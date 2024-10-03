@@ -43,7 +43,7 @@
             this.loginUserNameBox.Size = new Size(310, 26);
             this.loginUserNameBox.TabIndex = 0;
             this.loginUserNameBox.TextAlign = HorizontalAlignment.Center;
-            this.loginUserNameBox.TextChanged += this.loginUserNameBox_TextChanged_1;
+            this.loginUserNameBox.TextChanged += this.LoginUserNameBox_TextChanged_1;
             // 
             // loginUserPSWBox
             // 
@@ -57,7 +57,7 @@
             this.loginUserPSWBox.Size = new Size(310, 26);
             this.loginUserPSWBox.TabIndex = 1;
             this.loginUserPSWBox.TextAlign = HorizontalAlignment.Center;
-            this.loginUserPSWBox.TextChanged += this.loginUserPSWBox_TextChanged;
+            this.loginUserPSWBox.TextChanged += this.LoginUserPSWBox_TextChanged;
             // 
             // loginButton
             // 
@@ -70,7 +70,7 @@
             this.loginButton.TabIndex = 2;
             this.loginButton.Text = "Log In";
             this.loginButton.UseVisualStyleBackColor = false;
-            this.loginButton.Click += this.loginButton_Click;
+            this.loginButton.Click += this.LoginButton_Click;
             // 
             // LoginForm
             // 
