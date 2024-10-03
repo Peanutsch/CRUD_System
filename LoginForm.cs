@@ -130,11 +130,11 @@ namespace CRUD_LoginSystem
 
                 // Update PasswordChar based on visibility state
                 loginUserPSWBox.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
+                buttonShowPSW.BackColor = isPasswordVisible ? Color.Red : Color.Green; // Toggle color buttonShowPSW
 
                 // Update the label text based on the visibility state
                 labelShowPassword.Text = isPasswordVisible ? "Hide Password" : "Show Password";
             }
         }
-
     }
 }
