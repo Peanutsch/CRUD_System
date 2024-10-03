@@ -43,6 +43,7 @@
             this.loginUserNameBox.Size = new Size(310, 26);
             this.loginUserNameBox.TabIndex = 0;
             this.loginUserNameBox.TextAlign = HorizontalAlignment.Center;
+            this.loginUserNameBox.TextChanged += this.loginUserNameBox_TextChanged_1;
             // 
             // loginUserPSWBox
             // 
@@ -56,6 +57,7 @@
             this.loginUserPSWBox.Size = new Size(310, 26);
             this.loginUserPSWBox.TabIndex = 1;
             this.loginUserPSWBox.TextAlign = HorizontalAlignment.Center;
+            this.loginUserPSWBox.TextChanged += this.loginUserPSWBox_TextChanged;
             // 
             // loginButton
             // 

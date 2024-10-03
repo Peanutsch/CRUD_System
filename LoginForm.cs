@@ -24,18 +24,30 @@ namespace CRUD_LoginSystem
         /// <summary>
         /// Enables the password input box when the username input box has text.
         /// </summary>
-        private void loginUserNameBox_TextChanged(object sender, System.EventArgs e)
+        private void loginUserNameBox_TextChanged_1(object sender, EventArgs e)
         {
             // Check if there is text in the username box
-            if (!string.IsNullOrEmpty(loginUserNameBox.Text))
+            if (loginUserNameBox.Text.Length > 0)
             {
                 // Enable the password input box
                 loginUserPSWBox.Enabled = true;
             }
             else
             {
-                // Disable the password input box if the username is empty
                 loginUserPSWBox.Enabled = false;
+            }
+        }
+        private void loginUserPSWBox_TextChanged(object sender, EventArgs e)
+        {
+            // Check if there is text in the password box
+            if (loginUserPSWBox.Text.Length > 0)
+            {
+                // Enable loginButton
+                loginButton.Enabled = true;
+            }
+            else
+            {
+                loginButton.Enabled = false;
             }
         }
 
@@ -61,5 +73,6 @@ namespace CRUD_LoginSystem
                 MessageBox.Show("Invalid username or password");
             }
         }
+
     }
 }
