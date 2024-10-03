@@ -13,13 +13,22 @@ namespace CRUD_LoginSystem
         // Create an instance of the LoginValidation class for validating user credentials.
         LoginValidation loginValidation = new LoginValidation();
 
+        private bool isPasswordVisible = false;
+
         /// <summary>
-        /// Initializes the components for the LoginForm.
+        /// Constructor. Initializes the components for the LoginForm.
         /// </summary>
         public LoginForm()
         {
             InitializeComponent();
+
             EnterKey();
+        }
+
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+            // Set focus ActiveControl
+            this.ActiveControl = loginButton;
         }
 
         /// <summary>
@@ -49,10 +58,12 @@ namespace CRUD_LoginSystem
             {
                 // Enable login button
                 loginButton.Enabled = true;
+                buttonShowPSW.Enabled = true;
             }
             else
             {
                 loginButton.Enabled = false;
+                buttonShowPSW.Enabled = false;
             }
         }
 
@@ -109,5 +120,21 @@ namespace CRUD_LoginSystem
                 MessageBox.Show("Invalid username or password");
             }
         }
+
+        private void TogglePasswordButton_Click(object sender, EventArgs e)
+        {
+            // Check if there is text in the password box
+            if (loginUserPSWBox.Text.Length > 0)
+            {
+                isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide
+
+                // Update PasswordChar based on visibility state
+                loginUserPSWBox.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
+
+                // Update the label text based on the visibility state
+                labelShowPassword.Text = isPasswordVisible ? "Hide Password" : "Show Password";
+            }
+        }
+
     }
 }

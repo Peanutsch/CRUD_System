@@ -8,6 +8,9 @@ namespace CRUD_LoginSystem
 {
     internal class Files
     {
-        // public void RootPath
+        public void RootPath()
+        {
+            //
+        }
     }
 }
