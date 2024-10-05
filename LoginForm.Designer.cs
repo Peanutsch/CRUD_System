@@ -1,4 +1,4 @@
-﻿namespace CRUD_LoginSystem
+﻿namespace CRUD_System
 {
     partial class LoginForm
     {

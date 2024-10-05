@@ -1,7 +1,7 @@
 using Microsoft.Win32;
 using System.Windows.Forms;
 
-namespace CRUD_LoginSystem
+namespace CRUD_System
 {
     /// <summary>
     /// The LoginForm class handles the user interface for the login process,
@@ -80,20 +80,8 @@ namespace CRUD_LoginSystem
                     e.Handled = true; // Prevent the Enter key from inserting a new line
                     e.SuppressKeyPress = true; // Prevent the "ding" sound when Enter is pressed
 
-                    // Retrieve the current input values for validation
-                    string inputUserName = loginUserNameBox.Text;
-                    string inputUserPSW = loginUserPSWBox.Text;
-
                     // Validate username and password, and display appropriate message
-                    if (loginValidation.ValidateLoginName(inputUserName) && loginValidation.ValidatePassword(inputUserPSW))
-                    {
-                        MessageBox.Show("Login SUCCESS");
-                    }
-                    else
-                    {
-                        // Show error message if the username or password is invalid
-                        MessageBox.Show("Invalid username or password");
-                    }
+                    AuthenticateUser(loginUserNameBox.Text, loginUserPSWBox.Text);
                 }
             };
         }
@@ -105,20 +93,8 @@ namespace CRUD_LoginSystem
         /// </summary>
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            // Retrieve the current input values for validation
-            string inputUserName = loginUserNameBox.Text;
-            string inputUserPSW = loginUserPSWBox.Text;
-
-            // Validate username and password, and show appropriate message
-            if (loginValidation.ValidateLoginName(inputUserName) && loginValidation.ValidatePassword(inputUserPSW))
-            {
-                MessageBox.Show("Login SUCCESS");
-            }
-            else
-            {
-                // Show error message if the username or password is invalid.
-                MessageBox.Show("Invalid username or password");
-            }
+            // Validate username and password, and display appropriate message
+            AuthenticateUser(loginUserNameBox.Text, loginUserPSWBox.Text);
         }
 
         private void TogglePasswordButton_Click(object sender, EventArgs e)
@@ -126,7 +102,7 @@ namespace CRUD_LoginSystem
             // Check if there is text in the password box
             if (loginUserPSWBox.Text.Length > 0)
             {
-                isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide
+                isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide password
 
                 // Update PasswordChar based on visibility state
                 loginUserPSWBox.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
@@ -136,5 +112,34 @@ namespace CRUD_LoginSystem
                 labelShowPassword.Text = isPasswordVisible ? "Hide Password" : "Show Password";
             }
         }
+
+        /// <summary>
+        /// Authenticates the user's login credentials. 
+        /// If the username and password are valid, the LoginForm is hidden, and the MainForm is displayed. 
+        /// If invalid, an error message is shown.
+        /// </summary>
+        /// <param name="inputUserName">The username input provided by the user.</param>
+        /// <param name="inputUserPSW">The password input provided by the user.</param>
+        public void AuthenticateUser(string inputUserName, string inputUserPSW)
+        {
+            if (loginValidation.ValidateLoginName(inputUserName) && loginValidation.ValidatePassword(inputUserPSW))
+            {
+                // Hide the LoginForm
+                this.Hide();
+
+                // Open the MainForm
+                MainForm mainForm = new MainForm();
+                mainForm.ShowDialog();
+
+                //Once MainForm is closed, close the LoginForm
+                this.Close();
+            }
+            else
+            {
+                // Show error message if the username or password is invalid
+                MessageBox.Show("Invalid username or password");
+            }
+        }
+
     }
 }

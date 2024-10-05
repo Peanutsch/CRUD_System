@@ -5,10 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_LoginSystem
+namespace CRUD_System
 {
-    internal class Files
+    internal class Data
     {
+        #region USERDATA
+        // Predefined username and password for validation.
+        //List<object> LOGINDATA = new List<object> { "michiel", "admin", true };
+        List<object> LOGINDATA = new List<object> { "personX", "admin", false };
+
+        public string USERNAME => (string)LOGINDATA[0];
+        public string PASSWORD => (string)LOGINDATA[1];
+        public bool IsAdmin => (bool)LOGINDATA[2];
+
+        #endregion
+
         string loginData = Path.Combine(RootPath(), "CRUD_LOGIN.xlsx");
 
         /// <summary>

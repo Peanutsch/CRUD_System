@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace CRUD_LoginSystem
+
+namespace CRUD_System
 {
     /// <summary>
     /// The LoginValidation class provides methods to validate user credentials,
@@ -8,9 +10,22 @@ namespace CRUD_LoginSystem
     /// </summary>
     internal class LoginValidation
     {
-        // Predefined username and password for validation.
-        private string isUserName = "admin";
-        private string isUserPSW = "admin";
+        /* 
+         * FORMAT LOGIN DATA CSV:
+         * string USERNAME, string PASSWORD, bool ADMIN
+         *      mtelst    ,     *****      ,      true
+         *      userX     ,     *****      ,      false
+        */
+
+        /*
+         * FORMAT USER DATA CSV
+         * string FIRST NAME, (string INFIX), string SURNAME, string EMAIL
+         * maybe also:
+         * string STREET, string HOUSENUMBER, string HN EXT, string CITY, string COUNTRY, DateTime BIRTHDAY
+         */
+
+        Data _data = new Data();
+        //MainForm _mainForm = new MainForm();
 
         /// <summary>
         /// Validates the provided username by comparing it to the stored username.
@@ -21,7 +36,7 @@ namespace CRUD_LoginSystem
         public bool ValidateLoginName(string inputUserName)
         {
             // Convert input to lowercase and compare with the stored username
-            return inputUserName.ToLower() == isUserName.ToLower();
+            return inputUserName.ToLower() == _data.USERNAME.ToLower();
         }
 
         /// <summary>
@@ -32,7 +47,21 @@ namespace CRUD_LoginSystem
         public bool ValidatePassword(string inputUserPSW)
         {
             // Compare input with the stored password
-            return inputUserPSW == isUserPSW;
+            return inputUserPSW == _data.PASSWORD;
+        }
+
+        public void ValidateRights(MainForm _mainForm)
+        {
+            if (_data.IsAdmin)
+            {
+                _mainForm.UpdateRoleLabel(true);
+                //return "ADMIN";
+            }
+            else
+            {
+                _mainForm.UpdateRoleLabel(false);
+                //return "USER";
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_LoginSystem
+namespace CRUD_System
 {
     public partial class HideCarrot : TextBox
     {

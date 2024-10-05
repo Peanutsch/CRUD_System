@@ -1,4 +1,4 @@
-namespace CRUD_LoginSystem
+namespace CRUD_System
 {
     internal static class Program
     {
