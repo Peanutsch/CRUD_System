@@ -11,18 +11,17 @@ using System.Windows.Forms;
 
 namespace CRUD_System
 {
-    public partial class MainFormADMIN : Form
+    public partial class MainFormUSERS : Form
     {
-        private Data _Data = new Data(); 
+        private Data _Data = new Data();
         private LoginValidation _LoginValidation = new LoginValidation();
-        
 
-        public MainFormADMIN()
+        public MainFormUSERS()
         {
             InitializeComponent();
         }
 
-        private void MainFormAdmin_Load(object sender, EventArgs e)
+        private void MainFormUsers_Load(object sender, EventArgs e)
         {
             // Set focus to the logout button when the form is loaded
             this.ActiveControl = buttonLOGOUT;
@@ -48,7 +47,7 @@ namespace CRUD_System
         {
             this.Hide(); // Hide the MainForm
 
-            LoginForm loginForm = new LoginForm(); 
+            LoginForm loginForm = new LoginForm();
             loginForm.ShowDialog(); // Open the LoginForm
 
             this.Close(); // Once MainForm is closed, close the LoginForm
@@ -63,11 +62,12 @@ namespace CRUD_System
         public void BoxDisplay(string inputUserName, string inputUserPSW)
         {
             textBoxUserName.Text = $"{inputUserName.ToUpper()}";
-            //_LoginValidation.ValidateRights(this, inputUserName, inputUserPSW);
 
-            labelAdmin.TextAlign = ContentAlignment.TopLeft;
-            labelAdmin.BackColor = Color.LightSkyBlue;
-            labelAdmin.Text = "ADMIN";
+            labelUser.TextAlign = ContentAlignment.TopLeft;
+            labelUser.BackColor = Color.LightGreen;
+            labelUser.Text = "USER";
+
         }
     }
 }
+

@@ -14,6 +14,7 @@ namespace CRUD_System
         LoginValidation _LoginValidation = new LoginValidation();
         Data _Data = new Data();
 
+
         private bool isPasswordVisible = false;
 
         /// <summary>
@@ -108,25 +109,40 @@ namespace CRUD_System
         /// <param name="inputUserPSW">The password input provided by the user.</param>
         private void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
+            // Validate login input
             if (_LoginValidation.ValidateLogin(inputUserName, inputUserPSW))
             {
-                
-                this.Hide(); // Hide the LoginForm
+                // Check if user is admin
+                bool isAdmin = _LoginValidation.IsAdmin(inputUserName, inputUserPSW);
 
-                
-                MainFormADMIN mainForm = new MainFormADMIN(); // Open the MainForm
-                mainForm.BoxDisplay(inputUserName, inputUserPSW); // Pass the username and password to MainForm and display user info
-                mainForm.ShowDialog();
+                // Hide LoginForm
+                this.Hide();
 
-                
-                this.Close(); // Once MainForm is closed, close the LoginForm
+                // If user is admin, open MainFormADMIN
+                if (isAdmin)
+                {
+                    MainFormADMIN mainFormADMIN = new MainFormADMIN();
+                    mainFormADMIN.BoxDisplay(inputUserName, inputUserPSW); // Pass user input
+                    mainFormADMIN.ShowDialog();
+                }
+                // If user is no admin, open MainFormUSERS
+                else
+                {
+                    MainFormUSERS mainFormUSERS = new MainFormUSERS();
+                    mainFormUSERS.BoxDisplay(inputUserName, inputUserPSW); // Pass user input
+                    mainFormUSERS.ShowDialog();
+                }
+
+                // When MainForm is closed, close LoginForm
+                this.Close();
             }
             else
             {
-                // Show error message if the username or password is invalid
+                // Error message when input not valid
                 MessageBox.Show("Invalid username or password");
             }
         }
+
 
         /// <summary>
         /// Toggles the visibility of the password in the password input box when the checkbox is checked or unchecked.

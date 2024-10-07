@@ -51,15 +51,5 @@ namespace CRUD_System
             // Return the admin status if the user is found
             return user != default && user.IsAdmin;
         }
-
-        /// <summary>
-        /// Updates the MainForm with the user's admin rights.
-        /// </summary>
-        public void ValidateRights(MainFormADMIN _mainForm, string inputUserName, string inputUserPSW)
-        {
-            // Check if the user is an admin and update the MainForm label
-            bool isAdmin = IsAdmin(inputUserName, inputUserPSW);
-            _mainForm.UpdateRoleLabel(isAdmin);
-        }
     }
 }
