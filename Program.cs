@@ -2,6 +2,8 @@ namespace CRUD_System
 {
     internal static class Program
     {
+        static PasswordManager _PasswordManager = new PasswordManager();
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -12,6 +14,8 @@ namespace CRUD_System
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new LoginForm());
+
+            _PasswordManager.VerifyPassword();
         }
     }
 }
