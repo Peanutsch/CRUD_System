@@ -1,3 +1,4 @@
-admin,admin,true
-michiel,michiel,true
-person,person,false
+NAME, SURNAME, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
+admin,Adminimaxi, Enschedesestraat 6, 7554RX, Hengelo,admin@admin.com
+michiel,ter Elst, Hengelosestraat 6, 7557 GR, Enschede, peanutsch@duck.com
+person,User, Userstraat 6, 8558 AA, Enschede, puser@visie.nl

@@ -1,3 +1,5 @@
+NAME, PSW, ADMIN
 admin,admin,true
 michiel,michiel,true
 user,user,false
+user2, user2, false

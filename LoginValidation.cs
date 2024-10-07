@@ -1,67 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace CRUD_System
 {
     /// <summary>
     /// The LoginValidation class provides methods to validate user credentials,
-    /// including checking the username and password against predefined values.
+    /// including checking the username and password against the data from the CSV.
     /// </summary>
     internal class LoginValidation
     {
-        /* 
-         * FORMAT LOGIN DATA CSV:
-         * string USERNAME, string PASSWORD, bool ADMIN
-         *      mtelst    ,     *****      ,      true
-         *      userX     ,     *****      ,      false
-        */
-
-        /*
-         * FORMAT USER DATA CSV
-         * string FIRST NAME, (string INFIX), string SURNAME, string EMAIL
-         * maybe also:
-         * string STREET, string HOUSENUMBER, string HN EXT, string CITY, string COUNTRY, DateTime BIRTHDAY
-         */
-
-        Data _data = new Data();
-        //MainForm _mainForm = new MainForm();
+        Data _Data = new Data();
 
         /// <summary>
-        /// Validates the provided username by comparing it to the stored username.
-        /// The comparison is case-insensitive.
+        /// Validates the provided username and password by checking them against the stored data in the CSV.
         /// </summary>
         /// <param name="inputUserName">The username entered by the user.</param>
-        /// <returns>True if the username is valid; otherwise, false.</returns>
-        public bool ValidateLoginName(string inputUserName)
+        /// <param name="inputUserPSW">The password entered by the user.</param>
+        /// <returns>True if the credentials are valid; otherwise, false.</returns>
+        public bool ValidateLogin(string inputUserName, string inputUserPSW)
         {
-            // Convert input to lowercase and compare with the stored username
-            return inputUserName.ToLower() == _data.USERNAME.ToLower();
+            // Get login data from the CSV file
+            List<(string Username, string Password, bool IsAdmin)> loginData = _Data.GetLoginData();
+
+            // Find the user in the list where both username and password match
+            var user = loginData.FirstOrDefault(u =>
+                u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
+                u.Password == inputUserPSW);
+
+            // If user is found, credentials are valid
+            return user != default;
         }
 
         /// <summary>
-        /// Validates the provided password by comparing it to the stored password.
+        /// Determines if the logged-in user is an admin.
         /// </summary>
-        /// <param name="inputUserPSW">The password entered by the user.</param>
-        /// <returns>True if the password is valid; otherwise, false.</returns>
-        public bool ValidatePassword(string inputUserPSW)
+        /// <param name="inputUserName">The username of the user.</param>
+        /// <param name="inputUserPSW">The password of the user.</param>
+        /// <returns>True if the user is an admin; otherwise, false.</returns>
+        public bool IsAdmin(string inputUserName, string inputUserPSW)
         {
-            // Compare input with the stored password
-            return inputUserPSW == _data.PASSWORD;
+            // Get login data from the CSV file
+            List<(string Username, string Password, bool IsAdmin)> loginData = _Data.GetLoginData();
+
+            // Find the user in the list where both username and password match
+            var user = loginData.FirstOrDefault(u =>
+                u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
+                u.Password == inputUserPSW);
+
+            // Return the admin status if the user is found
+            return user != default && user.IsAdmin;
         }
 
-        public void ValidateRights(MainForm _mainForm)
+        /// <summary>
+        /// Updates the MainForm with the user's admin rights.
+        /// </summary>
+        public void ValidateRights(MainFormADMIN _mainForm, string inputUserName, string inputUserPSW)
         {
-            if (_data.IsAdmin)
-            {
-                _mainForm.UpdateRoleLabel(true);
-                //return "ADMIN";
-            }
-            else
-            {
-                _mainForm.UpdateRoleLabel(false);
-                //return "USER";
-            }
+            // Check if the user is an admin and update the MainForm label
+            bool isAdmin = IsAdmin(inputUserName, inputUserPSW);
+            _mainForm.UpdateRoleLabel(isAdmin);
         }
     }
 }

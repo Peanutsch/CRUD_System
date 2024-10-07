@@ -10,8 +10,9 @@ namespace CRUD_System
     /// </summary>
     public partial class LoginForm : Form
     {
-        // Create an instance of the LoginValidation class for validating user credentials.
-        LoginValidation loginValidation = new LoginValidation();
+        // Create an instance of classes for validating user credentials.
+        LoginValidation _LoginValidation = new LoginValidation();
+        Data _Data = new Data();
 
         private bool isPasswordVisible = false;
 
@@ -22,12 +23,12 @@ namespace CRUD_System
         {
             InitializeComponent();
 
-            EnterKey();
+            EnterKey(); //Initialize Key.Enter
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            // Set focus ActiveControl
+            // Set focus ActiveControl on loginButton
             this.ActiveControl = loginButton;
         }
 
@@ -98,25 +99,27 @@ namespace CRUD_System
         }
 
         /// <summary>
-        /// Authenticates the user's login credentials. 
-        /// If the username and password are valid, the LoginForm is hidden, and the MainForm is displayed. 
-        /// If invalid, an error message is shown.
+        /// Authenticates the user's login credentials by checking the provided
+        /// username and password against the login data stored in the CSV file.
+        /// If the credentials are valid, the user is logged in and the MainForm is shown.
+        /// If invalid, an error message is displayed.
         /// </summary>
         /// <param name="inputUserName">The username input provided by the user.</param>
         /// <param name="inputUserPSW">The password input provided by the user.</param>
-        public void AuthenticateUser(string inputUserName, string inputUserPSW)
+        private void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
-            if (loginValidation.ValidateLoginName(inputUserName) && loginValidation.ValidatePassword(inputUserPSW))
+            if (_LoginValidation.ValidateLogin(inputUserName, inputUserPSW))
             {
-                // Hide the LoginForm
-                this.Hide();
+                
+                this.Hide(); // Hide the LoginForm
 
-                // Open the MainForm
-                MainForm mainForm = new MainForm();
+                
+                MainFormADMIN mainForm = new MainFormADMIN(); // Open the MainForm
+                mainForm.BoxDisplay(inputUserName, inputUserPSW); // Pass the username and password to MainForm and display user info
                 mainForm.ShowDialog();
 
-                //Once MainForm is closed, close the LoginForm
-                this.Close();
+                
+                this.Close(); // Once MainForm is closed, close the LoginForm
             }
             else
             {
@@ -125,6 +128,12 @@ namespace CRUD_System
             }
         }
 
+        /// <summary>
+        /// Toggles the visibility of the password in the password input box when the checkbox is checked or unchecked.
+        /// Updates the text of the checkbox to reflect the current action (Show Password or Hide Password).
+        /// </summary>
+        /// <param name="sender">The source of the event, usually the checkbox.</param>
+        /// <param name="e">The event arguments associated with the checkbox state change.</param>
         private void checkBoxTogglePSW_CheckedChanged(object sender, EventArgs e)
         {
             // Check if there is text in the password box
