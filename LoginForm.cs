@@ -58,12 +58,12 @@ namespace CRUD_System
             {
                 // Enable login button
                 loginButton.Enabled = true;
-                buttonShowPSW.Enabled = true;
+                checkBoxTogglePSW.Enabled = true;
             }
             else
             {
                 loginButton.Enabled = false;
-                buttonShowPSW.Enabled = false;
+                checkBoxTogglePSW.Enabled = false;
             }
         }
 
@@ -97,22 +97,6 @@ namespace CRUD_System
             AuthenticateUser(loginUserNameBox.Text, loginUserPSWBox.Text);
         }
 
-        private void TogglePasswordButton_Click(object sender, EventArgs e)
-        {
-            // Check if there is text in the password box
-            if (loginUserPSWBox.Text.Length > 0)
-            {
-                isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide password
-
-                // Update PasswordChar based on visibility state
-                loginUserPSWBox.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
-                buttonShowPSW.BackColor = isPasswordVisible ? Color.Red : Color.Green; // Toggle color buttonShowPSW
-
-                // Update the label text based on the visibility state
-                labelShowPassword.Text = isPasswordVisible ? "Hide Password" : "Show Password";
-            }
-        }
-
         /// <summary>
         /// Authenticates the user's login credentials. 
         /// If the username and password are valid, the LoginForm is hidden, and the MainForm is displayed. 
@@ -141,5 +125,15 @@ namespace CRUD_System
             }
         }
 
+        private void checkBoxTogglePSW_CheckedChanged(object sender, EventArgs e)
+        {
+            // Check if there is text in the password box
+            if (loginUserPSWBox.Text.Length > 0)
+            {
+                isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide password
+                loginUserPSWBox.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
+                checkBoxTogglePSW.Text = isPasswordVisible ? "Hide Password" : "Show Password"; // Update the checkbox text based on the visibility state
+            }
+        }
     }
 }

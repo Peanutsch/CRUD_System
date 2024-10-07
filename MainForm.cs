@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace CRUD_System
     {
         Data _Data = new Data(); 
         LoginValidation _LoginValidation = new LoginValidation();
+        
 
         public MainForm()
         {
@@ -43,17 +45,18 @@ namespace CRUD_System
 
         public void UpdateRoleLabel(bool isAdmin)
         {
+            labelAdmin.TextAlign = ContentAlignment.TopLeft;
             labelAdmin.BackColor = isAdmin ? Color.LightSkyBlue : Color.LightGreen;
             labelAdmin.Text = isAdmin ? "ADMIN" : "USER";
-            labelAdmin.TextAlign = ContentAlignment.TopLeft;
         }
 
         public void BoxDisplay()
         {
             textBoxUserName.Text = $"{_Data.USERNAME.ToUpper()}";
             _LoginValidation.ValidateRights(this);
-            //textBoxRole.Text = $"{LoginValidation.ValidateRights()}";
-            //textBoxRole.Text = $"{LoginValidation.ValidateRights(this)}";
+
+            string lines = _Data.GetLoginData(); // Call the method correctly
+            Debug.WriteLine($"Data csv:\n{lines}"); // Now it shows the correct data
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,16 +12,44 @@ namespace CRUD_System
     {
         #region USERDATA
         // Predefined username and password for validation.
-        //List<object> LOGINDATA = new List<object> { "michiel", "admin", true };
-        List<object> LOGINDATA = new List<object> { "personX", "admin", false };
+        List<object> LOGINDATA = new List<object> { "admin", "admin", true };
+        //List<object> LOGINDATA = new List<object> { "personX", "admin", false };
 
         public string USERNAME => (string)LOGINDATA[0];
         public string PASSWORD => (string)LOGINDATA[1];
         public bool IsAdmin => (bool)LOGINDATA[2];
-
         #endregion
 
-        string loginData = Path.Combine(RootPath(), "CRUD_LOGIN.xlsx");
+
+        public string GetLoginData()
+        {
+            string file = Path.Combine(RootPath(), @"data\data_login.csv");
+
+            if (!File.Exists(file))
+            {
+                Debug.WriteLine($"Error! No such file with path {file}");
+                return string.Empty;
+            }
+
+            StringBuilder allData = new StringBuilder(); // To collect and format the data
+
+            using (StreamReader reader = new StreamReader(file))
+            {
+                string line;
+                while ((line = reader.ReadLine()!) != null)
+                {
+                    string[] values = line.Split(',');
+
+                    // Format the line: "element 1", "element 2", "element 3"
+                    string formattedLine = string.Join(", ", values);
+
+                    // Append formatted line to allData, with a new line after each row
+                    allData.AppendLine(formattedLine);
+                }
+            }
+
+            return allData.ToString().Trim(); // Return formatted data
+        }
 
         /// <summary>
         /// Initializes the root path for the application by determining the base directory 
@@ -69,6 +98,6 @@ namespace CRUD_System
             }
         }
 
-
+        string t = "\"C:\\Users\\Visie Groep\\source\\repos\\CRUD_LoginSystem\\data\\data_login.csv\"";
     }
 }
