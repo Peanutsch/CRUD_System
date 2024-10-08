@@ -28,84 +28,84 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.loginUserNameBox = new TextBox();
-            this.loginUserPSWBox = new TextBox();
-            this.loginButton = new Button();
-            this.checkBoxTogglePSW = new CheckBox();
-            this.SuspendLayout();
+            loginUserNameBox = new TextBox();
+            loginUserPSWBox = new TextBox();
+            loginButton = new Button();
+            checkBoxTogglePSW = new CheckBox();
+            SuspendLayout();
             // 
             // loginUserNameBox
             // 
-            this.loginUserNameBox.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.loginUserNameBox.Location = new Point(13, 56);
-            this.loginUserNameBox.Margin = new Padding(4);
-            this.loginUserNameBox.MaxLength = 20;
-            this.loginUserNameBox.Name = "loginUserNameBox";
-            this.loginUserNameBox.PlaceholderText = "Username";
-            this.loginUserNameBox.Size = new Size(441, 26);
-            this.loginUserNameBox.TabIndex = 0;
-            this.loginUserNameBox.TextAlign = HorizontalAlignment.Center;
-            this.loginUserNameBox.TextChanged += this.LoginUserNameBox_TextChanged_1;
+            loginUserNameBox.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            loginUserNameBox.Location = new Point(13, 56);
+            loginUserNameBox.Margin = new Padding(4);
+            loginUserNameBox.MaxLength = 20;
+            loginUserNameBox.Name = "loginUserNameBox";
+            loginUserNameBox.PlaceholderText = "Username";
+            loginUserNameBox.Size = new Size(441, 26);
+            loginUserNameBox.TabIndex = 1;
+            loginUserNameBox.TextAlign = HorizontalAlignment.Center;
+            loginUserNameBox.TextChanged += LoginUserNameBox_TextChanged_1;
             // 
             // loginUserPSWBox
             // 
-            this.loginUserPSWBox.Enabled = false;
-            this.loginUserPSWBox.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.loginUserPSWBox.Location = new Point(13, 90);
-            this.loginUserPSWBox.Margin = new Padding(4);
-            this.loginUserPSWBox.MaxLength = 32676;
-            this.loginUserPSWBox.Name = "loginUserPSWBox";
-            this.loginUserPSWBox.PasswordChar = '*';
-            this.loginUserPSWBox.PlaceholderText = "PASSWORD";
-            this.loginUserPSWBox.Size = new Size(441, 26);
-            this.loginUserPSWBox.TabIndex = 1;
-            this.loginUserPSWBox.TextAlign = HorizontalAlignment.Center;
-            this.loginUserPSWBox.TextChanged += this.LoginUserPSWBox_TextChanged;
+            loginUserPSWBox.Enabled = false;
+            loginUserPSWBox.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            loginUserPSWBox.Location = new Point(13, 90);
+            loginUserPSWBox.Margin = new Padding(4);
+            loginUserPSWBox.MaxLength = 32676;
+            loginUserPSWBox.Name = "loginUserPSWBox";
+            loginUserPSWBox.PasswordChar = '*';
+            loginUserPSWBox.PlaceholderText = "PASSWORD";
+            loginUserPSWBox.Size = new Size(441, 26);
+            loginUserPSWBox.TabIndex = 2;
+            loginUserPSWBox.TextAlign = HorizontalAlignment.Center;
+            loginUserPSWBox.TextChanged += LoginUserPSWBox_TextChanged;
             // 
             // loginButton
             // 
-            this.loginButton.BackColor = SystemColors.ControlLightLight;
-            this.loginButton.Enabled = false;
-            this.loginButton.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.loginButton.Location = new Point(162, 156);
-            this.loginButton.Margin = new Padding(4);
-            this.loginButton.Name = "loginButton";
-            this.loginButton.Size = new Size(150, 56);
-            this.loginButton.TabIndex = 2;
-            this.loginButton.Text = "Log In";
-            this.loginButton.UseVisualStyleBackColor = false;
-            this.loginButton.Click += this.LoginButton_Click;
+            loginButton.BackColor = SystemColors.ControlLightLight;
+            loginButton.Enabled = false;
+            loginButton.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            loginButton.Location = new Point(162, 156);
+            loginButton.Margin = new Padding(4);
+            loginButton.Name = "loginButton";
+            loginButton.Size = new Size(150, 56);
+            loginButton.TabIndex = 3;
+            loginButton.Text = "Log In";
+            loginButton.UseVisualStyleBackColor = false;
+            loginButton.Click += LoginButton_Click;
             // 
             // checkBoxTogglePSW
             // 
-            this.checkBoxTogglePSW.AutoSize = true;
-            this.checkBoxTogglePSW.Location = new Point(12, 123);
-            this.checkBoxTogglePSW.Name = "checkBoxTogglePSW";
-            this.checkBoxTogglePSW.Size = new Size(157, 22);
-            this.checkBoxTogglePSW.TabIndex = 5;
-            this.checkBoxTogglePSW.Text = "Show Password";
-            this.checkBoxTogglePSW.UseVisualStyleBackColor = true;
-            this.checkBoxTogglePSW.CheckedChanged += this.checkBoxTogglePSW_CheckedChanged;
+            checkBoxTogglePSW.AutoSize = true;
+            checkBoxTogglePSW.Location = new Point(12, 123);
+            checkBoxTogglePSW.Name = "checkBoxTogglePSW";
+            checkBoxTogglePSW.Size = new Size(157, 22);
+            checkBoxTogglePSW.TabIndex = 4;
+            checkBoxTogglePSW.Text = "Show Password";
+            checkBoxTogglePSW.UseVisualStyleBackColor = true;
+            checkBoxTogglePSW.CheckedChanged += checkBoxTogglePSW_CheckedChanged;
             // 
             // LoginForm
             // 
-            this.AutoScaleDimensions = new SizeF(10F, 18F);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.BackColor = SystemColors.ActiveCaption;
-            this.ClientSize = new Size(467, 225);
-            this.Controls.Add(this.checkBoxTogglePSW);
-            this.Controls.Add(this.loginButton);
-            this.Controls.Add(this.loginUserPSWBox);
-            this.Controls.Add(this.loginUserNameBox);
-            this.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            this.Margin = new Padding(4);
-            this.Name = "LoginForm";
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "CRUD Log In";
-            this.Load += this.LoginForm_Load;
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(10F, 18F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveCaption;
+            ClientSize = new Size(467, 225);
+            Controls.Add(checkBoxTogglePSW);
+            Controls.Add(loginButton);
+            Controls.Add(loginUserPSWBox);
+            Controls.Add(loginUserNameBox);
+            Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Margin = new Padding(4);
+            Name = "LoginForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "CRUD Log In";
+            Load += LoginForm_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

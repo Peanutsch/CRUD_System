@@ -12,8 +12,6 @@ namespace CRUD_System
     {
         // Create an instance of classes for validating user credentials.
         LoginValidation _LoginValidation = new LoginValidation();
-        Data _Data = new Data();
-
 
         private bool isPasswordVisible = false;
 
@@ -30,7 +28,7 @@ namespace CRUD_System
         private void LoginForm_Load(object sender, EventArgs e)
         {
             // Set focus ActiveControl on loginButton
-            this.ActiveControl = loginButton;
+            this.ActiveControl = checkBoxTogglePSW;
         }
 
         /// <summary>

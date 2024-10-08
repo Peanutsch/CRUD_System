@@ -1,4 +1,6 @@
 NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
 Admin,admin,admin,Adminimaxi,Enschedesestraat 6,7554RX,Hengelo,admin@admin.com
 Michiel,ter Elst,mist001,Hengelosestraat 6,7557 GR,Enschede,peanutsch@duck.com
-Person,User,peer001,Userstraat 6,8558 AA,Enschede,puser@visie.nl
+Person,User,peer001,Userstraat 6,8558 AA,Enschede,puser@mail.nl
+PersonN,NewInTown,pewn001,straat 6,1234 AA,Almelo,pintown@mail.nl
+Moor,Beerplies,moes001,straat 8,4321 BB,Oldenzaal,mbeerplies@drunk.nl

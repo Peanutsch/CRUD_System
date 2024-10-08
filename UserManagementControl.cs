@@ -13,15 +13,22 @@ namespace CRUD_System
 {
     public partial class UserManagementControl : UserControl
     {
-        string file_dataLogin;
-        string file_dataUsers;
+        string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
+        string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+
+
+        Data _Data = new Data();
+
 
         public UserManagementControl()
         {
             InitializeComponent();
 
-            file_dataLogin = Path.Combine(Data.RootPath(), @"data\data_login.csv");
-            file_dataUsers = Path.Combine(Data.RootPath(), @"data\data_users.csv");
+            //System.IO.FileNotFoundException: 'Could not find file 'C:\Users\mtels\OneDrive\Documenten\GitHub\CRUD_System\bin\Debug\net8.0-windows\file_dataUsers'.'
+            //file_dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
+            //file_dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+
+            LoadUserData();
         }
 
 
@@ -55,7 +62,7 @@ namespace CRUD_System
         private bool AliasExists(string alias)
         {
             // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines(file_dataLogin);
+            var loginLines = File.ReadAllLines(dataLogin);
 
             // Check if the alias already exists
             foreach (var line in loginLines)
@@ -88,8 +95,8 @@ namespace CRUD_System
             string newDataUsers = $"{txtName.Text},{txtSurname.Text},{txtAlias},{txtEmail.Text},{txtAddress.Text},{txtCity.Text}";
 
             // Append to the CSV files
-            File.AppendAllText(file_dataLogin, newDataLogin + Environment.NewLine);
-            File.AppendAllText(file_dataUsers, newDataUsers + Environment.NewLine);
+            File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
+            File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
 
             MessageBox.Show("User added successfully!");
         }
@@ -99,14 +106,16 @@ namespace CRUD_System
         /// </summary>
         private void LoadUserData()
         {
-            var lines = File.ReadAllLines(file_dataUsers);
+            var lines = File.ReadAllLines(dataUsers);
 
-            foreach (var line in lines.Skip(1)) // Skip the header
+            foreach (var line in lines.Skip(2)) // Skip Header and details Admin
             {
                 var userDetails = line.Split(',');
-                listBoxUsers.Items.Add(userDetails[0]); // Add names to the list
+                //                     userDetails[0] = Name  userDetails[1] = Surname     userDetails[2] = Alias
+                listBoxUsers.Items.Add(userDetails[0] + " " + userDetails[1] + " " + "(" + userDetails[2] + ")"); // Add names to the list
             }
         }
+
 
         /// <summary>
         /// Handles the event when a user is selected from the list box.
@@ -114,25 +123,38 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private void listBoxUsers_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBoxUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedUser = listBoxUsers.SelectedItem!.ToString();
-            var lines = File.ReadAllLines("file_dataUsers");
-
-            foreach (var line in lines.Skip(1))
+            var linesDataUsers = File.ReadAllLines(dataUsers);
+            var linesDataLogin = File.ReadAllLines(dataLogin);
+            // Get data from data_users.csv
+            foreach (var lineDataUser in linesDataUsers.Skip(2)) // Skip Header and details Admin
             {
-                var userDetails = line.Split(',');
-                if (userDetails[0] == selectedUser)
+                var userDetails = lineDataUser.Split(',');
+                if (linesDataUsers[0] == selectedUser)
                 {
                     txtName.Text = userDetails[0];
-                    txtSurname.Text = userDetails[1]; // Remember to fill in the surname
-                    txtPassword.Text = userDetails[2]; // Correct index for password
-                    chkIsAdmin.Checked = userDetails[3] == "true"; // Correct index for admin status
-                    txtEmail.Text = userDetails[4]; // Correct index for email
-                    // etc. for address, city
+                    txtSurname.Text = userDetails[1];
+                    txtAddress.Text = userDetails[3];
+                    txtZIPCode.Text = userDetails[4];
+                    txtCity.Text = userDetails[5];
+                    txtEmail.Text = userDetails[6];
+                }
+            }
+            // Get data from data_login.csv
+            foreach (var lineDataLogin in linesDataLogin.Skip(2)) // Skip Header and details Admin
+            {
+                var loginDetails = lineDataLogin.Split(",");
+                if (linesDataLogin[0] == selectedUser)
+                {
+                    txtAlias.Text = loginDetails[0];
+                    txtPassword.Text = loginDetails[1];
+                    chkIsAdmin.Checked = loginDetails[2] == "true"; // Checked if admin role
                 }
             }
         }
+
 
         /// <summary>
         /// Handles the click event to update an existing user.
@@ -143,8 +165,8 @@ namespace CRUD_System
         private void btnUpdateUser_Click(object sender, EventArgs e)
         {
             // Read lines from data_login.csv and data_users.csv
-            var loginLines = File.ReadAllLines(file_dataLogin).ToList();
-            var userLines = File.ReadAllLines(file_dataUsers).ToList();
+            var loginLines = File.ReadAllLines(dataLogin).ToList();
+            var userLines = File.ReadAllLines(dataUsers).ToList();
 
             // Loop through each line of both files and update
             for (int i = 0; i < userLines.Count; i++)
@@ -169,8 +191,8 @@ namespace CRUD_System
                     }
 
                     // Write updated data back to both files
-                    File.WriteAllLines(file_dataLogin, loginLines);
-                    File.WriteAllLines(file_dataUsers, userLines);
+                    File.WriteAllLines(dataLogin, loginLines);
+                    File.WriteAllLines(dataUsers, userLines);
 
                     // Confirm successful update
                     MessageBox.Show("User updated successfully!");
@@ -188,10 +210,10 @@ namespace CRUD_System
         private void btnDeleteUser_Click(object sender, EventArgs e)
         {
             // Read all lines from data_users.csv
-            var userLines = File.ReadAllLines(file_dataUsers).ToList();
+            var userLines = File.ReadAllLines(dataUsers).ToList();
 
             // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines(file_dataLogin).ToList();
+            var loginLines = File.ReadAllLines(dataLogin).ToList();
 
             // Find the alias for the selected user
             string aliasToDelete = string.Empty;
@@ -207,11 +229,11 @@ namespace CRUD_System
 
             // Remove the user from data_users.csv
             userLines = userLines.Where(line => !line.StartsWith(txtName.Text)).ToList(); // Filter out the selected user
-            File.WriteAllLines(file_dataUsers, userLines);
+            File.WriteAllLines(dataUsers, userLines);
 
             // Remove the user from data_login.csv using the alias
             loginLines = loginLines.Where(line => !line.StartsWith(aliasToDelete)).ToList(); // Filter out the user by alias
-            File.WriteAllLines(file_dataLogin, loginLines);
+            File.WriteAllLines(dataLogin, loginLines);
 
             MessageBox.Show("User deleted successfully!");
         }

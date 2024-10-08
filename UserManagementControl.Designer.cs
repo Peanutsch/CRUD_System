@@ -47,59 +47,61 @@
             btnDeleteUser = new Button();
             txtSurname = new TextBox();
             txtAlias = new TextBox();
+            txtZIPCode = new TextBox();
             SuspendLayout();
             // 
             // txtName
             // 
-            txtName.Location = new Point(133, 20);
+            txtName.Location = new Point(168, 20);
             txtName.Name = "txtName";
             txtName.PlaceholderText = "Name";
             txtName.Size = new Size(150, 23);
-            txtName.TabIndex = 0;
+            txtName.TabIndex = 1;
             txtName.TextAlign = HorizontalAlignment.Center;
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(133, 106);
+            txtPassword.Location = new Point(168, 259);
             txtPassword.Name = "txtPassword";
             txtPassword.PlaceholderText = "Password";
             txtPassword.Size = new Size(150, 23);
-            txtPassword.TabIndex = 3;
+            txtPassword.TabIndex = 8;
             txtPassword.TextAlign = HorizontalAlignment.Center;
             // 
             // chkIsAdmin
             // 
-            chkIsAdmin.Location = new Point(133, 135);
+            chkIsAdmin.Location = new Point(168, 229);
             chkIsAdmin.Name = "chkIsAdmin";
-            chkIsAdmin.Size = new Size(80, 24);
-            chkIsAdmin.TabIndex = 4;
+            chkIsAdmin.Size = new Size(150, 24);
+            chkIsAdmin.TabIndex = 7;
             chkIsAdmin.Text = "Is Admin";
+            chkIsAdmin.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // txtEmail
             // 
-            txtEmail.Location = new Point(133, 165);
+            txtEmail.Location = new Point(168, 196);
             txtEmail.Name = "txtEmail";
             txtEmail.PlaceholderText = "E-mail";
             txtEmail.Size = new Size(150, 23);
-            txtEmail.TabIndex = 5;
+            txtEmail.TabIndex = 6;
             txtEmail.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAddress
             // 
-            txtAddress.Location = new Point(133, 194);
+            txtAddress.Location = new Point(168, 107);
             txtAddress.Name = "txtAddress";
             txtAddress.PlaceholderText = "Adress";
             txtAddress.Size = new Size(150, 23);
-            txtAddress.TabIndex = 6;
+            txtAddress.TabIndex = 3;
             txtAddress.TextAlign = HorizontalAlignment.Center;
             // 
             // txtCity
             // 
-            txtCity.Location = new Point(133, 223);
+            txtCity.Location = new Point(168, 165);
             txtCity.Name = "txtCity";
             txtCity.PlaceholderText = "City";
             txtCity.Size = new Size(150, 23);
-            txtCity.TabIndex = 7;
+            txtCity.TabIndex = 5;
             txtCity.TextAlign = HorizontalAlignment.Center;
             // 
             // listBoxUsers
@@ -107,12 +109,13 @@
             listBoxUsers.ItemHeight = 15;
             listBoxUsers.Location = new Point(324, 20);
             listBoxUsers.Name = "listBoxUsers";
-            listBoxUsers.Size = new Size(462, 199);
-            listBoxUsers.TabIndex = 8;
+            listBoxUsers.Size = new Size(462, 229);
+            listBoxUsers.TabIndex = 0;
+            listBoxUsers.SelectedIndexChanged += ListBoxUsers_SelectedIndexChanged;
             // 
             // btnAddUser
             // 
-            btnAddUser.Location = new Point(636, 223);
+            btnAddUser.Location = new Point(636, 255);
             btnAddUser.Name = "btnAddUser";
             btnAddUser.Size = new Size(150, 30);
             btnAddUser.TabIndex = 11;
@@ -121,7 +124,7 @@
             // 
             // btnUpdateUser
             // 
-            btnUpdateUser.Location = new Point(480, 223);
+            btnUpdateUser.Location = new Point(480, 255);
             btnUpdateUser.Name = "btnUpdateUser";
             btnUpdateUser.Size = new Size(150, 30);
             btnUpdateUser.TabIndex = 10;
@@ -130,7 +133,7 @@
             // 
             // btnDeleteUser
             // 
-            btnDeleteUser.Location = new Point(324, 223);
+            btnDeleteUser.Location = new Point(324, 255);
             btnDeleteUser.Name = "btnDeleteUser";
             btnDeleteUser.Size = new Size(150, 30);
             btnDeleteUser.TabIndex = 9;
@@ -139,7 +142,7 @@
             // 
             // txtSurname
             // 
-            txtSurname.Location = new Point(133, 78);
+            txtSurname.Location = new Point(168, 49);
             txtSurname.Name = "txtSurname";
             txtSurname.PlaceholderText = "Surname";
             txtSurname.Size = new Size(150, 23);
@@ -148,19 +151,30 @@
             // 
             // txtAlias
             // 
-            txtAlias.Location = new Point(133, 49);
+            txtAlias.Enabled = false;
+            txtAlias.Location = new Point(168, 78);
             txtAlias.Name = "txtAlias";
             txtAlias.PlaceholderText = "Alias";
             txtAlias.ReadOnly = true;
             txtAlias.Size = new Size(150, 23);
-            txtAlias.TabIndex = 11;
+            txtAlias.TabIndex = 20;
             txtAlias.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtZIPCode
+            // 
+            txtZIPCode.Location = new Point(168, 136);
+            txtZIPCode.Name = "txtZIPCode";
+            txtZIPCode.PlaceholderText = "ZIP Code";
+            txtZIPCode.Size = new Size(150, 23);
+            txtZIPCode.TabIndex = 4;
+            txtZIPCode.TextAlign = HorizontalAlignment.Center;
             // 
             // UserManagementControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(txtZIPCode);
             Controls.Add(txtAlias);
             Controls.Add(txtSurname);
             Controls.Add(txtName);
@@ -183,5 +197,6 @@
 
         private TextBox txtSurname;
         private TextBox txtAlias;
+        private TextBox txtZIPCode;
     }
 }

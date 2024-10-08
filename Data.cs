@@ -28,12 +28,13 @@ namespace CRUD_System
         public List<(string Username, string Password, bool IsAdmin)> GetLoginData()
         {
             // Construct the full path to the CSV file
-            string file = Path.Combine(RootPath(), @"data\data_login.csv");
+            string file = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
+            Debug.WriteLine($"RootPath data_login.csv: {RootPath.GetRootPath}");
 
             // Check if the file exists; if not, log an error and return an empty list
             if (!File.Exists(file))
             {
-                Debug.WriteLine($"Error! No such file with path {file}");
+                Debug.WriteLine($"Error! No such file with path {file}\nRootPath = {RootPath.GetRootPath}");
                 return new List<(string Username, string Password, bool IsAdmin)>();
             }
 
@@ -55,9 +56,9 @@ namespace CRUD_System
                     // Ensure the line has exactly 3 elements before proceeding
                     if (values.Length == 3)
                     {
-                        string username = values[0].Trim();
-                        string password = values[1].Trim();
-                        bool isAdmin = bool.Parse(values[2].Trim());
+                        string username = values[0].Trim(); // Alias
+                        string password = values[1].Trim(); // Password
+                        bool isAdmin = bool.Parse(values[2].Trim()); // True or False IsAdmin
 
                         // Add the extracted data to the loginData list
                         loginData.Add((username, password, isAdmin));
@@ -72,7 +73,8 @@ namespace CRUD_System
         public List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> GetUserData()
         {
             // Construct the full path to the CSV file
-            string file = Path.Combine(RootPath(), @"data\data_users.csv");
+            string file = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+            Debug.WriteLine($"RootPath data_users.csv: {RootPath.GetRootPath}");
 
             // Check if the file exists; if not, log an error and return an empty list
             if (!File.Exists(file))
@@ -103,47 +105,6 @@ namespace CRUD_System
             }
 
             return users;
-        }
-
-
-        /// <summary>
-        /// Initializes the root path for the application by determining the base directory 
-        /// of the current AppDomain and locating the "CRUD_LoginSystem" directory within it.
-        /// </summary>
-        /// <returns>
-        /// Returns the root path as a string if the "CRUD_LoginSystem" directory is found. 
-        /// If the directory cannot be determined, it displays an error message and returns an empty string.
-        /// </returns>
-        internal static string RootPath()
-        {
-            string directoryPath = AppDomain.CurrentDomain.BaseDirectory;
-
-            if (string.IsNullOrEmpty(directoryPath))
-            {
-                Debug.WriteLine("Error: Unable to determine root path.");
-                MessageBox.Show("Error: Unable to determine root path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return string.Empty; // Return an empty string
-            }
-
-            string[] directorySplitPath = directoryPath.Split(Path.DirectorySeparatorChar);
-            int index = Array.IndexOf(directorySplitPath, "CRUD_LoginSystem");
-
-            if (index != -1)
-            {
-                string rootPath = string.Join(Path.DirectorySeparatorChar.ToString(), directorySplitPath.Take(index + 1));
-
-                if (!rootPath.EndsWith(Path.DirectorySeparatorChar.ToString()))
-                {
-                    rootPath += Path.DirectorySeparatorChar;
-                }
-                return rootPath;
-            }
-            else
-            {
-                Debug.WriteLine("Error: 'CRUD_LoginSystem' directory not found in path.");
-                MessageBox.Show("Error: 'CRUD_LoginSystem' directory not found in path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return string.Empty; // Return an empty string
-            }
         }
     }
 }
