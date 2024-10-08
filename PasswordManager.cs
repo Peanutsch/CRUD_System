@@ -88,19 +88,26 @@ namespace CRUD_System
             return AesEncryption.Decrypt(encryptedData, password);
         }
 
+        /// <summary>
+        /// Verifies a password by hashing it and checking it against a stored hash.
+        /// This method demonstrates how to hash a password and verify it 
+        /// using the PBKDF2 algorithm. It outputs the hashed password and 
+        /// indicates whether the entered password matches the hashed version.
+        /// </summary>
         internal void VerifyPassword()
         {
-            // Voorbeeld van wachtwoord hashing en verificatie met PBKDF2
+            // Example of password hashing and verification using PBKDF2
             string password = "mijnVeiligWachtwoord";
 
-            // Hash het wachtwoord
+            // Hash the password
             string hashedPassword = PasswordManager.GenerateHash(password);
             Console.WriteLine($"Hashed Password: {hashedPassword}");
 
-            // Bij inloggen
+            // During login
             bool isCorrect = PasswordManager.Verify("Entered Password:", hashedPassword);
             Debug.WriteLine($"Password correct? {isCorrect}");
         }
+
     }
 
     /// <summary>
