@@ -1,4 +1,4 @@
-NAME, SURNAME, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
-admin,Adminimaxi, Enschedesestraat 6, 7554RX, Hengelo,admin@admin.com
-michiel,ter Elst, Hengelosestraat 6, 7557 GR, Enschede, peanutsch@duck.com
-person,User, Userstraat 6, 8558 AA, Enschede, puser@visie.nl
+NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
+Admin,admin,admin,Adminimaxi,Enschedesestraat 6,7554RX,Hengelo,admin@admin.com
+Michiel,ter Elst,mist001,Hengelosestraat 6,7557 GR,Enschede,peanutsch@duck.com
+Person,User,peer001,Userstraat 6,8558 AA,Enschede,puser@visie.nl

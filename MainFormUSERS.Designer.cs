@@ -78,9 +78,9 @@
             Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
-            Name = "MainFormADMIN";
+            Name = "MainFormUSERS";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Main";
+            Text = "Main Users";
             WindowState = FormWindowState.Maximized;
             Load += MainFormUsers_Load;
             ResumeLayout(false);

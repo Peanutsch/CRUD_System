@@ -28,63 +28,72 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBoxUserName = new TextBox();
-            buttonLOGOUT = new Button();
-            labelAdmin = new Label();
-            SuspendLayout();
+            this.textBoxUserName = new TextBox();
+            this.buttonLOGOUT = new Button();
+            this.labelAdmin = new Label();
+            this.userManagementControl1 = new UserManagementControl();
+            this.SuspendLayout();
             // 
             // textBoxUserName
             // 
-            textBoxUserName.BackColor = SystemColors.ActiveCaption;
-            textBoxUserName.Location = new Point(18, 12);
-            textBoxUserName.Name = "textBoxUserName";
-            textBoxUserName.ReadOnly = true;
-            textBoxUserName.Size = new Size(100, 26);
-            textBoxUserName.TabIndex = 0;
-            textBoxUserName.TextAlign = HorizontalAlignment.Center;
+            this.textBoxUserName.BackColor = SystemColors.ActiveCaption;
+            this.textBoxUserName.Location = new Point(18, 12);
+            this.textBoxUserName.Name = "textBoxUserName";
+            this.textBoxUserName.ReadOnly = true;
+            this.textBoxUserName.Size = new Size(100, 26);
+            this.textBoxUserName.TabIndex = 0;
+            this.textBoxUserName.TextAlign = HorizontalAlignment.Center;
             // 
             // buttonLOGOUT
             // 
-            buttonLOGOUT.BackColor = SystemColors.ActiveCaption;
-            buttonLOGOUT.FlatStyle = FlatStyle.Popup;
-            buttonLOGOUT.Location = new Point(198, 11);
-            buttonLOGOUT.Name = "buttonLOGOUT";
-            buttonLOGOUT.Size = new Size(100, 26);
-            buttonLOGOUT.TabIndex = 1;
-            buttonLOGOUT.Text = "Log Out";
-            buttonLOGOUT.UseVisualStyleBackColor = false;
-            buttonLOGOUT.Click += buttonLOGOUT_Click;
+            this.buttonLOGOUT.BackColor = SystemColors.ActiveCaption;
+            this.buttonLOGOUT.FlatStyle = FlatStyle.Popup;
+            this.buttonLOGOUT.Location = new Point(198, 11);
+            this.buttonLOGOUT.Name = "buttonLOGOUT";
+            this.buttonLOGOUT.Size = new Size(100, 26);
+            this.buttonLOGOUT.TabIndex = 1;
+            this.buttonLOGOUT.Text = "Log Out";
+            this.buttonLOGOUT.UseVisualStyleBackColor = false;
+            this.buttonLOGOUT.Click += this.buttonLOGOUT_Click;
             // 
             // labelAdmin
             // 
-            labelAdmin.AutoSize = true;
-            labelAdmin.BackColor = SystemColors.Highlight;
-            labelAdmin.Location = new Point(134, 15);
-            labelAdmin.Name = "labelAdmin";
-            labelAdmin.Size = new Size(48, 18);
-            labelAdmin.TabIndex = 3;
-            labelAdmin.Text = "ROLE";
-            labelAdmin.TextAlign = ContentAlignment.TopCenter;
+            this.labelAdmin.AutoSize = true;
+            this.labelAdmin.BackColor = SystemColors.Highlight;
+            this.labelAdmin.Location = new Point(134, 15);
+            this.labelAdmin.Name = "labelAdmin";
+            this.labelAdmin.Size = new Size(48, 18);
+            this.labelAdmin.TabIndex = 3;
+            this.labelAdmin.Text = "ROLE";
+            this.labelAdmin.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // userManagementControl1
+            // 
+            this.userManagementControl1.BorderStyle = BorderStyle.FixedSingle;
+            this.userManagementControl1.Location = new Point(18, 86);
+            this.userManagementControl1.Name = "userManagementControl1";
+            this.userManagementControl1.Size = new Size(1208, 336);
+            this.userManagementControl1.TabIndex = 4;
             // 
             // MainFormADMIN
             // 
-            AutoScaleDimensions = new SizeF(10F, 18F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(2549, 1061);
-            Controls.Add(labelAdmin);
-            Controls.Add(buttonLOGOUT);
-            Controls.Add(textBoxUserName);
-            Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(4);
-            Name = "MainFormADMIN";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Main";
-            WindowState = FormWindowState.Maximized;
-            Load += MainFormAdmin_Load;
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new SizeF(10F, 18F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.BackColor = SystemColors.ActiveCaption;
+            this.ClientSize = new Size(1260, 512);
+            this.Controls.Add(this.userManagementControl1);
+            this.Controls.Add(this.labelAdmin);
+            this.Controls.Add(this.buttonLOGOUT);
+            this.Controls.Add(this.textBoxUserName);
+            this.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.Margin = new Padding(4);
+            this.Name = "MainFormADMIN";
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Text = "Main Admin";
+            this.Load += this.MainFormAdmin_Load;
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion
@@ -92,5 +101,6 @@
         private TextBox textBoxUserName;
         private Button buttonLOGOUT;
         private Label labelAdmin;
+        private UserManagementControl userManagementControl1;
     }
 }
