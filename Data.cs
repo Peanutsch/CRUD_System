@@ -114,7 +114,7 @@ namespace CRUD_System
         /// Returns the root path as a string if the "CRUD_LoginSystem" directory is found. 
         /// If the directory cannot be determined, it displays an error message and returns an empty string.
         /// </returns>
-        static string RootPath()
+        internal static string RootPath()
         {
             string directoryPath = AppDomain.CurrentDomain.BaseDirectory;
 

@@ -13,16 +13,17 @@ namespace CRUD_System
 {
     public partial class UserManagementControl : UserControl
     {
-        Data _Data = new Data();
-        /*
-        string dataLogin = ;
-        string dataUsers = ;
-        */
+        string file_dataLogin;
+        string file_dataUsers;
 
         public UserManagementControl()
         {
             InitializeComponent();
+
+            file_dataLogin = Path.Combine(Data.RootPath(), @"data\data_login.csv");
+            file_dataUsers = Path.Combine(Data.RootPath(), @"data\data_users.csv");
         }
+
 
         /// <summary>
         /// Generates a unique alias for the user based on the first two letters of the first name
@@ -54,7 +55,7 @@ namespace CRUD_System
         private bool AliasExists(string alias)
         {
             // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines("data_login.csv");
+            var loginLines = File.ReadAllLines(file_dataLogin);
 
             // Check if the alias already exists
             foreach (var line in loginLines)
@@ -87,8 +88,8 @@ namespace CRUD_System
             string newDataUsers = $"{txtName.Text},{txtSurname.Text},{txtAlias},{txtEmail.Text},{txtAddress.Text},{txtCity.Text}";
 
             // Append to the CSV files
-            File.AppendAllText("data_login.csv", newDataLogin + Environment.NewLine);
-            File.AppendAllText("data_users.csv", newDataUsers + Environment.NewLine);
+            File.AppendAllText(file_dataLogin, newDataLogin + Environment.NewLine);
+            File.AppendAllText(file_dataUsers, newDataUsers + Environment.NewLine);
 
             MessageBox.Show("User added successfully!");
         }
@@ -98,7 +99,7 @@ namespace CRUD_System
         /// </summary>
         private void LoadUserData()
         {
-            var lines = File.ReadAllLines("data_users.csv");
+            var lines = File.ReadAllLines(file_dataUsers);
 
             foreach (var line in lines.Skip(1)) // Skip the header
             {
@@ -116,7 +117,7 @@ namespace CRUD_System
         private void listBoxUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedUser = listBoxUsers.SelectedItem!.ToString();
-            var lines = File.ReadAllLines("data_users.csv");
+            var lines = File.ReadAllLines("file_dataUsers");
 
             foreach (var line in lines.Skip(1))
             {
@@ -142,8 +143,8 @@ namespace CRUD_System
         private void btnUpdateUser_Click(object sender, EventArgs e)
         {
             // Read lines from data_login.csv and data_users.csv
-            var loginLines = File.ReadAllLines("data_login.csv").ToList();
-            var userLines = File.ReadAllLines("data_users.csv").ToList();
+            var loginLines = File.ReadAllLines(file_dataLogin).ToList();
+            var userLines = File.ReadAllLines(file_dataUsers).ToList();
 
             // Loop through each line of both files and update
             for (int i = 0; i < userLines.Count; i++)
@@ -168,8 +169,8 @@ namespace CRUD_System
                     }
 
                     // Write updated data back to both files
-                    File.WriteAllLines("data_users.csv", userLines);
-                    File.WriteAllLines("data_login.csv", loginLines);
+                    File.WriteAllLines(file_dataLogin, loginLines);
+                    File.WriteAllLines(file_dataUsers, userLines);
 
                     // Confirm successful update
                     MessageBox.Show("User updated successfully!");
@@ -187,10 +188,10 @@ namespace CRUD_System
         private void btnDeleteUser_Click(object sender, EventArgs e)
         {
             // Read all lines from data_users.csv
-            var userLines = File.ReadAllLines("data_users.csv").ToList();
+            var userLines = File.ReadAllLines(file_dataUsers).ToList();
 
             // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines("data_login.csv").ToList();
+            var loginLines = File.ReadAllLines(file_dataLogin).ToList();
 
             // Find the alias for the selected user
             string aliasToDelete = string.Empty;
@@ -206,11 +207,11 @@ namespace CRUD_System
 
             // Remove the user from data_users.csv
             userLines = userLines.Where(line => !line.StartsWith(txtName.Text)).ToList(); // Filter out the selected user
-            File.WriteAllLines("data_users.csv", userLines);
+            File.WriteAllLines(file_dataUsers, userLines);
 
             // Remove the user from data_login.csv using the alias
             loginLines = loginLines.Where(line => !line.StartsWith(aliasToDelete)).ToList(); // Filter out the user by alias
-            File.WriteAllLines("data_login.csv", loginLines);
+            File.WriteAllLines(file_dataLogin, loginLines);
 
             MessageBox.Show("User deleted successfully!");
         }

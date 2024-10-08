@@ -28,63 +28,62 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBoxUserName = new TextBox();
-            buttonLOGOUT = new Button();
-            labelUser = new Label();
-            SuspendLayout();
+            this.textBoxUserName = new TextBox();
+            this.buttonLOGOUT = new Button();
+            this.labelUser = new Label();
+            this.SuspendLayout();
             // 
             // textBoxUserName
             // 
-            textBoxUserName.BackColor = SystemColors.ActiveCaption;
-            textBoxUserName.Location = new Point(18, 12);
-            textBoxUserName.Name = "textBoxUserName";
-            textBoxUserName.ReadOnly = true;
-            textBoxUserName.Size = new Size(100, 26);
-            textBoxUserName.TabIndex = 0;
-            textBoxUserName.TextAlign = HorizontalAlignment.Center;
+            this.textBoxUserName.BackColor = SystemColors.ActiveCaption;
+            this.textBoxUserName.Location = new Point(18, 12);
+            this.textBoxUserName.Name = "textBoxUserName";
+            this.textBoxUserName.ReadOnly = true;
+            this.textBoxUserName.Size = new Size(100, 26);
+            this.textBoxUserName.TabIndex = 0;
+            this.textBoxUserName.TextAlign = HorizontalAlignment.Center;
             // 
             // buttonLOGOUT
             // 
-            buttonLOGOUT.BackColor = SystemColors.ActiveCaption;
-            buttonLOGOUT.FlatStyle = FlatStyle.Popup;
-            buttonLOGOUT.Location = new Point(198, 11);
-            buttonLOGOUT.Name = "buttonLOGOUT";
-            buttonLOGOUT.Size = new Size(100, 26);
-            buttonLOGOUT.TabIndex = 1;
-            buttonLOGOUT.Text = "Log Out";
-            buttonLOGOUT.UseVisualStyleBackColor = false;
-            buttonLOGOUT.Click += buttonLOGOUT_Click;
+            this.buttonLOGOUT.BackColor = SystemColors.ActiveCaption;
+            this.buttonLOGOUT.FlatStyle = FlatStyle.Popup;
+            this.buttonLOGOUT.Location = new Point(198, 11);
+            this.buttonLOGOUT.Name = "buttonLOGOUT";
+            this.buttonLOGOUT.Size = new Size(100, 26);
+            this.buttonLOGOUT.TabIndex = 1;
+            this.buttonLOGOUT.Text = "Log Out";
+            this.buttonLOGOUT.UseVisualStyleBackColor = false;
+            this.buttonLOGOUT.Click += this.buttonLOGOUT_Click;
             // 
             // labelUser
             // 
-            labelUser.AutoSize = true;
-            labelUser.BackColor = SystemColors.Highlight;
-            labelUser.Location = new Point(134, 15);
-            labelUser.Name = "labelAdmin";
-            labelUser.Size = new Size(48, 18);
-            labelUser.TabIndex = 3;
-            labelUser.Text = "ROLE";
-            labelUser.TextAlign = ContentAlignment.TopCenter;
+            this.labelUser.AutoSize = true;
+            this.labelUser.BackColor = SystemColors.Highlight;
+            this.labelUser.Location = new Point(134, 15);
+            this.labelUser.Name = "labelUser";
+            this.labelUser.Size = new Size(48, 18);
+            this.labelUser.TabIndex = 3;
+            this.labelUser.Text = "ROLE";
+            this.labelUser.TextAlign = ContentAlignment.TopCenter;
             // 
-            // MainFormADMIN
+            // MainFormUSERS
             // 
-            AutoScaleDimensions = new SizeF(10F, 18F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(2549, 1061);
-            Controls.Add(labelUser);
-            Controls.Add(buttonLOGOUT);
-            Controls.Add(textBoxUserName);
-            Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(4);
-            Name = "MainFormUSERS";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Main Users";
-            WindowState = FormWindowState.Maximized;
-            Load += MainFormUsers_Load;
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new SizeF(10F, 18F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.BackColor = SystemColors.ActiveCaption;
+            this.ClientSize = new Size(1260, 512);
+            this.Controls.Add(this.labelUser);
+            this.Controls.Add(this.buttonLOGOUT);
+            this.Controls.Add(this.textBoxUserName);
+            this.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.Margin = new Padding(4);
+            this.Name = "MainFormUSERS";
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Text = "Main Users";
+            this.Load += this.MainFormUsers_Load;
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion
