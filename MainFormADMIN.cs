@@ -13,7 +13,7 @@ namespace CRUD_System
 {
     public partial class MainFormADMIN : Form
     {
-        private UserManagementControl _UserManagementControl = new UserManagementControl();
+        private AdminManagementControl _UserManagementControl = new AdminManagementControl();
         private Data _Data = new Data(); 
         private LoginValidation _LoginValidation = new LoginValidation();
         
@@ -37,7 +37,7 @@ namespace CRUD_System
             //
         }
 
-
+        #region BUTTONS
         /// <summary>
         /// Handles the click event of the logout button. 
         /// Hides the MainForm and opens the LoginForm.
@@ -54,6 +54,7 @@ namespace CRUD_System
 
             this.Close(); // Once MainForm is closed, close the LoginForm
         }
+        #endregion
 
         /// <summary>
         /// Displays the username in uppercase in the username text box
@@ -64,10 +65,9 @@ namespace CRUD_System
         public void BoxDisplay(string inputUserName, string inputUserPSW)
         {
             textBoxUserName.Text = $"{inputUserName.ToUpper()}";
-            //_LoginValidation.ValidateRights(this, inputUserName, inputUserPSW);
 
             labelAdmin.TextAlign = ContentAlignment.TopLeft;
-            labelAdmin.BackColor = Color.LightSkyBlue;
+            labelAdmin.BackColor = Color.LightGreen;
             labelAdmin.Text = "ADMIN";
         }
     }

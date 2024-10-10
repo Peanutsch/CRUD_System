@@ -31,7 +31,7 @@
             textBoxUserName = new TextBox();
             buttonLOGOUT = new Button();
             labelAdmin = new Label();
-            userManagementControl1 = new UserManagementControl();
+            adminManagementControl = new AdminManagementControl();
             SuspendLayout();
             // 
             // textBoxUserName
@@ -48,7 +48,7 @@
             // 
             buttonLOGOUT.BackColor = SystemColors.ActiveCaption;
             buttonLOGOUT.FlatStyle = FlatStyle.Popup;
-            buttonLOGOUT.Location = new Point(198, 11);
+            buttonLOGOUT.Location = new Point(188, 11);
             buttonLOGOUT.Name = "buttonLOGOUT";
             buttonLOGOUT.Size = new Size(100, 26);
             buttonLOGOUT.TabIndex = 1;
@@ -59,32 +59,32 @@
             // labelAdmin
             // 
             labelAdmin.AutoSize = true;
-            labelAdmin.BackColor = SystemColors.Highlight;
-            labelAdmin.Location = new Point(134, 15);
+            labelAdmin.BackColor = Color.FromArgb(128, 255, 128);
+            labelAdmin.Location = new Point(124, 15);
             labelAdmin.Name = "labelAdmin";
-            labelAdmin.Size = new Size(48, 18);
+            labelAdmin.Size = new Size(58, 18);
             labelAdmin.TabIndex = 3;
-            labelAdmin.Text = "ROLE";
+            labelAdmin.Text = "ADMIN";
             labelAdmin.TextAlign = ContentAlignment.TopCenter;
+            //
+            // adminManagementControl
             // 
-            // userManagementControl1
-            // 
-            userManagementControl1.BorderStyle = BorderStyle.FixedSingle;
-            userManagementControl1.Location = new Point(18, 86);
-            userManagementControl1.Name = "userManagementControl1";
-            userManagementControl1.Size = new Size(1208, 336);
-            userManagementControl1.TabIndex = 4;
+            adminManagementControl.BorderStyle = BorderStyle.FixedSingle;
+            adminManagementControl.Location = new Point(18, 86);
+            adminManagementControl.Name = "adminManagementControl";
+            adminManagementControl.Size = new Size(1208, 336);
+            adminManagementControl.TabIndex = 4;
             // 
             // MainFormADMIN
-            // 
+            //
             AutoScaleDimensions = new SizeF(10F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(1260, 512);
-            Controls.Add(userManagementControl1);
             Controls.Add(labelAdmin);
             Controls.Add(buttonLOGOUT);
             Controls.Add(textBoxUserName);
+            Controls.Add(adminManagementControl);
             Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
@@ -101,6 +101,6 @@
         private TextBox textBoxUserName;
         private Button buttonLOGOUT;
         private Label labelAdmin;
-        private UserManagementControl userManagementControl1;
+        private AdminManagementControl adminManagementControl;
     }
 }

@@ -74,7 +74,7 @@ namespace CRUD_System
         {
             // Construct the full path to the CSV file
             string file = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
-            Debug.WriteLine($"RootPath data_users.csv: {RootPath.GetRootPath}");
+            Debug.WriteLine($"RootPath data_users.csv: {RootPath.GetRootPath()}");
 
             // Check if the file exists; if not, log an error and return an empty list
             if (!File.Exists(file))
@@ -83,7 +83,8 @@ namespace CRUD_System
                 return new List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)>();
             }
 
-            List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> users = new List<(string, string, string, string, string, string)>();
+            List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> users =
+                new List<(string, string, string, string, string, string)>();
 
             using (var reader = new StreamReader(file))
             {
@@ -94,17 +95,21 @@ namespace CRUD_System
                     var line = reader.ReadLine();
                     var values = line!.Split(',');
 
-                    // Create a tuple with the user data
-                    users.Add((values[0].Trim(), 
-                               values[1].Trim(), 
-                               values[2].Trim(), 
-                               values[3].Trim(), 
-                               values[4].Trim(), 
-                               values[5].Trim()));
+                    // Assign "None" to any missing or empty value
+                    string name = string.IsNullOrWhiteSpace(values[0]) ? "None" : values[0].Trim();
+                    string surname = string.IsNullOrWhiteSpace(values[1]) ? "None" : values[1].Trim();
+                    string address = string.IsNullOrWhiteSpace(values[2]) ? "None" : values[2].Trim();
+                    string zipCode = string.IsNullOrWhiteSpace(values[3]) ? "None" : values[3].Trim();
+                    string city = string.IsNullOrWhiteSpace(values[4]) ? "None" : values[4].Trim();
+                    string emailAddress = string.IsNullOrWhiteSpace(values[5]) ? "None" : values[5].Trim();
+
+                    // Add the user data as a tuple to the list
+                    users.Add((name, surname, address, zipCode, city, emailAddress));
                 }
             }
 
             return users;
         }
+
     }
 }

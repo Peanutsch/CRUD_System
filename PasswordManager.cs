@@ -17,6 +17,33 @@ namespace CRUD_System
         private const int Iterations = 100000; // Recommended number of iterations
 
         /// <summary>
+        /// Generates a secure random password of the specified length.
+        /// </summary>
+        /// <param name="length">The length of the password to be generated.</param>
+        /// <returns>A random password string.</returns>
+        public static string GenerateUserPassword(int length = 12)
+        {
+            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_-+=<>?";
+            char[] password = new char[length];
+            byte[] randomBytes = new byte[length];
+
+            // Gebruik de nieuwe RandomNumberGenerator
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomBytes);
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                password[i] = validChars[randomBytes[i] % validChars.Length];
+            }
+
+            return new string(password);
+        }
+
+
+        #region HASH
+        /// <summary>
         /// Generates a hash for the specified password using PBKDF2.
         /// The generated hash includes a randomly generated salt.
         /// </summary>
@@ -109,6 +136,7 @@ namespace CRUD_System
         }
 
     }
+    #endregion
 
     /// <summary>
     /// Provides AES encryption and decryption methods.

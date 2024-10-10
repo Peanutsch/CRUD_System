@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace CRUD_System
 {
-    public partial class UserManagementControl : UserControl
+    public partial class AdminManagementControl : UserControl
     {
         string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
         string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
@@ -20,7 +20,7 @@ namespace CRUD_System
         Data _Data = new Data();
 
 
-        public UserManagementControl()
+        public AdminManagementControl()
         {
             InitializeComponent();
 
@@ -31,7 +31,7 @@ namespace CRUD_System
             LoadUserData();
         }
 
-
+        #region ALIAS
         /// <summary>
         /// Generates a unique alias for the user based on the first two letters of the first name
         /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
@@ -75,8 +75,9 @@ namespace CRUD_System
             }
 
             return false; // Alias does not exist
+            #endregion
         }
-
+        #region BUTTONS
         /// <summary>
         /// Handles the click event to add a new user.
         /// Creates a new record in both data_login.csv and data_users.csv.
@@ -89,7 +90,7 @@ namespace CRUD_System
             string txtAlias = CreateTXTAlias();
 
             // data_login: ALIAS, PASSWORD, ADMIN
-            string newDataLogin = $"{txtAlias},{txtPassword.Text},{chkIsAdmin.Checked}";
+            string newDataLogin = $"{txtAlias},{txtPassword.Text}";
 
             // data_users: NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
             string newDataUsers = $"{txtName.Text},{txtSurname.Text},{txtAlias},{txtEmail.Text},{txtAddress.Text},{txtCity.Text}";
@@ -100,62 +101,6 @@ namespace CRUD_System
 
             MessageBox.Show("User added successfully!");
         }
-
-        /// <summary>
-        /// Loads user data from data_users.csv and populates the list box with user names.
-        /// </summary>
-        private void LoadUserData()
-        {
-            var lines = File.ReadAllLines(dataUsers);
-
-            foreach (var line in lines.Skip(2)) // Skip Header and details Admin
-            {
-                var userDetails = line.Split(',');
-                //                     userDetails[0] = Name  userDetails[1] = Surname     userDetails[2] = Alias
-                listBoxUsers.Items.Add(userDetails[0] + " " + userDetails[1] + " " + "(" + userDetails[2] + ")"); // Add names to the list
-            }
-        }
-
-
-        /// <summary>
-        /// Handles the event when a user is selected from the list box.
-        /// Displays the user's details in the respective text fields.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
-        private void ListBoxUsers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var selectedUser = listBoxUsers.SelectedItem!.ToString();
-            var linesDataUsers = File.ReadAllLines(dataUsers);
-            var linesDataLogin = File.ReadAllLines(dataLogin);
-            // Get data from data_users.csv
-            foreach (var lineDataUser in linesDataUsers.Skip(2)) // Skip Header and details Admin
-            {
-                var userDetails = lineDataUser.Split(',');
-                if (linesDataUsers[0] == selectedUser)
-                {
-                    txtName.Text = userDetails[0];
-                    txtSurname.Text = userDetails[1];
-                    txtAddress.Text = userDetails[3];
-                    txtZIPCode.Text = userDetails[4];
-                    txtCity.Text = userDetails[5];
-                    txtEmail.Text = userDetails[6];
-                }
-            }
-            // Get data from data_login.csv
-            foreach (var lineDataLogin in linesDataLogin.Skip(2)) // Skip Header and details Admin
-            {
-                var loginDetails = lineDataLogin.Split(",");
-                if (linesDataLogin[0] == selectedUser)
-                {
-                    txtAlias.Text = loginDetails[0];
-                    txtPassword.Text = loginDetails[1];
-                    chkIsAdmin.Checked = loginDetails[2] == "true"; // Checked if admin role
-                }
-            }
-        }
-
-
         /// <summary>
         /// Handles the click event to update an existing user.
         /// Updates user details in both data_login.csv and data_users.csv.
@@ -185,7 +130,7 @@ namespace CRUD_System
 
                         if (loginDetails[0] == txtName.Text) // Search by name in data_login.csv
                         {
-                            loginLines[j] = $"{txtName.Text},{txtPassword.Text},{chkIsAdmin.Checked}";
+                            loginLines[j] = $"{txtName.Text},{txtPassword.Text}";
                             break; // Stop searching once a match is found and updated
                         }
                     }
@@ -237,5 +182,97 @@ namespace CRUD_System
 
             MessageBox.Show("User deleted successfully!");
         }
+
+        private void btnGenPSW_Click(object sender, EventArgs e)
+        {
+            string generatedPassword = PasswordManager.GenerateUserPassword();
+            txtPassword.Text = generatedPassword;
+        }
+        #endregion
+
+        #region LISTBOX
+        /// <summary>
+        /// Loads user data from data_users.csv and populates the list box with user names.
+        /// </summary>
+        private void LoadUserData()
+        {
+            var lines = File.ReadAllLines(dataUsers);
+
+            foreach (var line in lines.Skip(2)) // Skip Header and details Admin
+            {
+                var userDetails = line.Split(',');
+                //                     userDetails[0] = Name  userDetails[1] = Surname     userDetails[2] = Alias
+                listBoxUsers.Items.Add(userDetails[0] + " " + userDetails[1] + " " + "(" + userDetails[2] + ")"); // Add names to the list
+            }
+        }
+
+
+        /// <summary>
+        /// Handles the event when a user is selected from the list box.
+        /// Displays the user's details in the respective text fields.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        /// <summary>
+        /// Handles the event when a user is selected from the list box.
+        /// Extracts the alias from the selected item and retrieves the corresponding 
+        /// user details from both data_users.csv and data_login.csv. 
+        /// The user's information is then displayed in the appropriate text fields.
+        /// </summary>
+        /// <param name="sender">The source of the event (the ListBox).</param>
+        /// <param name="e">The event data (user selection).</param>
+        private void ListBoxUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Get the selected user from the ListBox
+            if (listBoxUsers.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
+            {
+                // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
+                string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
+
+                // Read user details
+                var userDetails = File.ReadAllLines(dataUsers).Skip(2)
+                    .Select(line => line.Split(',')).FirstOrDefault(details => details[2] == selectedAlias);
+
+                if (userDetails != null)
+                {
+                    // Populate the text fields with the details of the selected user
+                    txtName.Text = userDetails[0];
+                    txtSurname.Text = userDetails[1];
+                    txtAlias.Text = userDetails[2];
+                    txtAddress.Text = userDetails[3];
+                    txtZIPCode.Text = userDetails[4];
+                    txtCity.Text = userDetails[5];
+                    txtEmail.Text = userDetails[6];
+                    txtPhonenumber.Text = userDetails[7];
+                }
+
+                // Read the lines from data_login.csv
+                var loginLines = File.ReadAllLines(dataLogin).Skip(2); // Skip the headers
+                var loginDetailsList = loginLines.Select(line => line.Split(',')); // Split each line into details
+                var loginDetails = loginDetailsList.FirstOrDefault(details => details[0] == selectedAlias); // Find the login details for the selected alias
+
+                // Check if loginDetails is not null
+                if (loginDetails != null)
+                {
+                    // Check if the admin status is true
+                    if (loginDetails[2]! == "true") // Use '==' for comparison
+                    {
+                        // Show the admin label
+                        txtAdmin.Visible = true;
+                    }
+                    else
+                    {
+                        // Hide the admin label if not an admin
+                        txtAdmin.Visible = false;
+                    }
+                }
+                else
+                {
+                    // Handle the case where loginDetails is null (optional)
+                    txtAdmin.Visible = false; // Hide the label if no details found
+                }
+            }
+        }
+        #endregion
     }
 }
