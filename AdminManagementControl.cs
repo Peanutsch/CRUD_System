@@ -5,9 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using System.Xml.Linq;
 
 namespace CRUD_System
 {
@@ -202,7 +205,19 @@ namespace CRUD_System
             {
                 var userDetails = line.Split(',');
                 //                     userDetails[0] = Name  userDetails[1] = Surname     userDetails[2] = Alias
-                listBoxUsers.Items.Add(userDetails[0] + " " + userDetails[1] + " " + "(" + userDetails[2] + ")"); // Add names to the list
+                //NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS, PHONENUMBER
+                string NAME = userDetails[0];
+                string SURNAME = userDetails[1];
+                string ALIAS = userDetails[2];
+                string ADRESS = userDetails[3];
+                string ZIPCODE = userDetails[4];
+                string CITY = userDetails[5];
+                string EMAIL = userDetails[6];
+                string PHONE = userDetails[7];
+                //listBoxUsers.Items.Add(userDetails[0] + " " + userDetails[1] + " " + "(" + userDetails[2] + ")"); // Add names to the list
+                //listBoxUsers.Items.Add(NAME + " | " + SURNAME + " | " + "(" + ALIAS + ")" + " | " + ADRESS + " | " + 
+                //                       ZIPCODE + " | " + CITY + " | " + EMAIL + " | " + PHONE); // Add names to the list
+                listBoxUsers.Items.Add(NAME + " " + SURNAME + " " + "(" + ALIAS + ")" + " | " + EMAIL + " | " + PHONE); // Add names to the list
             }
         }
 

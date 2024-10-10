@@ -193,7 +193,7 @@
             txtAdmin.TextAlign = HorizontalAlignment.Center;
             txtAdmin.Visible = false;
             // 
-            // UserManagementControl
+            // AdminManagementControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -213,7 +213,7 @@
             Controls.Add(btnAddUser);
             Controls.Add(btnUpdateUser);
             Controls.Add(btnDeleteUser);
-            Name = "UserManagementControl";
+            Name = "AdminManagementControl";
             Size = new Size(1014, 396);
             ResumeLayout(false);
             PerformLayout();
