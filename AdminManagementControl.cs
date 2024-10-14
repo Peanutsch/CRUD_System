@@ -123,8 +123,9 @@ namespace CRUD_System
 
                 if (userDetails[0] == txtName.Text) // Search by name in data_users.csv
                 {
+                    // NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS, PHONENUMBER
                     // Update data_users.csv
-                    userLines[i] = $"{txtName.Text},{txtSurname.Text},{txtEmail.Text},{txtAddress.Text},{txtCity.Text}";
+                    userLines[i] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text},{txtCity.Text},{txtEmail.Text}.{txtPhonenumber.Text}";
 
                     // Find corresponding line in data_login.csv and update password and admin status
                     for (int j = 0; j < loginLines.Count; j++)
@@ -289,5 +290,28 @@ namespace CRUD_System
             }
         }
         #endregion
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            // Indicate Edit mode is enabled
+            btnEdit.BackColor = Color.Orange;
+
+            //Enable TextBoxes
+            txtName.Enabled = true;
+            txtSurname.Enabled = true;
+            txtAdmin.Enabled = true;
+            txtAddress.Enabled = true;
+            txtZIPCode.Enabled = true;
+            txtCity.Enabled = true;
+            txtEmail.Enabled = true;
+            txtPhonenumber.Enabled = true;
+            txtPassword.Enabled = true;
+
+            //Enable Buttons
+            btnAddUser.Enabled = true;
+            btnDeleteUser.Enabled = true;
+            btnGenPSW.Enabled = true;
+            btnUpdateUser.Enabled = true;
+        }
     }
 }

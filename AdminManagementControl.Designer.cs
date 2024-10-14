@@ -7,6 +7,7 @@
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.TextBox txtAddress;
         private System.Windows.Forms.TextBox txtCity;
+        private System.Windows.Forms.TextBox txtAdmin;
         private System.Windows.Forms.ListBox listBoxUsers;
         private System.Windows.Forms.Button btnAddUser;
         private System.Windows.Forms.Button btnUpdateUser;
@@ -34,191 +35,221 @@
 
         private void InitializeComponent()
         {
-            txtName = new TextBox();
-            txtPassword = new TextBox();
-            txtEmail = new TextBox();
-            txtAddress = new TextBox();
-            txtCity = new TextBox();
-            listBoxUsers = new ListBox();
-            btnAddUser = new Button();
-            btnUpdateUser = new Button();
-            btnDeleteUser = new Button();
-            txtSurname = new TextBox();
-            txtAlias = new TextBox();
-            txtZIPCode = new TextBox();
-            txtPhonenumber = new TextBox();
-            btnGenPSW = new Button();
-            txtAdmin = new TextBox();
-            SuspendLayout();
+            this.txtName = new TextBox();
+            this.txtPassword = new TextBox();
+            this.txtEmail = new TextBox();
+            this.txtAddress = new TextBox();
+            this.txtCity = new TextBox();
+            this.listBoxUsers = new ListBox();
+            this.btnAddUser = new Button();
+            this.btnUpdateUser = new Button();
+            this.btnDeleteUser = new Button();
+            this.txtSurname = new TextBox();
+            this.txtAlias = new TextBox();
+            this.txtZIPCode = new TextBox();
+            this.txtPhonenumber = new TextBox();
+            this.btnGenPSW = new Button();
+            this.btnEdit = new Button();
+            this.txtAdmin = new TextBox();
+            this.SuspendLayout();
+            
+            #region TEXTBOXES
             // 
             // txtName
             // 
-            txtName.Location = new Point(229, 255);
-            txtName.Name = "txtName";
-            txtName.PlaceholderText = "Name";
-            txtName.Size = new Size(199, 23);
-            txtName.TabIndex = 1;
-            txtName.TextAlign = HorizontalAlignment.Center;
+            this.txtName.Enabled = false;
+            this.txtName.Location = new Point(229, 255);
+            this.txtName.Name = "txtName";
+            this.txtName.PlaceholderText = "Name";
+            this.txtName.Size = new Size(199, 23);
+            this.txtName.TabIndex = 1;
+            this.txtName.TextAlign = HorizontalAlignment.Center;
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(681, 327);
-            txtPassword.Name = "txtPassword";
-            txtPassword.PlaceholderText = "Password";
-            txtPassword.Size = new Size(150, 23);
-            txtPassword.TabIndex = 8;
-            txtPassword.TextAlign = HorizontalAlignment.Center;
+            this.txtPassword.Enabled = false;
+            this.txtPassword.Location = new Point(681, 327);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PlaceholderText = "Password";
+            this.txtPassword.Size = new Size(150, 23);
+            this.txtPassword.TabIndex = 8;
+            this.txtPassword.TextAlign = HorizontalAlignment.Center;
             // 
             // txtEmail
             // 
-            txtEmail.Location = new Point(24, 313);
-            txtEmail.Name = "txtEmail";
-            txtEmail.PlaceholderText = "E-mail";
-            txtEmail.Size = new Size(199, 23);
-            txtEmail.TabIndex = 6;
-            txtEmail.TextAlign = HorizontalAlignment.Center;
+            this.txtEmail.Enabled = false;
+            this.txtEmail.Location = new Point(24, 313);
+            this.txtEmail.Name = "txtEmail";
+            this.txtEmail.PlaceholderText = "E-mail";
+            this.txtEmail.Size = new Size(199, 23);
+            this.txtEmail.TabIndex = 6;
+            this.txtEmail.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAddress
             // 
-            txtAddress.Location = new Point(24, 284);
-            txtAddress.Name = "txtAddress";
-            txtAddress.PlaceholderText = "Adress";
-            txtAddress.Size = new Size(199, 23);
-            txtAddress.TabIndex = 3;
-            txtAddress.TextAlign = HorizontalAlignment.Center;
+            this.txtAddress.Enabled = false;
+            this.txtAddress.Location = new Point(24, 284);
+            this.txtAddress.Name = "txtAddress";
+            this.txtAddress.PlaceholderText = "Adress";
+            this.txtAddress.Size = new Size(199, 23);
+            this.txtAddress.TabIndex = 3;
+            this.txtAddress.TextAlign = HorizontalAlignment.Center;
             // 
             // txtCity
             // 
-            txtCity.Location = new Point(434, 284);
-            txtCity.Name = "txtCity";
-            txtCity.PlaceholderText = "City";
-            txtCity.Size = new Size(199, 23);
-            txtCity.TabIndex = 5;
-            txtCity.TextAlign = HorizontalAlignment.Center;
-            // 
-            // listBoxUsers
-            // 
-            listBoxUsers.ItemHeight = 15;
-            listBoxUsers.Location = new Point(24, 20);
-            listBoxUsers.Name = "listBoxUsers";
-            listBoxUsers.Size = new Size(963, 229);
-            listBoxUsers.TabIndex = 0;
-            listBoxUsers.SelectedIndexChanged += ListBoxUsers_SelectedIndexChanged;
-            // 
-            // btnAddUser
-            // 
-            btnAddUser.Location = new Point(837, 255);
-            btnAddUser.Name = "btnAddUser";
-            btnAddUser.Size = new Size(150, 30);
-            btnAddUser.TabIndex = 11;
-            btnAddUser.Text = "Add User";
-            btnAddUser.Click += btnAddUser_Click;
-            // 
-            // btnUpdateUser
-            // 
-            btnUpdateUser.Location = new Point(681, 255);
-            btnUpdateUser.Name = "btnUpdateUser";
-            btnUpdateUser.Size = new Size(150, 30);
-            btnUpdateUser.TabIndex = 10;
-            btnUpdateUser.Text = "Update User";
-            btnUpdateUser.Click += btnUpdateUser_Click;
-            // 
-            // btnDeleteUser
-            // 
-            btnDeleteUser.Location = new Point(837, 291);
-            btnDeleteUser.Name = "btnDeleteUser";
-            btnDeleteUser.Size = new Size(150, 30);
-            btnDeleteUser.TabIndex = 9;
-            btnDeleteUser.Text = "Delete User";
-            btnDeleteUser.Click += btnDeleteUser_Click;
+            this.txtCity.Enabled = false;
+            this.txtCity.Location = new Point(434, 284);
+            this.txtCity.Name = "txtCity";
+            this.txtCity.PlaceholderText = "City";
+            this.txtCity.Size = new Size(199, 23);
+            this.txtCity.TabIndex = 5;
+            this.txtCity.TextAlign = HorizontalAlignment.Center;
             // 
             // txtSurname
             // 
-            txtSurname.Location = new Point(434, 255);
-            txtSurname.Name = "txtSurname";
-            txtSurname.PlaceholderText = "Surname";
-            txtSurname.Size = new Size(199, 23);
-            txtSurname.TabIndex = 2;
-            txtSurname.TextAlign = HorizontalAlignment.Center;
+            this.txtSurname.Enabled = false;
+            this.txtSurname.Location = new Point(434, 255);
+            this.txtSurname.Name = "txtSurname";
+            this.txtSurname.PlaceholderText = "Surname";
+            this.txtSurname.Size = new Size(199, 23);
+            this.txtSurname.TabIndex = 2;
+            this.txtSurname.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAlias
             // 
-            txtAlias.Enabled = false;
-            txtAlias.Location = new Point(24, 255);
-            txtAlias.Name = "txtAlias";
-            txtAlias.PlaceholderText = "Alias";
-            txtAlias.ReadOnly = true;
-            txtAlias.Size = new Size(199, 23);
-            txtAlias.TabIndex = 20;
-            txtAlias.TextAlign = HorizontalAlignment.Center;
+            this.txtAlias.Enabled = false;
+            this.txtAlias.Location = new Point(24, 255);
+            this.txtAlias.Name = "txtAlias";
+            this.txtAlias.PlaceholderText = "Alias";
+            this.txtAlias.ReadOnly = true;
+            this.txtAlias.Size = new Size(199, 23);
+            this.txtAlias.TabIndex = 20;
+            this.txtAlias.TextAlign = HorizontalAlignment.Center;
             // 
             // txtZIPCode
             // 
-            txtZIPCode.Location = new Point(229, 284);
-            txtZIPCode.Name = "txtZIPCode";
-            txtZIPCode.PlaceholderText = "ZIP Code";
-            txtZIPCode.Size = new Size(199, 23);
-            txtZIPCode.TabIndex = 4;
-            txtZIPCode.TextAlign = HorizontalAlignment.Center;
+            this.txtZIPCode.Enabled = false;
+            this.txtZIPCode.Location = new Point(229, 284);
+            this.txtZIPCode.Name = "txtZIPCode";
+            this.txtZIPCode.PlaceholderText = "ZIP Code";
+            this.txtZIPCode.Size = new Size(199, 23);
+            this.txtZIPCode.TabIndex = 4;
+            this.txtZIPCode.TextAlign = HorizontalAlignment.Center;
             // 
             // txtPhonenumber
             // 
-            txtPhonenumber.Location = new Point(229, 313);
-            txtPhonenumber.Name = "txtPhonenumber";
-            txtPhonenumber.PlaceholderText = "Phonenumber";
-            txtPhonenumber.Size = new Size(199, 23);
-            txtPhonenumber.TabIndex = 21;
-            txtPhonenumber.TextAlign = HorizontalAlignment.Center;
-            // 
-            // btnGenPSW
-            // 
-            btnGenPSW.Location = new Point(681, 291);
-            btnGenPSW.Name = "btnGenPSW";
-            btnGenPSW.Size = new Size(150, 30);
-            btnGenPSW.TabIndex = 22;
-            btnGenPSW.Text = "Generate PSW";
-            btnGenPSW.Click += btnGenPSW_Click;
+            this.txtPhonenumber.Enabled = false;
+            this.txtPhonenumber.Location = new Point(229, 313);
+            this.txtPhonenumber.Name = "txtPhonenumber";
+            this.txtPhonenumber.PlaceholderText = "Phonenumber";
+            this.txtPhonenumber.Size = new Size(199, 23);
+            this.txtPhonenumber.TabIndex = 21;
+            this.txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAdmin
             // 
-            txtAdmin.BackColor = Color.FromArgb(128, 255, 128);
-            txtAdmin.Enabled = false;
-            txtAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAdmin.Location = new Point(434, 313);
-            txtAdmin.Name = "txtAdmin";
-            txtAdmin.Size = new Size(199, 26);
-            txtAdmin.TabIndex = 24;
-            txtAdmin.TabStop = false;
-            txtAdmin.Text = "ADMIN";
-            txtAdmin.TextAlign = HorizontalAlignment.Center;
-            txtAdmin.Visible = false;
+            this.txtAdmin.BackColor = Color.LightGreen;
+            this.txtAdmin.Enabled = false;
+            this.txtAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.txtAdmin.Location = new Point(434, 313);
+            this.txtAdmin.Multiline = true;
+            this.txtAdmin.Name = "txtAdmin";
+            this.txtAdmin.Size = new Size(199, 23);
+            this.txtAdmin.TabIndex = 26;
+            this.txtAdmin.Text = "User is ADMIN";
+            this.txtAdmin.TextAlign = HorizontalAlignment.Center;
+            this.txtAdmin.Visible = false;
+            #endregion
+            #region BUTTONS
+            // 
+            // btnGenPSW
+            // 
+            this.btnGenPSW.Enabled = false;
+            this.btnGenPSW.Location = new Point(681, 291);
+            this.btnGenPSW.Name = "btnGenPSW";
+            this.btnGenPSW.Size = new Size(150, 30);
+            this.btnGenPSW.TabIndex = 22;
+            this.btnGenPSW.Text = "Generate PSW";
+            this.btnGenPSW.Click += this.btnGenPSW_Click;
+            // 
+            // btnAddUser
+            // 
+            this.btnAddUser.Enabled = false;
+            this.btnAddUser.Location = new Point(837, 255);
+            this.btnAddUser.Name = "btnAddUser";
+            this.btnAddUser.Size = new Size(150, 30);
+            this.btnAddUser.TabIndex = 11;
+            this.btnAddUser.Text = "Add User";
+            this.btnAddUser.Click += this.btnAddUser_Click;
+            // 
+            // btnUpdateUser
+            // 
+            this.btnUpdateUser.Enabled = false;
+            this.btnUpdateUser.Location = new Point(681, 255);
+            this.btnUpdateUser.Name = "btnUpdateUser";
+            this.btnUpdateUser.Size = new Size(150, 30);
+            this.btnUpdateUser.TabIndex = 10;
+            this.btnUpdateUser.Text = "Update User";
+            this.btnUpdateUser.Click += this.btnUpdateUser_Click;
+            // 
+            // btnDeleteUser
+            // 
+            this.btnDeleteUser.Enabled = false;
+            this.btnDeleteUser.Location = new Point(837, 291);
+            this.btnDeleteUser.Name = "btnDeleteUser";
+            this.btnDeleteUser.Size = new Size(150, 30);
+            this.btnDeleteUser.TabIndex = 9;
+            this.btnDeleteUser.Text = "Delete User";
+            this.btnDeleteUser.Click += this.btnDeleteUser_Click;
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Location = new Point(24, 355);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new Size(106, 25);
+            this.btnEdit.TabIndex = 25;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += this.btnEdit_Click;
+            #endregion
+            #region LISTBOX
+            // 
+            // listBoxUsers
+            // 
+            this.listBoxUsers.ItemHeight = 15;
+            this.listBoxUsers.Location = new Point(24, 20);
+            this.listBoxUsers.Name = "listBoxUsers";
+            this.listBoxUsers.Size = new Size(963, 229);
+            this.listBoxUsers.TabIndex = 0;
+            this.listBoxUsers.SelectedIndexChanged += this.ListBoxUsers_SelectedIndexChanged;
+            #endregion
             // 
             // AdminManagementControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BorderStyle = BorderStyle.FixedSingle;
-            Controls.Add(txtAdmin);
-            Controls.Add(btnGenPSW);
-            Controls.Add(txtPhonenumber);
-            Controls.Add(txtZIPCode);
-            Controls.Add(txtAlias);
-            Controls.Add(txtSurname);
-            Controls.Add(txtName);
-            Controls.Add(txtPassword);
-            Controls.Add(txtEmail);
-            Controls.Add(txtAddress);
-            Controls.Add(txtCity);
-            Controls.Add(listBoxUsers);
-            Controls.Add(btnAddUser);
-            Controls.Add(btnUpdateUser);
-            Controls.Add(btnDeleteUser);
-            Name = "AdminManagementControl";
-            Size = new Size(1014, 396);
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new SizeF(7F, 15F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.BorderStyle = BorderStyle.FixedSingle;
+            this.Controls.Add(this.txtAdmin);
+            this.Controls.Add(this.btnEdit);
+            this.Controls.Add(this.btnGenPSW);
+            this.Controls.Add(this.txtPhonenumber);
+            this.Controls.Add(this.txtZIPCode);
+            this.Controls.Add(this.txtAlias);
+            this.Controls.Add(this.txtSurname);
+            this.Controls.Add(this.txtName);
+            this.Controls.Add(this.txtPassword);
+            this.Controls.Add(this.txtEmail);
+            this.Controls.Add(this.txtAddress);
+            this.Controls.Add(this.txtCity);
+            this.Controls.Add(this.listBoxUsers);
+            this.Controls.Add(this.btnAddUser);
+            this.Controls.Add(this.btnUpdateUser);
+            this.Controls.Add(this.btnDeleteUser);
+            this.Name = "AdminManagementControl";
+            this.Size = new Size(1014, 396);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
-
         #endregion
 
         private TextBox txtSurname;
@@ -226,6 +257,6 @@
         private TextBox txtZIPCode;
         private TextBox txtPhonenumber;
         private Button btnGenPSW;
-        private TextBox txtAdmin;
+        private Button btnEdit;
     }
 }

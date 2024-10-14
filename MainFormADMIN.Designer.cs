@@ -72,7 +72,7 @@
             adminManagementControl.BorderStyle = BorderStyle.FixedSingle;
             adminManagementControl.Location = new Point(18, 86);
             adminManagementControl.Name = "adminManagementControl";
-            adminManagementControl.Size = new Size(1208, 375);
+            adminManagementControl.Size = new Size(1208, 400);
             adminManagementControl.TabIndex = 4;
             // 
             // MainFormADMIN
