@@ -22,6 +22,9 @@ namespace CRUD_System
 
         Data _Data = new Data();
 
+        bool editMode = false;
+        bool userSelected = false;
+        bool isAdmin = false;
 
         public AdminManagementControl()
         {
@@ -78,9 +81,39 @@ namespace CRUD_System
             }
 
             return false; // Alias does not exist
-            #endregion
         }
+        #endregion
+
         #region BUTTONS
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            // No action when no user is selected in listBox
+            if (userSelected != true)
+            {
+                return;
+            }
+
+            // Toggle editMode on and off
+            editMode = !editMode;
+
+            btnEdit.Text = editMode ? btnEdit.Text = "Cancel" : btnEdit.Text = "Edit User";
+            
+            // Indication Edit mode is Enabled in Controlfield: color.Orange
+            this.BackColor = editMode ? Color.Orange : SystemColors.ActiveCaption;
+
+            InterfaceEditMode();
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+
+        }
+
         /// <summary>
         /// Handles the click event to add a new user.
         /// Creates a new record in both data_login.csv and data_users.csv.
@@ -104,13 +137,14 @@ namespace CRUD_System
 
             MessageBox.Show("User added successfully!");
         }
+
         /// <summary>
         /// Handles the click event to update an existing user.
         /// Updates user details in both data_login.csv and data_users.csv.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private void btnUpdateUser_Click(object sender, EventArgs e)
+        private void btnSaveEdit_Click(object sender, EventArgs e)
         {
             // Read lines from data_login.csv and data_users.csv
             var loginLines = File.ReadAllLines(dataLogin).ToList();
@@ -239,9 +273,12 @@ namespace CRUD_System
         /// <param name="e">The event data (user selection).</param>
         private void ListBoxUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Get the selected user from the ListBox
+            // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (listBoxUsers.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
+                // Set userSelected on true
+                userSelected = true;
+
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
@@ -275,43 +312,69 @@ namespace CRUD_System
                     {
                         // Show the admin label
                         txtAdmin.Visible = true;
+                        chkIsAdmin.Checked = true; // checkbox chkAdmin checked
                     }
                     else
                     {
                         // Hide the admin label if not an admin
                         txtAdmin.Visible = false;
+                        chkIsAdmin.Checked = false; // checkbox chkAdmin unchecked
                     }
                 }
                 else
                 {
                     // Handle the case where loginDetails is null (optional)
-                    txtAdmin.Visible = false; // Hide the label if no details found
+                    txtAdmin.Visible = false; // Hide the textbox if no details found
                 }
             }
         }
+
+        private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
+        {
+            isAdmin = true;
+        }
         #endregion
 
-        private void btnEdit_Click(object sender, EventArgs e)
+        #region MODES
+        public void InterfaceEditMode()
         {
-            // Indicate Edit mode is enabled
-            btnEdit.BackColor = Color.Orange;
+            // Manage btnUpdateUser
+            btnSaveEdit.Visible = editMode ? true : false;
+            btnSaveEdit.BackColor = Color.LightGreen;
 
-            //Enable TextBoxes
-            txtName.Enabled = true;
-            txtSurname.Enabled = true;
-            txtAdmin.Enabled = true;
-            txtAddress.Enabled = true;
-            txtZIPCode.Enabled = true;
-            txtCity.Enabled = true;
-            txtEmail.Enabled = true;
-            txtPhonenumber.Enabled = true;
-            txtPassword.Enabled = true;
+            // Manage CheckBox isAdmin
+            chkIsAdmin.Visible = editMode ? true : false;
+            chkIsAdmin.Enabled = editMode ? true : false;
 
-            //Enable Buttons
-            btnAddUser.Enabled = true;
-            btnDeleteUser.Enabled = true;
-            btnGenPSW.Enabled = true;
-            btnUpdateUser.Enabled = true;
+            // Manage TextBoxes
+            txtName.Enabled = editMode ? true : false;
+            txtSurname.Enabled = editMode ? true : false;
+            txtAdmin.Enabled = editMode ? true : false;
+            txtAddress.Enabled = editMode ? true : false;
+            txtZIPCode.Enabled = editMode ? true : false;
+            txtCity.Enabled = editMode ? true : false;
+            txtEmail.Enabled = editMode ? true : false;
+            txtPhonenumber.Enabled = editMode ? true : false;
+            txtPassword.Enabled = editMode ? true : false;
+
+            // Manage status visible and enable Buttons and CheckBox
+            btnCreateUser.Visible = editMode ? false : true;
+            btnCreateUser.Enabled = editMode ? false : true;
+            btnDeleteUser.Visible = editMode ? false : true;
+            btnDeleteUser.Enabled = editMode ? false : true;
+            btnGenPSW.Visible = editMode ? false : true;
+            btnGenPSW.Enabled = editMode ? false : true;
+            txtPassword.Visible = editMode ? false : true;
+            txtPassword.Enabled = editMode ? false : true;
+
+            // Manage status enable ListBox
+            listBoxUsers.Enabled = editMode ? false : true;
         }
+
+        public void DisplayMode()
+        {
+
+        }
+        #endregion
     }
 }

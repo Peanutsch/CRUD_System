@@ -9,8 +9,8 @@
         private System.Windows.Forms.TextBox txtCity;
         private System.Windows.Forms.TextBox txtAdmin;
         private System.Windows.Forms.ListBox listBoxUsers;
-        private System.Windows.Forms.Button btnAddUser;
-        private System.Windows.Forms.Button btnUpdateUser;
+        private System.Windows.Forms.Button btnCreateUser;
+        private System.Windows.Forms.Button btnSaveEdit;
         private System.Windows.Forms.Button btnDeleteUser;
 
         /// <summary> 
@@ -41,8 +41,8 @@
             this.txtAddress = new TextBox();
             this.txtCity = new TextBox();
             this.listBoxUsers = new ListBox();
-            this.btnAddUser = new Button();
-            this.btnUpdateUser = new Button();
+            this.btnCreateUser = new Button();
+            this.btnSaveEdit = new Button();
             this.btnDeleteUser = new Button();
             this.txtSurname = new TextBox();
             this.txtAlias = new TextBox();
@@ -51,9 +51,8 @@
             this.btnGenPSW = new Button();
             this.btnEdit = new Button();
             this.txtAdmin = new TextBox();
+            this.chkIsAdmin = new CheckBox();
             this.SuspendLayout();
-            
-            #region TEXTBOXES
             // 
             // txtName
             // 
@@ -67,8 +66,7 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Enabled = false;
-            this.txtPassword.Location = new Point(681, 327);
+            this.txtPassword.Location = new Point(837, 368);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PlaceholderText = "Password";
             this.txtPassword.Size = new Size(150, 23);
@@ -104,6 +102,48 @@
             this.txtCity.Size = new Size(199, 23);
             this.txtCity.TabIndex = 5;
             this.txtCity.TextAlign = HorizontalAlignment.Center;
+            // 
+            // listBoxUsers
+            // 
+            this.listBoxUsers.ItemHeight = 15;
+            this.listBoxUsers.Location = new Point(24, 20);
+            this.listBoxUsers.Name = "listBoxUsers";
+            this.listBoxUsers.Size = new Size(963, 229);
+            this.listBoxUsers.TabIndex = 0;
+            this.listBoxUsers.SelectedIndexChanged += this.ListBoxUsers_SelectedIndexChanged;
+            // 
+            // btnCreateUser
+            // 
+            this.btnCreateUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.btnCreateUser.Location = new Point(681, 291);
+            this.btnCreateUser.Name = "btnCreateUser";
+            this.btnCreateUser.Size = new Size(150, 30);
+            this.btnCreateUser.TabIndex = 11;
+            this.btnCreateUser.Text = "Create User";
+            this.btnCreateUser.Click += this.btnAddUser_Click;
+            // 
+            // btnSaveEdit
+            // 
+            this.btnSaveEdit.BackColor = Color.LightGreen;
+            this.btnSaveEdit.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnSaveEdit.Location = new Point(837, 255);
+            this.btnSaveEdit.Name = "btnSaveEdit";
+            this.btnSaveEdit.Size = new Size(150, 30);
+            this.btnSaveEdit.TabIndex = 10;
+            this.btnSaveEdit.Text = "Save Edit";
+            this.btnSaveEdit.UseVisualStyleBackColor = false;
+            this.btnSaveEdit.Visible = false;
+            this.btnSaveEdit.Click += this.btnSaveEdit_Click;
+            // 
+            // btnDeleteUser
+            // 
+            this.btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.btnDeleteUser.Location = new Point(681, 327);
+            this.btnDeleteUser.Name = "btnDeleteUser";
+            this.btnDeleteUser.Size = new Size(150, 30);
+            this.btnDeleteUser.TabIndex = 9;
+            this.btnDeleteUser.Text = "Delete User";
+            this.btnDeleteUser.Click += this.btnDeleteUser_Click;
             // 
             // txtSurname
             // 
@@ -146,6 +186,28 @@
             this.txtPhonenumber.TabIndex = 21;
             this.txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
+            // btnGenPSW
+            // 
+            this.btnGenPSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.btnGenPSW.Location = new Point(681, 363);
+            this.btnGenPSW.Name = "btnGenPSW";
+            this.btnGenPSW.Size = new Size(150, 30);
+            this.btnGenPSW.TabIndex = 22;
+            this.btnGenPSW.Text = "Send New PSW";
+            this.btnGenPSW.Click += this.btnGenPSW_Click;
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.BackColor = SystemColors.ActiveCaption;
+            this.btnEdit.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnEdit.Location = new Point(681, 255);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new Size(150, 30);
+            this.btnEdit.TabIndex = 25;
+            this.btnEdit.Text = "Edit User";
+            this.btnEdit.UseVisualStyleBackColor = false;
+            this.btnEdit.Click += this.btnEdit_Click;
+            // 
             // txtAdmin
             // 
             this.txtAdmin.BackColor = Color.LightGreen;
@@ -159,76 +221,29 @@
             this.txtAdmin.Text = "User is ADMIN";
             this.txtAdmin.TextAlign = HorizontalAlignment.Center;
             this.txtAdmin.Visible = false;
-            #endregion
-            #region BUTTONS
             // 
-            // btnGenPSW
+            // chkIsAdmin
             // 
-            this.btnGenPSW.Enabled = false;
-            this.btnGenPSW.Location = new Point(681, 291);
-            this.btnGenPSW.Name = "btnGenPSW";
-            this.btnGenPSW.Size = new Size(150, 30);
-            this.btnGenPSW.TabIndex = 22;
-            this.btnGenPSW.Text = "Generate PSW";
-            this.btnGenPSW.Click += this.btnGenPSW_Click;
-            // 
-            // btnAddUser
-            // 
-            this.btnAddUser.Enabled = false;
-            this.btnAddUser.Location = new Point(837, 255);
-            this.btnAddUser.Name = "btnAddUser";
-            this.btnAddUser.Size = new Size(150, 30);
-            this.btnAddUser.TabIndex = 11;
-            this.btnAddUser.Text = "Add User";
-            this.btnAddUser.Click += this.btnAddUser_Click;
-            // 
-            // btnUpdateUser
-            // 
-            this.btnUpdateUser.Enabled = false;
-            this.btnUpdateUser.Location = new Point(681, 255);
-            this.btnUpdateUser.Name = "btnUpdateUser";
-            this.btnUpdateUser.Size = new Size(150, 30);
-            this.btnUpdateUser.TabIndex = 10;
-            this.btnUpdateUser.Text = "Update User";
-            this.btnUpdateUser.Click += this.btnUpdateUser_Click;
-            // 
-            // btnDeleteUser
-            // 
-            this.btnDeleteUser.Enabled = false;
-            this.btnDeleteUser.Location = new Point(837, 291);
-            this.btnDeleteUser.Name = "btnDeleteUser";
-            this.btnDeleteUser.Size = new Size(150, 30);
-            this.btnDeleteUser.TabIndex = 9;
-            this.btnDeleteUser.Text = "Delete User";
-            this.btnDeleteUser.Click += this.btnDeleteUser_Click;
-            // 
-            // btnEdit
-            // 
-            this.btnEdit.Location = new Point(24, 355);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new Size(106, 25);
-            this.btnEdit.TabIndex = 25;
-            this.btnEdit.Text = "Edit";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += this.btnEdit_Click;
-            #endregion
-            #region LISTBOX
-            // 
-            // listBoxUsers
-            // 
-            this.listBoxUsers.ItemHeight = 15;
-            this.listBoxUsers.Location = new Point(24, 20);
-            this.listBoxUsers.Name = "listBoxUsers";
-            this.listBoxUsers.Size = new Size(963, 229);
-            this.listBoxUsers.TabIndex = 0;
-            this.listBoxUsers.SelectedIndexChanged += this.ListBoxUsers_SelectedIndexChanged;
-            #endregion
+            this.chkIsAdmin.AutoSize = true;
+            this.chkIsAdmin.CheckAlign = ContentAlignment.MiddleRight;
+            this.chkIsAdmin.Enabled = false;
+            this.chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.chkIsAdmin.Location = new Point(536, 342);
+            this.chkIsAdmin.Name = "chkIsAdmin";
+            this.chkIsAdmin.Size = new Size(97, 22);
+            this.chkIsAdmin.TabIndex = 27;
+            this.chkIsAdmin.Text = "isAdmin";
+            this.chkIsAdmin.UseVisualStyleBackColor = true;
+            this.chkIsAdmin.Visible = false;
+            this.chkIsAdmin.CheckedChanged += this.chkIsAdmin_CheckedChanged;
             // 
             // AdminManagementControl
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
+            this.BackColor = SystemColors.ActiveCaption;
             this.BorderStyle = BorderStyle.FixedSingle;
+            this.Controls.Add(this.chkIsAdmin);
             this.Controls.Add(this.txtAdmin);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnGenPSW);
@@ -242,11 +257,11 @@
             this.Controls.Add(this.txtAddress);
             this.Controls.Add(this.txtCity);
             this.Controls.Add(this.listBoxUsers);
-            this.Controls.Add(this.btnAddUser);
-            this.Controls.Add(this.btnUpdateUser);
+            this.Controls.Add(this.btnCreateUser);
+            this.Controls.Add(this.btnSaveEdit);
             this.Controls.Add(this.btnDeleteUser);
             this.Name = "AdminManagementControl";
-            this.Size = new Size(1014, 396);
+            this.Size = new Size(1014, 410);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
@@ -258,5 +273,6 @@
         private TextBox txtPhonenumber;
         private Button btnGenPSW;
         private Button btnEdit;
+        private CheckBox chkIsAdmin;
     }
 }
