@@ -24,17 +24,13 @@ namespace CRUD_System
 
         bool editMode = false;
         bool userSelected = false;
-        bool isAdmin = false;
+        //bool isAdmin = false;
 
         public AdminManagementControl()
         {
             InitializeComponent();
 
-            //System.IO.FileNotFoundException: 'Could not find file 'C:\Users\mtels\OneDrive\Documenten\GitHub\CRUD_System\bin\Debug\net8.0-windows\file_dataUsers'.'
-            //file_dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
-            //file_dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
-
-            LoadUserData();
+            LoadUserData(); // Load data_users.csv for display in listbox
         }
 
         #region ALIAS
@@ -256,7 +252,6 @@ namespace CRUD_System
             }
         }
 
-
         /// <summary>
         /// Handles the event when a user is selected from the list box.
         /// Displays the user's details in the respective text fields.
@@ -329,10 +324,62 @@ namespace CRUD_System
             }
         }
 
+        /// <summary>
+        /// Loads the details of chosen userdetails based on the provided alias and populates the form's text fields
+        /// with the corresponding user data (e.g., name, address, email) in EditFormADMIN
+        /// </summary>
+        /// <param name="alias">The alias of the user whose details need to be loaded.</param>
+        public void LoadUserDetails(string alias)
+        {
+            // Search for the user with the given alias and load their data
+            var userDetails = File.ReadAllLines(dataUsers).Skip(2)
+                .Select(line => line.Split(',')).FirstOrDefault(details => details[2] == alias);
+
+            if (userDetails != null)
+            {
+                // Populate text fields with user data
+                txtName.Text = userDetails[0];
+                txtSurname.Text = userDetails[1];
+                txtAlias.Text = userDetails[2];
+                txtAddress.Text = userDetails[3];
+                txtZIPCode.Text = userDetails[4];
+                txtCity.Text = userDetails[5];
+                txtEmail.Text = userDetails[6];
+                txtPhonenumber.Text = userDetails[7];
+            }
+        }
+
+        /// <summary>
+        /// Handles the double-click event on the ListBox. Retrieves the selected user's alias and 
+        /// opens a new form (EditFormADMIN) with the user's details loaded in an AdminManagementControl.
+        /// </summary>
+        /// <param name="sender">The source of the event (the ListBox).</param>
+        /// <param name="e">The event data (user double-click).</param>
+        private void listBoxUsers_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBoxUsers.SelectedItem != null && !string.IsNullOrEmpty(listBoxUsers.SelectedItem.ToString()))
+            {
+                string selectedAlias = listBoxUsers.SelectedItem.ToString()!.Split('(', ')')[1];
+
+                AdminManagementControl selectedUserControl = new AdminManagementControl();
+                selectedUserControl.LoadUserDetails(selectedAlias); // Load the UserControl with the selected user
+
+                EditFormADMIN editFormADMIN = new EditFormADMIN(selectedUserControl);
+                editFormADMIN.Show(); // Open the new window
+            }
+        }
+
+        /// <summary>
+        /// Handles the event when the 'Is Admin' checkbox state changes.
+        /// Marks the current user as an admin when the checkbox is checked.
+        /// </summary>
+        /// <param name="sender">The source of the event (the CheckBox).</param>
+        /// <param name="e">The event data (checkbox change).</param>
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
-            isAdmin = true;
+            //isAdmin = true;
         }
+
         #endregion
 
         #region MODES

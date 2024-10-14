@@ -90,7 +90,7 @@
             Margin = new Padding(4);
             Name = "MainFormADMIN";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Main Admin";
+            Text = "Display UserDetails Admin";
             Load += MainFormAdmin_Load;
             ResumeLayout(false);
             PerformLayout();
