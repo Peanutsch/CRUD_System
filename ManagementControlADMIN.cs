@@ -113,9 +113,12 @@ namespace CRUD_System
             {
                 var userDetails = userLines[index].Split(','); // User details in data_users.csv
 
-                if (userDetails[0] == txtName.Text) // Search by name in data_users.csv
+                if (userDetails[2] == txtAlias.Text) // Search by name in data_users.csv
                 {
                     // NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS, PHONENUMBER
+
+                    
+                    
                     // Update data_users.csv
                     userLines[index] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
 
@@ -123,16 +126,10 @@ namespace CRUD_System
                     File.WriteAllLines(dataUsers, userLines);
 
                     // Confirm successful update
-                    MessageBox.Show("User updated successfully!");
+                    MessageBox.Show("User Details updated successfully!");
 
                     // Save the index of the selected user
                     int userIndex = index;
-
-                    /*
-                    // Clear listbox and reload data_users.csv for display in listbox
-                    listBoxUsers.Items.Clear();
-                    LoadUserData();
-                    */
 
                     // Reselect the updated user in the listbox by index
                     if (userIndex >= 0 && userIndex < listBoxUsers.Items.Count)
