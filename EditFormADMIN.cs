@@ -16,7 +16,5 @@ namespace CRUD_System
         {
             InitializeComponent();
         }
-
-
     }
 }

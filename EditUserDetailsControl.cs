@@ -22,10 +22,6 @@ namespace CRUD_System
             // Je kunt hier eventueel ook de AdminManagementControl tonen
             AdminManagementControl adminManagementControl = new AdminManagementControl();
             adminManagementControl.Show();
-
-            // Als EditUserDetailsControl een UserControl is en niet zelfstandig wordt gesloten, 
-            // is deze regel mogelijk niet nodig. Als het wel nodig is, kun je dit doen:
-            // this.Parent.Controls.Remove(this); // Verwijder de UserControl uit de parent
         }
     }
 }

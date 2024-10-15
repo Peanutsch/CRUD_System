@@ -111,7 +111,6 @@
             listBoxUsers.Size = new Size(963, 229);
             listBoxUsers.TabIndex = 0;
             listBoxUsers.SelectedIndexChanged += ListBoxUsers_SelectedIndexChanged;
-            listBoxUsers.DoubleClick += listBoxUsers_DoubleClick;
             // 
             // btnCreateUser
             // 
