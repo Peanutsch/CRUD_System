@@ -13,7 +13,7 @@ namespace CRUD_System
 {
     public partial class MainFormADMIN : Form
     {
-        private AdminManagementControl _UserManagementControl = new AdminManagementControl();
+        private ManagementControlADMIN _UserManagementControl = new ManagementControlADMIN();
         private Data _Data = new Data(); 
         private LoginValidation _LoginValidation = new LoginValidation();
         

@@ -31,7 +31,7 @@
             textBoxUserName = new TextBox();
             buttonLOGOUT = new Button();
             labelAdmin = new Label();
-            adminManagementControl = new AdminManagementControl();
+            adminManagementControl = new ManagementControlADMIN();
             SuspendLayout();
             // 
             // textBoxUserName
@@ -101,6 +101,6 @@
         private TextBox textBoxUserName;
         private Button buttonLOGOUT;
         private Label labelAdmin;
-        private AdminManagementControl adminManagementControl;
+        private ManagementControlADMIN adminManagementControl;
     }
 }

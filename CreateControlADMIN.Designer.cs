@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class EditUserDetailsControl
+    partial class EditControlADMIN
     {
         /// <summary> 
         /// Required designer variable.

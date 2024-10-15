@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class AdminManagementControl
+    partial class ManagementControlADMIN
     {
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.TextBox txtPassword;

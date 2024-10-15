@@ -14,7 +14,7 @@ using System.Xml.Linq;
 
 namespace CRUD_System
 {
-    public partial class AdminManagementControl : UserControl
+    public partial class ManagementControlADMIN : UserControl
     {
         string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
         string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
@@ -26,7 +26,7 @@ namespace CRUD_System
         bool userSelected = false;
         //bool isAdmin = false;
 
-        public AdminManagementControl()
+        public ManagementControlADMIN()
         {
             InitializeComponent();
 

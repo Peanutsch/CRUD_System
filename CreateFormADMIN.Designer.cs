@@ -2,7 +2,7 @@
 
 namespace CRUD_System
 {
-    partial class EditFormADMIN
+    partial class CreateFormADMIN
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace CRUD_System
         /// </summary>
         private void InitializeComponent()
         {
-            editUserDetailsControl1 = new EditUserDetailsControl(this);
+            editUserDetailsControl1 = new CreateControlADMIN(this);
             SuspendLayout();
             // 
             // editUserDetailsControl1
@@ -56,6 +56,6 @@ namespace CRUD_System
         
         #endregion
 
-        private EditUserDetailsControl editUserDetailsControl1;
+        private CreateControlADMIN editUserDetailsControl1;
     }
 }
