@@ -3,12 +3,12 @@ using System.Windows.Forms;
 
 namespace CRUD_System
 {
-    public partial class EditControlADMIN : UserControl
+    public partial class CreateControlADMIN : UserControl
     {
-        private EditFormADMIN editFormAdmin; // Referentie naar EditFormADMIN
+        private CreateFormADMIN editFormAdmin; // Referentie naar EditFormADMIN
 
         // Constructor die de EditFormADMIN- referentie accepteert
-        public EditControlADMIN(EditFormADMIN editForm)
+        public CreateControlADMIN(CreateFormADMIN editForm)
         {
             InitializeComponent();
             this.editFormAdmin = editForm; // Opslaan van de referentie

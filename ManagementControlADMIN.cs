@@ -81,6 +81,8 @@ namespace CRUD_System
         #endregion
 
         #region BUTTONS
+
+        #region BUTTON EDIT
         private void btnEdit_Click(object sender, EventArgs e)
         {
             // No action when no user is selected in listBox
@@ -91,14 +93,44 @@ namespace CRUD_System
 
             // Toggle editMode on and off
             editMode = !editMode;
-
-            btnEdit.Text = editMode ? btnEdit.Text = "Cancel" : btnEdit.Text = "Edit User";
             
-            // Indication Edit mode is Enabled in Controlfield: color.Orange
-            this.BackColor = editMode ? Color.Orange : SystemColors.ActiveCaption;
-
             InterfaceEditMode();
         }
+
+        /// <summary>
+        /// Handles the click event to update an existing user.
+        /// Updates user details in data_users.csv.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        private void btnSaveEdit_Click(object sender, EventArgs e)
+        {
+            // Read lines from data_users.csv
+            var userLines = File.ReadAllLines(dataUsers).ToList();
+
+            // Loop through each line of both files and update
+            for (int i = 0; i < userLines.Count; i++)
+            {
+                var userDetails = userLines[i].Split(','); // User details in data_users.csv
+
+                if (userDetails[0] == txtName.Text) // Search by name in data_users.csv
+                {
+                    // NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS, PHONENUMBER
+                    // Update data_users.csv
+                    userLines[i] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text},{txtCity.Text},{txtEmail.Text}.{txtPhonenumber.Text}";
+
+                    // Write updated data back to both files
+                    File.WriteAllLines(dataUsers, userLines);
+                    //File.WriteAllLines(dataLogin, loginLines);
+
+                    // Confirm successful update
+                    MessageBox.Show("User updated successfully!");
+                    break;
+                }
+            }
+        }
+
+        #endregion BUTTON EDIT
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -132,52 +164,6 @@ namespace CRUD_System
             File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
 
             MessageBox.Show("User added successfully!");
-        }
-
-        /// <summary>
-        /// Handles the click event to update an existing user.
-        /// Updates user details in both data_login.csv and data_users.csv.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
-        private void btnSaveEdit_Click(object sender, EventArgs e)
-        {
-            // Read lines from data_login.csv and data_users.csv
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-
-            // Loop through each line of both files and update
-            for (int i = 0; i < userLines.Count; i++)
-            {
-                var userDetails = userLines[i].Split(','); // User details in data_users.csv
-
-                if (userDetails[0] == txtName.Text) // Search by name in data_users.csv
-                {
-                    // NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS, PHONENUMBER
-                    // Update data_users.csv
-                    userLines[i] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text},{txtCity.Text},{txtEmail.Text}.{txtPhonenumber.Text}";
-
-                    // Find corresponding line in data_login.csv and update password and admin status
-                    for (int j = 0; j < loginLines.Count; j++)
-                    {
-                        var loginDetails = loginLines[j].Split(','); // Login details in data_login.csv
-
-                        if (loginDetails[0] == txtName.Text) // Search by name in data_login.csv
-                        {
-                            loginLines[j] = $"{txtName.Text},{txtPassword.Text}";
-                            break; // Stop searching once a match is found and updated
-                        }
-                    }
-
-                    // Write updated data back to both files
-                    File.WriteAllLines(dataLogin, loginLines);
-                    File.WriteAllLines(dataUsers, userLines);
-
-                    // Confirm successful update
-                    MessageBox.Show("User updated successfully!");
-                    break;
-                }
-            }
         }
 
         /// <summary>
@@ -217,12 +203,32 @@ namespace CRUD_System
             MessageBox.Show("User deleted successfully!");
         }
 
+        #region BUTTON GENPSW
         private void btnGenPSW_Click(object sender, EventArgs e)
         {
             string generatedPassword = PasswordManager.GenerateUserPassword();
             txtPassword.Text = generatedPassword;
         }
-        #endregion
+
+        private void SaveEditPSW()
+        {
+            var loginLines = File.ReadAllLines(dataLogin).ToList();
+
+            // Find corresponding line in data_login.csv and update password and admin status
+            for (int j = 0; j < loginLines.Count; j++)
+            {
+                var loginDetails = loginLines[j].Split(','); // Login details in data_login.csv
+
+                if (loginDetails[0] == txtName.Text) // Search by name in data_login.csv
+                {
+                    loginLines[j] = $"{txtName.Text},{txtPassword.Text}";
+                    break; // Stop searching once a match is found and updated
+                }
+            }
+        }
+        #endregion BUTTON GENPSW
+
+#endregion
 
         #region LISTBOX
         /// <summary>
@@ -337,9 +343,15 @@ namespace CRUD_System
 
         #endregion
 
-        #region MODES
+        #region INTERFACE
         public void InterfaceEditMode()
         {
+            // Use toggle to keep 1 button for Edit and Cancel
+            btnEdit.Text = editMode ? btnEdit.Text = "Cancel" : btnEdit.Text = "Edit User";
+
+            // Indication Edit mode is Enabled in Controlfield: color.Orange
+            this.BackColor = editMode ? Color.Orange : SystemColors.ActiveCaption;
+
             // Manage btnUpdateUser
             btnSaveEdit.Visible = editMode ? true : false;
             btnSaveEdit.BackColor = Color.LightGreen;
@@ -377,6 +389,6 @@ namespace CRUD_System
         {
 
         }
-        #endregion
+        #endregion INTERFACE
     }
 }
