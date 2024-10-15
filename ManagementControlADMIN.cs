@@ -109,26 +109,48 @@ namespace CRUD_System
             var userLines = File.ReadAllLines(dataUsers).ToList();
 
             // Loop through each line of both files and update
-            for (int i = 0; i < userLines.Count; i++)
+            for (int index = 0; index < userLines.Count; index++)
             {
-                var userDetails = userLines[i].Split(','); // User details in data_users.csv
+                var userDetails = userLines[index].Split(','); // User details in data_users.csv
 
                 if (userDetails[0] == txtName.Text) // Search by name in data_users.csv
                 {
                     // NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS, PHONENUMBER
                     // Update data_users.csv
-                    userLines[i] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text},{txtCity.Text},{txtEmail.Text}.{txtPhonenumber.Text}";
+                    userLines[index] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
 
-                    // Write updated data back to both files
+                    // Write updated data back to data_users.csv
                     File.WriteAllLines(dataUsers, userLines);
-                    //File.WriteAllLines(dataLogin, loginLines);
 
                     // Confirm successful update
                     MessageBox.Show("User updated successfully!");
+
+                    // Save the index of the selected user
+                    int userIndex = index;
+
+                    /*
+                    // Clear listbox and reload data_users.csv for display in listbox
+                    listBoxUsers.Items.Clear();
+                    LoadUserData();
+                    */
+
+                    // Reselect the updated user in the listbox by index
+                    if (userIndex >= 0 && userIndex < listBoxUsers.Items.Count)
+                    {
+                        listBoxUsers.SelectedItem = userIndex;
+                    }
+                    listBoxUsers.Items.Clear();
+                    LoadUserData();
+
+                    // Reset editMode to false after saving and reloading data
+                    editMode = false;
+                    InterfaceEditMode();
+
                     break;
                 }
             }
         }
+
 
         #endregion BUTTON EDIT
 
@@ -381,11 +403,52 @@ namespace CRUD_System
             txtPassword.Visible = editMode ? false : true;
             txtPassword.Enabled = editMode ? false : true;
 
+            // Manage status ListBox
+            listBoxUsers.Enabled = editMode ? false : true;
+        }
+
+        public void InterfaceDisplayMode()
+        {
+            // Use toggle to keep 1 button for Edit and Cancel
+            btnEdit.Text = editMode ? btnEdit.Text = "Cancel" : btnEdit.Text = "Edit User";
+
+            // Indication Edit mode is Enabled in Controlfield: color.Orange
+            this.BackColor = editMode ? Color.Orange : SystemColors.ActiveCaption;
+
+            // Manage btnUpdateUser
+            btnSaveEdit.Visible = editMode ? true : false;
+            btnSaveEdit.BackColor = Color.LightGreen;
+
+            // Manage CheckBox isAdmin
+            chkIsAdmin.Visible = editMode ? true : false;
+            chkIsAdmin.Enabled = editMode ? true : false;
+
+            // Manage TextBoxes
+            txtName.Enabled = editMode ? true : false;
+            txtSurname.Enabled = editMode ? true : false;
+            txtAdmin.Enabled = editMode ? true : false;
+            txtAddress.Enabled = editMode ? true : false;
+            txtZIPCode.Enabled = editMode ? true : false;
+            txtCity.Enabled = editMode ? true : false;
+            txtEmail.Enabled = editMode ? true : false;
+            txtPhonenumber.Enabled = editMode ? true : false;
+            txtPassword.Enabled = editMode ? true : false;
+
+            // Manage status visible and enable Buttons and CheckBox
+            btnCreateUser.Visible = editMode ? false : true;
+            btnCreateUser.Enabled = editMode ? false : true;
+            btnDeleteUser.Visible = editMode ? false : true;
+            btnDeleteUser.Enabled = editMode ? false : true;
+            btnGenPSW.Visible = editMode ? false : true;
+            btnGenPSW.Enabled = editMode ? false : true;
+            txtPassword.Visible = editMode ? false : true;
+            txtPassword.Enabled = editMode ? false : true;
+
             // Manage status enable ListBox
             listBoxUsers.Enabled = editMode ? false : true;
         }
 
-        public void DisplayMode()
+            public void DisplayMode()
         {
 
         }
