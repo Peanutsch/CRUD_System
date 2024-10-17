@@ -16,6 +16,7 @@ namespace CRUD_System
 {
     public partial class ManagementControlADMIN : UserControl
     {
+        #region PROPERTIES
         string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
         string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
 
@@ -25,13 +26,16 @@ namespace CRUD_System
         bool editMode = false;
         bool userSelected = false;
         //bool isAdmin = false;
+        #endregion
 
+        #region Constructor
         public ManagementControlADMIN()
         {
             InitializeComponent();
 
             LoadUserData(); // Load data_users.csv for display in listbox
         }
+        #endregion
 
         #region ALIAS
         /// <summary>
@@ -123,26 +127,6 @@ namespace CRUD_System
         }
 
         /// <summary>
-        /// Reloads the user interface after saving changes.
-        /// </summary>
-        /// <param name="userIndex">The index of the updated user.</param>
-        public void ReloadInterface(int userIndex)
-        {
-            if (userIndex >= 0 && userIndex < listBoxUsers.Items.Count)
-            {
-                this.Refresh();
-            }
-
-            // Clear and reload listbox
-            listBoxUsers.Items.Clear();
-            LoadUserData();
-
-            // Reset editMode to false after saving and reload interface
-            editMode = false;
-            InterfaceEditMode();
-        }
-
-        /// <summary>
         /// Handles the click event to toggle edit mode for the selected user.
         /// No action is taken if no user is selected.
         /// </summary>
@@ -170,6 +154,11 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEdit_Click(object sender, EventArgs e)
         {
+            SaveEdit();
+        }
+
+        public void SaveEdit()
+        {
             // Read lines from data_users.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
             // Find user index
@@ -181,15 +170,16 @@ namespace CRUD_System
 
                 // MessageBox YesNo to confirm changes
                 MessageBoxes messageBoxes = new MessageBoxes();
-                DialogResult dr = messageBoxes.MessageBoxConfirmationSAVE(userDetails[2]);
+                DialogResult dr = messageBoxes.MessageBoxConfirmToSAVE(userDetails[2]);
 
                 if (dr == DialogResult.Yes)
                 {
-                    // Save changes to data_users.csv
-                    UpdateUser(userLines, userIndex);
 
-                    // Reload interface
-                    ReloadInterface(userIndex);
+                    UpdateUser(userLines, userIndex); // Save changes to data_users.csv
+
+                    ClearTextBoxes(); // Clear textboxes
+                    ReloadListBoxUsers(userIndex); // Reload interface
+                    FillTextboxes(userDetails);
                 }
 
                 if (dr == DialogResult.No)
@@ -203,79 +193,53 @@ namespace CRUD_System
         #region DELETE USER
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            // No action when no user is selected in listBox
+            if (userSelected != true)
+            {
+                return;
+            }
+
+            DeleteUser();
+        }
+
+        private void DeleteUser()
+        {
             // Read lines from data_users.csv and data_login.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
             var loginLines = File.ReadAllLines(dataLogin).ToList();
 
-            // Find user index
             int userIndex = FindUserIndexByAlias(userLines, txtAlias.Text);
 
-            if (userIndex >= 0)
+            // Get alias to delete from the selected user
+            string aliasToDelete = txtAlias.Text;
+
+            // MessageBox to confirm task
+            MessageBoxes messageBoxes = new MessageBoxes();
+            DialogResult dr = messageBoxes.MessageBoxConfirmToDELETE(aliasToDelete);
+
+            if (dr == DialogResult.Yes)
             {
-                var userDetails = userLines[userIndex].Split(',');
+                // Remove the user from data_users.csv by alias
+                userLines = userLines.Where(line =>
+                                            !line.Split(',')[2].Trim().Equals(aliasToDelete,
+                                            StringComparison.OrdinalIgnoreCase)).ToList();
+                File.WriteAllLines(dataUsers, userLines);
 
-                MessageBoxes messageBoxes = new MessageBoxes();
-                DialogResult dr = messageBoxes.MessageBoxConfirmationDELETE(userDetails[2]);
+                // Remove the user from data_login.csv using the alias
+                loginLines = loginLines.Where(line =>
+                                              !line.Split(',')[0].Trim().Equals(aliasToDelete,
+                                              StringComparison.OrdinalIgnoreCase)).ToList();
+                File.WriteAllLines(dataLogin, loginLines);
 
-                if (dr == DialogResult.Yes)
-                {
-                    DeleteUserFromDataUsers(userLines, userIndex);
-                    DeleteUserFromDataLogin(loginLines, userIndex);
-                }
-                else if (dr == DialogResult.No)
-                {
-                        return;
-                }
-                            
+                messageBoxes.MessageSucces(); // Show MessageBox Succes
+                ReloadListBoxUsers(userIndex);
+                ClearTextBoxes();
             }
-        }
-
-        private void DeleteUserFromDataUsers(List<string> userLines, int userIndex)
-        {
-            userLines.RemoveAt(userIndex);
-
-        }
-
-        private void DeleteUserFromDataLogin(List<string> loginLines, int userIndex)
-        {
-            loginLines.RemoveAt(userIndex);
-        }
-
-        /// <summary>
-        /// Handles the click event to delete a user.
-        /// Removes the user from both data_users.csv and data_login.csv.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
-        private void btnDeleteUser_Click(object sender, EventArgs e)
-        {
-            // Read all lines from data_users.csv
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-
-            // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
-
-            // Find the alias for the selected user
-            string aliasToDelete = string.Empty;
-            foreach (var line in loginLines)
+            if (dr != DialogResult.No)
             {
-                var loginDetails = line.Split(',');
-                if (loginDetails[0] == txtName.Text) // Assuming txtName.Text contains the user's name
-                {
-                    aliasToDelete = loginDetails[0]; // Get the alias
-                    break;
-                }
+                return;
             }
 
-            // Remove the user from data_users.csv
-            userLines = userLines.Where(line => !line.StartsWith(txtName.Text)).ToList(); // Filter out the selected user
-            File.WriteAllLines(dataUsers, userLines);
-
-            // Remove the user from data_login.csv using the alias
-            loginLines = loginLines.Where(line => !line.StartsWith(aliasToDelete)).ToList(); // Filter out the user by alias
-            File.WriteAllLines(dataLogin, loginLines);
-
-            MessageBox.Show("User deleted successfully!");
         }
         #endregion DELETE USER
 
@@ -308,7 +272,7 @@ namespace CRUD_System
             MessageBox.Show("User added successfully!");
         }
 
-        
+
         #region BUTTON GENPSW
         private void btnGenPSW_Click(object sender, EventArgs e)
         {
@@ -368,8 +332,8 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         /// <summary>
         /// Handles the event when a user is selected from the list box.
-        /// Extracts the alias from the selected item and retrieves the corresponding 
-        /// user details from both data_users.csv and data_login.csv. 
+        /// Extracts the alias from the selected item.
+        /// Retrieves the corresponding user details from both data_users.csv and data_login.csv. 
         /// The user's information is then displayed in the appropriate text fields.
         /// </summary>
         /// <param name="sender">The source of the event (the ListBox).</param>
@@ -393,17 +357,7 @@ namespace CRUD_System
 
                 if (userDetailsArray != null)
                 {
-                    UserDetails userDetails = new UserDetails(userDetailsArray);
-
-                    // Populate the text fields with the details of the selected user
-                    txtName.Text = userDetails.Name;
-                    txtSurname.Text = userDetails.Surname;
-                    txtAlias.Text = userDetails.Alias;
-                    txtAddress.Text = userDetails.Address;
-                    txtZIPCode.Text = userDetails.ZIPCode;
-                    txtCity.Text = userDetails.City;
-                    txtEmail.Text = userDetails.Email;
-                    txtPhonenumber.Text = userDetails.PhoneNumber;
+                    FillTextboxes(userDetailsArray);
                 }
 
                 // Read the lines from data_login.csv
@@ -532,10 +486,56 @@ namespace CRUD_System
             listBoxUsers.Enabled = editMode ? false : true;
         }
 
-            public void DisplayMode()
+        /// <summary>
+        /// Reloads the user interface after saving changes.
+        /// </summary>
+        /// <param name="userIndex">The index of the updated user.</param>
+        public void ReloadListBoxUsers(int userIndex)
         {
+            if (userIndex >= 0 && userIndex < listBoxUsers.Items.Count)
+            {
+                this.Refresh();
+            }
 
+            // Clear and reload listbox
+            listBoxUsers.Items.Clear();
+            LoadUserData();
+
+            // Reset editMode to false after saving and reload interface
+            editMode = false;
+            InterfaceEditMode();
         }
+
+        public void ClearTextBoxes()
+        {
+            // Refill textboxes with empty values
+            txtName.Text = string.Empty;
+            txtSurname.Text = string.Empty;
+            txtAlias.Text = string.Empty;
+            txtAddress.Text = string.Empty;
+            txtZIPCode.Text = string.Empty;
+            txtCity.Text = string.Empty;
+            txtEmail.Text = string.Empty;
+            txtPhonenumber.Text = string.Empty;
+        }
+
+        public void FillTextboxes(string[] userDetailsArray)
+        {
+            // Initialize the UserDetails object with the array of user details
+            UserDetails userDetails = new UserDetails(userDetailsArray);
+
+            // Populate the text fields with the details of the selected user
+            txtName.Text = userDetails.Name;
+            txtSurname.Text = userDetails.Surname;
+            txtAlias.Text = userDetails.Alias;
+            txtAddress.Text = userDetails.Address;
+            txtZIPCode.Text = userDetails.ZIPCode;
+            txtCity.Text = userDetails.City;
+            txtEmail.Text = userDetails.Email;
+            txtPhonenumber.Text = userDetails.PhoneNumber;
+        }
+
+
         #endregion INTERFACE
     }
 }
