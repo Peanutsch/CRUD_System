@@ -143,7 +143,8 @@
             btnDeleteUser.Size = new Size(150, 30);
             btnDeleteUser.TabIndex = 9;
             btnDeleteUser.Text = "Delete User";
-            btnDeleteUser.Click += btnDeleteUser_Click;
+            //btnDeleteUser.Click += btnDeleteUser_Click;
+            btnDeleteUser.Click += btnDelete_Click;
             // 
             // txtSurname
             // 
