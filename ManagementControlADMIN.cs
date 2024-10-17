@@ -115,39 +115,48 @@ namespace CRUD_System
 
                 if (userDetails[2] == txtAlias.Text) // Search by name in data_users.csv
                 {
-                    // NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS, PHONENUMBER
 
-                    
-                    
-                    // Update data_users.csv
-                    userLines[index] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
+                    // MessageBox YesNo
+                    DialogResult dr = MessageBox.Show($"Do you want to save the changes for {userDetails[2].ToUpper()}?", "", MessageBoxButtons.YesNo);
 
-                    // Write updated data back to data_users.csv
-                    File.WriteAllLines(dataUsers, userLines);
-
-                    // Confirm successful update
-                    MessageBox.Show("User Details updated successfully!");
-
-                    // Save the index of the selected user
-                    int userIndex = index;
-
-                    // Reselect the updated user in the listbox by index
-                    if (userIndex >= 0 && userIndex < listBoxUsers.Items.Count)
+                    if (dr == DialogResult.Yes)
                     {
-                        listBoxUsers.SelectedItem = userIndex;
+
+                        // Update data_users.csv
+                        userLines[index] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
+
+                        // Write updated data back to data_users.csv
+                        File.WriteAllLines(dataUsers, userLines);
+
+                        // Confirm successful update
+                        MessageBox.Show("User Details updated successfully!");
+
+                        // Save the index of the selected user
+                        int userIndex = index;
+
+                        // Reselect the updated user in the listbox by index
+                        if (userIndex >= 0 && userIndex < listBoxUsers.Items.Count)
+                        {
+                            listBoxUsers.SelectedItem = userIndex;
+                        }
+
+                        // Clear and reload listbox
+                        listBoxUsers.Items.Clear();
+                        LoadUserData();
+
+                        // Reset editMode to false after saving and reload interface
+                        editMode = false;
+                        InterfaceEditMode();
+
+                        break;
                     }
-                    listBoxUsers.Items.Clear();
-                    LoadUserData();
-
-                    // Reset editMode to false after saving and reloading data
-                    editMode = false;
-                    InterfaceEditMode();
-
-                    break;
+                    if (dr == DialogResult.No)
+                    {
+                        return;
+                    }
                 }
             }
         }
-
 
         #endregion BUTTON EDIT
 
