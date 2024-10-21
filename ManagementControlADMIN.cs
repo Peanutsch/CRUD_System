@@ -35,7 +35,7 @@ namespace CRUD_System
 
             LoadUserData(); // Load data_users.csv for display in listbox
         }
-        #endregion
+        #endregion CONSTRUCTOR
 
         #region BUTTONS SoC (Seperate of Concerns)
         /// <summary>
@@ -106,7 +106,8 @@ namespace CRUD_System
 
         #region METHODS MANAGEMENT CONTROLADMIN
         /// <summary>
-        /// Ignores click action when no user is selected.
+        /// Ignores BTN_click action when no user is selected 
+        /// (btnEditUserDetails_Click, btnDeleteUser_Click, btnGeneratePSW_Click)
         /// </summary>
         private void PerformActionIfUserSelected(Action action)
         {
@@ -188,6 +189,7 @@ namespace CRUD_System
         /// </summary>
         public void SaveEditUserDetails()
         {
+
             // Read lines from data_users.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
             // Find user index
@@ -201,19 +203,19 @@ namespace CRUD_System
                 MessageBoxes messageBoxes = new MessageBoxes();
                 DialogResult dr = messageBoxes.MessageBoxConfirmToSAVE(userDetails[2]);
 
+                if (dr != DialogResult.Yes)
+                {
+                    return;
+                }
+
                 if (dr == DialogResult.Yes)
                 {
 
                     UpdateUser(userLines, userIndex); // Save changes to data_users.csv
 
                     ClearTextBoxes(); // Clear textboxes
+                    FillTextboxes(userDetails); // Reload txtboxes
                     ReloadListBoxUsers(userIndex); // Reload interface
-                    FillTextboxes(userDetails);
-                }
-
-                if (dr == DialogResult.No)
-                {
-                    return;
                 }
             }
         }
@@ -235,6 +237,11 @@ namespace CRUD_System
             // MessageBox to confirm task
             MessageBoxes messageBoxes = new MessageBoxes();
             DialogResult dr = messageBoxes.MessageBoxConfirmToDELETE(aliasToDelete);
+            
+            if (dr != DialogResult.Yes)
+            {
+                return;
+            }
 
             if (dr == DialogResult.Yes)
             {
@@ -254,15 +261,10 @@ namespace CRUD_System
                 ReloadListBoxUsers(userIndex);
                 ClearTextBoxes();
             }
-            if (dr != DialogResult.No)
-            {
-                return;
-            }
-
         }
 
         /// <summary>
-        /// Method for saving and sending (new) generated password to (new) user
+        /// Saving and sending (new) generated password to (new) user
         /// </summary>
         private void SaveEditPSW()
         {

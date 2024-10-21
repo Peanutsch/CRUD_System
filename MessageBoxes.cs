@@ -18,12 +18,12 @@ namespace CRUD_System
 
         public DialogResult MessageBoxConfirmToSAVE(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}?", "", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
         }
 
     public DialogResult MessageBoxConfirmToDELETE(string alias)
         {
-            return MessageBox.Show($"Please confirm to DELETE user {alias.ToUpper()}?", "", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to DELETE user {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
         }
 
     }
