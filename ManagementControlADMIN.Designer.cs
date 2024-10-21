@@ -120,7 +120,7 @@
             btnCreateUser.Size = new Size(150, 30);
             btnCreateUser.TabIndex = 11;
             btnCreateUser.Text = "Create User";
-            btnCreateUser.Click += btnAddUser_Click;
+            btnCreateUser.Click += btnCreateUser_Click;
             // 
             // btnSaveEdit
             // 

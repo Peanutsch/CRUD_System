@@ -37,56 +37,91 @@ namespace CRUD_System
         }
         #endregion
 
-        #region ALIAS
+        #region BUTTONS SoC (Seperate of Concerns)
         /// <summary>
-        /// Generates a unique alias for the user based on the first two letters of the first name
-        /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
+        /// Handles the click event to toggle edit mode for the selected user in listBoxUsers.
+        /// Ignores action when no user is selected.
         /// </summary>
-        /// <returns>A unique alias as a string.</returns>
-        private string CreateTXTAlias()
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        private void btnEdit_Click(object sender, EventArgs e)
         {
-            string txtAlias = txtName.Text.Substring(0, 2).ToLower() + txtSurname.Text.Substring(txtSurname.Text.Length - 2).ToLower();
-            int counter = 1;
-            string finalAlias = txtAlias + "001";
+            // No action when no user is selected in listBox
+            IgnoreClickEvent();
 
-            // Check if the alias already exists and increment the number if necessary
-            while (AliasExists(finalAlias))
-            {
-                counter++;
-                string newNumber = counter.ToString("D3"); // Ensures it always has 3 digits
-                finalAlias = txtAlias + newNumber;
-            }
+            // Toggle editMode on and off
+            editMode = !editMode;
 
-            return finalAlias;
+            InterfaceEditMode();
         }
 
         /// <summary>
-        /// Checks if the given alias already exists in the data_login.csv file.
+        /// Handles the click event to save the edited user details.
+        /// Updates user details in data_users.csv if confirmed by the user.
         /// </summary>
-        /// <param name="alias">The alias to check for existence.</param>
-        /// <returns>True if the alias exists; otherwise, false.</returns>
-        private bool AliasExists(string alias)
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        private void btnSaveEdit_Click(object sender, EventArgs e)
         {
-            // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines(dataLogin);
+            SaveEdit();
+        }
 
-            // Check if the alias already exists
-            foreach (var line in loginLines)
+        /// <summary>
+        /// Handles the click event to delete user from data_users.csv and data_login.csv
+        /// Ignores action when no user is selected.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            // No action when no user is selected in listBox
+            IgnoreClickEvent();
+
+            DeleteUser();
+        }
+
+        /// <summary>
+        /// Handles the click event to add a new user.
+        /// Creates a new record in both data_login.csv and data_users.csv.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        private void btnCreateUser_Click(object sender, EventArgs e)
+        {
+            CreateUser();
+        }
+
+        /// <summary>
+        /// Handles click event to create a new password
+        /// Ignores action when no user is selected.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        private void btnGenPSW_Click(object sender, EventArgs e)
+        {
+            // No action when no user is selected in listBox
+            IgnoreClickEvent();
+
+            string generatedPassword = PasswordManager.GenerateUserPassword();
+            txtPassword.Text = generatedPassword;
+        }
+        #endregion BUTTONS SoC (Seperate of Concerns)
+
+
+        #region METHODS MANAGEMENT CONTROLADMIN
+        /// <summary>
+        /// Method for ignoring click event when no user is selected in listBoxUsers.
+        /// </summary>
+        public void IgnoreClickEvent()
+        {
+            // No action when no user is selected in listBox
+            if (userSelected != true)
             {
-                var loginDetails = line.Split(',');
-                if (loginDetails[0] == alias)
-                {
-                    return true; // Alias already exists
-                }
+                return;
             }
 
-            return false; // Alias does not exist
         }
-        #endregion
 
-        #region BUTTONS
-
-        #region BUTTON EDIT
         /// <summary>
         /// Finds the index of a user in the CSV data by alias.
         /// Returns -1 if the alias is not found.
@@ -106,6 +141,7 @@ namespace CRUD_System
             }
 
             // Alias not found
+            MessageBox.Show("User not found");
             return -1;
         }
 
@@ -126,37 +162,32 @@ namespace CRUD_System
             messageBoxes.MessageSucces();
         }
 
+
         /// <summary>
-        /// Handles the click event to toggle edit mode for the selected user.
-        /// No action is taken if no user is selected.
+        /// Method for creating new user.
+        /// Writes new user details in data_users.csv and data_login.csv.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
-        private void btnEdit_Click(object sender, EventArgs e)
+        public void CreateUser()
         {
-            // No action when no user is selected in listBox
-            if (userSelected != true)
-            {
-                return;
-            }
+            // Create a new record
+            string txtAlias = CreateTXTAlias();
 
-            // Toggle editMode on and off
-            editMode = !editMode;
+            // data_login: ALIAS, PASSWORD, ADMIN
+            string newDataLogin = $"{txtAlias},{txtPassword.Text}";
 
-            InterfaceEditMode();
+            // data_users: NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
+            string newDataUsers = $"{txtName.Text},{txtSurname.Text},{txtAlias},{txtEmail.Text},{txtAddress.Text},{txtCity.Text}";
+
+            // Append to the CSV files
+            File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
+            File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
+
+            MessageBox.Show("User added successfully!");
         }
 
         /// <summary>
-        /// Handles the click event to save the edited user details.
-        /// Updates user details in data_users.csv if confirmed by the user.
+        /// Method for save changes user details
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
-        private void btnSaveEdit_Click(object sender, EventArgs e)
-        {
-            SaveEdit();
-        }
-
         public void SaveEdit()
         {
             // Read lines from data_users.csv
@@ -188,20 +219,10 @@ namespace CRUD_System
                 }
             }
         }
-        #endregion BUTTON EDIT
 
-        #region DELETE USER
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            // No action when no user is selected in listBox
-            if (userSelected != true)
-            {
-                return;
-            }
-
-            DeleteUser();
-        }
-
+        /// <summary>
+        /// Method for deleting user from data_users.csv and data_log.csv
+        /// </summary>
         private void DeleteUser()
         {
             // Read lines from data_users.csv and data_login.csv
@@ -241,45 +262,10 @@ namespace CRUD_System
             }
 
         }
-        #endregion DELETE USER
-
-        private void btnCreate_Click(object sender, EventArgs e)
-        {
-
-        }
 
         /// <summary>
-        /// Handles the click event to add a new user.
-        /// Creates a new record in both data_login.csv and data_users.csv.
+        /// Method for saving and sending (new) generated password to (new) user
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
-        private void btnAddUser_Click(object sender, EventArgs e)
-        {
-            // Create a new record
-            string txtAlias = CreateTXTAlias();
-
-            // data_login: ALIAS, PASSWORD, ADMIN
-            string newDataLogin = $"{txtAlias},{txtPassword.Text}";
-
-            // data_users: NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
-            string newDataUsers = $"{txtName.Text},{txtSurname.Text},{txtAlias},{txtEmail.Text},{txtAddress.Text},{txtCity.Text}";
-
-            // Append to the CSV files
-            File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
-            File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
-
-            MessageBox.Show("User added successfully!");
-        }
-
-
-        #region BUTTON GENPSW
-        private void btnGenPSW_Click(object sender, EventArgs e)
-        {
-            string generatedPassword = PasswordManager.GenerateUserPassword();
-            txtPassword.Text = generatedPassword;
-        }
-
         private void SaveEditPSW()
         {
             var loginLines = File.ReadAllLines(dataLogin).ToList();
@@ -296,9 +282,54 @@ namespace CRUD_System
                 }
             }
         }
-        #endregion BUTTON GENPSW
 
-        #endregion
+        #region ALIAS
+        /// <summary>
+        /// Generates a unique alias for the user based on the first two letters of the first name
+        /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
+        /// </summary>
+        /// <returns>A unique alias as a string.</returns>
+        private string CreateTXTAlias()
+        {
+            string txtAlias = txtName.Text.Substring(0, 2).ToLower() + txtSurname.Text.Substring(txtSurname.Text.Length - 2).ToLower();
+            int counter = 1;
+            string finalAlias = txtAlias + "001";
+
+            // Check if the alias already exists and increment the number if necessary
+            while (AliasExists(finalAlias))
+            {
+                counter++;
+                string newNumber = counter.ToString("D3"); // Ensures it always has 3 digits
+                finalAlias = txtAlias + newNumber;
+            }
+
+            return finalAlias;
+        }
+
+
+        /// <summary>
+        /// Checks if the given alias already exists in the data_login.csv file.
+        /// </summary>
+        /// <param name="alias">The alias to check for existence.</param>
+        /// <returns>True if the alias exists; otherwise, false.</returns>
+        private bool AliasExists(string alias)
+        {
+            // Read all lines from data_login.csv
+            var loginLines = File.ReadAllLines(dataLogin);
+
+            // Check if the alias already exists
+            foreach (var line in loginLines)
+            {
+                var loginDetails = line.Split(',');
+                if (loginDetails[0] == alias)
+                {
+                    return true; // Alias already exists
+                }
+            }
+
+            return false; // Alias does not exist
+        }
+        #endregion ALIAS
 
         #region LISTBOX
         /// <summary>
@@ -401,7 +432,8 @@ namespace CRUD_System
             //isAdmin = true;
         }
 
-        #endregion
+        #endregion ALIAS
+        #endregion METHODS MANAGEMENT CONTROLADMIN
 
         #region INTERFACE
         public void InterfaceEditMode()
@@ -534,8 +566,6 @@ namespace CRUD_System
             txtEmail.Text = userDetails.Email;
             txtPhonenumber.Text = userDetails.PhoneNumber;
         }
-
-
         #endregion INTERFACE
     }
 }
