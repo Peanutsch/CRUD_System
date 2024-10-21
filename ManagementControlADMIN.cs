@@ -40,19 +40,17 @@ namespace CRUD_System
         #region BUTTONS SoC (Seperate of Concerns)
         /// <summary>
         /// Handles the click event to toggle edit mode for the selected user in listBoxUsers.
-        /// Ignores action when no user is selected.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private void btnEdit_Click(object sender, EventArgs e)
+        private void btnEditUserDetails_Click(object sender, EventArgs e)
         {
-            // No action when no user is selected in listBox
-            IgnoreClickEvent();
-
-            // Toggle editMode on and off
-            editMode = !editMode;
-
-            InterfaceEditMode();
+            PerformActionIfUserSelected(() =>
+            {
+                // Toggle edit mode
+                editMode = !editMode;
+                InterfaceEditMode();
+            });
         }
 
         /// <summary>
@@ -68,16 +66,15 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the click event to delete user from data_users.csv and data_login.csv
-        /// Ignores action when no user is selected.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnDeleteUser_Click(object sender, EventArgs e)
         {
-            // No action when no user is selected in listBox
-            IgnoreClickEvent();
-
-            DeleteUser();
+            PerformActionIfUserSelected(() =>
+            {
+                DeleteUser(); // Perform delete action only if a user is selected
+            });
         }
 
         /// <summary>
@@ -93,33 +90,34 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles click event to create a new password
-        /// Ignores action when no user is selected.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private void btnGenPSW_Click(object sender, EventArgs e)
+        private void btnGeneratePSW_Click(object sender, EventArgs e)
         {
-            // No action when no user is selected in listBox
-            IgnoreClickEvent();
-
-            string generatedPassword = PasswordManager.GenerateUserPassword();
-            txtPassword.Text = generatedPassword;
+            PerformActionIfUserSelected(() =>
+            {
+                string generatedPassword = PasswordManager.GenerateUserPassword();
+                txtPassword.Text = generatedPassword;
+            });
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
 
         #region METHODS MANAGEMENT CONTROLADMIN
         /// <summary>
-        /// Method for ignoring click event when no user is selected in listBoxUsers.
+        /// Ignores click action when no user is selected.
         /// </summary>
-        public void IgnoreClickEvent()
+        private void PerformActionIfUserSelected(Action action)
         {
-            // No action when no user is selected in listBox
-            if (userSelected != true)
+            if (userSelected)
             {
-                return;
+                action(); // Execute the action if a user is selected
             }
-
+            else
+            {
+                MessageBox.Show("Please select a user first."); // Feedback if no user is selected
+            }
         }
 
         /// <summary>
@@ -439,7 +437,7 @@ namespace CRUD_System
         public void InterfaceEditMode()
         {
             // Use toggle to keep 1 button for Edit and Cancel
-            btnEdit.Text = editMode ? btnEdit.Text = "Cancel" : btnEdit.Text = "Edit User";
+            btnEditUserDetails.Text = editMode ? btnEditUserDetails.Text = "Cancel" : btnEditUserDetails.Text = "Edit User";
 
             // Indication Edit mode is Enabled in Controlfield: color.Orange
             this.BackColor = editMode ? Color.Orange : SystemColors.ActiveCaption;
@@ -468,8 +466,8 @@ namespace CRUD_System
             btnCreateUser.Enabled = editMode ? false : true;
             btnDeleteUser.Visible = editMode ? false : true;
             btnDeleteUser.Enabled = editMode ? false : true;
-            btnGenPSW.Visible = editMode ? false : true;
-            btnGenPSW.Enabled = editMode ? false : true;
+            btnGeneratePSW.Visible = editMode ? false : true;
+            btnGeneratePSW.Enabled = editMode ? false : true;
             txtPassword.Visible = editMode ? false : true;
             txtPassword.Enabled = editMode ? false : true;
 
@@ -480,7 +478,7 @@ namespace CRUD_System
         public void InterfaceDisplayMode()
         {
             // Use toggle to keep 1 button for Edit and Cancel
-            btnEdit.Text = editMode ? btnEdit.Text = "Cancel" : btnEdit.Text = "Edit User";
+            btnEditUserDetails.Text = editMode ? btnEditUserDetails.Text = "Cancel" : btnEditUserDetails.Text = "Edit User";
 
             // Indication Edit mode is Enabled in Controlfield: color.Orange
             this.BackColor = editMode ? Color.Orange : SystemColors.ActiveCaption;
@@ -509,8 +507,8 @@ namespace CRUD_System
             btnCreateUser.Enabled = editMode ? false : true;
             btnDeleteUser.Visible = editMode ? false : true;
             btnDeleteUser.Enabled = editMode ? false : true;
-            btnGenPSW.Visible = editMode ? false : true;
-            btnGenPSW.Enabled = editMode ? false : true;
+            btnGeneratePSW.Visible = editMode ? false : true;
+            btnGeneratePSW.Enabled = editMode ? false : true;
             txtPassword.Visible = editMode ? false : true;
             txtPassword.Enabled = editMode ? false : true;
 

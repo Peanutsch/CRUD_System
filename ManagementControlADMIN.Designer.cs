@@ -48,8 +48,8 @@
             txtAlias = new TextBox();
             txtZIPCode = new TextBox();
             txtPhonenumber = new TextBox();
-            btnGenPSW = new Button();
-            btnEdit = new Button();
+            btnGeneratePSW = new Button();
+            btnEditUserDetails = new Button();
             txtAdmin = new TextBox();
             chkIsAdmin = new CheckBox();
             SuspendLayout();
@@ -144,7 +144,7 @@
             btnDeleteUser.TabIndex = 9;
             btnDeleteUser.Text = "Delete User";
             //btnDeleteUser.Click += btnDeleteUser_Click;
-            btnDeleteUser.Click += btnDelete_Click;
+            btnDeleteUser.Click += btnDeleteUser_Click;
             // 
             // txtSurname
             // 
@@ -189,25 +189,25 @@
             // 
             // btnGenPSW
             // 
-            btnGenPSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnGenPSW.Location = new Point(681, 363);
-            btnGenPSW.Name = "btnGenPSW";
-            btnGenPSW.Size = new Size(150, 30);
-            btnGenPSW.TabIndex = 22;
-            btnGenPSW.Text = "Send New PSW";
-            btnGenPSW.Click += btnGenPSW_Click;
+            btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            btnGeneratePSW.Location = new Point(681, 363);
+            btnGeneratePSW.Name = "btnGeneratePSW ";
+            btnGeneratePSW.Size = new Size(150, 30);
+            btnGeneratePSW.TabIndex = 22;
+            btnGeneratePSW.Text = "Send New PSW";
+            btnGeneratePSW.Click += btnGeneratePSW_Click;
             // 
             // btnEdit
             // 
-            btnEdit.BackColor = SystemColors.ActiveCaption;
-            btnEdit.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnEdit.Location = new Point(681, 255);
-            btnEdit.Name = "btnEdit";
-            btnEdit.Size = new Size(150, 30);
-            btnEdit.TabIndex = 25;
-            btnEdit.Text = "Edit Details";
-            btnEdit.UseVisualStyleBackColor = false;
-            btnEdit.Click += btnEdit_Click;
+            btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
+            btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnEditUserDetails.Location = new Point(681, 255);
+            btnEditUserDetails.Name = "btnEdit";
+            btnEditUserDetails.Size = new Size(150, 30);
+            btnEditUserDetails.TabIndex = 25;
+            btnEditUserDetails.Text = "Edit Details";
+            btnEditUserDetails.UseVisualStyleBackColor = false;
+            btnEditUserDetails.Click += btnEditUserDetails_Click;
             // 
             // txtAdmin
             // 
@@ -246,8 +246,8 @@
             BorderStyle = BorderStyle.FixedSingle;
             Controls.Add(chkIsAdmin);
             Controls.Add(txtAdmin);
-            Controls.Add(btnEdit);
-            Controls.Add(btnGenPSW);
+            Controls.Add(btnEditUserDetails);
+            Controls.Add(btnGeneratePSW);
             Controls.Add(txtPhonenumber);
             Controls.Add(txtZIPCode);
             Controls.Add(txtAlias);
@@ -272,8 +272,8 @@
         private TextBox txtAlias;
         private TextBox txtZIPCode;
         private TextBox txtPhonenumber;
-        private Button btnGenPSW;
-        private Button btnEdit;
+        private Button btnGeneratePSW;
+        private Button btnEditUserDetails;
         private CheckBox chkIsAdmin;
     }
 }
