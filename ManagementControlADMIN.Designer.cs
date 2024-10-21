@@ -10,7 +10,7 @@
         private System.Windows.Forms.TextBox txtAdmin;
         private System.Windows.Forms.ListBox listBoxUsers;
         private System.Windows.Forms.Button btnCreateUser;
-        private System.Windows.Forms.Button btnSaveEdit;
+        private System.Windows.Forms.Button btnSaveEditUserDetails;
         private System.Windows.Forms.Button btnDeleteUser;
 
         /// <summary> 
@@ -42,7 +42,7 @@
             txtCity = new TextBox();
             listBoxUsers = new ListBox();
             btnCreateUser = new Button();
-            btnSaveEdit = new Button();
+            btnSaveEditUserDetails = new Button();
             btnDeleteUser = new Button();
             txtSurname = new TextBox();
             txtAlias = new TextBox();
@@ -124,16 +124,16 @@
             // 
             // btnSaveEdit
             // 
-            btnSaveEdit.BackColor = Color.LightGreen;
-            btnSaveEdit.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSaveEdit.Location = new Point(837, 255);
-            btnSaveEdit.Name = "btnSaveEdit";
-            btnSaveEdit.Size = new Size(150, 30);
-            btnSaveEdit.TabIndex = 10;
-            btnSaveEdit.Text = "Save Edit";
-            btnSaveEdit.UseVisualStyleBackColor = false;
-            btnSaveEdit.Visible = false;
-            btnSaveEdit.Click += btnSaveEdit_Click;
+            btnSaveEditUserDetails.BackColor = Color.LightGreen;
+            btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSaveEditUserDetails.Location = new Point(837, 255);
+            btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
+            btnSaveEditUserDetails.Size = new Size(150, 30);
+            btnSaveEditUserDetails.TabIndex = 10;
+            btnSaveEditUserDetails.Text = "Save Edit";
+            btnSaveEditUserDetails.UseVisualStyleBackColor = false;
+            btnSaveEditUserDetails.Visible = false;
+            btnSaveEditUserDetails.Click += btnSaveEditUserDetails_Click;
             // 
             // btnDeleteUser
             // 
@@ -259,7 +259,7 @@
             Controls.Add(txtCity);
             Controls.Add(listBoxUsers);
             Controls.Add(btnCreateUser);
-            Controls.Add(btnSaveEdit);
+            Controls.Add(btnSaveEditUserDetails);
             Controls.Add(btnDeleteUser);
             Name = "AdminManagementControl";
             Size = new Size(1014, 410);

@@ -59,9 +59,9 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private void btnSaveEdit_Click(object sender, EventArgs e)
+        private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            SaveEdit();
+            SaveEditUserDetails();
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace CRUD_System
         /// <summary>
         /// Method for save changes user details
         /// </summary>
-        public void SaveEdit()
+        public void SaveEditUserDetails()
         {
             // Read lines from data_users.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
@@ -443,8 +443,8 @@ namespace CRUD_System
             this.BackColor = editMode ? Color.Orange : SystemColors.ActiveCaption;
 
             // Manage btnUpdateUser
-            btnSaveEdit.Visible = editMode ? true : false;
-            btnSaveEdit.BackColor = Color.LightGreen;
+            btnSaveEditUserDetails.Visible = editMode ? true : false;
+            btnSaveEditUserDetails.BackColor = Color.LightGreen;
 
             // Manage CheckBox isAdmin
             chkIsAdmin.Visible = editMode ? true : false;
@@ -484,8 +484,8 @@ namespace CRUD_System
             this.BackColor = editMode ? Color.Orange : SystemColors.ActiveCaption;
 
             // Manage btnUpdateUser
-            btnSaveEdit.Visible = editMode ? true : false;
-            btnSaveEdit.BackColor = Color.LightGreen;
+            btnSaveEditUserDetails.Visible = editMode ? true : false;
+            btnSaveEditUserDetails.BackColor = Color.LightGreen;
 
             // Manage CheckBox isAdmin
             chkIsAdmin.Visible = editMode ? true : false;
