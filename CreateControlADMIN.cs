@@ -61,11 +61,14 @@ namespace CRUD_System
 
         public void SaveNewUser()
         {
-            if (txtName.Text.Length < 1)
+            if (txtName.Text.Length < 1 || txtSurname.Text.Length < 1)
             {
-                MessageBox.Show("There is no input");
+                MessageBox.Show("Missing Name and/or Surname");
                 return;
             }
+
+            // Initial txtBoxes are empty
+            mainControlADMIN.EmptyTextBoxes();
 
             // Create a new record
             string isAlias = mainControlADMIN.CreateTXTAlias();
@@ -74,8 +77,18 @@ namespace CRUD_System
             // data_login: ALIAS, PASSWORD, ADMIN
             string newDataLogin = $"{isAlias},{isPassword},{isAdmin}";
 
+            // Check each field and assign string.Empty if it is empty
+            string name = txtName.Text;
+            string surname = txtSurname.Text;
+            string alias = string.IsNullOrWhiteSpace(txtAlias.Text) ? string.Empty : txtAlias.Text;
+            string address = string.IsNullOrWhiteSpace(txtAddress.Text) ? string.Empty : txtAddress.Text;
+            string zipCode = string.IsNullOrWhiteSpace(txtZIPCode.Text) ? string.Empty : txtZIPCode.Text;
+            string city = string.IsNullOrWhiteSpace(txtCity.Text) ? string.Empty : txtCity.Text;
+            string email = string.IsNullOrWhiteSpace(txtEmail.Text) ? string.Empty : txtEmail.Text;
+            string phoneNumber = string.IsNullOrWhiteSpace(txtPhonenumber.Text) ? string.Empty : txtPhonenumber.Text;
+
             // data_users: NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
-            string newDataUsers = $"{txtName.Text},{txtSurname.Text},{txtAlias},{txtEmail.Text},{txtAddress.Text},{txtCity.Text}";
+            string newDataUsers = $"{name},{surname},{alias},{email},{address},{zipCode},{city},{phoneNumber}";
 
             // Append to the CSV files
             File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
@@ -86,6 +99,7 @@ namespace CRUD_System
             // Close CreateFormADMIN, return to MainFormADMIN
             CloseCreateForm();
         }
+
         #endregion METHODS CREATE CONTROL ADMIN
     }
 }

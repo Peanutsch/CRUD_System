@@ -30,10 +30,19 @@ namespace CRUD_System
         /// </summary>
         private void InitializeComponent()
         {
-            SuspendLayout();
-
             CreateControlADMIN createControlADMIN = new CreateControlADMIN();
 
+            this.focusButton = new Button();
+            this.SuspendLayout();
+            // 
+            // focusButton
+            // 
+            this.focusButton.Location = new Point(1046, 304);
+            this.focusButton.Name = "focusButton";
+            this.focusButton.Size = new Size(75, 23);
+            this.focusButton.TabIndex = 0;
+            this.focusButton.Visible = false;
+            this.focusButton.Enabled = false;
             // 
             // createControlADMIN
             // 
@@ -44,19 +53,21 @@ namespace CRUD_System
             createControlADMIN.Size = new Size(1136, 340);
             createControlADMIN.TabIndex = 0;
             // 
-            // EditFormADMIN
+            // CreateFormADMIN
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1133, 339);
-            Controls.Add(createControlADMIN);
-            Name = "EditFormADMIN";
-            Text = "Edit UserDetails ADMIN";
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new SizeF(7F, 15F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.ClientSize = new Size(1133, 339);
+            this.Controls.Add(this.focusButton);
+            this.Controls.Add(createControlADMIN);
+            this.Name = "CreateFormADMIN";
+            this.Text = "Edit UserDetails ADMIN";
+            this.Load += this.Form_Load;
+            this.ResumeLayout(false);
         }
-        
+
         #endregion
 
-        //private CreateControlADMIN createControlADMIN;
+        private Button focusButton;
     }
 }

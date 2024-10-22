@@ -127,11 +127,6 @@ namespace CRUD_System
             }
         }
 
-        public void ToCreateForm()
-        {
-
-        }
-
         /// <summary>
         /// Ignores BTN_click action when no user is selected 
         /// (btnEditUserDetails_Click, btnDeleteUser_Click, btnGeneratePSW_Click)
@@ -217,7 +212,7 @@ namespace CRUD_System
 
                     UpdateUser(userLines, userIndex); // Save changes to data_users.csv
 
-                    ClearTextBoxes(); // Clear textboxes
+                    EmptyTextBoxes(); // Clear textboxes
                     FillTextboxes(userDetails); // Reload txtboxes
                     ReloadListBoxUsers(userIndex); // Reload interface
                 }
@@ -263,7 +258,7 @@ namespace CRUD_System
 
                 messageBoxes.MessageSucces(); // Show MessageBox Succes
                 ReloadListBoxUsers(userIndex);
-                ClearTextBoxes();
+                EmptyTextBoxes();
             }
         }
 
@@ -542,7 +537,7 @@ namespace CRUD_System
             InterfaceEditMode();
         }
 
-        public void ClearTextBoxes()
+        public void EmptyTextBoxes()
         {
             // Refill textboxes with empty values
             txtName.Text = string.Empty;
