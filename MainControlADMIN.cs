@@ -232,9 +232,6 @@ namespace CRUD_System
                 var userDetails = userLines[userIndex].Split(',');
                 var loginDetails = loginLines[userIndex].Split(",");
 
-                Debug.WriteLine($"userDetails: {userDetails}");
-                Debug.WriteLine($"loginDetails: {loginDetails}");
-
                 // MessageBox YesNo to confirm changes
                 MessageBoxes messageBoxes = new MessageBoxes();
                 DialogResult dr = messageBoxes.MessageBoxConfirmToSAVE(userDetails[2]);
@@ -250,12 +247,17 @@ namespace CRUD_System
                     UpdateUserLogin(loginLines, userIndex); // Save changes to data_loging.csv
 
                     // MessageBox Succes
-                    messageBoxes.MessageSucces();
+                    messageBoxes.MessageUpdateSucces();
 
                     EmptyTextBoxes(); // Clear textboxes
                     FillTextboxes(userDetails); // Reload txtboxes
                     ReloadListBoxUsers(userIndex); // Reload interface
                 }
+            }
+            else
+            {
+                // Close editMode
+                editMode = false;
             }
         }
 
@@ -296,7 +298,7 @@ namespace CRUD_System
                                               StringComparison.OrdinalIgnoreCase)).ToList();
                 File.WriteAllLines(dataLogin, loginLines);
 
-                messageBoxes.MessageSucces(); // Show MessageBox Succes
+                messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
                 ReloadListBoxUsers(userIndex);
                 EmptyTextBoxes();
             }
@@ -349,12 +351,6 @@ namespace CRUD_System
             }
         }
 
-        /// <summary>
-        /// Handles the event when a user is selected from the list box.
-        /// Displays the user's details in the respective text fields.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
         /// <summary>
         /// Handles the event when a user is selected from the list box.
         /// Extracts the alias from the selected item.

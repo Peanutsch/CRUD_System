@@ -10,6 +10,7 @@ namespace CRUD_System
         #region PROPERTIES
         MainFormADMIN mainFormADMIN = new MainFormADMIN();
         MainControlADMIN mainControlADMIN = new MainControlADMIN();
+        MessageBoxes messageBoxes = new MessageBoxes();
 
         readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
         readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
@@ -65,17 +66,13 @@ namespace CRUD_System
         {
             if (txtName.Text.Length < 2 || txtSurname.Text.Length < 2)
             {
-                MessageBox.Show("No valid input for Name and/or Surname");
+                messageBoxes.MessageInvalidInput();
                 return;
             }
 
             // Create a new record
             string isAlias = CreateTXTAlias();
             string isPassword = GeneratePSW();
-
-            // data_login: ALIAS, PASSWORD, ADMIN
-            string newDataLogin = $"{isAlias},{isPassword},{isAdmin}";
-            Debug.WriteLine($"Login: {newDataLogin}\nAlias: {isAlias} Password: {isPassword} Admin: {isAdmin}");
 
             // Check each field and assign string.Empty if it is empty
             string name = txtName.Text;
@@ -86,10 +83,10 @@ namespace CRUD_System
             string email = string.IsNullOrWhiteSpace(txtEmail.Text) ? string.Empty : txtEmail.Text;
             string phoneNumber = string.IsNullOrWhiteSpace(txtPhonenumber.Text) ? string.Empty : txtPhonenumber.Text;
 
-            // data_users: NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
+            string newDataLogin = $"{isAlias},{isPassword},{isAdmin}";
+            Debug.WriteLine($"New User Login: {newDataLogin}\nAlias: {isAlias} Password: {isPassword} Admin: {isAdmin}");
             string newDataUsers = $"{name},{surname},{isAlias},{address},{zipCode},{city},{email},{phoneNumber}";
-            
-            Debug.WriteLine($"Details User: {newDataUsers}\n{name} {surname}, {isAlias}, {address}, {zipCode}, {city}, {email}, {phoneNumber}");
+            Debug.WriteLine($"New User Details: {newDataUsers}\n{name} {surname}, {isAlias}, {address}, {zipCode}, {city}, {email}, {phoneNumber}");
 
             // Append to the CSV files
             File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
