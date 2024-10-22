@@ -282,54 +282,6 @@ namespace CRUD_System
             }
         }
 
-        #region ALIAS
-        /// <summary>
-        /// Generates a unique alias for the user based on the first two letters of the first name
-        /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
-        /// </summary>
-        /// <returns>A unique alias as a string.</returns>
-        public string CreateTXTAlias()
-        {
-            string txtAlias = txtName.Text.Substring(0, 2).ToLower() + txtSurname.Text.Substring(txtSurname.Text.Length - 2).ToLower();
-            int counter = 1;
-            string finalAlias = txtAlias + "001";
-
-            // Check if the alias already exists and increment the number if necessary
-            while (AliasExists(finalAlias))
-            {
-                counter++;
-                string newNumber = counter.ToString("D3"); // Ensures it always has 3 digits
-                finalAlias = txtAlias + newNumber;
-            }
-
-            return finalAlias;
-        }
-
-
-        /// <summary>
-        /// Checks if the given alias already exists in the data_login.csv file.
-        /// </summary>
-        /// <param name="alias">The alias to check for existence.</param>
-        /// <returns>True if the alias exists; otherwise, false.</returns>
-        private bool AliasExists(string alias)
-        {
-            // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines(dataLogin);
-
-            // Check if the alias already exists
-            foreach (var line in loginLines)
-            {
-                var loginDetails = line.Split(',');
-                if (loginDetails[0] == alias)
-                {
-                    return true; // Alias already exists
-                }
-            }
-
-            return false; // Alias does not exist
-        }
-        #endregion ALIAS
-
         #region LISTBOX
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.

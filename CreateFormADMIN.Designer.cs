@@ -49,7 +49,7 @@ namespace CRUD_System
             createControlADMIN.Dock = DockStyle.Fill;
             createControlADMIN.BackColor = SystemColors.ActiveCaption;
             createControlADMIN.Location = new Point(-1, 1);
-            createControlADMIN.Name = "editUserDetailsControl1";
+            //createControlADMIN.Name = "Create New User";
             createControlADMIN.Size = new Size(1136, 340);
             createControlADMIN.TabIndex = 0;
             // 
@@ -61,7 +61,7 @@ namespace CRUD_System
             this.Controls.Add(this.focusButton);
             this.Controls.Add(createControlADMIN);
             this.Name = "CreateFormADMIN";
-            this.Text = "Edit UserDetails ADMIN";
+            this.Text = "Create New User";
             this.Load += this.Form_Load;
             this.ResumeLayout(false);
         }

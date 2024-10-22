@@ -19,7 +19,7 @@ namespace CRUD_System
 
         private void Form_Load(object sender, EventArgs e)
         {
-            // Set focus ActiveControl on Form
+            // Set focus ActiveControl at focusButton
             this.ActiveControl = focusButton;
         }
 

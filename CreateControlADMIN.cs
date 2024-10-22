@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace CRUD_System
 {
@@ -61,17 +63,14 @@ namespace CRUD_System
 
         public void SaveNewUser()
         {
-            if (txtName.Text.Length < 1 || txtSurname.Text.Length < 1)
+            if (txtName.Text.Length < 2 || txtSurname.Text.Length < 2)
             {
-                MessageBox.Show("Missing Name and/or Surname");
+                MessageBox.Show("No valid Name and/or Surname");
                 return;
             }
 
-            // Initial txtBoxes are empty
-            mainControlADMIN.EmptyTextBoxes();
-
             // Create a new record
-            string isAlias = mainControlADMIN.CreateTXTAlias();
+            string isAlias = CreateTXTAlias();
             string isPassword = GeneratePSW();
 
             // data_login: ALIAS, PASSWORD, ADMIN
@@ -80,7 +79,6 @@ namespace CRUD_System
             // Check each field and assign string.Empty if it is empty
             string name = txtName.Text;
             string surname = txtSurname.Text;
-            string alias = string.IsNullOrWhiteSpace(txtAlias.Text) ? string.Empty : txtAlias.Text;
             string address = string.IsNullOrWhiteSpace(txtAddress.Text) ? string.Empty : txtAddress.Text;
             string zipCode = string.IsNullOrWhiteSpace(txtZIPCode.Text) ? string.Empty : txtZIPCode.Text;
             string city = string.IsNullOrWhiteSpace(txtCity.Text) ? string.Empty : txtCity.Text;
@@ -88,18 +86,72 @@ namespace CRUD_System
             string phoneNumber = string.IsNullOrWhiteSpace(txtPhonenumber.Text) ? string.Empty : txtPhonenumber.Text;
 
             // data_users: NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
-            string newDataUsers = $"{name},{surname},{alias},{email},{address},{zipCode},{city},{phoneNumber}";
-
+            string newDataUsers = $"{name},{surname},{isAlias},{address},{zipCode},{city},{email},{phoneNumber}";
+            
+            Debug.WriteLine($"Details Login: {newDataLogin}\nDetails User: {newDataUsers}");
+            /*
             // Append to the CSV files
-            File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
-            File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
-
-            MessageBox.Show("User added successfully!");
+            //File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
+            //File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
+            
+            MessageBox.Show($"User {isAlias} added successfully!"); 
+            */
 
             // Close CreateFormADMIN, return to MainFormADMIN
-            CloseCreateForm();
+            // CloseCreateForm();
         }
 
+        #region ALIAS
+        /// <summary>
+        /// Generates a unique alias for the user based on the first two letters of the first name
+        /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
+        /// </summary>
+        /// <returns>A unique alias as a string.</returns>
+        public string CreateTXTAlias()
+        {
+            string initialAlias = txtName.Text.Substring(0, 2).ToLower() + txtSurname.Text.Substring(txtSurname.Text.Length - 2).ToLower();
+            int counter = 1;
+            string finalAlias = initialAlias + "001";
+
+            // Check if the alias already exists and increment the number if necessary
+            while (AliasExists(finalAlias))
+            {
+                counter++;
+                string newNumber = counter.ToString("D3"); // Ensures it always has 3 digits
+                finalAlias = initialAlias + newNumber;
+            }
+
+
+            txtAlias.Text = finalAlias;
+            MessageBox.Show($"Alias user: {finalAlias}");
+            
+            return finalAlias;
+        }
+
+        /// <summary>
+        /// Checks if the given alias already exists in the data_login.csv file.
+        /// </summary>
+        /// <param name="alias">The alias to check for existence.</param>
+        /// <returns>True if the alias exists; otherwise, false.</returns>
+        private bool AliasExists(string alias)
+        {
+            // Read all lines from data_login.csv
+            var loginLines = File.ReadAllLines(dataLogin);
+
+            // Check if the alias already exists
+            foreach (var line in loginLines)
+            {
+                var loginDetails = line.Split(',');
+                if (loginDetails[0] == alias)
+                {
+                    MessageBox.Show($"Alias {alias} already exist");
+                    return true; // Alias already exists
+                }
+            }
+
+            return false; // Alias does not exist
+        }
+        #endregion ALIAS
         #endregion METHODS CREATE CONTROL ADMIN
     }
 }
