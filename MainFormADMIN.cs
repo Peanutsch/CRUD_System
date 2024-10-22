@@ -13,7 +13,7 @@ namespace CRUD_System
 {
     public partial class MainFormADMIN : Form
     {
-        private ManagementControlADMIN _UserManagementControl = new ManagementControlADMIN();
+        private MainControlADMIN _UserManagementControl = new MainControlADMIN();
         private Data _Data = new Data(); 
         private LoginValidation _LoginValidation = new LoginValidation();
         
@@ -27,14 +27,6 @@ namespace CRUD_System
         {
             // Set focus to the logout button when the form is loaded
             this.ActiveControl = buttonLOGOUT;
-
-            // Load user data from data_users.csv
-            LoadUserData();
-        }
-
-        private void LoadUserData()
-        {
-            //
         }
 
         #region BUTTONS
@@ -54,7 +46,7 @@ namespace CRUD_System
 
             this.Close(); // Once MainForm is closed, close the LoginForm
         }
-        #endregion
+        #endregion BUTTONS
 
         /// <summary>
         /// Displays the username in uppercase in the username text box

@@ -12,7 +12,7 @@ namespace CRUD_System
 {
     public partial class CreateFormADMIN : Form
     {
-        public CreateFormADMIN(ManagementControlADMIN userControl)
+        public CreateFormADMIN()
         {
             InitializeComponent();
         }

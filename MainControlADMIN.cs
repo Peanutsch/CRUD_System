@@ -14,7 +14,7 @@ using System.Xml.Linq;
 
 namespace CRUD_System
 {
-    public partial class ManagementControlADMIN : UserControl
+    public partial class MainControlADMIN : UserControl
     {
         #region PROPERTIES
         string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
@@ -29,7 +29,7 @@ namespace CRUD_System
         #endregion
 
         #region Constructor
-        public ManagementControlADMIN()
+        public MainControlADMIN()
         {
             InitializeComponent();
 
@@ -79,13 +79,12 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the click event to add a new user.
-        /// Creates a new record in both data_login.csv and data_users.csv.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
-            CreateUser();
+            OpenCreateForm();
         }
 
         /// <summary>
@@ -105,6 +104,34 @@ namespace CRUD_System
 
 
         #region METHODS MANAGEMENT CONTROLADMIN
+        /// <summary>
+        /// Hides MainForm, Opens CreateForm
+        /// </summary>
+        public void OpenCreateForm()
+        {
+            // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method.
+            // Check if ParentForm is not null and is of type MainFormADMIN
+            if (this.ParentForm is MainFormADMIN mainFormADMIN)
+            {
+                this.ParentForm.Hide();
+
+                CreateFormADMIN createFormADMIN = new CreateFormADMIN();
+                createFormADMIN.ShowDialog();
+
+                // Show the main form again after CreateForm is closed
+                this.ParentForm.Show();
+            }
+            else
+            {
+                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void ToCreateForm()
+        {
+
+        }
+
         /// <summary>
         /// Ignores BTN_click action when no user is selected 
         /// (btnEditUserDetails_Click, btnDeleteUser_Click, btnGeneratePSW_Click)
@@ -159,29 +186,6 @@ namespace CRUD_System
             // Confirm successful update
             MessageBoxes messageBoxes = new MessageBoxes();
             messageBoxes.MessageSucces();
-        }
-
-
-        /// <summary>
-        /// Method for creating new user.
-        /// Writes new user details in data_users.csv and data_login.csv.
-        /// </summary>
-        public void CreateUser()
-        {
-            // Create a new record
-            string txtAlias = CreateTXTAlias();
-
-            // data_login: ALIAS, PASSWORD, ADMIN
-            string newDataLogin = $"{txtAlias},{txtPassword.Text}";
-
-            // data_users: NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
-            string newDataUsers = $"{txtName.Text},{txtSurname.Text},{txtAlias},{txtEmail.Text},{txtAddress.Text},{txtCity.Text}";
-
-            // Append to the CSV files
-            File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
-            File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
-
-            MessageBox.Show("User added successfully!");
         }
 
         /// <summary>
@@ -266,7 +270,7 @@ namespace CRUD_System
         /// <summary>
         /// Saving and sending (new) generated password to (new) user
         /// </summary>
-        private void SaveEditPSW()
+        public void SaveEditPSW()
         {
             var loginLines = File.ReadAllLines(dataLogin).ToList();
 
@@ -289,7 +293,7 @@ namespace CRUD_System
         /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
         /// </summary>
         /// <returns>A unique alias as a string.</returns>
-        private string CreateTXTAlias()
+        public string CreateTXTAlias()
         {
             string txtAlias = txtName.Text.Substring(0, 2).ToLower() + txtSurname.Text.Substring(txtSurname.Text.Length - 2).ToLower();
             int counter = 1;

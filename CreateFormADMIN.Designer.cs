@@ -30,25 +30,26 @@ namespace CRUD_System
         /// </summary>
         private void InitializeComponent()
         {
-            editUserDetailsControl1 = new CreateControlADMIN(this);
             SuspendLayout();
+
+            CreateControlADMIN createControlADMIN = new CreateControlADMIN();
+
             // 
-            // editUserDetailsControl1
+            // createControlADMIN
             // 
-            editUserDetailsControl1.Dock = DockStyle.Fill;
-            editUserDetailsControl1.BackColor = SystemColors.ActiveCaption;
-            editUserDetailsControl1.Location = new Point(-1, 1);
-            editUserDetailsControl1.Name = "editUserDetailsControl1";
-            editUserDetailsControl1.Size = new Size(1136, 340);
-            editUserDetailsControl1.TabIndex = 0;
+            createControlADMIN.Dock = DockStyle.Fill;
+            createControlADMIN.BackColor = SystemColors.ActiveCaption;
+            createControlADMIN.Location = new Point(-1, 1);
+            createControlADMIN.Name = "editUserDetailsControl1";
+            createControlADMIN.Size = new Size(1136, 340);
+            createControlADMIN.TabIndex = 0;
             // 
             // EditFormADMIN
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1133, 339);
-            Controls.Add(editUserDetailsControl1);
-            //userControl.Dock = DockStyle.Fill; // UserControl fills whole Form
+            Controls.Add(createControlADMIN);
             Name = "EditFormADMIN";
             Text = "Edit UserDetails ADMIN";
             ResumeLayout(false);
@@ -56,6 +57,6 @@ namespace CRUD_System
         
         #endregion
 
-        private CreateControlADMIN editUserDetailsControl1;
+        //private CreateControlADMIN createControlADMIN;
     }
 }
