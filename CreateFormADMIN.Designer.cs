@@ -57,6 +57,7 @@ namespace CRUD_System
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
+            StartPosition = FormStartPosition.CenterScreen;
             this.ClientSize = new Size(1133, 339);
             this.Controls.Add(this.focusButton);
             this.Controls.Add(createControlADMIN);

@@ -32,7 +32,7 @@ namespace CRUD_System
 
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
-            isAdmin = !isAdmin;
+            isAdmin = !isAdmin; // Toggle between true and false
         }
 
         private void btnSaveEdit_Click(object sender, EventArgs e)
@@ -65,7 +65,7 @@ namespace CRUD_System
         {
             if (txtName.Text.Length < 2 || txtSurname.Text.Length < 2)
             {
-                MessageBox.Show("No valid Name and/or Surname");
+                MessageBox.Show("No valid input for Name and/or Surname");
                 return;
             }
 
@@ -75,6 +75,7 @@ namespace CRUD_System
 
             // data_login: ALIAS, PASSWORD, ADMIN
             string newDataLogin = $"{isAlias},{isPassword},{isAdmin}";
+            Debug.WriteLine($"Login: {newDataLogin}\nAlias: {isAlias} Password: {isPassword} Admin: {isAdmin}");
 
             // Check each field and assign string.Empty if it is empty
             string name = txtName.Text;
@@ -88,17 +89,17 @@ namespace CRUD_System
             // data_users: NAME, SURNAME, ALIAS, ADRESS, ZIPCODE, CITY, EMAIL ADRESS
             string newDataUsers = $"{name},{surname},{isAlias},{address},{zipCode},{city},{email},{phoneNumber}";
             
-            Debug.WriteLine($"Details Login: {newDataLogin}\nDetails User: {newDataUsers}");
-            /*
+            Debug.WriteLine($"Details User: {newDataUsers}\n{name} {surname}, {isAlias}, {address}, {zipCode}, {city}, {email}, {phoneNumber}");
+
             // Append to the CSV files
-            //File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
-            //File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
+            File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
+            File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
             
             MessageBox.Show($"User {isAlias} added successfully!"); 
-            */
+            Debug.WriteLine($"User {isAlias} added successfully!");
 
             // Close CreateFormADMIN, return to MainFormADMIN
-            // CloseCreateForm();
+            CloseCreateForm();
         }
 
         #region ALIAS
@@ -123,7 +124,7 @@ namespace CRUD_System
 
 
             txtAlias.Text = finalAlias;
-            MessageBox.Show($"Alias user: {finalAlias}");
+            Debug.WriteLine($"Alias user: {finalAlias}");
             
             return finalAlias;
         }
@@ -144,12 +145,29 @@ namespace CRUD_System
                 var loginDetails = line.Split(',');
                 if (loginDetails[0] == alias)
                 {
-                    MessageBox.Show($"Alias {alias} already exist");
+                    Debug.WriteLine($"Alias {alias} already exist");
                     return true; // Alias already exists
                 }
             }
 
             return false; // Alias does not exist
+        }
+
+        private void TxtAlias_TextChanged(object sender, EventArgs e)
+        {
+            // Check if both txtName and txtSurname have at least 2 characters
+            if (txtName.Text.Length >= 2 && txtSurname.Text.Length >= 2)
+            {
+                // Generate and display the alias
+                string displayAlias = CreateTXTAlias();
+                txtAlias.Text = displayAlias;
+            }
+            else
+            {
+                // Clear the alias and show placeholder text
+                txtAlias.Clear();
+                txtAlias.PlaceholderText = "Alias";
+            }
         }
         #endregion ALIAS
         #endregion METHODS CREATE CONTROL ADMIN

@@ -23,7 +23,7 @@ namespace CRUD_System
         /// <returns>A random password string.</returns>
         public static string GenerateUserPassword(int length = 12)
         {
-            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_-+=<>?";
+            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"; //!@#$%^&*()_-+=<>?"; No symbols
             char[] password = new char[length];
             byte[] randomBytes = new byte[length];
 

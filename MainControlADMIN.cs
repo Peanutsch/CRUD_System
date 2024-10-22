@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace CRUD_System
 {
@@ -25,15 +26,15 @@ namespace CRUD_System
 
         bool editMode = false;
         bool userSelected = false;
-        //bool isAdmin = false;
-        #endregion
+        bool isAdmin = false;
+        #endregion PROPERTIES
 
         #region Constructor
         public MainControlADMIN()
         {
             InitializeComponent();
 
-            LoadUserData(); // Load data_users.csv for display in listbox
+            LoadUserDataListBox(); // Load data_users.csv for display in listbox
         }
         #endregion CONSTRUCTOR
 
@@ -55,7 +56,6 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the click event to save the edited user details.
-        /// Updates user details in data_users.csv if confirmed by the user.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
@@ -100,8 +100,17 @@ namespace CRUD_System
                 txtPassword.Text = generatedPassword;
             });
         }
+        /// <summary>
+        /// Handles the event when the 'Is Admin' checkbox state changes.
+        /// Marks the current user as an admin when the checkbox is checked.
+        /// </summary>
+        /// <param name="sender">The source of the event (the CheckBox).</param>
+        /// <param name="e">The event data (checkbox change).</param>
+        private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
+        {
+            isAdmin = !isAdmin; // Toggle between true and false
+        }
         #endregion BUTTONS SoC (Seperate of Concerns)
-
 
         #region METHODS MANAGEMENT CONTROLADMIN
         /// <summary>
@@ -120,6 +129,7 @@ namespace CRUD_System
 
                 // Show the main form again after CreateForm is closed
                 this.ParentForm.Show();
+                ReloadListBoxUsers(0);
             }
             else
             {
@@ -150,12 +160,13 @@ namespace CRUD_System
         /// <param name="userLines">The list of lines from data_users.csv.</param>
         /// <param name="alias">The alias to search for.</param>
         /// <returns>The index of the user, or -1 if not found.</returns>
-        public int FindUserIndexByAlias(List<string> userLines, string alias)
+        public int FindUserIndexByAlias(List<string> userLines, List<string> loginLines, string alias)
         {
             for (int index = 0; index < userLines.Count; index++)
             {
                 var userDetails = userLines[index].Split(',');
-                if (userDetails[2] == alias)
+                var loginDetails = loginLines[index].Split(",");
+                if (userDetails[2] == alias && loginDetails[0] == alias)
                 {
                     return index;
                 }
@@ -172,31 +183,57 @@ namespace CRUD_System
         /// </summary>
         /// <param name="userLines">The list of lines from data_users.csv.</param>
         /// <param name="userIndex">The index of the user to update.</param>
-        public void UpdateUser(List<string> userLines, int userIndex)
+        public void UpdateUserDetails(List<string> userLines, int userIndex)
         {
-            // Update data_users.csv
             userLines[userIndex] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
-            // Write updated data back to data_users.csv
-            File.WriteAllLines(dataUsers, userLines);
-            // Confirm successful update
-            MessageBoxes messageBoxes = new MessageBoxes();
-            messageBoxes.MessageSucces();
+            File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
         }
+
+        /// <summary>
+        /// Updates the login details at the specified index in the CSV data.
+        /// Writes the updated details back to data_login.csv.
+        /// </summary>
+        /// <param name="loginLines">The list of lines from data_users.csv.</param>
+        /// <param name="userIndex">The index of the user to update.</param>
+        public void UpdateUserLogin(List<string> loginLines, int userIndex)
+        {
+            var loginDetails = loginLines[userIndex].Split(',');
+
+            // When need to keep current data on indexes
+            string currentAlias = loginDetails[0];
+            string currentPassword = loginDetails[1];
+            string currentAdminBool = loginDetails[2];
+
+            Debug.WriteLine($"Current: {currentAlias},{currentPassword},{currentAdminBool}");
+
+            loginLines[userIndex] = $"{currentAlias},{loginDetails[1]},{isAdmin}";
+
+            Debug.WriteLine($"After Update: {loginLines[userIndex]}");
+
+            File.WriteAllLines(dataLogin, loginLines); // Write updated data back to data_login.csv
+        }
+
+
 
         /// <summary>
         /// Method for save changes user details
         /// </summary>
         public void SaveEditUserDetails()
         {
-
             // Read lines from data_users.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
+            var loginLines = File.ReadAllLines(dataLogin).ToList();
             // Find user index
-            int userIndex = FindUserIndexByAlias(userLines, txtAlias.Text);
+            int userIndex = FindUserIndexByAlias(userLines,loginLines, txtAlias.Text);
+            int loginIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
 
             if (userIndex >= 0)
             {
                 var userDetails = userLines[userIndex].Split(',');
+                var loginDetails = loginLines[userIndex].Split(",");
+
+                Debug.WriteLine($"userDetails: {userDetails}");
+                Debug.WriteLine($"loginDetails: {loginDetails}");
 
                 // MessageBox YesNo to confirm changes
                 MessageBoxes messageBoxes = new MessageBoxes();
@@ -209,8 +246,11 @@ namespace CRUD_System
 
                 if (dr == DialogResult.Yes)
                 {
+                    UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
+                    UpdateUserLogin(loginLines, userIndex); // Save changes to data_loging.csv
 
-                    UpdateUser(userLines, userIndex); // Save changes to data_users.csv
+                    // MessageBox Succes
+                    messageBoxes.MessageSucces();
 
                     EmptyTextBoxes(); // Clear textboxes
                     FillTextboxes(userDetails); // Reload txtboxes
@@ -228,7 +268,7 @@ namespace CRUD_System
             var userLines = File.ReadAllLines(dataUsers).ToList();
             var loginLines = File.ReadAllLines(dataLogin).ToList();
 
-            int userIndex = FindUserIndexByAlias(userLines, txtAlias.Text);
+            int userIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
 
             // Get alias to delete from the selected user
             string aliasToDelete = txtAlias.Text;
@@ -281,14 +321,17 @@ namespace CRUD_System
                 }
             }
         }
+        #endregion METHODS MANAGEMENT CONTROLADMIN
 
         #region LISTBOX
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
-        private void LoadUserData()
+        private void LoadUserDataListBox()
         {
             var lines = File.ReadAllLines(dataUsers);
+
+            listBoxUsers.Items.Clear();
 
             foreach (var line in lines.Skip(2)) // Skip Header and details Admin
             {
@@ -351,7 +394,7 @@ namespace CRUD_System
                 if (loginDetails != null)
                 {
                     // Check if the admin status is true
-                    if (loginDetails[2]! == "true") // Use '==' for comparison
+                    if (loginDetails[2]! == "True") // Use '==' for comparison
                     {
                         // Show the admin label
                         txtAdmin.Visible = true;
@@ -371,21 +414,8 @@ namespace CRUD_System
                 }
             }
         }
-
-        /// <summary>
-        /// Handles the event when the 'Is Admin' checkbox state changes.
-        /// Marks the current user as an admin when the checkbox is checked.
-        /// </summary>
-        /// <param name="sender">The source of the event (the CheckBox).</param>
-        /// <param name="e">The event data (checkbox change).</param>
-        private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
-        {
-            //isAdmin = true;
-        }
-
-        #endregion ALIAS
-        #endregion METHODS MANAGEMENT CONTROLADMIN
-
+        #endregion LISTBOX
+        
         #region INTERFACE
         public void InterfaceEditMode()
         {
@@ -482,7 +512,7 @@ namespace CRUD_System
 
             // Clear and reload listbox
             listBoxUsers.Items.Clear();
-            LoadUserData();
+            LoadUserDataListBox();
 
             // Reset editMode to false after saving and reload interface
             editMode = false;

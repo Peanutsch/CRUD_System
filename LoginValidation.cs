@@ -25,8 +25,8 @@ namespace CRUD_System
 
             // Find the user in the list where both username and password match
             var user = loginData.FirstOrDefault(u =>
-                u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
-                u.Password == inputUserPSW);
+                                                u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
+                                                u.Password == inputUserPSW);
 
             // If user is found, credentials are valid
             return user != default;

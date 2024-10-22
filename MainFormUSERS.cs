@@ -27,10 +27,10 @@ namespace CRUD_System
             this.ActiveControl = buttonLOGOUT;
 
             // Load user data from data_users.csv
-            LoadUserData();
+            LoadUserDataListBox();
         }
 
-        private void LoadUserData()
+        private void LoadUserDataListBox()
         {
             //
         }
