@@ -44,17 +44,6 @@ namespace CRUD_System
         }
         #endregion BUTTONS
 
-        public void LogOut(string loggedInUser)
-        {
-            Debug.WriteLine($"User [{loggedInUser}] logged out");
-            UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
-            Debug.WriteLine($"Total users online: {UsersOnline.Count()}");
-
-            this.Hide(); // Hide the MainForm
-            loginForm.ShowDialog(); // Open the LoginForm
-            this.Close(); // Once MainForm is closed, close the LoginForm
-        }
-
         /// <summary>
         /// Displays the username in uppercase in the username text box
         /// and validates the user's rights based on the provided username and password.
@@ -71,9 +60,45 @@ namespace CRUD_System
             labelAdmin.Text = "ADMIN";
         }
 
+        public void LogOut(string loggedInUser)
+        {
+            Debug.WriteLine($"User [{loggedInUser}] logged out");
+            UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
+            Debug.WriteLine($"Total users online: {UsersOnline.Count()}");
+
+            this.Hide(); // Hide the MainForm
+            loginForm.ShowDialog(); // Open the LoginForm
+            this.Close(); // Once MainForm is closed, close the LoginForm
+        }
+
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
-            LogOut(loggedInUser);
+            if (!string.IsNullOrEmpty(loggedInUser))
+            {
+                Debug.WriteLine($"\n(Form Close Button)\nUser [{loggedInUser.ToUpper()}] logged OUT");
+                UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
+                Debug.WriteLine($"Total users online: {UsersOnline.Count}\n==========");
+            }
+            else
+            {
+                Debug.WriteLine("No user is currently logged in.");
+            }
+        }
+
+        public string ThisUserName()
+        {
+            if (!string.IsNullOrEmpty(loggedInUser))
+            {
+                Debug.WriteLine($"\n(Form Close Button)\nUser [{loggedInUser.ToUpper()}] logged OUT");
+                Debug.WriteLine($"Total users online: {UsersOnline.Count}\n==========");
+
+                return $"User[{loggedInUser.ToUpper()}] logged OUT";
+            }
+            else
+            {
+                Debug.WriteLine("No user is currently logged in.");
+                return $"User[{loggedInUser.ToUpper()}] is string.Empty";
+            }
         }
     }
 }
