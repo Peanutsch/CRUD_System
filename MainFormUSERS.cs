@@ -59,7 +59,7 @@ namespace CRUD_System
         /// </summary>
         /// <param name="inputUserName">The username entered by the user.</param>
         /// <param name="inputUserPSW">The password entered by the user.</param>
-        public void BoxDisplay(string inputUserName, string inputUserPSW)
+        public void BoxDisplay(string inputUserName)
         {
             textBoxUserName.Text = $"{inputUserName.ToUpper()}";
 

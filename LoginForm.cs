@@ -1,4 +1,5 @@
 using Microsoft.Win32;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace CRUD_System
@@ -10,9 +11,6 @@ namespace CRUD_System
     /// </summary>
     public partial class LoginForm : Form
     {
-        // Create an instance of classes for validating user credentials.
-        LoginValidation _LoginValidation = new LoginValidation();
-
         private bool isPasswordVisible = false;
 
         /// <summary>
@@ -107,11 +105,17 @@ namespace CRUD_System
         /// <param name="inputUserPSW">The password input provided by the user.</param>
         private void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
+            LoginValidation loginValidation = new LoginValidation();
+            MainFormADMIN mainFormADMIN = new MainFormADMIN();
             // Validate login input
-            if (_LoginValidation.ValidateLogin(inputUserName, inputUserPSW))
+            if (loginValidation.ValidateLogin(inputUserName, inputUserPSW))
             {
+                Debug.WriteLine($"User [{inputUserName.ToUpper()}] logged in");
+                mainFormADMIN.UsersOnline.Add(inputUserName); // Add user to list UsersOnline
+                Debug.WriteLine($"Total users Online: {mainFormADMIN.UsersOnline.Count()}");
+
                 // Check if user is admin
-                bool isAdmin = _LoginValidation.IsAdmin(inputUserName, inputUserPSW);
+                bool isAdmin = loginValidation.IsAdmin(inputUserName, inputUserPSW);
 
                 // Hide LoginForm
                 this.Hide();
@@ -119,15 +123,15 @@ namespace CRUD_System
                 // If user is admin, open MainFormADMIN
                 if (isAdmin)
                 {
-                    MainFormADMIN mainFormADMIN = new MainFormADMIN();
-                    mainFormADMIN.BoxDisplay(inputUserName, inputUserPSW); // Pass user input
+                    //MainFormADMIN mainFormADMIN = new MainFormADMIN();
+                    mainFormADMIN.BoxDisplay(inputUserName); // Pass user input
                     mainFormADMIN.ShowDialog();
                 }
                 // If user is no admin, open MainFormUSERS
                 else
                 {
                     MainFormUSERS mainFormUSERS = new MainFormUSERS();
-                    mainFormUSERS.BoxDisplay(inputUserName, inputUserPSW); // Pass user input
+                    mainFormUSERS.BoxDisplay(inputUserName); // Pass user input
                     mainFormUSERS.ShowDialog();
                 }
 

@@ -21,9 +21,6 @@ namespace CRUD_System
         string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
         string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
 
-
-        Data _Data = new Data();
-
         bool editMode = false;
         bool userSelected = false;
         bool isAdmin = false;
@@ -243,8 +240,13 @@ namespace CRUD_System
 
                 if (dr == DialogResult.Yes)
                 {
+                    MainFormADMIN mainFormADMIN = new MainFormADMIN();
+
                     UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
                     UpdateUserLogin(loginLines, userIndex); // Save changes to data_loging.csv
+
+                    Debug.WriteLine($"Action from user [{mainFormADMIN.loggedInUser}]");
+                    Debug.WriteLine($"Edited details from user [{userDetails[2]}]");
 
                     // MessageBox Succes
                     messageBoxes.MessageUpdateSucces();
@@ -297,6 +299,11 @@ namespace CRUD_System
                                               !line.Split(',')[0].Trim().Equals(aliasToDelete,
                                               StringComparison.OrdinalIgnoreCase)).ToList();
                 File.WriteAllLines(dataLogin, loginLines);
+
+                MainFormADMIN mainFormADMIN = new MainFormADMIN();
+
+                Debug.WriteLine($"Action from user [{mainFormADMIN.loggedInUser.ToUpper()}]");
+                Debug.WriteLine($"Deleted user [{aliasToDelete}]");
 
                 messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
                 ReloadListBoxUsers(userIndex);

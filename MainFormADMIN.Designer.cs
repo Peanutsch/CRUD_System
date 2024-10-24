@@ -90,6 +90,7 @@
             Margin = new Padding(4);
             Name = "MainFormADMIN";
             StartPosition = FormStartPosition.CenterScreen;
+            this.FormClosing += this.MainFormADMIN_FormClosing;
             Text = "Display UserDetails Admin";
             Load += MainFormAdmin_Load;
             ResumeLayout(false);

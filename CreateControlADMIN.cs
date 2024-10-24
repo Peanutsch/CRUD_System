@@ -9,7 +9,6 @@ namespace CRUD_System
     {
         #region PROPERTIES
         MainFormADMIN mainFormADMIN = new MainFormADMIN();
-        MainControlADMIN mainControlADMIN = new MainControlADMIN();
         MessageBoxes messageBoxes = new MessageBoxes();
 
         readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
@@ -92,8 +91,11 @@ namespace CRUD_System
             File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
             File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
             
-            MessageBox.Show($"User {isAlias} added successfully!"); 
+            MessageBox.Show($"User {isAlias} added successfully!");
+
+            Debug.WriteLine($"Action from user [{mainFormADMIN.loggedInUser}]");
             Debug.WriteLine($"User {isAlias} added successfully!");
+
 
             // Close CreateFormADMIN, return to MainFormADMIN
             CloseCreateForm();

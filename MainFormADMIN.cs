@@ -13,10 +13,11 @@ namespace CRUD_System
 {
     public partial class MainFormADMIN : Form
     {
-        private MainControlADMIN _UserManagementControl = new MainControlADMIN();
-        private Data _Data = new Data(); 
-        private LoginValidation _LoginValidation = new LoginValidation();
-        
+        LoginForm loginForm = new LoginForm();
+
+        public List<string> UsersOnline = new List<string>();
+
+        public string loggedInUser = string.Empty;
 
         public MainFormADMIN()
         {
@@ -39,28 +40,40 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            this.Hide(); // Hide the MainForm
-
-            LoginForm loginForm = new LoginForm(); 
-            loginForm.ShowDialog(); // Open the LoginForm
-
-            this.Close(); // Once MainForm is closed, close the LoginForm
+            LogOut(loggedInUser);
         }
         #endregion BUTTONS
+
+        public void LogOut(string loggedInUser)
+        {
+            Debug.WriteLine($"User [{loggedInUser}] logged out");
+            UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
+            Debug.WriteLine($"Total users online: {UsersOnline.Count()}");
+
+            this.Hide(); // Hide the MainForm
+            loginForm.ShowDialog(); // Open the LoginForm
+            this.Close(); // Once MainForm is closed, close the LoginForm
+        }
 
         /// <summary>
         /// Displays the username in uppercase in the username text box
         /// and validates the user's rights based on the provided username and password.
         /// </summary>
         /// <param name="inputUserName">The username entered by the user.</param>
-        /// <param name="inputUserPSW">The password entered by the user.</param>
-        public void BoxDisplay(string inputUserName, string inputUserPSW)
+        public void BoxDisplay(string inputUserName)
         {
+            loggedInUser = inputUserName;
+
             textBoxUserName.Text = $"{inputUserName.ToUpper()}";
 
             labelAdmin.TextAlign = ContentAlignment.TopLeft;
             labelAdmin.BackColor = Color.LightGreen;
             labelAdmin.Text = "ADMIN";
+        }
+
+        private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            LogOut(loggedInUser);
         }
     }
 }
