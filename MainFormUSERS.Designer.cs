@@ -31,6 +31,7 @@
             this.textBoxUserName = new TextBox();
             this.buttonLOGOUT = new Button();
             this.labelUser = new Label();
+            userManagementControl = new MainControlUSERS();
             this.SuspendLayout();
             // 
             // textBoxUserName
@@ -65,6 +66,14 @@
             this.labelUser.TabIndex = 3;
             this.labelUser.Text = "ROLE";
             this.labelUser.TextAlign = ContentAlignment.TopCenter;
+            //
+            // adminManagementControl
+            // 
+            userManagementControl.BorderStyle = BorderStyle.FixedSingle;
+            userManagementControl.Location = new Point(18, 86);
+            userManagementControl.Name = "adminManagementControl";
+            userManagementControl.Size = new Size(1208, 400);
+            userManagementControl.TabIndex = 4;
             // 
             // MainFormUSERS
             // 
@@ -75,6 +84,7 @@
             this.Controls.Add(this.labelUser);
             this.Controls.Add(this.buttonLOGOUT);
             this.Controls.Add(this.textBoxUserName);
+            this.Controls.Add(this.userManagementControl);
             this.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.Margin = new Padding(4);
@@ -91,5 +101,6 @@
         private TextBox textBoxUserName;
         private Button buttonLOGOUT;
         private Label labelUser;
+        private MainControlUSERS userManagementControl;
     }
 }
