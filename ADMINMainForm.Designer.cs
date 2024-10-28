@@ -31,7 +31,7 @@
             textBoxUserName = new TextBox();
             buttonLOGOUT = new Button();
             labelAdmin = new Label();
-            adminManagementControl = new ADMINMainControl();
+            UserControl = new ADMINMainControl();
             SuspendLayout();
             // 
             // textBoxUserName
@@ -67,13 +67,13 @@
             labelAdmin.Text = "ADMIN";
             labelAdmin.TextAlign = ContentAlignment.TopCenter;
             //
-            // adminManagementControl
+            // UserControl
             // 
-            adminManagementControl.BorderStyle = BorderStyle.FixedSingle;
-            adminManagementControl.Location = new Point(18, 86);
-            adminManagementControl.Name = "adminManagementControl";
-            adminManagementControl.Size = new Size(1208, 400);
-            adminManagementControl.TabIndex = 4;
+            UserControl.BorderStyle = BorderStyle.FixedSingle;
+            UserControl.Location = new Point(18, 86);
+            UserControl.Name = "adminManagementControl";
+            UserControl.Size = new Size(1208, 400);
+            UserControl.TabIndex = 4;
             // 
             // MainFormADMIN
             //
@@ -84,7 +84,7 @@
             Controls.Add(labelAdmin);
             Controls.Add(buttonLOGOUT);
             Controls.Add(textBoxUserName);
-            Controls.Add(adminManagementControl);
+            Controls.Add(UserControl);
             Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
@@ -102,6 +102,6 @@
         private TextBox textBoxUserName;
         private Button buttonLOGOUT;
         private Label labelAdmin;
-        private ADMINMainControl adminManagementControl;
+        private ADMINMainControl UserControl;
     }
 }

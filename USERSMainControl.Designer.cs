@@ -57,6 +57,8 @@ namespace CRUD_System
             btnEditUserDetails = new Button();
             listBoxUser = new ListBox();
             comboBoxStatus = new ComboBox();
+            textBox1 = new TextBox();
+            btnChangePassword = new Button();
             SuspendLayout();
             // 
             // txtName
@@ -121,7 +123,7 @@ namespace CRUD_System
             // 
             btnSaveEditUserDetails.BackColor = Color.LightGreen;
             btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSaveEditUserDetails.Location = new Point(666, 194);
+            btnSaveEditUserDetails.Location = new Point(821, 105);
             btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
             btnSaveEditUserDetails.Size = new Size(150, 30);
             btnSaveEditUserDetails.TabIndex = 10;
@@ -193,7 +195,7 @@ namespace CRUD_System
             // 
             btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
             btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnEditUserDetails.Location = new Point(510, 194);
+            btnEditUserDetails.Location = new Point(821, 69);
             btnEditUserDetails.Name = "btnEditUserDetails";
             btnEditUserDetails.Size = new Size(150, 30);
             btnEditUserDetails.TabIndex = 25;
@@ -216,11 +218,33 @@ namespace CRUD_System
             // 
             comboBoxStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             comboBoxStatus.FormattingEnabled = true;
-            comboBoxStatus.Location = new Point(971, 30);
+            comboBoxStatus.Location = new Point(821, 30);
             comboBoxStatus.Name = "comboBoxStatus";
-            comboBoxStatus.Size = new Size(134, 26);
+            comboBoxStatus.Size = new Size(150, 26);
             comboBoxStatus.TabIndex = 28;
             comboBoxStatus.Text = "User Status";
+            // 
+            // textBox1
+            // 
+            textBox1.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            textBox1.Location = new Point(977, 144);
+            textBox1.Name = "textBox1";
+            textBox1.PlaceholderText = "Password";
+            textBox1.Size = new Size(150, 26);
+            textBox1.TabIndex = 29;
+            textBox1.TextAlign = HorizontalAlignment.Center;
+            // 
+            // ChangePassword
+            // 
+            btnChangePassword.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnChangePassword.Location = new Point(821, 141);
+            btnChangePassword.Name = "button1";
+            btnChangePassword.Size = new Size(150, 30);
+            btnChangePassword.TabIndex = 30;
+            btnChangePassword.Text = "Change PSW";
+            btnChangePassword.UseVisualStyleBackColor = true;
+            btnChangePassword.Enabled = false;
+            btnChangePassword.Click += ChangePassword_Click;
             // 
             // USERSMainControl
             // 
@@ -228,6 +252,8 @@ namespace CRUD_System
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(btnChangePassword);
+            Controls.Add(textBox1);
             Controls.Add(comboBoxStatus);
             Controls.Add(btnEditUserDetails);
             Controls.Add(listBoxUser);
@@ -255,5 +281,7 @@ namespace CRUD_System
         private Button btnEditUserDetails;
         private ListBox listBoxUser;
         private ComboBox comboBoxStatus;
+        private TextBox textBox1;
+        private Button btnChangePassword;
     }
 }

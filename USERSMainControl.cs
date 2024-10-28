@@ -39,7 +39,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-           SaveEditUserDetails();
+            SaveEditUserDetails();
         }
 
         /// <summary>
@@ -56,6 +56,15 @@ namespace CRUD_System
                 InterfaceEditMode();
             });
         }
+
+        private void ChangePassword_Click(object sender, EventArgs e)
+        {
+            PerformActionIfUserSelected(() =>
+            {
+                ChangePassword();
+            });
+        }
+
         #endregion BUTTONS
 
         /// <summary>
@@ -71,6 +80,14 @@ namespace CRUD_System
             else
             {
                 MessageBox.Show("Please select a user first."); // Feedback if no user is selected
+            }
+        }
+
+        public void ChangePassword()
+        {
+            if (txtPassword.Text.Length > 0)
+            {
+                btnChangePassword.Enabled = true;
             }
         }
 

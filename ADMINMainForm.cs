@@ -39,7 +39,7 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            LogOut(loggedInUser);
+            LogOutButton(loggedInUser);
         }
         #endregion BUTTONS
 
@@ -59,9 +59,9 @@ namespace CRUD_System
             labelAdmin.Text = "ADMIN";
         }
 
-        public void LogOut(string loggedInUser)
+        public void LogOutButton(string loggedInUser)
         {
-            Debug.WriteLine($"\n=====\nUser [{loggedInUser.ToUpper()}] logged OUT");
+            Debug.WriteLine($"\n(LogOut Button)\nUser [{loggedInUser.ToUpper()}] logged OUT");
             loginForm.UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
             Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
 

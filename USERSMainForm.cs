@@ -27,29 +27,6 @@ namespace CRUD_System
         }
 
         /// <summary>
-        /// Handles the click event of the logout button. 
-        /// Hides the MainForm and opens the LoginForm.
-        /// Closes the MainForm once the LoginForm is closed.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void buttonLOGOUT_Click(object sender, EventArgs e)
-        {
-            var currentUser = LoginForm.CurrentUser;
-
-            if (currentUser != null)
-            {
-                Debug.WriteLine($"\n=====\nUser [{currentUser.ToUpper()}] logged OUT");
-                loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
-                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
-
-                this.Hide(); // Hide the MainForm
-                loginForm.ShowDialog(); // Open the LoginForm
-                this.Close(); // Once MainForm is closed, close the LoginForm
-            }
-        }
-
-        /// <summary>
         /// Displays the username in uppercase in the username text box
         /// and validates the user's rights based on the provided username and password.
         /// </summary>
@@ -70,6 +47,29 @@ namespace CRUD_System
             labelUser.TextAlign = ContentAlignment.TopLeft;
             labelUser.BackColor = Color.LightGreen;
             labelUser.Text = "USER";
+        }
+
+        /// <summary>
+        /// Handles the click event of the logout button. 
+        /// Hides the MainForm and opens the LoginForm.
+        /// Closes the MainForm once the LoginForm is closed.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void buttonLOGOUT_Click(object sender, EventArgs e)
+        {
+            var currentUser = LoginForm.CurrentUser;
+
+            if (currentUser != null)
+            {
+                Debug.WriteLine($"\n(LogOut Button)\nUser [{currentUser.ToUpper()}] logged OUT");
+                loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
+                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
+
+                this.Hide(); // Hide the MainForm
+                loginForm.ShowDialog(); // Open the LoginForm
+                this.Close(); // Once MainForm is closed, close the LoginForm
+            }
         }
 
         private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
