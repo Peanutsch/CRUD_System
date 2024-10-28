@@ -197,7 +197,7 @@
             btnGeneratePSW.Text = "Send New PSW";
             btnGeneratePSW.Click += btnGeneratePSW_Click;
             // 
-            // btnEdit
+            // btnEditUserDetails
             // 
             btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
             btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);

@@ -58,7 +58,18 @@ namespace CRUD_System
             btnEditUserDetails = new Button();
             txtAdmin = new TextBox();
             chkIsAdmin = new CheckBox();
+
+            MainControlADMIN adminMethods = new MainControlADMIN();
             SuspendLayout();
+            // 
+            // listBoxUsers
+            // 
+            listBoxUsers.ItemHeight = 15;
+            listBoxUsers.Location = new Point(24, 20);
+            listBoxUsers.Name = "listBoxUsers";
+            listBoxUsers.Size = new Size(963, 229);
+            listBoxUsers.TabIndex = 0;
+            //listBoxUsers.SelectedIndexChanged += ListBoxUsers_SelectedIndexChanged;
             // 
             // txtName
             // 
@@ -111,10 +122,10 @@ namespace CRUD_System
             btnSaveEditUserDetails.Text = "Save Edit";
             btnSaveEditUserDetails.UseVisualStyleBackColor = false;
             btnSaveEditUserDetails.Visible = false;
-            //btnSaveEditUserDetails.Click += btnSaveEditUserDetails_Click;
+            btnSaveEditUserDetails.Click += btnSaveEditUserDetails_Click;
             // 
             // txtSurname
-            // 
+            //
             txtSurname.Enabled = false;
             txtSurname.Location = new Point(434, 255);
             txtSurname.Name = "txtSurname";
@@ -154,7 +165,7 @@ namespace CRUD_System
             txtPhonenumber.TabIndex = 21;
             txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
-            // btnEdit
+            // btnEditUserDetails
             // 
             btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
             btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -164,7 +175,7 @@ namespace CRUD_System
             btnEditUserDetails.TabIndex = 25;
             btnEditUserDetails.Text = "Edit Details";
             btnEditUserDetails.UseVisualStyleBackColor = false;
-            //btnEditUserDetails.Click += btnEditUserDetails_Click;
+            btnEditUserDetails.Click += btnEditUserDetails_Click;
             // 
             // txtAdmin
             // 
@@ -197,6 +208,7 @@ namespace CRUD_System
             Controls.Add(txtAddress);
             Controls.Add(txtCity);
             Controls.Add(btnSaveEditUserDetails);
+            Controls.Add(listBoxUsers);
             Name = "UserManagementControl";
             Size = new Size(1014, 410);
             ResumeLayout(false);

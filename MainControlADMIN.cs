@@ -138,7 +138,7 @@ namespace CRUD_System
         /// Ignores BTN_click action when no user is selected 
         /// (btnEditUserDetails_Click, btnDeleteUser_Click, btnGeneratePSW_Click)
         /// </summary>
-        private void PerformActionIfUserSelected(Action action)
+        public void PerformActionIfUserSelected(Action action)
         {
             if (userSelected)
             {
@@ -350,7 +350,7 @@ namespace CRUD_System
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
-        private void LoadUserDataListBox()
+        public void LoadUserDataListBox()
         {
             var lines = File.ReadAllLines(dataUsers);
 
