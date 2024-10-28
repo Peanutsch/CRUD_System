@@ -83,21 +83,5 @@ namespace CRUD_System
                 Debug.WriteLine("No user is currently logged in.");
             }
         }
-
-        public string ThisUserName()
-        {
-            if (!string.IsNullOrEmpty(loggedInUser))
-            {
-                Debug.WriteLine($"\n(Form Close Button)\nUser [{loggedInUser.ToUpper()}] logged OUT");
-                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
-
-                return $"User[{loggedInUser.ToUpper()}] logged OUT";
-            }
-            else
-            {
-                Debug.WriteLine("No user is currently logged in.");
-                return $"User[{loggedInUser.ToUpper()}] is string.Empty";
-            }
-        }
     }
 }

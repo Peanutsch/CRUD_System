@@ -8,7 +8,7 @@
         private System.Windows.Forms.TextBox txtAddress;
         private System.Windows.Forms.TextBox txtCity;
         private System.Windows.Forms.TextBox txtAdmin;
-        private System.Windows.Forms.ListBox listBoxUsers;
+        private System.Windows.Forms.ListBox listBoxAdmin;
         private System.Windows.Forms.Button btnCreateUser;
         private System.Windows.Forms.Button btnSaveEditUserDetails;
         private System.Windows.Forms.Button btnDeleteUser;
@@ -40,7 +40,7 @@
             txtEmail = new TextBox();
             txtAddress = new TextBox();
             txtCity = new TextBox();
-            listBoxUsers = new ListBox();
+            listBoxAdmin = new ListBox();
             btnCreateUser = new Button();
             btnSaveEditUserDetails = new Button();
             btnDeleteUser = new Button();
@@ -103,14 +103,14 @@
             txtCity.TabIndex = 5;
             txtCity.TextAlign = HorizontalAlignment.Center;
             // 
-            // listBoxUsers
+            // listBoxAdmin
             // 
-            listBoxUsers.ItemHeight = 15;
-            listBoxUsers.Location = new Point(24, 20);
-            listBoxUsers.Name = "listBoxUsers";
-            listBoxUsers.Size = new Size(963, 229);
-            listBoxUsers.TabIndex = 0;
-            listBoxUsers.SelectedIndexChanged += ListBoxUsers_SelectedIndexChanged;
+            listBoxAdmin.ItemHeight = 15;
+            listBoxAdmin.Location = new Point(24, 20);
+            listBoxAdmin.Name = "listBoxAdmin";
+            listBoxAdmin.Size = new Size(963, 229);
+            listBoxAdmin.TabIndex = 0;
+            listBoxAdmin.SelectedIndexChanged += ListBoxAdmin_SelectedIndexChanged;
             // 
             // btnCreateUser
             // 
@@ -257,7 +257,7 @@
             Controls.Add(txtEmail);
             Controls.Add(txtAddress);
             Controls.Add(txtCity);
-            Controls.Add(listBoxUsers);
+            Controls.Add(listBoxAdmin);
             Controls.Add(btnCreateUser);
             Controls.Add(btnSaveEditUserDetails);
             Controls.Add(btnDeleteUser);

@@ -126,7 +126,7 @@ namespace CRUD_System
 
                 // Show the main form again after CreateForm is closed
                 this.ParentForm.Show();
-                ReloadListBoxUsers(0);
+                ReloadListBoxAdmin(0);
             }
             else
             {
@@ -183,7 +183,7 @@ namespace CRUD_System
         public void UpdateUserDetails(List<string> userLines, int userIndex)
         {
             string currentUserDetails = userLines[userIndex].Trim();
-            Debug.WriteLine($"currentName: {currentUserDetails}");
+            Debug.WriteLine($"Current User Details: {currentUserDetails}");
             userLines[userIndex] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
             File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
             Debug.WriteLine($"After Update: {userLines[userIndex]}");
@@ -223,10 +223,11 @@ namespace CRUD_System
             // Read lines from data_users.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
             var loginLines = File.ReadAllLines(dataLogin).ToList();
+
             // Find user index
             int userIndex = FindUserIndexByAlias(userLines,loginLines, txtAlias.Text);
             int loginIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-
+                
             if (userIndex >= 0)
             {
                 var userDetails = userLines[userIndex].Split(',');
@@ -260,7 +261,7 @@ namespace CRUD_System
 
                     EmptyTextBoxes(); // Clear textboxes
                     FillTextboxes(userDetails); // Reload txtboxes
-                    ReloadListBoxUsers(userIndex); // Reload interface
+                    ReloadListBoxAdmin(userIndex); // Reload interface
                 }
             }
             else
@@ -320,7 +321,7 @@ namespace CRUD_System
                 
 
                 messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
-                ReloadListBoxUsers(userIndex);
+                ReloadListBoxAdmin(userIndex);
                 EmptyTextBoxes();
             }
         }
@@ -354,7 +355,7 @@ namespace CRUD_System
         {
             var lines = File.ReadAllLines(dataUsers);
 
-            listBoxUsers.Items.Clear();
+            listBoxAdmin.Items.Clear();
 
             foreach (var line in lines.Skip(2)) // Skip Header and details Admin
             {
@@ -368,7 +369,7 @@ namespace CRUD_System
                 string listItem = $"{userDetails.Name} {userDetails.Surname} ({userDetails.Alias}) | {userDetails.Email} | {userDetails.PhoneNumber}";
 
                 // Add the formatted string to the listBox
-                listBoxUsers.Items.Add(listItem);
+                listBoxAdmin.Items.Add(listItem);
             }
         }
 
@@ -380,10 +381,10 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event (the ListBox).</param>
         /// <param name="e">The event data (user selection).</param>
-        private void ListBoxUsers_SelectedIndexChanged(object sender, EventArgs e)
+        public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
-            if (listBoxUsers.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
+            if (listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
                 // Set userSelected on true
                 userSelected = true;
@@ -472,7 +473,7 @@ namespace CRUD_System
             txtPassword.Enabled = editMode ? false : true;
 
             // Manage status ListBox
-            listBoxUsers.Enabled = editMode ? false : true;
+            listBoxAdmin.Enabled = editMode ? false : true;
         }
 
         public void InterfaceDisplayMode()
@@ -513,22 +514,22 @@ namespace CRUD_System
             txtPassword.Enabled = editMode ? false : true;
 
             // Manage status enable ListBox
-            listBoxUsers.Enabled = editMode ? false : true;
+            listBoxAdmin.Enabled = editMode ? false : true;
         }
 
         /// <summary>
         /// Reloads the user interface after saving changes.
         /// </summary>
         /// <param name="userIndex">The index of the updated user.</param>
-        public void ReloadListBoxUsers(int userIndex)
+        public void ReloadListBoxAdmin(int userIndex)
         {
-            if (userIndex >= 0 && userIndex < listBoxUsers.Items.Count)
+            if (userIndex >= 0 && userIndex < listBoxAdmin.Items.Count)
             {
                 this.Refresh();
             }
 
             // Clear and reload listbox
-            listBoxUsers.Items.Clear();
+            listBoxAdmin.Items.Clear();
             LoadUserDataListBox();
 
             // Reset editMode to false after saving and reload interface

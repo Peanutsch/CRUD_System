@@ -1,5 +1,5 @@
 Alias, PSW, ADMIN
-admin,admin,True
+admin,admin,False
 mist001,mist001,False
 peer001,peer001,False
 pewn001,pewn001,False

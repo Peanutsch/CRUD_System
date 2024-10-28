@@ -13,8 +13,7 @@ namespace CRUD_System
 {
     public partial class USERSMainForm : Form
     {
-        private OpenUserDetailFiles openDetails = new OpenUserDetailFiles();
-        private LoginValidation _LoginValidation = new LoginValidation();
+        private LoginForm loginForm = new LoginForm();
 
         public USERSMainForm()
         {
@@ -27,12 +26,6 @@ namespace CRUD_System
             this.ActiveControl = buttonLOGOUT;
         }
 
-        private void LoadUserDataListBox()
-        {
-            //
-        }
-
-
         /// <summary>
         /// Handles the click event of the logout button. 
         /// Hides the MainForm and opens the LoginForm.
@@ -42,12 +35,18 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            this.Hide(); // Hide the MainForm
+            var currentUser = LoginForm.CurrentUser;
 
-            LoginForm loginForm = new LoginForm();
-            loginForm.ShowDialog(); // Open the LoginForm
+            if (currentUser != null)
+            {
+                Debug.WriteLine($"\n=====\nUser [{currentUser.ToUpper()}] logged OUT");
+                loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
+                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
 
-            this.Close(); // Once MainForm is closed, close the LoginForm
+                this.Hide(); // Hide the MainForm
+                loginForm.ShowDialog(); // Open the LoginForm
+                this.Close(); // Once MainForm is closed, close the LoginForm
+            }
         }
 
         /// <summary>
@@ -71,8 +70,26 @@ namespace CRUD_System
             labelUser.TextAlign = ContentAlignment.TopLeft;
             labelUser.BackColor = Color.LightGreen;
             labelUser.Text = "USER";
-
         }
+
+        private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var currentUser = LoginForm.CurrentUser;
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                Debug.WriteLine($"\n(Form Close Button)\nUser [{currentUser.ToUpper()}] logged OUT");
+                loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
+                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
+            }
+            else
+            {
+                Debug.WriteLine("No user is currently logged in.");
+            }
+        }
+
+
+
+
     }
 }
 

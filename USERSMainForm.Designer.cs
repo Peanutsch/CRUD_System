@@ -92,6 +92,7 @@
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Main Users";
             this.Load += this.MainFormUsers_Load;
+            this.FormClosing += USERSMainForm_FormClosing;
             this.ResumeLayout(false);
             this.PerformLayout();
         }

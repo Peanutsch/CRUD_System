@@ -9,10 +9,11 @@ namespace CRUD_System
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.TextBox txtAddress;
         private System.Windows.Forms.TextBox txtCity;
-        private System.Windows.Forms.TextBox txtAdmin;
         private System.Windows.Forms.Button btnCreateUser;
         private System.Windows.Forms.Button btnSaveEditUserDetails;
         private System.Windows.Forms.Button btnDeleteUser;
+
+        private ADMINMainControl mainControlAdmin = new ADMINMainControl();
 
         /// <summary> 
         /// Required designer variable.
@@ -54,18 +55,18 @@ namespace CRUD_System
             txtPhonenumber = new TextBox();
             btnGeneratePSW = new Button();
             btnEditUserDetails = new Button();
-            txtAdmin = new TextBox();
-            chkIsAdmin = new CheckBox();
-            listBoxUsers = new ListBox();
+            listBoxUser = new ListBox();
+            comboBoxStatus = new ComboBox();
             SuspendLayout();
             // 
             // txtName
             // 
             txtName.Enabled = false;
-            txtName.Location = new Point(24, 87);
+            txtName.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            txtName.Location = new Point(100, 101);
             txtName.Name = "txtName";
             txtName.PlaceholderText = "Name";
-            txtName.Size = new Size(199, 23);
+            txtName.Size = new Size(199, 26);
             txtName.TabIndex = 1;
             txtName.TextAlign = HorizontalAlignment.Center;
             // 
@@ -79,30 +80,33 @@ namespace CRUD_System
             // txtEmail
             // 
             txtEmail.Enabled = false;
-            txtEmail.Location = new Point(24, 145);
+            txtEmail.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            txtEmail.Location = new Point(100, 162);
             txtEmail.Name = "txtEmail";
             txtEmail.PlaceholderText = "E-mail";
-            txtEmail.Size = new Size(199, 23);
+            txtEmail.Size = new Size(199, 26);
             txtEmail.TabIndex = 6;
             txtEmail.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAddress
             // 
             txtAddress.Enabled = false;
-            txtAddress.Location = new Point(24, 116);
+            txtAddress.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            txtAddress.Location = new Point(100, 133);
             txtAddress.Name = "txtAddress";
             txtAddress.PlaceholderText = "Adress";
-            txtAddress.Size = new Size(199, 23);
+            txtAddress.Size = new Size(199, 26);
             txtAddress.TabIndex = 3;
             txtAddress.TextAlign = HorizontalAlignment.Center;
             // 
             // txtCity
             // 
             txtCity.Enabled = false;
-            txtCity.Location = new Point(434, 116);
+            txtCity.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            txtCity.Location = new Point(510, 133);
             txtCity.Name = "txtCity";
             txtCity.PlaceholderText = "City";
-            txtCity.Size = new Size(199, 23);
+            txtCity.Size = new Size(199, 26);
             txtCity.TabIndex = 5;
             txtCity.TextAlign = HorizontalAlignment.Center;
             // 
@@ -117,7 +121,7 @@ namespace CRUD_System
             // 
             btnSaveEditUserDetails.BackColor = Color.LightGreen;
             btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSaveEditUserDetails.Location = new Point(483, 174);
+            btnSaveEditUserDetails.Location = new Point(666, 194);
             btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
             btnSaveEditUserDetails.Size = new Size(150, 30);
             btnSaveEditUserDetails.TabIndex = 10;
@@ -136,41 +140,45 @@ namespace CRUD_System
             // txtSurname
             // 
             txtSurname.Enabled = false;
-            txtSurname.Location = new Point(229, 87);
+            txtSurname.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            txtSurname.Location = new Point(305, 101);
             txtSurname.Name = "txtSurname";
             txtSurname.PlaceholderText = "Surname";
-            txtSurname.Size = new Size(199, 23);
+            txtSurname.Size = new Size(199, 26);
             txtSurname.TabIndex = 2;
             txtSurname.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAlias
             // 
             txtAlias.Enabled = false;
-            txtAlias.Location = new Point(24, 58);
+            txtAlias.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            txtAlias.Location = new Point(100, 69);
             txtAlias.Name = "txtAlias";
             txtAlias.PlaceholderText = "Alias";
             txtAlias.ReadOnly = true;
-            txtAlias.Size = new Size(199, 23);
+            txtAlias.Size = new Size(199, 26);
             txtAlias.TabIndex = 20;
             txtAlias.TextAlign = HorizontalAlignment.Center;
             // 
             // txtZIPCode
             // 
             txtZIPCode.Enabled = false;
-            txtZIPCode.Location = new Point(229, 116);
+            txtZIPCode.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            txtZIPCode.Location = new Point(305, 133);
             txtZIPCode.Name = "txtZIPCode";
             txtZIPCode.PlaceholderText = "ZIP Code";
-            txtZIPCode.Size = new Size(199, 23);
+            txtZIPCode.Size = new Size(199, 26);
             txtZIPCode.TabIndex = 4;
             txtZIPCode.TextAlign = HorizontalAlignment.Center;
             // 
             // txtPhonenumber
             // 
             txtPhonenumber.Enabled = false;
-            txtPhonenumber.Location = new Point(229, 145);
+            txtPhonenumber.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            txtPhonenumber.Location = new Point(305, 162);
             txtPhonenumber.Name = "txtPhonenumber";
             txtPhonenumber.PlaceholderText = "Phonenumber";
-            txtPhonenumber.Size = new Size(199, 23);
+            txtPhonenumber.Size = new Size(199, 26);
             txtPhonenumber.TabIndex = 21;
             txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
@@ -184,8 +192,8 @@ namespace CRUD_System
             // btnEditUserDetails
             // 
             btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
-            btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnEditUserDetails.Location = new Point(483, 174);
+            btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            btnEditUserDetails.Location = new Point(510, 194);
             btnEditUserDetails.Name = "btnEditUserDetails";
             btnEditUserDetails.Size = new Size(150, 30);
             btnEditUserDetails.TabIndex = 25;
@@ -193,35 +201,26 @@ namespace CRUD_System
             btnEditUserDetails.UseVisualStyleBackColor = false;
             btnEditUserDetails.Click += btnEditUserDetails_Click;
             // 
-            // txtAdmin
+            // listBoxUser
             // 
-            txtAdmin.BackColor = Color.LightGreen;
-            txtAdmin.Enabled = false;
-            txtAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAdmin.Location = new Point(434, 145);
-            txtAdmin.Multiline = true;
-            txtAdmin.Name = "txtAdmin";
-            txtAdmin.Size = new Size(199, 23);
-            txtAdmin.TabIndex = 26;
-            txtAdmin.Text = "User is ADMIN";
-            txtAdmin.TextAlign = HorizontalAlignment.Center;
-            txtAdmin.Visible = false;
+            listBoxUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            listBoxUser.FormattingEnabled = true;
+            listBoxUser.ItemHeight = 18;
+            listBoxUser.Location = new Point(100, 30);
+            listBoxUser.Name = "listBoxUser";
+            listBoxUser.Size = new Size(680, 22);
+            listBoxUser.TabIndex = 27;
+            listBoxUser.SelectedIndexChanged += ListBoxUser_SelectedIndexChanged;
             // 
-            // chkIsAdmin
+            // comboBoxStatus
             // 
-            chkIsAdmin.Location = new Point(0, 0);
-            chkIsAdmin.Name = "chkIsAdmin";
-            chkIsAdmin.Size = new Size(104, 24);
-            chkIsAdmin.TabIndex = 0;
-            // 
-            // listBoxUsers
-            // 
-            listBoxUsers.FormattingEnabled = true;
-            listBoxUsers.ItemHeight = 15;
-            listBoxUsers.Location = new Point(24, 3);
-            listBoxUsers.Name = "listBoxUsers";
-            listBoxUsers.Size = new Size(609, 49);
-            listBoxUsers.TabIndex = 27;
+            comboBoxStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            comboBoxStatus.FormattingEnabled = true;
+            comboBoxStatus.Location = new Point(971, 30);
+            comboBoxStatus.Name = "comboBoxStatus";
+            comboBoxStatus.Size = new Size(134, 26);
+            comboBoxStatus.TabIndex = 28;
+            comboBoxStatus.Text = "User Status";
             // 
             // USERSMainControl
             // 
@@ -229,9 +228,9 @@ namespace CRUD_System
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(comboBoxStatus);
             Controls.Add(btnEditUserDetails);
-            Controls.Add(listBoxUsers);
-            Controls.Add(txtAdmin);
+            Controls.Add(listBoxUser);
             Controls.Add(txtPhonenumber);
             Controls.Add(txtZIPCode);
             Controls.Add(txtAlias);
@@ -242,7 +241,7 @@ namespace CRUD_System
             Controls.Add(txtCity);
             Controls.Add(btnSaveEditUserDetails);
             Name = "USERSMainControl";
-            Size = new Size(746, 317);
+            Size = new Size(1192, 317);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -254,7 +253,7 @@ namespace CRUD_System
         private TextBox txtPhonenumber;
         private Button btnGeneratePSW;
         private Button btnEditUserDetails;
-        private CheckBox chkIsAdmin;
-        private ListBox listBoxUsers;
+        private ListBox listBoxUser;
+        private ComboBox comboBoxStatus;
     }
 }
