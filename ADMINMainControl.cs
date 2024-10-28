@@ -235,7 +235,7 @@ namespace CRUD_System
 
                 // MessageBox YesNo to confirm changes
                 MessageBoxes messageBoxes = new MessageBoxes();
-                DialogResult dr = messageBoxes.MessageBoxConfirmToSAVE(userDetails[2]);
+                DialogResult dr = messageBoxes.MessageBoxConfirmToSAVEChanges(userDetails[2]);
 
                 if (dr != DialogResult.Yes)
                 {
@@ -329,7 +329,7 @@ namespace CRUD_System
         /// <summary>
         /// Saving and sending (new) generated password to (new) user
         /// </summary>
-        public void SaveEditPSW()
+        public void SaveNewPSW()
         {
             var loginLines = File.ReadAllLines(dataLogin).ToList();
 

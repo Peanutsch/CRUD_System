@@ -61,7 +61,7 @@ namespace CRUD_System
         {
             PerformActionIfUserSelected(() =>
             {
-                ChangePassword();
+                OpenUsersPSWForm();
             });
         }
 
@@ -83,11 +83,23 @@ namespace CRUD_System
             }
         }
 
-        public void ChangePassword()
+        public void OpenUsersPSWForm()
         {
-            if (txtPassword.Text.Length > 0)
+            // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method.
+            // Check if ParentForm is not null and is of type MainFormADMIN
+            if (this.ParentForm is USERSMainForm)
             {
-                btnChangePassword.Enabled = true;
+                this.ParentForm.Hide();
+
+                USERS_PSW_Form usersPSWForm = new USERS_PSW_Form();
+                usersPSWForm.ShowDialog();
+
+                // Show the main controls form again after usersPSWForm is closed
+                this.ParentForm.Show();
+            }
+            else
+            {
+                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -130,7 +142,7 @@ namespace CRUD_System
 
                     // MessageBox YesNo to confirm changes
                     MessageBoxes messageBoxes = new MessageBoxes();
-                    DialogResult dr = messageBoxes.MessageBoxConfirmToSAVE(userDetails[2]);
+                    DialogResult dr = messageBoxes.MessageBoxConfirmToSAVEChanges(userDetails[2]);
 
                     if (dr != DialogResult.Yes)
                     {
@@ -301,14 +313,8 @@ namespace CRUD_System
             txtPassword.Enabled = editMode ? true : false;
 
             // Manage status visible and enable Buttons and CheckBox
-            btnCreateUser.Visible = editMode ? false : true;
-            btnCreateUser.Enabled = editMode ? false : true;
-            btnDeleteUser.Visible = editMode ? false : true;
-            btnDeleteUser.Enabled = editMode ? false : true;
-            btnGeneratePSW.Visible = editMode ? false : true;
-            btnGeneratePSW.Enabled = editMode ? false : true;
-            txtPassword.Visible = editMode ? false : true;
-            txtPassword.Enabled = editMode ? false : true;
+            btnChangePassword.Visible = editMode ? false : true;
+            btnChangePassword.Enabled = editMode ? false : true;
 
             // Manage status ListBox
             listBoxUser.Enabled = editMode ? false : true;

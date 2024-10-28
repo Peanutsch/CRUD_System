@@ -30,8 +30,8 @@
         {
             checkBoxTogglePSW1 = new CheckBox();
             inputChangePSW1 = new TextBox();
-            inputChangePSW2 = new TextBox();
-            checkBoxTogglePSW2 = new CheckBox();
+            lblPassword = new Label();
+            btnEnterPSW = new Button();
             SuspendLayout();
             // 
             // checkBoxTogglePSW1
@@ -57,30 +57,27 @@
             inputChangePSW1.Size = new Size(441, 26);
             inputChangePSW1.TabIndex = 5;
             inputChangePSW1.TextAlign = HorizontalAlignment.Center;
+            //inputChangePSW1.TextChanged += inputChangePSW1_TextChanged;
             // 
-            // inputChangePSW2
+            // lblPassword
             // 
-            inputChangePSW2.Enabled = false;
-            inputChangePSW2.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            inputChangePSW2.Location = new Point(13, 130);
-            inputChangePSW2.Margin = new Padding(4);
-            inputChangePSW2.MaxLength = 32676;
-            inputChangePSW2.Name = "inputChangePSW2";
-            inputChangePSW2.PasswordChar = '*';
-            inputChangePSW2.PlaceholderText = "PASSWORD";
-            inputChangePSW2.Size = new Size(441, 26);
-            inputChangePSW2.TabIndex = 7;
-            inputChangePSW2.TextAlign = HorizontalAlignment.Center;
+            lblPassword.AutoSize = true;
+            lblPassword.Location = new Point(44, 12);
+            lblPassword.Name = "lblPassword";
+            lblPassword.RightToLeft = RightToLeft.No;
+            lblPassword.Size = new Size(78, 18);
+            lblPassword.TabIndex = 9;
+            lblPassword.Text = "PSW TXT";
             // 
-            // checkBoxTogglePSW2
+            // btnEnterPSW
             // 
-            checkBoxTogglePSW2.AutoSize = true;
-            checkBoxTogglePSW2.Location = new Point(13, 163);
-            checkBoxTogglePSW2.Name = "checkBoxTogglePSW2";
-            checkBoxTogglePSW2.Size = new Size(157, 22);
-            checkBoxTogglePSW2.TabIndex = 8;
-            checkBoxTogglePSW2.Text = "Show Password";
-            checkBoxTogglePSW2.UseVisualStyleBackColor = true;
+            btnEnterPSW.Location = new Point(187, 149);
+            btnEnterPSW.Name = "btnEnterPSW";
+            btnEnterPSW.Size = new Size(85, 33);
+            btnEnterPSW.TabIndex = 10;
+            btnEnterPSW.Text = "Enter";
+            btnEnterPSW.UseVisualStyleBackColor = true;
+            btnEnterPSW.Click += btnEnterPSW_Click;
             // 
             // USERS_PSW_Form
             // 
@@ -88,8 +85,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(467, 225);
-            Controls.Add(checkBoxTogglePSW2);
-            Controls.Add(inputChangePSW2);
+            Controls.Add(btnEnterPSW);
+            Controls.Add(lblPassword);
             Controls.Add(checkBoxTogglePSW1);
             Controls.Add(inputChangePSW1);
             Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -106,7 +103,7 @@
 
         private CheckBox checkBoxTogglePSW1;
         private TextBox inputChangePSW1;
-        private TextBox inputChangePSW2;
-        private CheckBox checkBoxTogglePSW2;
+        private Label lblPassword;
+        private Button btnEnterPSW;
     }
 }

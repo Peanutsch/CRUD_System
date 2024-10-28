@@ -57,7 +57,6 @@ namespace CRUD_System
             btnEditUserDetails = new Button();
             listBoxUser = new ListBox();
             comboBoxStatus = new ComboBox();
-            textBox1 = new TextBox();
             btnChangePassword = new Button();
             SuspendLayout();
             // 
@@ -224,26 +223,16 @@ namespace CRUD_System
             comboBoxStatus.TabIndex = 28;
             comboBoxStatus.Text = "User Status";
             // 
-            // textBox1
-            // 
-            textBox1.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            textBox1.Location = new Point(977, 144);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Password";
-            textBox1.Size = new Size(150, 26);
-            textBox1.TabIndex = 29;
-            textBox1.TextAlign = HorizontalAlignment.Center;
-            // 
-            // ChangePassword
+            // btnChangePassword
             // 
             btnChangePassword.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnChangePassword.Location = new Point(821, 141);
-            btnChangePassword.Name = "button1";
+            btnChangePassword.Name = "btnChangePassword";
             btnChangePassword.Size = new Size(150, 30);
             btnChangePassword.TabIndex = 30;
             btnChangePassword.Text = "Change PSW";
             btnChangePassword.UseVisualStyleBackColor = true;
-            btnChangePassword.Enabled = false;
+            btnChangePassword.Visible = true;
             btnChangePassword.Click += ChangePassword_Click;
             // 
             // USERSMainControl
@@ -253,7 +242,6 @@ namespace CRUD_System
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
             Controls.Add(btnChangePassword);
-            Controls.Add(textBox1);
             Controls.Add(comboBoxStatus);
             Controls.Add(btnEditUserDetails);
             Controls.Add(listBoxUser);
@@ -281,7 +269,6 @@ namespace CRUD_System
         private Button btnEditUserDetails;
         private ListBox listBoxUser;
         private ComboBox comboBoxStatus;
-        private TextBox textBox1;
         private Button btnChangePassword;
     }
 }

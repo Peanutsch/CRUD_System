@@ -86,10 +86,6 @@ namespace CRUD_System
                 Debug.WriteLine("No user is currently logged in.");
             }
         }
-
-
-
-
     }
 }
 
