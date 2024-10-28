@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace CRUD_System
 {
-    public partial class CreateFormADMIN : Form
+    public partial class ADMINCreateForm : Form
     {
-        public CreateFormADMIN()
+        public ADMINCreateForm()
         {
             InitializeComponent();
         }

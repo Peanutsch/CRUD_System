@@ -11,12 +11,12 @@ using System.Windows.Forms;
 
 namespace CRUD_System
 {
-    public partial class MainFormUSERS : Form
+    public partial class USERSMainForm : Form
     {
-        private Data _Data = new Data();
+        private OpenUserDetailFiles openDetails = new OpenUserDetailFiles();
         private LoginValidation _LoginValidation = new LoginValidation();
 
-        public MainFormUSERS()
+        public USERSMainForm()
         {
             InitializeComponent();
         }
@@ -25,9 +25,6 @@ namespace CRUD_System
         {
             // Set focus to the logout button when the form is loaded
             this.ActiveControl = buttonLOGOUT;
-
-            // Load user data from data_users.csv
-            LoadUserDataListBox();
         }
 
         private void LoadUserDataListBox()
@@ -59,10 +56,18 @@ namespace CRUD_System
         /// </summary>
         /// <param name="inputUserName">The username entered by the user.</param>
         /// <param name="inputUserPSW">The password entered by the user.</param>
-        public void BoxDisplay(string inputUserName)
+        public void BoxDisplay()
         {
-            textBoxUserName.Text = $"{inputUserName.ToUpper()}";
+            var currentUser = LoginForm.CurrentUser;
 
+            if (currentUser != null)
+            {
+                textBoxUserName.Text = $"{currentUser.ToUpper()}";
+            }
+            else
+            {
+                textBoxUserName.Text = "NO_USER";
+            }
             labelUser.TextAlign = ContentAlignment.TopLeft;
             labelUser.BackColor = Color.LightGreen;
             labelUser.Text = "USER";

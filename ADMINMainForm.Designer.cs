@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class MainFormADMIN
+    partial class ADMINMainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
             textBoxUserName = new TextBox();
             buttonLOGOUT = new Button();
             labelAdmin = new Label();
-            adminManagementControl = new MainControlADMIN();
+            adminManagementControl = new ADMINMainControl();
             SuspendLayout();
             // 
             // textBoxUserName
@@ -102,6 +102,6 @@
         private TextBox textBoxUserName;
         private Button buttonLOGOUT;
         private Label labelAdmin;
-        private MainControlADMIN adminManagementControl;
+        private ADMINMainControl adminManagementControl;
     }
 }

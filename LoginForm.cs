@@ -110,8 +110,8 @@ namespace CRUD_System
         private void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
             LoginValidation loginValidation = new LoginValidation();
-            MainFormADMIN mainFormADMIN = new MainFormADMIN();
-            MainControlADMIN mainControlADMIN = new MainControlADMIN();
+            ADMINMainForm mainFormADMIN = new ADMINMainForm();
+            ADMINMainControl mainControlADMIN = new ADMINMainControl();
 
             // Validate login input
             if (loginValidation.ValidateLogin(inputUserName, inputUserPSW))
@@ -139,8 +139,8 @@ namespace CRUD_System
                 // If user is no admin, open MainFormUSERS
                 else
                 {
-                    MainFormUSERS mainFormUSERS = new MainFormUSERS();
-                    mainFormUSERS.BoxDisplay(inputUserName); // Pass user input
+                    USERSMainForm mainFormUSERS = new USERSMainForm();
+                    mainFormUSERS.BoxDisplay(); // Pass user input
                     mainFormUSERS.ShowDialog();
                 }
 

@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class CreateControlADMIN
+    partial class ADMINCreateControl
     {
         /// <summary> 
         /// Required designer variable.

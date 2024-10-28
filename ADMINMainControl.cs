@@ -15,7 +15,7 @@ using System.Diagnostics;
 
 namespace CRUD_System
 {
-    public partial class MainControlADMIN : UserControl
+    public partial class ADMINMainControl : UserControl
     {
         #region PROPERTIES
         string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
@@ -27,7 +27,7 @@ namespace CRUD_System
         #endregion PROPERTIES
 
         #region Constructor
-        public MainControlADMIN()
+        public ADMINMainControl()
         {
             InitializeComponent();
 

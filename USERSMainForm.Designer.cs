@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class MainFormUSERS
+    partial class USERSMainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
             this.textBoxUserName = new TextBox();
             this.buttonLOGOUT = new Button();
             this.labelUser = new Label();
-            userManagementControl = new MainControlUSERS();
+            userManagementControl = new USERSMainControl();
             this.SuspendLayout();
             // 
             // textBoxUserName
@@ -101,6 +101,6 @@
         private TextBox textBoxUserName;
         private Button buttonLOGOUT;
         private Label labelUser;
-        private MainControlUSERS userManagementControl;
+        private USERSMainControl userManagementControl;
     }
 }

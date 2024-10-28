@@ -11,14 +11,14 @@ using System.Windows.Forms;
 
 namespace CRUD_System
 {
-    public partial class MainFormADMIN : Form
+    public partial class ADMINMainForm : Form
     {
         LoginForm loginForm = new LoginForm();
-        MainControlADMIN mainControlADMIN = new MainControlADMIN();
+        ADMINMainControl mainControlADMIN = new ADMINMainControl();
 
         public string loggedInUser = string.Empty;
 
-        public MainFormADMIN()
+        public ADMINMainForm()
         {
             InitializeComponent();
         }

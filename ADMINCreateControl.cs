@@ -5,10 +5,10 @@ using System.Xml.Linq;
 
 namespace CRUD_System
 {
-    public partial class CreateControlADMIN : UserControl
+    public partial class ADMINCreateControl : UserControl
     {
         #region PROPERTIES
-        MainFormADMIN mainFormADMIN = new MainFormADMIN();
+        ADMINMainForm mainFormADMIN = new ADMINMainForm();
         MessageBoxes messageBoxes = new MessageBoxes();
 
         readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
@@ -18,7 +18,7 @@ namespace CRUD_System
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
-        public CreateControlADMIN()
+        public ADMINCreateControl()
         {
             InitializeComponent();
         }
@@ -46,7 +46,7 @@ namespace CRUD_System
         {
             // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method
             // Check if ParentForm is not null and is of type MainFormADMIN
-            if (this.ParentForm is CreateFormADMIN createFormADMIN)
+            if (this.ParentForm is ADMINCreateForm createFormADMIN)
             {
                 this.ParentForm.Close();
             }

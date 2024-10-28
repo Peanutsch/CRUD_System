@@ -2,7 +2,7 @@
 
 namespace CRUD_System
 {
-    partial class CreateFormADMIN
+    partial class ADMINCreateForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace CRUD_System
         /// </summary>
         private void InitializeComponent()
         {
-            CreateControlADMIN createControlADMIN = new CreateControlADMIN();
+            ADMINCreateControl createControlADMIN = new ADMINCreateControl();
 
             this.focusButton = new Button();
             this.SuspendLayout();
