@@ -14,8 +14,7 @@ namespace CRUD_System
     public partial class MainFormADMIN : Form
     {
         LoginForm loginForm = new LoginForm();
-
-        public List<string> UsersOnline = new List<string>();
+        MainControlADMIN mainControlADMIN = new MainControlADMIN();
 
         public string loggedInUser = string.Empty;
 
@@ -62,9 +61,9 @@ namespace CRUD_System
 
         public void LogOut(string loggedInUser)
         {
-            Debug.WriteLine($"User [{loggedInUser}] logged out");
-            UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
-            Debug.WriteLine($"Total users online: {UsersOnline.Count()}");
+            Debug.WriteLine($"\n=====\nUser [{loggedInUser.ToUpper()}] logged OUT");
+            loginForm.UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
+            Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
 
             this.Hide(); // Hide the MainForm
             loginForm.ShowDialog(); // Open the LoginForm
@@ -76,8 +75,8 @@ namespace CRUD_System
             if (!string.IsNullOrEmpty(loggedInUser))
             {
                 Debug.WriteLine($"\n(Form Close Button)\nUser [{loggedInUser.ToUpper()}] logged OUT");
-                UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
-                Debug.WriteLine($"Total users online: {UsersOnline.Count}\n==========");
+                loginForm.UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
+                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
             }
             else
             {
@@ -90,7 +89,7 @@ namespace CRUD_System
             if (!string.IsNullOrEmpty(loggedInUser))
             {
                 Debug.WriteLine($"\n(Form Close Button)\nUser [{loggedInUser.ToUpper()}] logged OUT");
-                Debug.WriteLine($"Total users online: {UsersOnline.Count}\n==========");
+                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
 
                 return $"User[{loggedInUser.ToUpper()}] logged OUT";
             }

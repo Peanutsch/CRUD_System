@@ -63,6 +63,8 @@ namespace CRUD_System
 
         public void SaveNewUser()
         {
+            var currentUser = LoginForm.CurrentUser;
+
             if (txtName.Text.Length < 2 || txtSurname.Text.Length < 2)
             {
                 messageBoxes.MessageInvalidInput();
@@ -90,11 +92,19 @@ namespace CRUD_System
             // Append to the CSV files
             File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
             File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
-            
+
             MessageBox.Show($"User {isAlias} added successfully!");
 
-            Debug.WriteLine($"Action from user [{mainFormADMIN.loggedInUser}]");
-            Debug.WriteLine($"User {isAlias} added successfully!");
+            if (currentUser != null)
+            {
+                Debug.WriteLine($"[{currentUser.ToUpper()}]: created new user [{isAlias}]");
+                Debug.WriteLine($"User {isAlias} added successfully!");
+            }
+            else
+            {
+                Debug.WriteLine($"[UNKNOWN]: created new user [{isAlias}]");
+                Debug.WriteLine($"User {isAlias} added successfully!");
+            }
 
 
             // Close CreateFormADMIN, return to MainFormADMIN

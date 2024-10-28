@@ -117,7 +117,7 @@ namespace CRUD_System
         {
             // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method.
             // Check if ParentForm is not null and is of type MainFormADMIN
-            if (this.ParentForm is MainFormADMIN mainFormADMIN)
+            if (this.ParentForm is MainFormADMIN)
             {
                 this.ParentForm.Hide();
 
@@ -182,8 +182,11 @@ namespace CRUD_System
         /// <param name="userIndex">The index of the user to update.</param>
         public void UpdateUserDetails(List<string> userLines, int userIndex)
         {
+            string currentUserDetails = userLines[userIndex].Trim();
+            Debug.WriteLine($"currentName: {currentUserDetails}");
             userLines[userIndex] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
             File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
+            Debug.WriteLine($"After Update: {userLines[userIndex]}");
         }
 
         /// <summary>
@@ -210,13 +213,13 @@ namespace CRUD_System
             File.WriteAllLines(dataLogin, loginLines); // Write updated data back to data_login.csv
         }
 
-
-
         /// <summary>
         /// Method for save changes user details
         /// </summary>
         public void SaveEditUserDetails()
         {
+            var currentUser = LoginForm.CurrentUser;
+
             // Read lines from data_users.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
             var loginLines = File.ReadAllLines(dataLogin).ToList();
@@ -240,13 +243,17 @@ namespace CRUD_System
 
                 if (dr == DialogResult.Yes)
                 {
-                    MainFormADMIN mainFormADMIN = new MainFormADMIN();
-
                     UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
                     UpdateUserLogin(loginLines, userIndex); // Save changes to data_loging.csv
 
-                    Debug.WriteLine($"Action from user [{mainFormADMIN.loggedInUser}]");
-                    Debug.WriteLine($"Edited details from user [{userDetails[2]}]");
+                    if (currentUser != null)
+                    {
+                        Debug.WriteLine($"[{currentUser.ToUpper()}]: Edited details from user [{userDetails[2]}]");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"[UNKNOWN]: Edited details from user [{userDetails[2]}]");
+                    }
 
                     // MessageBox Succes
                     messageBoxes.MessageUpdateSucces();
@@ -268,6 +275,8 @@ namespace CRUD_System
         /// </summary>
         private void DeleteUser()
         {
+            var currentUser = LoginForm.CurrentUser;
+
             // Read lines from data_users.csv and data_login.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
             var loginLines = File.ReadAllLines(dataLogin).ToList();
@@ -300,10 +309,15 @@ namespace CRUD_System
                                               StringComparison.OrdinalIgnoreCase)).ToList();
                 File.WriteAllLines(dataLogin, loginLines);
 
-                MainFormADMIN mainFormADMIN = new MainFormADMIN();
-
-                Debug.WriteLine($"Action from user [{mainFormADMIN.loggedInUser.ToUpper()}]");
-                Debug.WriteLine($"Deleted user [{aliasToDelete}]");
+                if (currentUser != null)
+                {
+                    Debug.WriteLine($"[{currentUser.ToUpper()}]: Deleted user [{aliasToDelete}]");
+                }
+                else
+                {
+                    Debug.WriteLine($"[UNKNOWN]: Deleted user [{aliasToDelete}]");
+                }
+                
 
                 messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
                 ReloadListBoxUsers(userIndex);

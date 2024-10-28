@@ -11,6 +11,10 @@ namespace CRUD_System
     /// </summary>
     public partial class LoginForm : Form
     {
+        public static string? CurrentUser { get; private set; }
+
+        public List<string> UsersOnline = new List<string>();
+
         private bool isPasswordVisible = false;
 
         /// <summary>
@@ -107,12 +111,17 @@ namespace CRUD_System
         {
             LoginValidation loginValidation = new LoginValidation();
             MainFormADMIN mainFormADMIN = new MainFormADMIN();
+            MainControlADMIN mainControlADMIN = new MainControlADMIN();
+
             // Validate login input
             if (loginValidation.ValidateLogin(inputUserName, inputUserPSW))
             {
-                Debug.WriteLine($"User [{inputUserName.ToUpper()}] logged in");
-                mainFormADMIN.UsersOnline.Add(inputUserName); // Add user to list UsersOnline
-                Debug.WriteLine($"Total users Online: {mainFormADMIN.UsersOnline.Count()}");
+                CurrentUser = inputUserName;
+
+                UsersOnline.Add(inputUserName); // Add user to list UsersOnline
+
+                Debug.WriteLine($"=====\nUser [{inputUserName.ToUpper()}] logged IN");
+                Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n=====");
 
                 // Check if user is admin
                 bool isAdmin = loginValidation.IsAdmin(inputUserName, inputUserPSW);
