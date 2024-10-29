@@ -23,22 +23,44 @@ namespace CRUD_System
         /// <returns>A random password string.</returns>
         public static string GenerateUserPassword(int length = 12)
         {
-            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"; //!@#$%^&*()_-+=<>?"; No symbols
-            char[] password = new char[length];
-            byte[] randomBytes = new byte[length];
+            const string lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
+            const string upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string numericChars = "1234567890";
 
-            // Gebruik de nieuwe RandomNumberGenerator
+            // Ensure minimum length of 12 characters
+            if (length < 12) length = 12; 
+
+            // Create lists for each character type
+            List<char> password = new List<char>();
+            byte[] randomBytes = new byte[length];
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomBytes);
             }
 
-            for (int i = 0; i < length; i++)
+            // Add at least 3 uppercase letters
+            for (int index = 0; index < 3; index++)
             {
-                password[i] = validChars[randomBytes[i] % validChars.Length];
+                password.Add(upperCaseChars[randomBytes[index] % upperCaseChars.Length]);
             }
 
-            return new string(password);
+            // Add at least 3 numbers
+            for (int index = 3; index < 6; index++)
+            {
+                password.Add(numericChars[randomBytes[index] % numericChars.Length]);
+            }
+
+            // Fill the remaining characters with random lowercase or uppercase letters and numbers
+            const string validChars = lowerCaseChars + upperCaseChars + numericChars;
+            for (int index = 6; index < length; index++)
+            {
+                password.Add(validChars[randomBytes[index] % validChars.Length]);
+            }
+
+            // Shuffle to ensure randomness
+            password = password.OrderBy(_ => randomBytes[new Random().Next(randomBytes.Length)]).ToList();
+
+            return new string(password.ToArray());
         }
 
 

@@ -93,8 +93,7 @@ namespace CRUD_System
         {
             PerformActionIfUserSelected(() =>
             {
-                string generatedPassword = PasswordManager.GenerateUserPassword();
-                txtPassword.Text = generatedPassword;
+                GenerateNewPassword();
             });
         }
         /// <summary>
@@ -110,6 +109,47 @@ namespace CRUD_System
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region METHODS MANAGEMENT CONTROLADMIN
+        public void GenerateNewPassword()
+        {
+            var currentUser = LoginForm.CurrentUser;
+
+            // Read lines from data_users.csv
+            var userLines = File.ReadAllLines(dataUsers).ToList();
+            var loginLines = File.ReadAllLines(dataLogin).ToList();
+
+            // Find user index
+            int userIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int loginIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            var loginDetails = loginLines[loginIndex].Split(",");
+
+            MessageBoxes messageConfirmSave = new MessageBoxes();
+            DialogResult dr = messageConfirmSave.MessageBoxConfirmToSAVEPassword(loginDetails[0]);
+
+            if (dr != DialogResult.Yes)
+            {
+                return;
+            }
+
+            string generatedPassword = PasswordManager.GenerateUserPassword();
+            txtPassword.Text = generatedPassword;
+
+            loginLines[userIndex] = $"{loginDetails[0]},{generatedPassword},{isAdmin}";
+
+            UpdateUserLogin(loginLines, loginIndex);
+
+            MessageBoxes messageSucces = new MessageBoxes();
+            messageSucces.MessageUpdateSucces();
+
+            if (currentUser != null)
+            {
+                Debug.WriteLine($"[{currentUser.ToUpper()}] changed password for [{loginDetails[0].ToUpper()}]");
+            }
+            else
+            {
+                Debug.WriteLine($"[UNKNOWN] changed password for [{loginDetails[0].ToUpper()}]");
+            }
+        }
+
         /// <summary>
         /// Hides MainForm, Opens CreateForm
         /// </summary>
@@ -183,7 +223,7 @@ namespace CRUD_System
         public void UpdateUserDetails(List<string> userLines, int userIndex)
         {
             string currentUserDetails = userLines[userIndex].Trim();
-            Debug.WriteLine($"Current User Details: {currentUserDetails}");
+
             userLines[userIndex] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
             File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
             Debug.WriteLine($"After Update: {userLines[userIndex]}");
@@ -201,16 +241,12 @@ namespace CRUD_System
 
             // When need to keep current data on indexes
             string currentAlias = loginDetails[0];
-            string currentPassword = loginDetails[1];
-            string currentAdminBool = loginDetails[2];
-
-            Debug.WriteLine($"Current: {currentAlias},{currentPassword},{currentAdminBool}");
 
             loginLines[userIndex] = $"{currentAlias},{loginDetails[1]},{isAdmin}";
 
-            Debug.WriteLine($"After Update: {loginLines[userIndex]}");
-
             File.WriteAllLines(dataLogin, loginLines); // Write updated data back to data_login.csv
+
+            Debug.WriteLine($"After Update: {loginLines[userIndex]}");
         }
 
         /// <summary>
@@ -245,7 +281,7 @@ namespace CRUD_System
                 if (dr == DialogResult.Yes)
                 {
                     UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
-                    UpdateUserLogin(loginLines, userIndex); // Save changes to data_loging.csv
+                    UpdateUserLogin(loginLines, loginIndex); // Save changes to data_loging.csv
 
                     if (currentUser != null)
                     {
@@ -256,8 +292,8 @@ namespace CRUD_System
                         Debug.WriteLine($"[UNKNOWN]: Edited details from user [{userDetails[2]}]");
                     }
 
-                    // MessageBox Succes
-                    messageBoxes.MessageUpdateSucces();
+                    MessageBoxes message = new MessageBoxes();
+                    message.MessageUpdateSucces();
 
                     EmptyTextBoxes(); // Clear textboxes
                     FillTextboxes(userDetails); // Reload txtboxes
@@ -323,26 +359,6 @@ namespace CRUD_System
                 messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
                 ReloadListBoxAdmin(userIndex);
                 EmptyTextBoxes();
-            }
-        }
-
-        /// <summary>
-        /// Saving and sending (new) generated password to (new) user
-        /// </summary>
-        public void SaveNewPSW()
-        {
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
-
-            // Find corresponding line in data_login.csv and update password and admin status
-            for (int j = 0; j < loginLines.Count; j++)
-            {
-                var loginDetails = loginLines[j].Split(','); // Login details in data_login.csv
-
-                if (loginDetails[0] == txtName.Text) // Search by name in data_login.csv
-                {
-                    loginLines[j] = $"{txtName.Text},{txtPassword.Text}";
-                    break; // Stop searching once a match is found and updated
-                }
             }
         }
         #endregion METHODS MANAGEMENT CONTROLADMIN
@@ -451,7 +467,7 @@ namespace CRUD_System
             chkIsAdmin.Visible = editMode ? true : false;
             chkIsAdmin.Enabled = editMode ? true : false;
 
-            // Manage TextBoxes
+            // Manage TextBoxes and buttons
             txtName.Enabled = editMode ? true : false;
             txtSurname.Enabled = editMode ? true : false;
             txtAdmin.Enabled = editMode ? true : false;
@@ -460,17 +476,13 @@ namespace CRUD_System
             txtCity.Enabled = editMode ? true : false;
             txtEmail.Enabled = editMode ? true : false;
             txtPhonenumber.Enabled = editMode ? true : false;
-            txtPassword.Enabled = editMode ? true : false;
 
-            // Manage status visible and enable Buttons and CheckBox
             btnCreateUser.Visible = editMode ? false : true;
             btnCreateUser.Enabled = editMode ? false : true;
             btnDeleteUser.Visible = editMode ? false : true;
             btnDeleteUser.Enabled = editMode ? false : true;
             btnGeneratePSW.Visible = editMode ? false : true;
             btnGeneratePSW.Enabled = editMode ? false : true;
-            txtPassword.Visible = editMode ? false : true;
-            txtPassword.Enabled = editMode ? false : true;
 
             // Manage status ListBox
             listBoxAdmin.Enabled = editMode ? false : true;

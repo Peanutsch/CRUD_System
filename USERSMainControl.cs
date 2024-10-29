@@ -24,12 +24,14 @@ namespace CRUD_System
         bool userSelected = false;
         #endregion PROPERTIES
 
+        #region CONSTRUCTOR
         public USERSMainControl()
         {
             InitializeComponent();
 
             LoadDetailsListBoxUser();
         }
+        #endregion CONSTRUCTOR
 
         #region BUTTONS
         /// <summary>
@@ -67,6 +69,7 @@ namespace CRUD_System
 
         #endregion BUTTONS
 
+        #region METHODS MANAGEMENT CONTROL USER
         /// <summary>
         /// Ignores BTN_click action when no user is selected 
         /// (btnEditUserDetails_Click, btnDeleteUser_Click, btnGeneratePSW_Click)
@@ -191,6 +194,7 @@ namespace CRUD_System
             File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
             Debug.WriteLine($"After Update: {userLines[userIndex]}");
         }
+        #endregion METHODS MANAGEMENT CONTROL USER
 
         #region LISTBOX
         /// <summary>

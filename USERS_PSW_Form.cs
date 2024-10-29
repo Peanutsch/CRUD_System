@@ -132,7 +132,7 @@ namespace CRUD_System
                 if (newPassword.Length >= lengthPsw && uppercaseCount >= charToUpper && digitCount >= charIsDigi)
                 {
                     MessageBoxes message = new MessageBoxes();
-                    DialogResult dr = message.MessageBoxConfirmToSAVEPasssword(currentUser);
+                    DialogResult dr = message.MessageBoxConfirmToSAVEPassword(currentUser);
 
                     if (dr != DialogResult.Yes)
                     {

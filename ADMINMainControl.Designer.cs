@@ -72,6 +72,8 @@
             txtPassword.Size = new Size(150, 23);
             txtPassword.TabIndex = 8;
             txtPassword.TextAlign = HorizontalAlignment.Center;
+            txtPassword.Visible = false;
+            txtPassword.Enabled = false;
             // 
             // txtEmail
             // 
@@ -187,15 +189,15 @@
             txtPhonenumber.TabIndex = 21;
             txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
-            // btnGenPSW
+            // btnGenPassword
             // 
             btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
             btnGeneratePSW.Location = new Point(681, 363);
             btnGeneratePSW.Name = "btnGeneratePSW ";
             btnGeneratePSW.Size = new Size(150, 30);
             btnGeneratePSW.TabIndex = 22;
-            btnGeneratePSW.Text = "Send New PSW";
-            btnGeneratePSW.Click += btnGeneratePSW_Click;
+            btnGeneratePSW.Text = "New Password";
+            btnGeneratePSW.Click += btnGeneratePassword_Click;
             // 
             // btnEditUserDetails
             // 

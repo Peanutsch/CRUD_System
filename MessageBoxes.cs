@@ -16,9 +16,9 @@ namespace CRUD_System
             return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToSAVEPasssword(string alias)
+        public DialogResult MessageBoxConfirmToSAVEPassword(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the new password for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
         }
 
         public DialogResult MessageBoxConfirmToDELETE(string alias)
