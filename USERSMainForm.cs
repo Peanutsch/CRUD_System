@@ -13,6 +13,8 @@ namespace CRUD_System
 {
     public partial class USERSMainForm : Form
     {
+        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
+
         private LoginForm loginForm = new LoginForm();
 
         #region Initialize DateTime for logging
@@ -74,6 +76,9 @@ namespace CRUD_System
                 loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
                 //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
 
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
+                File.AppendAllText(logAction, newLog + Environment.NewLine);
+
                 this.Hide(); // Hide the MainForm
                 loginForm.ShowDialog(); // Open the LoginForm
                 this.Close(); // Once MainForm is closed, close the LoginForm
@@ -88,6 +93,9 @@ namespace CRUD_System
                 Debug.WriteLine($"\n(Form Close Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
                 loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
                 //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
+
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
+                File.AppendAllText(logAction, newLog + Environment.NewLine);
             }
             else
             {

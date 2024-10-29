@@ -8,11 +8,12 @@ namespace CRUD_System
     public partial class ADMINCreateControl : UserControl
     {
         #region PROPERTIES
-        ADMINMainForm mainFormADMIN = new ADMINMainForm();
-        MessageBoxes messageBoxes = new MessageBoxes();
-
         readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
         readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
+
+        ADMINMainForm mainFormADMIN = new ADMINMainForm();
+        MessageBoxes messageBoxes = new MessageBoxes();
 
         bool isAdmin = false;
 
@@ -106,16 +107,20 @@ namespace CRUD_System
 
             if (currentUser != null)
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: created new user [{isAlias}]");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Created new user [{isAlias.ToUpper()}]");
                 Debug.WriteLine($"User {isAlias} added successfully!");
+
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Created new user [{isAlias.ToUpper()}]";
+                File.AppendAllText(logAction, newLog + Environment.NewLine);
             }
             else
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: created new user [{isAlias}]");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Created new user [{isAlias.ToUpper()}]");
                 Debug.WriteLine($"User {isAlias} added successfully!");
+
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Created new user [{isAlias.ToUpper()}]";
+                File.AppendAllText(logAction, newLog + Environment.NewLine);
             }
-
-
             // Close CreateFormADMIN, return to MainFormADMIN
             CloseCreateForm();
         }

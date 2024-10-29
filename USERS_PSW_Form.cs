@@ -21,8 +21,9 @@ namespace CRUD_System
 
         ADMINMainControl adminMethods = new ADMINMainControl();
 
-        string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
-        string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
+        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
 
         private bool isPasswordVisible = false;
 
@@ -148,7 +149,7 @@ namespace CRUD_System
                         return;
                     }
 
-                    Debug.WriteLine($"User psw: {newPassword}");
+                    Debug.WriteLine($"New User psw: {newPassword}");
                     UpdateNewPassword(loginLines, userIndex, newPassword);
                     this.Close();
                 }
@@ -175,15 +176,14 @@ namespace CRUD_System
             string currentPassword = loginDetails[1];
             string currentAdminBool = loginDetails[2];
 
-            Debug.WriteLine($"Current: {currentAlias},{currentPassword},{currentAdminBool}");
-
             loginLines[userIndex] = $"{currentAlias},{newPassword},{currentAdminBool}";
-
-            Debug.WriteLine($"After Update: {loginLines[userIndex]}");
 
             Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentAlias.ToUpper()}]: Changed password");
 
             File.WriteAllLines(dataLogin, loginLines); // Write updated data back to data_login.csv
+
+            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentAlias.ToUpper()},Changed password";
+            File.AppendAllText(logAction, newLog + Environment.NewLine);
         }
 
         private void TxtLabelPSW()

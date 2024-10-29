@@ -11,6 +11,9 @@ namespace CRUD_System
     /// </summary>
     public partial class LoginForm : Form
     {
+        #region PROPERTIES
+        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
+
         public static string? CurrentUser { get; private set; }
 
         public List<string> UsersOnline = new List<string>();
@@ -24,6 +27,7 @@ namespace CRUD_System
             Time = DateTime.Now
         };
         #endregion
+        #endregion PROPERTIES
 
         /// <summary>
         /// Constructor. Initializes the components for the LoginForm.
@@ -137,18 +141,21 @@ namespace CRUD_System
                 // If user is admin, open MainFormADMIN
                 if (isAdmin)
                 {
-                    Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) Admin [{inputUserName.ToUpper()}] logged IN");
-                    //Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n");
+                    Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) Admin [{inputUserName.ToUpper()}] Logged IN");
 
-                    //MainFormADMIN mainFormADMIN = new MainFormADMIN();
+                    string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{inputUserName.ToUpper()},Logged IN";
+                    File.AppendAllText(logAction, newLog + Environment.NewLine);
+
                     mainFormADMIN.BoxDisplay(inputUserName); // Pass user input
                     mainFormADMIN.ShowDialog();
                 }
                 // If user is no admin, open MainFormUSERS
                 else
                 {
-                    Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{inputUserName.ToUpper()}] logged IN");
-                    //Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n");
+                    Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{inputUserName.ToUpper()}] Logged IN");
+
+                    string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{inputUserName.ToUpper()},Logged IN";
+                    File.AppendAllText(logAction, newLog + Environment.NewLine);
 
                     USERSMainForm mainFormUSERS = new USERSMainForm();
                     mainFormUSERS.BoxDisplay(); // Pass user input
@@ -165,6 +172,10 @@ namespace CRUD_System
             }
         }
 
+        private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //
+        }
 
         /// <summary>
         /// Toggles the visibility of the password in the password input box when the checkbox is checked or unchecked.

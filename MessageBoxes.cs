@@ -26,7 +26,6 @@ namespace CRUD_System
             return MessageBox.Show($"Please confirm to DELETE user {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
         }
 
-
         public DialogResult MessageUpdateSucces()
         {
             return MessageBox.Show("User Details updated successfully!", "Succes", MessageBoxButtons.OK);

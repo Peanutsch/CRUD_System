@@ -15,8 +15,9 @@ namespace CRUD_System
     public partial class USERSMainControl : UserControl
     {
         #region PROPERTIES
-        string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
-        string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
+        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
 
         ADMINMainControl adminMethods = new ADMINMainControl();
 
@@ -159,26 +160,28 @@ namespace CRUD_System
                     {
                         return;
                     }
+                    UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
 
-                    if (dr == DialogResult.Yes)
+                    if (currentUser != null)
                     {
-                        UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
+                        Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Edited details");
 
-                        if (currentUser != null)
-                        {
-                            Debug.WriteLine($"[\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) {currentUser.ToUpper()}]: Edited details from user [{userDetails[2]}]");
-                        }
-                        else
-                        {
-                            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details from user [{userDetails[2]}]");
-                        }
-
-                        // MessageBox Succes
-                        messageBoxes.MessageUpdateSucces();
-
-                        FillTextboxes(userDetails); // Reload txtboxes
-                        ReloadListBoxUser(userIndex); // Reload interface
+                        string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Edited details";
+                        File.AppendAllText(logAction, newLog + Environment.NewLine);
                     }
+                    else
+                    {
+                        Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details");
+
+                        string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Edited details";
+                        File.AppendAllText(logAction, newLog + Environment.NewLine);
+                    }
+
+                    // MessageBox Succes
+                    messageBoxes.MessageUpdateSucces();
+
+                    FillTextboxes(userDetails); // Reload txtboxes
+                    ReloadListBoxUser(userIndex); // Reload interface
                 }
                 else
                 {
@@ -197,7 +200,7 @@ namespace CRUD_System
         public void UpdateUserDetails(List<string> userLines, int userIndex)
         {
             string currentUserDetails = userLines[userIndex].Trim();
-            Debug.WriteLine($"Current User Details: {currentUserDetails}");
+            //Debug.WriteLine($"Current User Details: {currentUserDetails}");
             userLines[userIndex] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
             File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
             Debug.WriteLine($"After Update: {userLines[userIndex]}");
@@ -230,7 +233,7 @@ namespace CRUD_System
                 MessageBox.Show($"No user details found");
             }
 
-            listBoxUser.SelectedIndex = 0; // select listbox's first item
+            listBoxUser.SelectedIndex = 0; // auto select user to fill textboxes
         }
 
         public void ListBoxUser_SelectedIndexChanged(object sender, EventArgs e)
@@ -294,12 +297,14 @@ namespace CRUD_System
             }
 
             // Clear and reload listbox
-            listBoxUser.Items.Clear();
-            LoadUserDetailsListBoxUser();
+            //listBoxUser.Items.Clear();
+            LoadDetailsListBoxUser();
 
             // Reset editMode to false after saving and reload interface
             editMode = false;
             InterfaceEditMode();
+
+            //listBoxUser.SelectedIndex = 0;
         }
         #endregion LISTBOX
 

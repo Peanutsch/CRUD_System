@@ -18,8 +18,9 @@ namespace CRUD_System
     public partial class ADMINMainControl : UserControl
     {
         #region PROPERTIES
-        string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
-        string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
+        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
 
         bool editMode = false;
         bool userSelected = false;
@@ -150,11 +151,17 @@ namespace CRUD_System
 
             if (currentUser != null)
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] changed password for [{loginDetails[0].ToUpper()}]");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] Changed password for [{loginDetails[0].ToUpper()}]");
+
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Changed password for user [{loginDetails[0].ToUpper()}]";
+                File.AppendAllText(logAction, newLog + Environment.NewLine);
             }
             else
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN] changed password for [{loginDetails[0].ToUpper()}]");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN] Changed password for [{loginDetails[0].ToUpper()}]");
+
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Changed password for user [{loginDetails[0].ToUpper()}]";
+                File.AppendAllText(logAction, newLog + Environment.NewLine);
             }
         }
 
@@ -285,28 +292,30 @@ namespace CRUD_System
                 {
                     return;
                 }
+                UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
+                UpdateUserLogin(loginLines, loginIndex); // Save changes to data_loging.csv
 
-                if (dr == DialogResult.Yes)
+                if (currentUser != null)
                 {
-                    UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
-                    UpdateUserLogin(loginLines, loginIndex); // Save changes to data_loging.csv
+                    Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Edited details from user [{userDetails[2].ToUpper()}]");
 
-                    if (currentUser != null)
-                    {
-                        Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Edited details from user [{userDetails[2]}]");
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details from user [{userDetails[2]}]");
-                    }
-
-                    MessageBoxes message = new MessageBoxes();
-                    message.MessageUpdateSucces();
-
-                    EmptyTextBoxes(); // Clear textboxes
-                    FillTextboxes(userDetails); // Reload txtboxes
-                    ReloadListBoxAdmin(userIndex); // Reload interface
+                    string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Edited details from user [{userDetails[2].ToUpper()}]";
+                    File.AppendAllText(logAction, newLog + Environment.NewLine);
                 }
+                else
+                {
+                    Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details from user [{userDetails[2].ToUpper()}]");
+                        
+                    string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Edited details from user [{userDetails[2].ToUpper()}]";
+                    File.AppendAllText(logAction, newLog + Environment.NewLine);
+                }
+
+                MessageBoxes message = new MessageBoxes();
+                message.MessageUpdateSucces();
+
+                EmptyTextBoxes(); // Clear textboxes
+                FillTextboxes(userDetails); // Reload txtboxes
+                ReloadListBoxAdmin(userIndex); // Reload interface
             }
             else
             {
@@ -340,33 +349,36 @@ namespace CRUD_System
                 return;
             }
 
-            if (dr == DialogResult.Yes)
-            {
-                // Remove the user from data_users.csv by alias
-                userLines = userLines.Where(line =>
-                                            !line.Split(',')[2].Trim().Equals(aliasToDelete,
+            // Remove the user from data_users.csv by alias
+            userLines = userLines.Where(line =>
+                                        !line.Split(',')[2].Trim().Equals(aliasToDelete,
+                                        StringComparison.OrdinalIgnoreCase)).ToList();
+            File.WriteAllLines(dataUsers, userLines);
+
+            // Remove the user from data_login.csv using the alias
+            loginLines = loginLines.Where(line =>
+                                            !line.Split(',')[0].Trim().Equals(aliasToDelete,
                                             StringComparison.OrdinalIgnoreCase)).ToList();
-                File.WriteAllLines(dataUsers, userLines);
+            File.WriteAllLines(dataLogin, loginLines);
 
-                // Remove the user from data_login.csv using the alias
-                loginLines = loginLines.Where(line =>
-                                              !line.Split(',')[0].Trim().Equals(aliasToDelete,
-                                              StringComparison.OrdinalIgnoreCase)).ToList();
-                File.WriteAllLines(dataLogin, loginLines);
+            if (currentUser != null)
+            {
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Deleted user [{aliasToDelete.ToUpper()}]");
 
-                if (currentUser != null)
-                {
-                    Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Deleted user [{aliasToDelete}]");
-                }
-                else
-                {
-                    Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Deleted user [{aliasToDelete}]");
-                }
-
-                messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
-                ReloadListBoxAdmin(userIndex);
-                EmptyTextBoxes();
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Deleted user [{aliasToDelete.ToUpper()}]";
+                File.AppendAllText(logAction, newLog + Environment.NewLine);
             }
+            else
+            {
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Deleted user [{aliasToDelete.ToUpper()}]");
+
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Deleted user [{aliasToDelete.ToUpper()}]";
+                File.AppendAllText(logAction, newLog + Environment.NewLine);
+            }
+
+            messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
+            ReloadListBoxAdmin(userIndex);
+            EmptyTextBoxes();
         }
         #endregion METHODS MANAGEMENT CONTROLADMIN
 

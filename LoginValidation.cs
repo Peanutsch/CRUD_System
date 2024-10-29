@@ -10,7 +10,7 @@ namespace CRUD_System
     /// </summary>
     internal class LoginValidation
     {
-        Data _Data = new Data();
+        Data dataFile = new Data();
 
         /// <summary>
         /// Validates the provided username and password by checking them against the stored data in the CSV.
@@ -21,7 +21,7 @@ namespace CRUD_System
         public bool ValidateLogin(string inputUserName, string inputUserPSW)
         {
             // Get login data from the CSV file
-            List<(string Username, string Password, bool IsAdmin)> loginData = _Data.GetLoginData();
+            List<(string Username, string Password, bool IsAdmin)> loginData = dataFile.GetLoginData();
 
             // Find the user in the list where both username and password match
             var user = loginData.FirstOrDefault(u =>
@@ -41,7 +41,7 @@ namespace CRUD_System
         public bool IsAdmin(string inputUserName, string inputUserPSW)
         {
             // Get login data from the CSV file
-            List<(string Username, string Password, bool IsAdmin)> loginData = _Data.GetLoginData();
+            List<(string Username, string Password, bool IsAdmin)> loginData = dataFile.GetLoginData();
 
             // Find the user in the list where both username and password match
             var user = loginData.FirstOrDefault(u =>

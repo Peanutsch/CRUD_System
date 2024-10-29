@@ -104,11 +104,12 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CRUD Log In";
             Load += LoginForm_Load;
+            this.FormClosing += this.LoginForm_FormClosing;
             ResumeLayout(false);
             PerformLayout();
         }
-
         #endregion
+
         private Button loginButton;
         private TextBox loginUserNameBox;
         private TextBox loginUserPSWBox;
