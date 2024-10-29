@@ -78,9 +78,10 @@ namespace CRUD_System
             string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{loggedInUser.ToUpper()},Logged OUT";
             File.AppendAllText(logAction, newLog + Environment.NewLine);
 
+            this.loggedInUser = string.Empty;
             this.Hide(); // Hide the MainForm
             loginForm.ShowDialog(); // Open the LoginForm
-            this.Close(); // Once MainForm is closed, close the LoginForm
+            //this.Close(); // Once MainForm is closed, close the LoginForm
         }
 
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)

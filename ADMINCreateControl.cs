@@ -94,6 +94,14 @@ namespace CRUD_System
             string email = string.IsNullOrWhiteSpace(txtEmail.Text) ? string.Empty : txtEmail.Text;
             string phoneNumber = string.IsNullOrWhiteSpace(txtPhonenumber.Text) ? string.Empty : txtPhonenumber.Text;
 
+            MessageBoxes message = new MessageBoxes();
+            DialogResult dr = message.MessageBoxConfirmNewUser(isAlias);
+
+            if (dr != DialogResult.Yes)
+            {
+                return;
+            }
+
             string newDataLogin = $"{isAlias},{isPassword},{isAdmin}";
             Debug.WriteLine($"New User Login: {newDataLogin}\nAlias: {isAlias} Password: {isPassword} Admin: {isAdmin}");
             string newDataUsers = $"{name},{surname},{isAlias},{address},{zipCode},{city},{email},{phoneNumber}";

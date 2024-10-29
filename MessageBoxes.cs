@@ -11,6 +11,11 @@ namespace CRUD_System
     /// </summary>
     internal class MessageBoxes
     {
+        public DialogResult MessageBoxConfirmNewUser(string alias)
+        {
+            return MessageBox.Show($"Please confirm to SAVE new user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+        }
+
         public DialogResult MessageBoxConfirmToSAVEChanges(string alias)
         {
             return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);

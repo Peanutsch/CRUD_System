@@ -160,6 +160,7 @@ namespace CRUD_System
                     {
                         return;
                     }
+
                     UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
 
                     if (currentUser != null)

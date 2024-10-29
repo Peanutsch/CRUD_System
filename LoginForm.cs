@@ -14,7 +14,7 @@ namespace CRUD_System
         #region PROPERTIES
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
 
-        public static string? CurrentUser { get; private set; }
+        public static string? CurrentUser { get; set; }
 
         public List<string> UsersOnline = new List<string>();
 
