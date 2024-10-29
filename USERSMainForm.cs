@@ -52,7 +52,7 @@ namespace CRUD_System
             }
             else
             {
-                textBoxUserName.Text = "NO_USER";
+                textBoxUserName.Text = "UNKNOWN";
             }
             labelUser.TextAlign = ContentAlignment.TopLeft;
             labelUser.BackColor = Color.LightGreen;
@@ -74,30 +74,29 @@ namespace CRUD_System
             {
                 Debug.WriteLine($"\n(LogOut Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
                 loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
-                //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
                 File.AppendAllText(logAction, newLog + Environment.NewLine);
 
                 LoginForm.CurrentUser = string.Empty;
-
-                this.Hide(); // Hide the MainForm
-                loginForm.ShowDialog(); // Open the LoginForm
-                this.Close(); // Once MainForm is closed, close the LoginForm
             }
+            this.Hide(); // Hide the MainForm
+            //loginForm.ShowDialog(); // Open the LoginForm
+            this.Close(); // Once MainForm is closed, close the LoginForm
         }
 
         private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             var currentUser = LoginForm.CurrentUser;
-            if (!string.IsNullOrEmpty(currentUser))
+            if (currentUser != null)
             {
                 Debug.WriteLine($"\n(Form Close Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
                 loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
-                //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
                 File.AppendAllText(logAction, newLog + Environment.NewLine);
+
+                LoginForm.CurrentUser = string.Empty;
             }
             else
             {

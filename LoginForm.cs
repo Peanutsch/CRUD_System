@@ -146,7 +146,7 @@ namespace CRUD_System
                     string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{inputUserName.ToUpper()},Logged IN";
                     File.AppendAllText(logAction, newLog + Environment.NewLine);
 
-                    mainFormADMIN.BoxDisplay(inputUserName); // Pass user input
+                    mainFormADMIN.BoxDisplay();
                     mainFormADMIN.ShowDialog();
                 }
                 // If user is no admin, open MainFormUSERS

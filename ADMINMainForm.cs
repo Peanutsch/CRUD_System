@@ -18,8 +18,6 @@ namespace CRUD_System
 
         LoginForm loginForm = new LoginForm();
 
-        public string loggedInUser = string.Empty;
-
         #region Initialize DateTime for logging
         LogActions log = new LogActions
         {
@@ -49,7 +47,7 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            LogOutButton(loggedInUser);
+            LogOutButton();
         }
         #endregion BUTTONS
 
@@ -58,42 +56,54 @@ namespace CRUD_System
         /// and validates the user's rights based on the provided username and password.
         /// </summary>
         /// <param name="inputUserName">The username entered by the user.</param>
-        public void BoxDisplay(string inputUserName)
+        public void BoxDisplay()
         {
-            loggedInUser = inputUserName;
+            var currentUser = LoginForm.CurrentUser;
 
-            textBoxUserName.Text = $"{inputUserName.ToUpper()}";
-
+            if (currentUser != null)
+            {
+                textBoxUserName.Text = $"{currentUser.ToUpper()}";
+            }
+            else
+            {
+                textBoxUserName.Text = $"UNKNOWN";
+            }
             labelAdmin.TextAlign = ContentAlignment.TopLeft;
             labelAdmin.BackColor = Color.LightGreen;
             labelAdmin.Text = "ADMIN";
         }
 
-        public void LogOutButton(string loggedInUser)
+        public void LogOutButton()
         {
-            Debug.WriteLine($"\n(LogOut Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{loggedInUser.ToUpper()}] logged OUT");
-            loginForm.UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
-            //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
+            var currentUser = LoginForm.CurrentUser;
 
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{loggedInUser.ToUpper()},Logged OUT";
-            File.AppendAllText(logAction, newLog + Environment.NewLine);
+            if (currentUser != null)
+            {
+                Debug.WriteLine($"\n(LogOut Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
+                loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
 
-            this.loggedInUser = string.Empty;
-            this.Hide(); // Hide the MainForm
-            loginForm.ShowDialog(); // Open the LoginForm
-            //this.Close(); // Once MainForm is closed, close the LoginForm
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
+                File.AppendAllText(logAction, newLog + Environment.NewLine);
+
+                LoginForm.CurrentUser = string.Empty;
+            }
+            //this.Hide(); // Hide the MainForm
+            this.Close();
         }
 
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!string.IsNullOrEmpty(loggedInUser))
-            {
-                Debug.WriteLine($"\n(Form Close Button)\n\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{loggedInUser.ToUpper()}] logged OUT");
-                loginForm.UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
-                                                            //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
+            var currentUser = LoginForm.CurrentUser;
 
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{loggedInUser.ToUpper()},Logged OUT";
+            if (currentUser != null)
+            {
+                Debug.WriteLine($"\n(Form Close Button)\n\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
+                loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
+
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
                 File.AppendAllText(logAction, newLog + Environment.NewLine);
+
+                LoginForm.CurrentUser = string.Empty;
             }
             else
             {
