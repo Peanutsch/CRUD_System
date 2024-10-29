@@ -83,7 +83,7 @@ namespace CRUD_System
                     e.SuppressKeyPress = true; // Prevent the "ding" sound when Enter is pressed
 
                     // Validate username and password, and display appropriate message
-                    AuthenticateUser(loginUserNameBox.Text, loginUserPSWBox.Text);
+                    AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
                 }
             };
         }
@@ -96,7 +96,7 @@ namespace CRUD_System
         private void LoginButton_Click(object sender, EventArgs e)
         {
             // Validate username and password, and display appropriate message
-            AuthenticateUser(loginUserNameBox.Text, loginUserPSWBox.Text);
+            AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
         }
 
         /// <summary>
@@ -116,12 +116,9 @@ namespace CRUD_System
             // Validate login input
             if (loginValidation.ValidateLogin(inputUserName, inputUserPSW))
             {
-                CurrentUser = inputUserName;
+                CurrentUser = inputUserName.ToLower();
 
-                UsersOnline.Add(inputUserName); // Add user to list UsersOnline
-
-                Debug.WriteLine($"=====\nUser [{inputUserName.ToUpper()}] logged IN");
-                Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n=====");
+                UsersOnline.Add(inputUserName.ToLower()); // Add user to list UsersOnline
 
                 // Check if user is admin
                 bool isAdmin = loginValidation.IsAdmin(inputUserName, inputUserPSW);
@@ -132,6 +129,9 @@ namespace CRUD_System
                 // If user is admin, open MainFormADMIN
                 if (isAdmin)
                 {
+                    Debug.WriteLine($"=====\nAdmin [{inputUserName.ToUpper()}] logged IN");
+                    Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n=====");
+
                     //MainFormADMIN mainFormADMIN = new MainFormADMIN();
                     mainFormADMIN.BoxDisplay(inputUserName); // Pass user input
                     mainFormADMIN.ShowDialog();
@@ -139,6 +139,9 @@ namespace CRUD_System
                 // If user is no admin, open MainFormUSERS
                 else
                 {
+                    Debug.WriteLine($"=====\nUser [{inputUserName.ToUpper()}] logged IN");
+                    Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n=====");
+
                     USERSMainForm mainFormUSERS = new USERSMainForm();
                     mainFormUSERS.BoxDisplay(); // Pass user input
                     mainFormUSERS.ShowDialog();

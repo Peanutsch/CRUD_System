@@ -28,82 +28,116 @@
         /// </summary>
         private void InitializeComponent()
         {
-            checkBoxTogglePSW1 = new CheckBox();
-            inputChangePSW1 = new TextBox();
-            lblPassword = new Label();
-            btnEnterPSW = new Button();
-            SuspendLayout();
+            this.checkBoxTogglePSW = new CheckBox();
+            this.inputChangePSW = new TextBox();
+            this.lblPassword = new Label();
+            this.btnApplyPSW = new Button();
+            this.inputConfirmPSW = new TextBox();
+            this.btnCancel = new Button();
+            this.SuspendLayout();
             // 
-            // checkBoxTogglePSW1
+            // checkBoxTogglePSW
             // 
-            checkBoxTogglePSW1.AutoSize = true;
-            checkBoxTogglePSW1.Location = new Point(13, 101);
-            checkBoxTogglePSW1.Name = "checkBoxTogglePSW1";
-            checkBoxTogglePSW1.Size = new Size(157, 22);
-            checkBoxTogglePSW1.TabIndex = 6;
-            checkBoxTogglePSW1.Text = "Show Password";
-            checkBoxTogglePSW1.UseVisualStyleBackColor = true;
-            checkBoxTogglePSW1.CheckedChanged += checkBoxTogglePSW_CheckedChanged;
+            this.checkBoxTogglePSW.AutoSize = true;
+            this.checkBoxTogglePSW.CheckAlign = ContentAlignment.MiddleRight;
+            this.checkBoxTogglePSW.Location = new Point(296, 152);
+            this.checkBoxTogglePSW.Name = "checkBoxTogglePSW";
+            this.checkBoxTogglePSW.Size = new Size(157, 22);
+            this.checkBoxTogglePSW.TabIndex = 2;
+            this.checkBoxTogglePSW.Text = "Show Password";
+            this.checkBoxTogglePSW.UseVisualStyleBackColor = true;
+            this.checkBoxTogglePSW.CheckedChanged += this.checkBoxTogglePSW_CheckedChanged;
             // 
-            // inputChangePSW1
+            // inputChangePSW
             // 
-            inputChangePSW1.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            inputChangePSW1.Location = new Point(13, 68);
-            inputChangePSW1.Margin = new Padding(4);
-            inputChangePSW1.MaxLength = 32676;
-            inputChangePSW1.Name = "inputChangePSW1";
-            inputChangePSW1.PasswordChar = '*';
-            inputChangePSW1.PlaceholderText = "PASSWORD";
-            inputChangePSW1.Size = new Size(441, 26);
-            inputChangePSW1.TabIndex = 5;
-            inputChangePSW1.TextAlign = HorizontalAlignment.Center;
-            //inputChangePSW1.TextChanged += inputChangePSW1_TextChanged;
+            this.inputChangePSW.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.inputChangePSW.Location = new Point(13, 76);
+            this.inputChangePSW.Margin = new Padding(4);
+            this.inputChangePSW.MaxLength = 32676;
+            this.inputChangePSW.Name = "inputChangePSW";
+            this.inputChangePSW.PasswordChar = '*';
+            this.inputChangePSW.PlaceholderText = "ENTER NEW PASSWORD";
+            this.inputChangePSW.Size = new Size(441, 26);
+            this.inputChangePSW.TabIndex = 0;
+            this.inputChangePSW.TextAlign = HorizontalAlignment.Center;
+            this.inputChangePSW.TextChanged += this.inputChangePSW1_TextChanged;
             // 
             // lblPassword
             // 
-            lblPassword.AutoSize = true;
-            lblPassword.Location = new Point(44, 12);
-            lblPassword.Name = "lblPassword";
-            lblPassword.RightToLeft = RightToLeft.No;
-            lblPassword.Size = new Size(78, 18);
-            lblPassword.TabIndex = 9;
-            lblPassword.Text = "PSW TXT";
+            this.lblPassword.AutoSize = true;
+            this.lblPassword.Location = new Point(44, 12);
+            this.lblPassword.Name = "lblPassword";
+            this.lblPassword.RightToLeft = RightToLeft.No;
+            this.lblPassword.Size = new Size(138, 18);
+            this.lblPassword.TabIndex = 9;
+            this.lblPassword.Text = "LABEL PSW TXT";
             // 
-            // btnEnterPSW
+            // btnApplyPSW
             // 
-            btnEnterPSW.Location = new Point(187, 149);
-            btnEnterPSW.Name = "btnEnterPSW";
-            btnEnterPSW.Size = new Size(85, 33);
-            btnEnterPSW.TabIndex = 10;
-            btnEnterPSW.Text = "Enter";
-            btnEnterPSW.UseVisualStyleBackColor = true;
-            btnEnterPSW.Click += btnEnterPSW_Click;
+            this.btnApplyPSW.Enabled = false;
+            this.btnApplyPSW.Location = new Point(140, 180);
+            this.btnApplyPSW.Name = "btnApplyPSW";
+            this.btnApplyPSW.Size = new Size(85, 33);
+            this.btnApplyPSW.TabIndex = 3;
+            this.btnApplyPSW.Text = "Apply";
+            this.btnApplyPSW.UseVisualStyleBackColor = true;
+            this.btnApplyPSW.Click += this.btnApplyPSW_Click;
+            // 
+            // inputConfirmPSW
+            // 
+            this.inputConfirmPSW.Enabled = false;
+            this.inputConfirmPSW.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.inputConfirmPSW.Location = new Point(12, 119);
+            this.inputConfirmPSW.Margin = new Padding(4);
+            this.inputConfirmPSW.MaxLength = 32676;
+            this.inputConfirmPSW.Name = "inputConfirmPSW";
+            this.inputConfirmPSW.PasswordChar = '*';
+            this.inputConfirmPSW.PlaceholderText = "CONFIRM PASSWORD";
+            this.inputConfirmPSW.Size = new Size(441, 26);
+            this.inputConfirmPSW.TabIndex = 1;
+            this.inputConfirmPSW.TextAlign = HorizontalAlignment.Center;
+            this.inputConfirmPSW.TextChanged += this.inputConfirmPSW_TextChanged;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new Point(240, 180);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new Size(85, 33);
+            this.btnCancel.TabIndex = 10;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += this.btnCancel_Click;
             // 
             // USERS_PSW_Form
             // 
-            AutoScaleDimensions = new SizeF(10F, 18F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(467, 225);
-            Controls.Add(btnEnterPSW);
-            Controls.Add(lblPassword);
-            Controls.Add(checkBoxTogglePSW1);
-            Controls.Add(inputChangePSW1);
-            Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Margin = new Padding(4);
-            Name = "USERS_PSW_Form";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Change Password";
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new SizeF(10F, 18F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.BackColor = SystemColors.ActiveCaption;
+            this.ClientSize = new Size(467, 225);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.inputConfirmPSW);
+            this.Controls.Add(this.btnApplyPSW);
+            this.Controls.Add(this.lblPassword);
+            this.Controls.Add(this.checkBoxTogglePSW);
+            this.Controls.Add(this.inputChangePSW);
+            this.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            this.Margin = new Padding(4);
+            this.Name = "USERS_PSW_Form";
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Text = "Change Password";
+            this.Load += this.Form_Load;
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion
 
-        private CheckBox checkBoxTogglePSW1;
-        private TextBox inputChangePSW1;
+        private CheckBox checkBoxTogglePSW;
+        private TextBox inputChangePSW;
         private Label lblPassword;
-        private Button btnEnterPSW;
+        private Button btnApplyPSW;
+        private TextBox inputConfirmPSW;
+        private Button btnCancel;
     }
 }

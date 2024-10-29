@@ -20,7 +20,7 @@ namespace CRUD_System
         public int charIsDigi = 3;
 
         ADMINMainControl adminMethods = new ADMINMainControl();
-        
+
         string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
         string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
 
@@ -31,24 +31,86 @@ namespace CRUD_System
             InitializeComponent();
 
             TxtLabelPSW();
+            EnterKey();
+        }
+
+        private void Form_Load(object sender, EventArgs e)
+        {
+            this.ActiveControl = inputConfirmPSW;
+        }
+
+        private void inputChangePSW1_TextChanged(object sender, EventArgs e)
+        {
+            if (inputChangePSW.Text.Length >= 12)
+            {
+                inputConfirmPSW.Enabled = true;
+            }
+        }
+
+        private void inputConfirmPSW_TextChanged(object sender, EventArgs e)
+        {
+            if (inputConfirmPSW.Text.Length >= 12)
+            {
+                btnApplyPSW.Enabled = true;
+            }
         }
 
         private void checkBoxTogglePSW_CheckedChanged(object sender, EventArgs e)
         {
-            // Check if there is text in the password box
-            if (inputChangePSW1.Text.Length > 0)
+            isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide password
+            checkBoxTogglePSW.Text = isPasswordVisible ? "Hide Password" : "Show Password"; // Update the checkbox text based on the visibility state
+            inputChangePSW.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
+            inputConfirmPSW.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
+        }
+
+        private void btnApplyPSW_Click(object sender, EventArgs e)
+        {
+            if (inputConfirmPSW.Text != inputChangePSW.Text)
             {
-                isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide password
-                inputChangePSW1.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
-                checkBoxTogglePSW1.Text = isPasswordVisible ? "Hide Password" : "Show Password"; // Update the checkbox text based on the visibility state
+                MessageBoxes message = new MessageBoxes();
+                message.MessageInvalidConfirmationPassword();
+                inputConfirmPSW.Clear();
+            }
+            else
+            {
+                ValidatePSW();
             }
         }
 
-        private void btnEnterPSW_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-            ValidatePSW();
             this.Close();
         }
+
+        /// <summary>
+        /// Initialize EnterKey to confirm input when Enter is pressed.
+        /// </summary>
+        private void EnterKey()
+        {
+            // Attach the KeyDown event to the form or password input fields
+            this.KeyPreview = true; // Enable form-wide key handling
+            this.KeyDown += (sender, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.Handled = true; // Prevent the Enter key from inserting a new line
+                    e.SuppressKeyPress = true; // Prevent the "ding" sound when Enter is pressed
+
+                    if (inputChangePSW.Text != inputConfirmPSW.Text)
+                    {
+                        MessageBoxes message = new MessageBoxes();
+                        message.MessageInvalidConfirmationPassword();
+                        inputConfirmPSW.Clear();
+                    }
+                    else
+                    {
+                        // Call btnApplyPSW_Click with dummy parameters
+                        btnApplyPSW_Click(this, EventArgs.Empty);
+                    }
+                }
+            };
+        }
+
 
         private void ValidatePSW()
         {
@@ -63,7 +125,7 @@ namespace CRUD_System
                 int userIndex = adminMethods.FindUserIndexByAlias(userLines, loginLines, currentUser);
                 int loginIndex = adminMethods.FindUserIndexByAlias(userLines, loginLines, currentUser);
 
-                string newPassword = inputChangePSW1.Text;
+                string newPassword = inputChangePSW.Text;
                 int uppercaseCount = newPassword.Count(char.IsUpper);
                 int digitCount = newPassword.Count(char.IsDigit);
 
@@ -79,6 +141,7 @@ namespace CRUD_System
 
                     Debug.WriteLine($"User psw: {newPassword}");
                     UpdateNewPassword(loginLines, userIndex, newPassword);
+                    this.Close();
                 }
                 else
                 {
@@ -120,7 +183,5 @@ namespace CRUD_System
                                $"Must contain at least {charToUpper} capital letters\n" +
                                $"Must contain at least {charIsDigi} numbers";
         }
-
-
     }
 }

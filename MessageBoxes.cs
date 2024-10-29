@@ -50,6 +50,11 @@ namespace CRUD_System
                                    $"Must contain at least {psw.charToUpper} capital letters\n" +
                                    $"Must contain at least {psw.charIsDigi} numbers");
         }
+
+        public DialogResult MessageInvalidConfirmationPassword()
+        {
+            return MessageBox.Show("Input password and confirmation password are not the same!");
+        }
     }
 }
 

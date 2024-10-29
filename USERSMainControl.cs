@@ -217,6 +217,8 @@ namespace CRUD_System
             {
                 MessageBox.Show($"No user details found");
             }
+
+            listBoxUser.SelectedIndex = 0; // select listbox's first item
         }
 
         public void ListBoxUser_SelectedIndexChanged(object sender, EventArgs e)
