@@ -15,6 +15,15 @@ namespace CRUD_System
         readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
 
         bool isAdmin = false;
+
+        #region Initialize DateTime for logging
+        LogActions log = new LogActions
+        {
+            Date = DateTime.Now.Date,
+            Time = DateTime.Now
+        };
+        #endregion
+
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -97,12 +106,12 @@ namespace CRUD_System
 
             if (currentUser != null)
             {
-                Debug.WriteLine($"[{currentUser.ToUpper()}]: created new user [{isAlias}]");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: created new user [{isAlias}]");
                 Debug.WriteLine($"User {isAlias} added successfully!");
             }
             else
             {
-                Debug.WriteLine($"[UNKNOWN]: created new user [{isAlias}]");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: created new user [{isAlias}]");
                 Debug.WriteLine($"User {isAlias} added successfully!");
             }
 

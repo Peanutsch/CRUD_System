@@ -24,6 +24,14 @@ namespace CRUD_System
         bool editMode = false;
         bool userSelected = false;
         bool isAdmin = false;
+
+        #region Initialize DateTime for logging
+        LogActions log = new LogActions
+        {
+            Date = DateTime.Now.Date,
+            Time = DateTime.Now
+        };
+        #endregion
         #endregion PROPERTIES
 
         #region Constructor
@@ -89,7 +97,7 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private void btnGeneratePSW_Click(object sender, EventArgs e)
+        private void btnGeneratePassword_Click(object sender, EventArgs e)
         {
             PerformActionIfUserSelected(() =>
             {
@@ -142,11 +150,11 @@ namespace CRUD_System
 
             if (currentUser != null)
             {
-                Debug.WriteLine($"[{currentUser.ToUpper()}] changed password for [{loginDetails[0].ToUpper()}]");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] changed password for [{loginDetails[0].ToUpper()}]");
             }
             else
             {
-                Debug.WriteLine($"[UNKNOWN] changed password for [{loginDetails[0].ToUpper()}]");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN] changed password for [{loginDetails[0].ToUpper()}]");
             }
         }
 
@@ -285,11 +293,11 @@ namespace CRUD_System
 
                     if (currentUser != null)
                     {
-                        Debug.WriteLine($"[{currentUser.ToUpper()}]: Edited details from user [{userDetails[2]}]");
+                        Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Edited details from user [{userDetails[2]}]");
                     }
                     else
                     {
-                        Debug.WriteLine($"[UNKNOWN]: Edited details from user [{userDetails[2]}]");
+                        Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details from user [{userDetails[2]}]");
                     }
 
                     MessageBoxes message = new MessageBoxes();
@@ -348,13 +356,12 @@ namespace CRUD_System
 
                 if (currentUser != null)
                 {
-                    Debug.WriteLine($"[{currentUser.ToUpper()}]: Deleted user [{aliasToDelete}]");
+                    Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Deleted user [{aliasToDelete}]");
                 }
                 else
                 {
-                    Debug.WriteLine($"[UNKNOWN]: Deleted user [{aliasToDelete}]");
+                    Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Deleted user [{aliasToDelete}]");
                 }
-                
 
                 messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
                 ReloadListBoxAdmin(userIndex);

@@ -15,6 +15,14 @@ namespace CRUD_System
     {
         private LoginForm loginForm = new LoginForm();
 
+        #region Initialize DateTime for logging
+        LogActions log = new LogActions
+        {
+            Date = DateTime.Now.Date,
+            Time = DateTime.Now
+        };
+        #endregion
+
         public USERSMainForm()
         {
             InitializeComponent();
@@ -62,9 +70,9 @@ namespace CRUD_System
 
             if (currentUser != null)
             {
-                Debug.WriteLine($"\n(LogOut Button)\nUser [{currentUser.ToUpper()}] logged OUT");
+                Debug.WriteLine($"\n(LogOut Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
                 loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
-                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
+                //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
 
                 this.Hide(); // Hide the MainForm
                 loginForm.ShowDialog(); // Open the LoginForm
@@ -77,9 +85,9 @@ namespace CRUD_System
             var currentUser = LoginForm.CurrentUser;
             if (!string.IsNullOrEmpty(currentUser))
             {
-                Debug.WriteLine($"\n(Form Close Button)\nUser [{currentUser.ToUpper()}] logged OUT");
+                Debug.WriteLine($"\n(Form Close Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
                 loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
-                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
+                //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
             }
             else
             {

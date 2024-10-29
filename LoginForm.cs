@@ -17,6 +17,14 @@ namespace CRUD_System
 
         private bool isPasswordVisible = false;
 
+        #region Initialize DateTime for logging
+        LogActions log = new LogActions
+        {
+            Date = DateTime.Now.Date,
+            Time = DateTime.Now
+        };
+        #endregion
+
         /// <summary>
         /// Constructor. Initializes the components for the LoginForm.
         /// </summary>
@@ -129,8 +137,8 @@ namespace CRUD_System
                 // If user is admin, open MainFormADMIN
                 if (isAdmin)
                 {
-                    Debug.WriteLine($"=====\nAdmin [{inputUserName.ToUpper()}] logged IN");
-                    Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n=====");
+                    Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) Admin [{inputUserName.ToUpper()}] logged IN");
+                    //Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n");
 
                     //MainFormADMIN mainFormADMIN = new MainFormADMIN();
                     mainFormADMIN.BoxDisplay(inputUserName); // Pass user input
@@ -139,8 +147,8 @@ namespace CRUD_System
                 // If user is no admin, open MainFormUSERS
                 else
                 {
-                    Debug.WriteLine($"=====\nUser [{inputUserName.ToUpper()}] logged IN");
-                    Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n=====");
+                    Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{inputUserName.ToUpper()}] logged IN");
+                    //Debug.WriteLine($"Total users Online: {UsersOnline.Count}\n");
 
                     USERSMainForm mainFormUSERS = new USERSMainForm();
                     mainFormUSERS.BoxDisplay(); // Pass user input

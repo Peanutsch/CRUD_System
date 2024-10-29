@@ -26,6 +26,15 @@ namespace CRUD_System
 
         private bool isPasswordVisible = false;
 
+        #region Initialize DateTime for logging
+        LogActions log = new LogActions
+        {
+            Date = DateTime.Now.Date,
+            Time = DateTime.Now
+        };
+        #endregion
+
+
         public USERS_PSW_Form()
         {
             InitializeComponent();
@@ -172,7 +181,7 @@ namespace CRUD_System
 
             Debug.WriteLine($"After Update: {loginLines[userIndex]}");
 
-            Debug.WriteLine($"[{currentAlias.ToUpper()}]: Changed password");
+            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentAlias.ToUpper()}]: Changed password");
 
             File.WriteAllLines(dataLogin, loginLines); // Write updated data back to data_login.csv
         }

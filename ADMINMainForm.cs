@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Logging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +18,14 @@ namespace CRUD_System
         ADMINMainControl mainControlADMIN = new ADMINMainControl();
 
         public string loggedInUser = string.Empty;
+
+        #region Initialize DateTime for logging
+        LogActions log = new LogActions
+        {
+            Date = DateTime.Now.Date,
+            Time = DateTime.Now
+        };
+        #endregion
 
         public ADMINMainForm()
         {
@@ -61,9 +70,9 @@ namespace CRUD_System
 
         public void LogOutButton(string loggedInUser)
         {
-            Debug.WriteLine($"\n(LogOut Button)\nUser [{loggedInUser.ToUpper()}] logged OUT");
+            Debug.WriteLine($"\n(LogOut Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{loggedInUser.ToUpper()}] logged OUT");
             loginForm.UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
-            Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
+            //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n=====");
 
             this.Hide(); // Hide the MainForm
             loginForm.ShowDialog(); // Open the LoginForm
@@ -74,9 +83,9 @@ namespace CRUD_System
         {
             if (!string.IsNullOrEmpty(loggedInUser))
             {
-                Debug.WriteLine($"\n(Form Close Button)\nUser [{loggedInUser.ToUpper()}] logged OUT");
+                Debug.WriteLine($"\n(Form Close Button)\n\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{loggedInUser.ToUpper()}] logged OUT");
                 loginForm.UsersOnline.Remove(loggedInUser); // Remove user from UsersOnline
-                Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
+                //Debug.WriteLine($"Total users online: {loginForm.UsersOnline.Count}\n==========");
             }
             else
             {

@@ -22,6 +22,14 @@ namespace CRUD_System
 
         bool editMode = false;
         bool userSelected = false;
+
+        #region Initialize DateTime for logging
+        LogActions log = new LogActions
+        {
+            Date = DateTime.Now.Date,
+            Time = DateTime.Now
+        };
+        #endregion
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -158,11 +166,11 @@ namespace CRUD_System
 
                         if (currentUser != null)
                         {
-                            Debug.WriteLine($"[{currentUser.ToUpper()}]: Edited details from user [{userDetails[2]}]");
+                            Debug.WriteLine($"[\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) {currentUser.ToUpper()}]: Edited details from user [{userDetails[2]}]");
                         }
                         else
                         {
-                            Debug.WriteLine($"[UNKNOWN]: Edited details from user [{userDetails[2]}]");
+                            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details from user [{userDetails[2]}]");
                         }
 
                         // MessageBox Succes
