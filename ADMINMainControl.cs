@@ -105,6 +105,7 @@ namespace CRUD_System
                 GenerateNewPassword();
             });
         }
+
         /// <summary>
         /// Handles the event when the 'Is Admin' checkbox state changes.
         /// Marks the current user as an admin when the checkbox is checked.
@@ -140,7 +141,7 @@ namespace CRUD_System
             }
 
             string generatedPassword = PasswordManager.GenerateUserPassword();
-            txtPassword.Text = generatedPassword;
+            //txtPassword.Text = generatedPassword;
 
             loginLines[userIndex] = $"{loginDetails[0]},{generatedPassword},{isAdmin}";
 
@@ -532,7 +533,7 @@ namespace CRUD_System
             txtCity.Enabled = editMode ? true : false;
             txtEmail.Enabled = editMode ? true : false;
             txtPhonenumber.Enabled = editMode ? true : false;
-            txtPassword.Enabled = editMode ? true : false;
+            //txtPassword.Enabled = editMode ? true : false;
 
             // Manage status visible and enable Buttons and CheckBox
             btnCreateUser.Visible = editMode ? false : true;
@@ -541,8 +542,8 @@ namespace CRUD_System
             btnDeleteUser.Enabled = editMode ? false : true;
             btnGeneratePSW.Visible = editMode ? false : true;
             btnGeneratePSW.Enabled = editMode ? false : true;
-            txtPassword.Visible = editMode ? false : true;
-            txtPassword.Enabled = editMode ? false : true;
+            //txtPassword.Visible = editMode ? false : true;
+            //txtPassword.Enabled = editMode ? false : true;
 
             // Manage status enable ListBox
             listBoxAdmin.Enabled = editMode ? false : true;

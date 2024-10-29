@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD_System
 {
-    internal class UserDetails
+    public class UserDetails
     {
         // Properties
         public string Name { get; set; }

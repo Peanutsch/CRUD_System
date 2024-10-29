@@ -87,7 +87,8 @@ namespace CRUD_System
 
                 LoginForm.CurrentUser = string.Empty;
             }
-            //this.Hide(); // Hide the MainForm
+            LoginForm.CurrentUser = string.Empty;
+            this.Hide(); // Hide the MainForm
             this.Close();
         }
 

@@ -3,12 +3,11 @@
     partial class ADMINMainControl
     {
         private System.Windows.Forms.TextBox txtName;
-        private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.TextBox txtAddress;
         private System.Windows.Forms.TextBox txtCity;
         private System.Windows.Forms.TextBox txtAdmin;
-        private System.Windows.Forms.ListBox listBoxAdmin;
+        public System.Windows.Forms.ListBox listBoxAdmin;
         private System.Windows.Forms.Button btnCreateUser;
         private System.Windows.Forms.Button btnSaveEditUserDetails;
         private System.Windows.Forms.Button btnDeleteUser;
@@ -36,7 +35,6 @@
         private void InitializeComponent()
         {
             txtName = new TextBox();
-            txtPassword = new TextBox();
             txtEmail = new TextBox();
             txtAddress = new TextBox();
             txtCity = new TextBox();
@@ -63,17 +61,6 @@
             txtName.Size = new Size(199, 23);
             txtName.TabIndex = 1;
             txtName.TextAlign = HorizontalAlignment.Center;
-            // 
-            // txtPassword
-            // 
-            txtPassword.Location = new Point(837, 368);
-            txtPassword.Name = "txtPassword";
-            txtPassword.PlaceholderText = "Password";
-            txtPassword.Size = new Size(150, 23);
-            txtPassword.TabIndex = 8;
-            txtPassword.TextAlign = HorizontalAlignment.Center;
-            txtPassword.Visible = false;
-            txtPassword.Enabled = false;
             // 
             // txtEmail
             // 
@@ -255,7 +242,6 @@
             Controls.Add(txtAlias);
             Controls.Add(txtSurname);
             Controls.Add(txtName);
-            Controls.Add(txtPassword);
             Controls.Add(txtEmail);
             Controls.Add(txtAddress);
             Controls.Add(txtCity);
