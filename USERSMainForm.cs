@@ -81,7 +81,7 @@ namespace CRUD_System
         {
             var currentUser = LoginForm.CurrentUser;
 
-            if (currentUser != string.Empty && currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
                 loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
@@ -89,7 +89,7 @@ namespace CRUD_System
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
                 File.AppendAllText(logAction, newLog + Environment.NewLine);
 
-                LoginForm.CurrentUser = string.Empty;
+                LoginForm.CurrentUser = null;
             }
         }
     }
