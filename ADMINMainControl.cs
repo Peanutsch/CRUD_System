@@ -116,9 +116,35 @@ namespace CRUD_System
         {
             isAdmin = !isAdmin; // Toggle between true and false
         }
+
+        private void btnChangePassword_Click(object sender, EventArgs e)
+        {
+            Open_CreateNewPasswordForm();
+        }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region METHODS MANAGEMENT CONTROLADMIN
+
+        public void Open_CreateNewPasswordForm()
+        {
+            // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the CreateNewPassWordForm method.
+            // Check if ParentForm is not null and is of type MainFormADMIN
+            if (this.ParentForm is ADMINMainForm)
+            {
+                this.ParentForm.Hide();
+
+                CreateNewPassword_Form createNewPassword = new CreateNewPassword_Form();
+                createNewPassword.ShowDialog();
+
+                // Show the main controls form again after createNewPassword is closed
+                this.ParentForm.Show();
+            }
+            else
+            {
+                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void GenerateNewPassword()
         {
             var currentUser = LoginForm.CurrentUser;
@@ -277,9 +303,9 @@ namespace CRUD_System
             var loginLines = File.ReadAllLines(dataLogin).ToList();
 
             // Find user index
-            int userIndex = FindUserIndexByAlias(userLines,loginLines, txtAlias.Text);
+            int userIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             int loginIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-                
+
             if (userIndex >= 0)
             {
                 var userDetails = userLines[userIndex].Split(',');
@@ -306,7 +332,7 @@ namespace CRUD_System
                 else
                 {
                     Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details from user [{userDetails[2].ToUpper()}]");
-                        
+
                     string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Edited details from user [{userDetails[2].ToUpper()}]";
                     File.AppendAllText(logAction, newLog + Environment.NewLine);
                 }
@@ -344,7 +370,7 @@ namespace CRUD_System
             // MessageBox to confirm task
             MessageBoxes messageBoxes = new MessageBoxes();
             DialogResult dr = messageBoxes.MessageBoxConfirmToDELETE(aliasToDelete);
-            
+
             if (dr != DialogResult.Yes)
             {
                 return;
@@ -469,7 +495,7 @@ namespace CRUD_System
             }
         }
         #endregion LISTBOX
-        
+
         #region INTERFACE
         public void InterfaceEditMode()
         {
@@ -598,5 +624,6 @@ namespace CRUD_System
             txtPhonenumber.Text = userDetails.PhoneNumber;
         }
         #endregion INTERFACE
+
     }
 }

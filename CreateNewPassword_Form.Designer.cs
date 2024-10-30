@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class USERS_PSW_Form
+    partial class CreateNewPassword_Form
     {
         /// <summary>
         /// Required designer variable.

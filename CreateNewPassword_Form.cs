@@ -12,7 +12,7 @@ using System.Xml.Linq;
 
 namespace CRUD_System
 {
-    public partial class USERS_PSW_Form : Form
+    public partial class CreateNewPassword_Form : Form
     {
         // Password conditions
         public int lengthPsw = 12;
@@ -36,7 +36,7 @@ namespace CRUD_System
         #endregion
 
 
-        public USERS_PSW_Form()
+        public CreateNewPassword_Form()
         {
             InitializeComponent();
 

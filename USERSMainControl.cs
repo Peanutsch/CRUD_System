@@ -72,7 +72,7 @@ namespace CRUD_System
         {
             PerformActionIfUserSelected(() =>
             {
-                OpenUsersPSWForm();
+                Open_CreateNewPasswordForm();
             });
         }
 
@@ -95,18 +95,18 @@ namespace CRUD_System
             }
         }
 
-        public void OpenUsersPSWForm()
+        public void Open_CreateNewPasswordForm()
         {
-            // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method.
+            // MustNeed: explicitly cast ParentForm to ADMINMainForm before passing it to the CreatNewPassword.
             // Check if ParentForm is not null and is of type MainFormADMIN
             if (this.ParentForm is USERSMainForm)
             {
                 this.ParentForm.Hide();
 
-                USERS_PSW_Form usersPSWForm = new USERS_PSW_Form();
-                usersPSWForm.ShowDialog();
+                CreateNewPassword_Form createNewPassword = new CreateNewPassword_Form();
+                createNewPassword.ShowDialog();
 
-                // Show the main controls form again after usersPSWForm is closed
+                // Show the main controls form again after createNewPassword is closed
                 this.ParentForm.Show();
             }
             else

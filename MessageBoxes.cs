@@ -48,7 +48,7 @@ namespace CRUD_System
 
         public DialogResult MessageInvalidPassword()
         {
-            USERS_PSW_Form psw = new USERS_PSW_Form();
+            CreateNewPassword_Form psw = new CreateNewPassword_Form();
             return MessageBox.Show($"Invalid Password\n" +
                                    $"Must contain {psw.lengthPsw} or more chars.\n" +
                                    $"Must contain at least {psw.charToUpper} capital letters\n" +
