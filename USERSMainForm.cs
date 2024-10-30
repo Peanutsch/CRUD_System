@@ -15,7 +15,8 @@ namespace CRUD_System
     {
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
 
-        private LoginForm loginForm = new LoginForm();
+        //private LoginForm loginForm = new LoginForm();
+        private readonly Utilities utilities = new Utilities();
 
         #region Initialize DateTime for logging
         LogActions log = new LogActions
@@ -68,29 +69,13 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            PerformLogout();
+            utilities.PerformLogout();
             this.Hide(); // Hide the MainForm
         }
 
         private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            PerformLogout();
-        }
-
-        private void PerformLogout()
-        {
-            var currentUser = LoginForm.CurrentUser;
-
-            if (!string.IsNullOrEmpty(currentUser))
-            {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
-                loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
-
-                LoginForm.CurrentUser = null;
-            }
+            utilities.PerformLogout();
         }
     }
 }
