@@ -97,22 +97,13 @@ namespace CRUD_System
 
         public void Open_CreateNewPasswordForm()
         {
-            // MustNeed: explicitly cast ParentForm to ADMINMainForm before passing it to the CreatNewPassword.
-            // Check if ParentForm is not null and is of type MainFormADMIN
-            if (this.ParentForm is USERSMainForm)
-            {
-                this.ParentForm.Hide();
+            this.Hide();
 
-                CreateNewPassword_Form createNewPassword = new CreateNewPassword_Form();
-                createNewPassword.ShowDialog();
+            CreateNewPassword_Form createNewPassword = new CreateNewPassword_Form();
+            createNewPassword.ShowDialog();
 
-                // Show the main controls form again after createNewPassword is closed
-                this.ParentForm.Show();
-            }
-            else
-            {
-                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // Show the main controls form again after createNewPassword is closed
+            this.Show();
         }
 
         public void FillTextboxes(string[] userDetailsArray)
