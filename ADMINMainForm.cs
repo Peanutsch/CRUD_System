@@ -73,42 +73,30 @@ namespace CRUD_System
             labelAdmin.Text = "ADMIN";
         }
 
-        public void LogOutButton()
-        {
-            var currentUser = LoginForm.CurrentUser;
-
-            if (currentUser != null)
-            {
-                Debug.WriteLine($"\n(LogOut Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
-                loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
-
-                LoginForm.CurrentUser = string.Empty;
-            }
-            LoginForm.CurrentUser = string.Empty;
-            this.Hide(); // Hide the MainForm
-            this.Close();
-        }
-
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
+            PerformLogout();
+        }
+
+        public void LogOutButton()
+        {
+            PerformLogout(); // Call a separate method for logout logic
+            this.Hide();
+        }
+
+        private void PerformLogout()
+        {
             var currentUser = LoginForm.CurrentUser;
 
-            if (currentUser != null)
+            if (currentUser != string.Empty && currentUser != null)
             {
-                Debug.WriteLine($"\n(Form Close Button)\n\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) Admin [{currentUser.ToUpper()}] logged OUT");
                 loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
                 File.AppendAllText(logAction, newLog + Environment.NewLine);
 
                 LoginForm.CurrentUser = string.Empty;
-            }
-            else
-            {
-                Debug.WriteLine("No user is currently logged in.");
             }
         }
     }

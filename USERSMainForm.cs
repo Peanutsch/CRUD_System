@@ -68,39 +68,28 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            var currentUser = LoginForm.CurrentUser;
-
-            if (currentUser != null)
-            {
-                Debug.WriteLine($"\n(LogOut Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
-                loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
-
-                LoginForm.CurrentUser = string.Empty;
-            }
+            PerformLogout();
             this.Hide(); // Hide the MainForm
-            //loginForm.ShowDialog(); // Open the LoginForm
-            this.Close(); // Once MainForm is closed, close the LoginForm
         }
 
         private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            PerformLogout();
+        }
+
+        private void PerformLogout()
+        {
             var currentUser = LoginForm.CurrentUser;
-            if (currentUser != null)
+
+            if (currentUser != string.Empty && currentUser != null)
             {
-                Debug.WriteLine($"\n(Form Close Button)\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{currentUser.ToUpper()}] logged OUT");
                 loginForm.UsersOnline.Remove(currentUser); // Remove user from UsersOnline
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
                 File.AppendAllText(logAction, newLog + Environment.NewLine);
 
                 LoginForm.CurrentUser = string.Empty;
-            }
-            else
-            {
-                Debug.WriteLine("No user is currently logged in.");
             }
         }
     }
