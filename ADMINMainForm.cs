@@ -60,7 +60,7 @@ namespace CRUD_System
         {
             var currentUser = LoginForm.CurrentUser;
 
-            if (currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 textBoxUserName.Text = $"{currentUser.ToUpper()}";
             }

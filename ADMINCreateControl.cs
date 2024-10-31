@@ -113,7 +113,7 @@ namespace CRUD_System
 
             MessageBox.Show($"User {isAlias} added successfully!");
 
-            if (currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Created new user [{isAlias.ToUpper()}]");
                 Debug.WriteLine($"User {isAlias} added successfully!");
