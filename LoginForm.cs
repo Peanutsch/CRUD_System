@@ -114,6 +114,25 @@ namespace CRUD_System
         }
 
         /// <summary>
+        /// Toggles the visibility of the password in the password input box when the checkbox is checked or unchecked.
+        /// Updates the text of the checkbox to reflect the current action (Show Password or Hide Password).
+        /// </summary>
+        /// <param name="sender">The source of the event, usually the checkbox.</param>
+        /// <param name="e">The event arguments associated with the checkbox state change.</param>
+        private void checkBoxTogglePSW_CheckedChanged(object sender, EventArgs e)
+        {
+            // Check if there is text in the password box
+            if (loginUserPSWBox.Text.Length > 0)
+            {
+                isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide password
+                loginUserPSWBox.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
+                checkBoxTogglePSW.Text = isPasswordVisible ? "Hide Password" : "Show Password"; // Update the checkbox text based on the visibility state
+            }
+        }
+
+        //=====
+
+        /// <summary>
         /// Authenticates the user's login credentials by checking the provided
         /// username and password against the login data stored in the CSV file.
         /// If the credentials are valid, the user is logged in and the MainForm is shown.
@@ -123,19 +142,19 @@ namespace CRUD_System
         /// <param name="inputUserPSW">The password input provided by the user.</param>
         private void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
-            LoginValidation loginValidation = new LoginValidation();
+            LoginHandler loginHandler = new LoginHandler();
             ADMINMainForm mainFormADMIN = new ADMINMainForm();
             ADMINMainControl mainControlADMIN = new ADMINMainControl();
 
             // Validate login input
-            if (loginValidation.ValidateLogin(inputUserName, inputUserPSW))
+            if (loginHandler.ValidateLogin(inputUserName, inputUserPSW))
             {
                 CurrentUser = inputUserName.ToLower();
 
                 UsersOnline.Add(inputUserName.ToLower()); // Add user to list UsersOnline
 
                 // Check if user is admin
-                bool isAdmin = loginValidation.IsAdmin(inputUserName, inputUserPSW);
+                bool isAdmin = loginHandler.IsAdmin(inputUserName, inputUserPSW);
 
                 // Hide LoginForm
                 this.Hide();
@@ -177,23 +196,6 @@ namespace CRUD_System
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             //
-        }
-
-        /// <summary>
-        /// Toggles the visibility of the password in the password input box when the checkbox is checked or unchecked.
-        /// Updates the text of the checkbox to reflect the current action (Show Password or Hide Password).
-        /// </summary>
-        /// <param name="sender">The source of the event, usually the checkbox.</param>
-        /// <param name="e">The event arguments associated with the checkbox state change.</param>
-        private void checkBoxTogglePSW_CheckedChanged(object sender, EventArgs e)
-        {
-            // Check if there is text in the password box
-            if (loginUserPSWBox.Text.Length > 0)
-            {
-                isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide password
-                loginUserPSWBox.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
-                checkBoxTogglePSW.Text = isPasswordVisible ? "Hide Password" : "Show Password"; // Update the checkbox text based on the visibility state
-            }
         }
     }
 }

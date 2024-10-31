@@ -16,7 +16,7 @@ namespace CRUD_System
     {
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
 
-        private readonly Utilities utilities = new Utilities();
+        LoginHandler utilities = new LoginHandler();
 
         #region Initialize DateTime for logging
         LogActions log = new LogActions
@@ -75,12 +75,14 @@ namespace CRUD_System
 
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //loginManager.PerformLogout();
             utilities.PerformLogout();
         }
 
         public void LogOutButton()
         {
-            utilities.PerformLogout(); // Call a separate method for logout logic
+            //loginManager.PerformLogout();
+            utilities.PerformLogout();
             this.Hide();
         }
     }
