@@ -30,7 +30,7 @@
         {
             textBoxUserName = new TextBox();
             buttonLOGOUT = new Button();
-            labelAdmin = new Label();
+            labelUserName = new Label();
             UserControl = new ADMINMainControl();
             SuspendLayout();
             // 
@@ -56,16 +56,16 @@
             buttonLOGOUT.UseVisualStyleBackColor = false;
             buttonLOGOUT.Click += buttonLOGOUT_Click;
             // 
-            // labelAdmin
+            // labelUserName
             // 
-            labelAdmin.AutoSize = true;
-            labelAdmin.BackColor = Color.FromArgb(128, 255, 128);
-            labelAdmin.Location = new Point(124, 15);
-            labelAdmin.Name = "labelAdmin";
-            labelAdmin.Size = new Size(58, 18);
-            labelAdmin.TabIndex = 3;
-            labelAdmin.Text = "ADMIN";
-            labelAdmin.TextAlign = ContentAlignment.TopCenter;
+            labelUserName.AutoSize = true;
+            labelUserName.BackColor = Color.FromArgb(128, 255, 128);
+            labelUserName.Location = new Point(124, 15);
+            labelUserName.Name = "labelUserName";
+            labelUserName.Size = new Size(58, 18);
+            labelUserName.TabIndex = 3;
+            labelUserName.Text = "ADMIN";
+            labelUserName.TextAlign = ContentAlignment.TopCenter;
             //
             // UserControl
             // 
@@ -81,7 +81,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(1260, 512);
-            Controls.Add(labelAdmin);
+            Controls.Add(labelUserName);
             Controls.Add(buttonLOGOUT);
             Controls.Add(textBoxUserName);
             Controls.Add(UserControl);
@@ -101,7 +101,7 @@
 
         private TextBox textBoxUserName;
         private Button buttonLOGOUT;
-        private Label labelAdmin;
+        private Label labelUserName;
         private ADMINMainControl UserControl;
     }
 }

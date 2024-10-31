@@ -129,7 +129,7 @@ namespace CRUD_System
 
             var currentUser = LoginForm.CurrentUser;
 
-            if (currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 // Find userIndex in data_login.csv and data_users.csv
                 int userIndex = adminMethods.FindUserIndexByAlias(userLines, loginLines, currentUser);

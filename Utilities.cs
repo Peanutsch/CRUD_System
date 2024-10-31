@@ -18,10 +18,6 @@ namespace CRUD_System
 
         LoginForm loginForm = new LoginForm();
 
-        bool editMode = false;
-        bool userSelected = false;
-        bool isAdmin = false;
-
         #region Initialize DateTime for logging
         LogActions log = new LogActions
         {

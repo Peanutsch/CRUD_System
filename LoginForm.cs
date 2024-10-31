@@ -16,6 +16,8 @@ namespace CRUD_System
 
         public static string? CurrentUser { get; set; }
 
+        UtilitiesLogin login = new UtilitiesLogin();
+
         public List<string> UsersOnline = new List<string>();
 
         private bool isPasswordVisible = false;
@@ -95,7 +97,7 @@ namespace CRUD_System
                     e.SuppressKeyPress = true; // Prevent the "ding" sound when Enter is pressed
 
                     // Validate username and password, and display appropriate message
-                    AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+                    login.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
                 }
             };
         }
@@ -108,7 +110,7 @@ namespace CRUD_System
         private void LoginButton_Click(object sender, EventArgs e)
         {
             // Validate username and password, and display appropriate message
-            AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+            login.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
         }
 
         /// <summary>
@@ -146,7 +148,7 @@ namespace CRUD_System
                     string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{inputUserName.ToUpper()},Logged IN";
                     File.AppendAllText(logAction, newLog + Environment.NewLine);
 
-                    mainFormADMIN.BoxDisplay();
+                    mainFormADMIN.DisplayUserInformationForm();
                     mainFormADMIN.ShowDialog();
                 }
                 // If user is no admin, open MainFormUSERS
@@ -158,7 +160,7 @@ namespace CRUD_System
                     File.AppendAllText(logAction, newLog + Environment.NewLine);
 
                     USERSMainForm mainFormUSERS = new USERSMainForm();
-                    mainFormUSERS.BoxDisplay(); // Pass user input
+                    mainFormUSERS.DisplayUserInformationForm(); // Pass user input
                     mainFormUSERS.ShowDialog();
                 }
 

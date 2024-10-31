@@ -30,7 +30,7 @@
         {
             this.textBoxUserName = new TextBox();
             this.buttonLOGOUT = new Button();
-            this.labelUser = new Label();
+            this.labelUserName = new Label();
             UserControl = new USERSMainControl();
             this.SuspendLayout();
             // 
@@ -56,16 +56,16 @@
             this.buttonLOGOUT.UseVisualStyleBackColor = false;
             this.buttonLOGOUT.Click += this.buttonLOGOUT_Click;
             // 
-            // labelUser
+            // labelUserName
             // 
-            this.labelUser.AutoSize = true;
-            this.labelUser.BackColor = SystemColors.Highlight;
-            this.labelUser.Location = new Point(134, 15);
-            this.labelUser.Name = "labelUser";
-            this.labelUser.Size = new Size(48, 18);
-            this.labelUser.TabIndex = 3;
-            this.labelUser.Text = "ROLE";
-            this.labelUser.TextAlign = ContentAlignment.TopCenter;
+            this.labelUserName.AutoSize = true;
+            this.labelUserName.BackColor = SystemColors.Highlight;
+            this.labelUserName.Location = new Point(134, 15);
+            this.labelUserName.Name = "labelUserName";
+            this.labelUserName.Size = new Size(48, 18);
+            this.labelUserName.TabIndex = 3;
+            this.labelUserName.Text = "ROLE";
+            this.labelUserName.TextAlign = ContentAlignment.TopCenter;
             //
             // UserControl
             // 
@@ -81,7 +81,7 @@
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
             this.ClientSize = new Size(1260, 512);
-            this.Controls.Add(this.labelUser);
+            this.Controls.Add(this.labelUserName);
             this.Controls.Add(this.buttonLOGOUT);
             this.Controls.Add(this.textBoxUserName);
             this.Controls.Add(this.UserControl);
@@ -101,7 +101,7 @@
 
         private TextBox textBoxUserName;
         private Button buttonLOGOUT;
-        private Label labelUser;
+        private Label labelUserName;
         private USERSMainControl UserControl;
     }
 }

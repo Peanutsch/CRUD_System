@@ -16,7 +16,7 @@ namespace CRUD_System
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
 
         //private LoginForm loginForm = new LoginForm();
-        private readonly Utilities utilities = new Utilities();
+        private UtilitiesLogin logout = new UtilitiesLogin();
 
         #region Initialize DateTime for logging
         LogActions log = new LogActions
@@ -41,13 +41,11 @@ namespace CRUD_System
         /// Displays the username in uppercase in the username text box
         /// and validates the user's rights based on the provided username and password.
         /// </summary>
-        /// <param name="inputUserName">The username entered by the user.</param>
-        /// <param name="inputUserPSW">The password entered by the user.</param>
-        public void BoxDisplay()
+        public void DisplayUserInformationForm()
         {
             var currentUser = LoginForm.CurrentUser;
 
-            if (currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 textBoxUserName.Text = $"{currentUser.ToUpper()}";
             }
@@ -55,9 +53,9 @@ namespace CRUD_System
             {
                 textBoxUserName.Text = "UNKNOWN";
             }
-            labelUser.TextAlign = ContentAlignment.TopLeft;
-            labelUser.BackColor = Color.LightGreen;
-            labelUser.Text = "USER";
+            labelUserName.TextAlign = ContentAlignment.TopLeft;
+            labelUserName.BackColor = Color.LightGreen;
+            labelUserName.Text = "USER";
         }
 
         /// <summary>
@@ -69,13 +67,13 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            utilities.PerformLogout();
+            logout.PerformLogout();
             this.Hide(); // Hide the MainForm
         }
 
         private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            utilities.PerformLogout();
+            logout.PerformLogout();
         }
     }
 }

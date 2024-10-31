@@ -56,11 +56,11 @@ namespace CRUD_System
         /// and validates the user's rights based on the provided username and password.
         /// </summary>
         /// <param name="inputUserName">The username entered by the user.</param>
-        public void BoxDisplay()
+        public void DisplayUserInformationForm()
         {
             var currentUser = LoginForm.CurrentUser;
 
-            if (currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 textBoxUserName.Text = $"{currentUser.ToUpper()}";
             }
@@ -68,9 +68,9 @@ namespace CRUD_System
             {
                 textBoxUserName.Text = $"UNKNOWN";
             }
-            labelAdmin.TextAlign = ContentAlignment.TopLeft;
-            labelAdmin.BackColor = Color.LightGreen;
-            labelAdmin.Text = "ADMIN";
+            labelUserName.TextAlign = ContentAlignment.TopLeft;
+            labelUserName.BackColor = Color.LightGreen;
+            labelUserName.Text = "ADMIN";
         }
 
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)

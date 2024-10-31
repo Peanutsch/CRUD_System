@@ -129,7 +129,7 @@ namespace CRUD_System
         {
             var currentUser = LoginForm.CurrentUser;
 
-            if (currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 // Read lines from data_users.csv
                 var userLines = File.ReadAllLines(dataUsers).ToList();
@@ -154,7 +154,7 @@ namespace CRUD_System
 
                     UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
 
-                    if (currentUser != null)
+                    if (!string.IsNullOrEmpty(currentUser))
                     {
                         Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Edited details");
 
@@ -210,7 +210,7 @@ namespace CRUD_System
 
             var currentUser = LoginForm.CurrentUser;
 
-            if (currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 var userIndex = adminMethods.FindUserIndexByAlias(userLines, loginLines, currentUser);
                 var userDetailsArray = userLines[userIndex].Split(',');

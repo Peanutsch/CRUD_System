@@ -176,7 +176,7 @@ namespace CRUD_System
             MessageBoxes messageSucces = new MessageBoxes();
             messageSucces.MessageUpdateSucces();
 
-            if (currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] Changed password for [{loginDetails[0].ToUpper()}]");
 
@@ -322,7 +322,7 @@ namespace CRUD_System
                 UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
                 UpdateUserLogin(loginLines, loginIndex); // Save changes to data_loging.csv
 
-                if (currentUser != null)
+                if (!string.IsNullOrEmpty(currentUser))
                 {
                     Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Edited details from user [{userDetails[2].ToUpper()}]");
 
@@ -388,7 +388,7 @@ namespace CRUD_System
                                             StringComparison.OrdinalIgnoreCase)).ToList();
             File.WriteAllLines(dataLogin, loginLines);
 
-            if (currentUser != null)
+            if (!string.IsNullOrEmpty(currentUser))
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Deleted user [{aliasToDelete.ToUpper()}]");
 
