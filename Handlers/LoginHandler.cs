@@ -14,9 +14,9 @@ namespace CRUD_System.Handlers
     public class LoginHandler
     {
         #region PROPERTIES
-        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
-        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
+        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_login.csv");
+        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
+        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
 
         public static string? CurrentUser { get; set; }
 

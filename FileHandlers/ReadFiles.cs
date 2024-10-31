@@ -28,7 +28,7 @@ namespace CRUD_System.FileHandlers
         public List<(string Username, string Password, bool IsAdmin)> GetLoginData()
         {
             // Construct the full path to the CSV file
-            string file = Path.Combine(RootPath.GetRootPath(), @"data\data_login.csv");
+            string file = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_login.csv");
             //Debug.WriteLine($"RootPath data_login.csv: {RootPath.GetRootPath}");
 
             // Check if the file exists; if not, log an error and return an empty list
@@ -73,7 +73,7 @@ namespace CRUD_System.FileHandlers
         public List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> GetUserData()
         {
             // Construct the full path to the CSV file
-            string file = Path.Combine(RootPath.GetRootPath(), @"data\data_users.csv");
+            string file = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
             Debug.WriteLine($"RootPath data_users.csv: {RootPath.GetRootPath()}");
 
             // Check if the file exists; if not, log an error and return an empty list
