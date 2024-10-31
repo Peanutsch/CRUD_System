@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace CRUD_System
+namespace CRUD_System.FileHandlers
 {
-    internal class Data
+    internal class ReadFiles
     {
         /// <summary>
         /// Retrieves login data from a CSV file and returns it as a list of tuples

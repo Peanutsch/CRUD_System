@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace CRUD_System
+namespace CRUD_System.Handlers
 {
     /// <summary>
     /// Provides methods for securely generating and verifying password hashes using 
@@ -28,7 +28,7 @@ namespace CRUD_System
             const string numericChars = "1234567890";
 
             // Ensure minimum length of 12 characters
-            if (length < 12) length = 12; 
+            if (length < 12) length = 12;
 
             // Create lists for each character type
             List<char> password = new List<char>();
@@ -149,11 +149,11 @@ namespace CRUD_System
             string password = "mijnVeiligWachtwoord";
 
             // Hash the password
-            string hashedPassword = PasswordManager.GenerateHash(password);
+            string hashedPassword = GenerateHash(password);
             Console.WriteLine($"Hashed Password: {hashedPassword}");
 
             // During login
-            bool isCorrect = PasswordManager.Verify("Entered Password:", hashedPassword);
+            bool isCorrect = Verify("Entered Password:", hashedPassword);
             Debug.WriteLine($"Password correct? {isCorrect}");
         }
 

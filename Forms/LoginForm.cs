@@ -1,3 +1,4 @@
+using CRUD_System.Handlers;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -12,25 +13,18 @@ namespace CRUD_System
     public partial class LoginForm : Form
     {
         #region PROPERTIES
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
-
-        public static string? CurrentUser { get; set; }
-
-        UtilitiesLogin login = new UtilitiesLogin();
-
-        public List<string> UsersOnline = new List<string>();
+        LoginHandler loginHandler = new LoginHandler();
 
         private bool isPasswordVisible = false;
 
         #region Initialize DateTime for logging
-        LogActions log = new LogActions
+        LogEntryActions log = new LogEntryActions
         {
             Date = DateTime.Now.Date,
             Time = DateTime.Now
         };
         #endregion
         #endregion PROPERTIES
-
         /// <summary>
         /// Constructor. Initializes the components for the LoginForm.
         /// </summary>
@@ -97,7 +91,8 @@ namespace CRUD_System
                     e.SuppressKeyPress = true; // Prevent the "ding" sound when Enter is pressed
 
                     // Validate username and password, and display appropriate message
-                    login.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+                    loginHandler.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+                    this.Close();
                 }
             };
         }
@@ -110,7 +105,8 @@ namespace CRUD_System
         private void LoginButton_Click(object sender, EventArgs e)
         {
             // Validate username and password, and display appropriate message
-            login.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+            loginHandler.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+            this.Close();
         }
 
         /// <summary>
@@ -127,69 +123,6 @@ namespace CRUD_System
                 isPasswordVisible = !isPasswordVisible; // Toggle between Visible and Hide password
                 loginUserPSWBox.PasswordChar = isPasswordVisible ? '\0' : '*'; // Show or hide the password
                 checkBoxTogglePSW.Text = isPasswordVisible ? "Hide Password" : "Show Password"; // Update the checkbox text based on the visibility state
-            }
-        }
-
-        //=====
-
-        /// <summary>
-        /// Authenticates the user's login credentials by checking the provided
-        /// username and password against the login data stored in the CSV file.
-        /// If the credentials are valid, the user is logged in and the MainForm is shown.
-        /// If invalid, an error message is displayed.
-        /// </summary>
-        /// <param name="inputUserName">The username input provided by the user.</param>
-        /// <param name="inputUserPSW">The password input provided by the user.</param>
-        private void AuthenticateUser(string inputUserName, string inputUserPSW)
-        {
-            LoginHandler loginHandler = new LoginHandler();
-            ADMINMainForm mainFormADMIN = new ADMINMainForm();
-            ADMINMainControl mainControlADMIN = new ADMINMainControl();
-
-            // Validate login input
-            if (loginHandler.ValidateLogin(inputUserName, inputUserPSW))
-            {
-                CurrentUser = inputUserName.ToLower();
-
-                UsersOnline.Add(inputUserName.ToLower()); // Add user to list UsersOnline
-
-                // Check if user is admin
-                bool isAdmin = loginHandler.IsAdmin(inputUserName, inputUserPSW);
-
-                // Hide LoginForm
-                this.Hide();
-
-                // If user is admin, open MainFormADMIN
-                if (isAdmin)
-                {
-                    Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) Admin [{inputUserName.ToUpper()}] Logged IN");
-
-                    string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{inputUserName.ToUpper()},Logged IN";
-                    File.AppendAllText(logAction, newLog + Environment.NewLine);
-
-                    mainFormADMIN.DisplayUserInformationForm();
-                    mainFormADMIN.ShowDialog();
-                }
-                // If user is no admin, open MainFormUSERS
-                else
-                {
-                    Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) User [{inputUserName.ToUpper()}] Logged IN");
-
-                    string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{inputUserName.ToUpper()},Logged IN";
-                    File.AppendAllText(logAction, newLog + Environment.NewLine);
-
-                    USERSMainForm mainFormUSERS = new USERSMainForm();
-                    mainFormUSERS.DisplayUserInformationForm(); // Pass user input
-                    mainFormUSERS.ShowDialog();
-                }
-
-                // When MainForm is closed, close LoginForm
-                this.Close();
-            }
-            else
-            {
-                // Error message when input not valid
-                MessageBox.Show("Invalid username or password");
             }
         }
 

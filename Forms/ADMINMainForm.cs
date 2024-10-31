@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualBasic.Logging;
+﻿using CRUD_System.FileHandlers;
+using CRUD_System.Handlers;
+using Microsoft.VisualBasic.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,10 +18,10 @@ namespace CRUD_System
     {
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
 
-        LoginHandler utilities = new LoginHandler();
+        LoginHandler loginHandler = new LoginHandler();
 
         #region Initialize DateTime for logging
-        LogActions log = new LogActions
+        LogEntryActions log = new LogEntryActions
         {
             Date = DateTime.Now.Date,
             Time = DateTime.Now
@@ -51,38 +53,16 @@ namespace CRUD_System
         }
         #endregion BUTTONS
 
-        /// <summary>
-        /// Displays the username in uppercase in the username text box
-        /// and validates the user's rights based on the provided username and password.
-        /// </summary>
-        /// <param name="inputUserName">The username entered by the user.</param>
-        public void DisplayUserInformationForm()
-        {
-            var currentUser = LoginForm.CurrentUser;
-
-            if (!string.IsNullOrEmpty(currentUser))
-            {
-                textBoxUserName.Text = $"{currentUser.ToUpper()}";
-            }
-            else
-            {
-                textBoxUserName.Text = $"UNKNOWN";
-            }
-            labelUserName.TextAlign = ContentAlignment.TopLeft;
-            labelUserName.BackColor = Color.LightGreen;
-            labelUserName.Text = "ADMIN";
-        }
-
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
             //loginManager.PerformLogout();
-            utilities.PerformLogout();
+            loginHandler.PerformLogout();
         }
 
         public void LogOutButton()
         {
             //loginManager.PerformLogout();
-            utilities.PerformLogout();
+            loginHandler.PerformLogout();
             this.Hide();
         }
     }

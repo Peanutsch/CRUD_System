@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CRUD_System.FileHandlers;
+using CRUD_System.Handlers;
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -18,7 +20,7 @@ namespace CRUD_System
         bool isAdmin = false;
 
         #region Initialize DateTime for logging
-        LogActions log = new LogActions
+        LogEntryActions log = new LogEntryActions
         {
             Date = DateTime.Now.Date,
             Time = DateTime.Now
@@ -73,7 +75,7 @@ namespace CRUD_System
 
         public void SaveNewUser()
         {
-            var currentUser = LoginForm.CurrentUser;
+            var currentUser = LoginHandler.CurrentUser;
 
             if (txtName.Text.Length < 2 || txtSurname.Text.Length < 2)
             {

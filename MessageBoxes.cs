@@ -46,6 +46,11 @@ namespace CRUD_System
             return MessageBox.Show("Invalid input for Name and/or Surname");
         }
 
+        public DialogResult MessageInvalidNamePassword()
+        {
+            return MessageBox.Show("Invalid username or password");
+        }
+
         public DialogResult MessageInvalidPassword()
         {
             CreateNewPassword_Form psw = new CreateNewPassword_Form();

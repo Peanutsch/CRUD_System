@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_System
+namespace CRUD_System.FileHandlers
 {
     internal class RootPath
-    {      
+    {
         /// <summary>
         /// Initializes the root path for the application by determining the base directory 
         /// of the current AppDomain and locating the "CRUD_System" directory within it.

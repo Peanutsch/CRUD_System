@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using System.Xml.Linq;
 using System.Diagnostics;
+using CRUD_System.Handlers;
+using CRUD_System.FileHandlers;
 
 namespace CRUD_System
 {
@@ -27,7 +29,7 @@ namespace CRUD_System
         bool isAdmin = false;
 
         #region Initialize DateTime for logging
-        LogActions log = new LogActions
+        LogEntryActions log = new LogEntryActions
         {
             Date = DateTime.Now.Date,
             Time = DateTime.Now
@@ -147,7 +149,7 @@ namespace CRUD_System
 
         public void GenerateNewPassword()
         {
-            var currentUser = LoginForm.CurrentUser;
+            var currentUser = LoginHandler.CurrentUser;
 
             // Read lines from data_users.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
@@ -296,7 +298,7 @@ namespace CRUD_System
         /// </summary>
         public void SaveEditUserDetails()
         {
-            var currentUser = LoginForm.CurrentUser;
+            var currentUser = LoginHandler.CurrentUser;
 
             // Read lines from data_users.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();
@@ -356,7 +358,7 @@ namespace CRUD_System
         /// </summary>
         private void DeleteUser()
         {
-            var currentUser = LoginForm.CurrentUser;
+            var currentUser = LoginHandler.CurrentUser;
 
             // Read lines from data_users.csv and data_login.csv
             var userLines = File.ReadAllLines(dataUsers).ToList();

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CRUD_System.FileHandlers;
+using CRUD_System.Handlers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -25,7 +27,7 @@ namespace CRUD_System
         bool userSelected = false;
 
         #region Initialize DateTime for logging
-        LogActions log = new LogActions
+        LogEntryActions log = new LogEntryActions
         {
             Date = DateTime.Now.Date,
             Time = DateTime.Now
@@ -38,7 +40,7 @@ namespace CRUD_System
         {
             InitializeComponent();
 
-            LoadDetailsListBoxUser();
+            ListBoxThisUser();
         }
         #endregion CONSTRUCTOR
 
@@ -127,7 +129,7 @@ namespace CRUD_System
         /// </summary>
         public void SaveEditUserDetails()
         {
-            var currentUser = LoginForm.CurrentUser;
+            var currentUser = LoginHandler.CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {
@@ -203,12 +205,12 @@ namespace CRUD_System
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
-        private void LoadDetailsListBoxUser()
+        private void ListBoxThisUser()
         {
             var userLines = File.ReadAllLines(dataUsers).ToList();
             var loginLines = File.ReadAllLines(dataLogin).ToList();
 
-            var currentUser = LoginForm.CurrentUser;
+            var currentUser = LoginHandler.CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {
@@ -253,31 +255,6 @@ namespace CRUD_System
         }
 
         /// <summary>
-        /// Loads user data from data_users.csv and populates the list box with user names.
-        /// </summary>
-        public void LoadUserDetailsListBoxUser()
-        {
-            var lines = File.ReadAllLines(dataUsers);
-
-            listBoxUser.Items.Clear();
-
-            foreach (var line in lines.Skip(2)) // Skip Header and details Admin
-            {
-                // Split each line into an array of user details
-                var userDetailsArray = line.Split(',');
-
-                // Create a UserDetails object using the array
-                UserDetails userDetails = new UserDetails(userDetailsArray);
-
-                // Use the UserDetails properties to format the string for the listBox
-                string listItem = $"{userDetails.Name} {userDetails.Surname} ({userDetails.Alias}) | {userDetails.Email} | {userDetails.PhoneNumber}";
-
-                // Add the formatted string to the listBox
-                listBoxUser.Items.Add(listItem);
-            }
-        }
-
-        /// <summary>
         /// Reloads the user interface after saving changes.
         /// </summary>
         /// <param name="userIndex">The index of the updated user.</param>
@@ -289,8 +266,8 @@ namespace CRUD_System
             }
 
             // Clear and reload listbox
-            //listBoxUser.Items.Clear();
-            LoadDetailsListBoxUser();
+            listBoxUser.Items.Clear();
+            ListBoxThisUser();
 
             // Reset editMode to false after saving and reload interface
             editMode = false;

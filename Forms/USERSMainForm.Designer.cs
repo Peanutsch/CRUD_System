@@ -30,7 +30,7 @@
         {
             this.textBoxUserName = new TextBox();
             this.buttonLOGOUT = new Button();
-            this.labelUserName = new Label();
+            this.labelAlias = new Label();
             UserControl = new USERSMainControl();
             this.SuspendLayout();
             // 
@@ -56,16 +56,16 @@
             this.buttonLOGOUT.UseVisualStyleBackColor = false;
             this.buttonLOGOUT.Click += this.buttonLOGOUT_Click;
             // 
-            // labelUserName
+            // labelAlias
             // 
-            this.labelUserName.AutoSize = true;
-            this.labelUserName.BackColor = SystemColors.Highlight;
-            this.labelUserName.Location = new Point(134, 15);
-            this.labelUserName.Name = "labelUserName";
-            this.labelUserName.Size = new Size(48, 18);
-            this.labelUserName.TabIndex = 3;
-            this.labelUserName.Text = "ROLE";
-            this.labelUserName.TextAlign = ContentAlignment.TopCenter;
+            this.labelAlias.AutoSize = true;
+            this.labelAlias.BackColor = SystemColors.Highlight;
+            this.labelAlias.Location = new Point(134, 15);
+            this.labelAlias.Name = "labelUserName";
+            this.labelAlias.Size = new Size(48, 18);
+            this.labelAlias.TabIndex = 3;
+            this.labelAlias.Text = "ROLE";
+            this.labelAlias.TextAlign = ContentAlignment.TopCenter;
             //
             // UserControl
             // 
@@ -81,7 +81,7 @@
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
             this.ClientSize = new Size(1260, 512);
-            this.Controls.Add(this.labelUserName);
+            this.Controls.Add(this.labelAlias);
             this.Controls.Add(this.buttonLOGOUT);
             this.Controls.Add(this.textBoxUserName);
             this.Controls.Add(this.UserControl);
@@ -99,9 +99,9 @@
 
         #endregion
 
-        private TextBox textBoxUserName;
-        private Button buttonLOGOUT;
-        private Label labelUserName;
-        private USERSMainControl UserControl;
+        public TextBox textBoxUserName;
+        public Button buttonLOGOUT;
+        public Label labelAlias;
+        public USERSMainControl UserControl;
     }
 }

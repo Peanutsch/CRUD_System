@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CRUD_System.FileHandlers;
+using CRUD_System.Handlers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,7 +30,7 @@ namespace CRUD_System
         private bool isPasswordVisible = false;
 
         #region Initialize DateTime for logging
-        LogActions log = new LogActions
+        LogEntryActions log = new LogEntryActions
         {
             Date = DateTime.Now.Date,
             Time = DateTime.Now
@@ -127,7 +129,7 @@ namespace CRUD_System
             var userLines = File.ReadAllLines(dataUsers).ToList();
             var loginLines = File.ReadAllLines(dataLogin).ToList();
 
-            var currentUser = LoginForm.CurrentUser;
+            var currentUser = LoginHandler.CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {

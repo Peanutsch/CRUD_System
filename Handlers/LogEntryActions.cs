@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_System
+namespace CRUD_System.Handlers
 {
-    internal class LogActions
+    internal class LogEntryActions
     {
         public DateTime Date { get; set; }
         public DateTime Time { get; set; }

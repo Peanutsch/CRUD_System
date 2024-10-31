@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CRUD_System.FileHandlers;
+using CRUD_System.Handlers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,11 +17,10 @@ namespace CRUD_System
     {
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"data\log.csv");
 
-        //private LoginForm loginForm = new LoginForm();
-        private UtilitiesLogin logout = new UtilitiesLogin();
+        LoginHandler loginHandler = new LoginHandler();
 
         #region Initialize DateTime for logging
-        LogActions log = new LogActions
+        LogEntryActions log = new LogEntryActions
         {
             Date = DateTime.Now.Date,
             Time = DateTime.Now
@@ -43,7 +44,7 @@ namespace CRUD_System
         /// </summary>
         public void DisplayUserInformationForm()
         {
-            var currentUser = LoginForm.CurrentUser;
+            var currentUser = LoginHandler.CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {
@@ -53,9 +54,9 @@ namespace CRUD_System
             {
                 textBoxUserName.Text = "UNKNOWN";
             }
-            labelUserName.TextAlign = ContentAlignment.TopLeft;
-            labelUserName.BackColor = Color.LightGreen;
-            labelUserName.Text = "USER";
+            labelAlias.TextAlign = ContentAlignment.TopLeft;
+            labelAlias.BackColor = Color.LightGreen;
+            labelAlias.Text = "USER";
         }
 
         /// <summary>
@@ -67,13 +68,13 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            logout.PerformLogout();
+            loginHandler.PerformLogout();
             this.Hide(); // Hide the MainForm
         }
 
         private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            logout.PerformLogout();
+            loginHandler.PerformLogout();
         }
     }
 }

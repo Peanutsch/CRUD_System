@@ -30,7 +30,7 @@
         {
             textBoxUserName = new TextBox();
             buttonLOGOUT = new Button();
-            labelUserName = new Label();
+            labelAlias = new Label();
             UserControl = new ADMINMainControl();
             SuspendLayout();
             // 
@@ -56,16 +56,16 @@
             buttonLOGOUT.UseVisualStyleBackColor = false;
             buttonLOGOUT.Click += buttonLOGOUT_Click;
             // 
-            // labelUserName
+            // labelAlias
             // 
-            labelUserName.AutoSize = true;
-            labelUserName.BackColor = Color.FromArgb(128, 255, 128);
-            labelUserName.Location = new Point(124, 15);
-            labelUserName.Name = "labelUserName";
-            labelUserName.Size = new Size(58, 18);
-            labelUserName.TabIndex = 3;
-            labelUserName.Text = "ADMIN";
-            labelUserName.TextAlign = ContentAlignment.TopCenter;
+            labelAlias.AutoSize = true;
+            labelAlias.BackColor = Color.FromArgb(128, 255, 128);
+            labelAlias.Location = new Point(124, 15);
+            labelAlias.Name = "labelUserName";
+            labelAlias.Size = new Size(58, 18);
+            labelAlias.TabIndex = 3;
+            labelAlias.Text = "ADMIN";
+            labelAlias.TextAlign = ContentAlignment.TopCenter;
             //
             // UserControl
             // 
@@ -81,7 +81,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(1260, 512);
-            Controls.Add(labelUserName);
+            Controls.Add(labelAlias);
             Controls.Add(buttonLOGOUT);
             Controls.Add(textBoxUserName);
             Controls.Add(UserControl);
@@ -99,9 +99,9 @@
 
         #endregion
 
-        private TextBox textBoxUserName;
-        private Button buttonLOGOUT;
-        private Label labelUserName;
-        private ADMINMainControl UserControl;
+        public TextBox textBoxUserName;
+        public Button buttonLOGOUT;
+        public Label labelAlias;
+        public ADMINMainControl UserControl;
     }
 }
