@@ -23,8 +23,10 @@ namespace CRUD_System
             Date = DateTime.Now.Date,
             Time = DateTime.Now
         };
-        #endregion
+        #endregion Initialize DateTime
         #endregion PROPERTIES
+
+        #region CONSTRUCTOR
         /// <summary>
         /// Constructor. Initializes the components for the LoginForm.
         /// </summary>
@@ -34,12 +36,15 @@ namespace CRUD_System
 
             EnterKey(); //Initialize Key.Enter
         }
+        #endregion CONSTRUCTOR
 
+        #region FORM INTERFACE
         private void LoginForm_Load(object sender, EventArgs e)
         {
             // Set focus ActiveControl on loginButton
             this.ActiveControl = checkBoxTogglePSW;
         }
+
 
         /// <summary>
         /// Enables the password input box when the username input box has text.
@@ -130,5 +135,6 @@ namespace CRUD_System
         {
             //
         }
+        #endregion FORM INTERFACE
     }
 }

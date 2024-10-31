@@ -24,6 +24,8 @@ namespace CRUD_System
         readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
 
+        ControlsHandler controlsHandler = new ControlsHandler();
+
         bool editMode = false;
         bool userSelected = false;
         bool isAdmin = false;
@@ -121,12 +123,14 @@ namespace CRUD_System
 
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
-            Open_CreateNewPasswordForm();
+            //Open_CreateNewPasswordForm();
+            controlsHandler.Open_CreateNewPasswordForm();
+
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region METHODS MANAGEMENT CONTROLADMIN
-
+        /*
         public void Open_CreateNewPasswordForm()
         {
             // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the CreateNewPassWordForm method.
@@ -146,6 +150,7 @@ namespace CRUD_System
                 MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        */
 
         public void GenerateNewPassword()
         {

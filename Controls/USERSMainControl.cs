@@ -74,7 +74,8 @@ namespace CRUD_System
         {
             PerformActionIfUserSelected(() =>
             {
-                Open_CreateNewPasswordForm();
+                ControlsHandler controlsHandler = new ControlsHandler();
+                controlsHandler.Open_CreateNewPasswordForm();
             });
         }
 

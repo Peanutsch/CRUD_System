@@ -104,13 +104,13 @@ namespace CRUD_System.Handlers
 
                 if (isAdmin)
                 {
-                    var adminForm = new ADMINMainForm();
+                    ADMINMainForm adminForm = new ADMINMainForm();
                     DisplayUserAlias(adminForm, isAdmin); // Pass adminForm, isAdmin to DisplayUserAlias
                     adminForm.ShowDialog(); // Open adminForm
                 }
                 else
                 {
-                    var usersForm = new USERSMainForm();
+                    USERSMainForm usersForm = new USERSMainForm();
                     DisplayUserAlias(usersForm, !isAdmin); // Pass usersForm, !isAdmin to DisplayUserAlias
                     usersForm.ShowDialog(); // Open usersForm
                 }
