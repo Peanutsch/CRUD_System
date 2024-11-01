@@ -21,10 +21,12 @@ namespace CRUD_System
         readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
 
-        ADMINMainControl adminMethods = new ADMINMainControl();
+        ADMINMainControl adminMainControl = new ADMINMainControl();
+        ControlsHandler controlsHandler = new ControlsHandler();
+        MessageBoxes message = new MessageBoxes();
 
         bool editMode = false;
-        bool userSelected = false;
+        //bool userSelected = false;
 
         #region Initialize DateTime for logging
         LogEntryActions log = new LogEntryActions
@@ -62,52 +64,27 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnEditUserDetails_Click(object sender, EventArgs e)
         {
-            PerformActionIfUserSelected(() =>
-            {
-                // Toggle edit mode
-                editMode = !editMode;
-                InterfaceEditMode();
-            });
+            controlsHandler.PerformActionIfUserSelected(
+                () =>   {
+                        // Toggle editMode
+                        editMode = !editMode;
+                        InterfaceEditMode();
+                        },
+                () => message.MessageInvalidNoUserSelected());
         }
 
         private void ChangePassword_Click(object sender, EventArgs e)
         {
-            PerformActionIfUserSelected(() =>
+            controlsHandler.PerformActionIfUserSelected(() => 
             {
-                ControlsHandler controlsHandler = new ControlsHandler();
                 controlsHandler.Open_CreateNewPasswordForm();
             });
+            
         }
 
         #endregion BUTTONS
 
         #region METHODS MANAGEMENT CONTROL USER
-        /// <summary>
-        /// Ignores BTN_click action when no user is selected 
-        /// (btnEditUserDetails_Click, btnDeleteUser_Click, btnGeneratePSW_Click)
-        /// </summary>
-        public void PerformActionIfUserSelected(Action action)
-        {
-            if (userSelected)
-            {
-                action(); // Execute the action if a user is selected
-            }
-            else
-            {
-                MessageBox.Show("Please select a user first."); // Feedback if no user is selected
-            }
-        }
-
-        public void Open_CreateNewPasswordForm()
-        {
-            this.Hide();
-
-            CreateNewPassword_Form createNewPassword = new CreateNewPassword_Form();
-            createNewPassword.ShowDialog();
-
-            // Show the main controls form again after createNewPassword is closed
-            this.Show();
-        }
 
         public void FillTextboxes(string[] userDetailsArray)
         {
@@ -138,8 +115,8 @@ namespace CRUD_System
                 var userLines = File.ReadAllLines(dataUsers).ToList();
                 var loginLines = File.ReadAllLines(dataLogin).ToList();
                 // Find user index
-                int userIndex = adminMethods.FindUserIndexByAlias(userLines, loginLines, currentUser);
-                int loginIndex = adminMethods.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                int userIndex = adminMainControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                int loginIndex = adminMainControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
 
                 if (userIndex >= 0)
                 {
@@ -195,7 +172,6 @@ namespace CRUD_System
         public void UpdateUserDetails(List<string> userLines, int userIndex)
         {
             string currentUserDetails = userLines[userIndex].Trim();
-            //Debug.WriteLine($"Current User Details: {currentUserDetails}");
             userLines[userIndex] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
             File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
             Debug.WriteLine($"After Update: {userLines[userIndex]}");
@@ -215,7 +191,7 @@ namespace CRUD_System
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                var userIndex = adminMethods.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                var userIndex = adminMainControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
                 var userDetailsArray = userLines[userIndex].Split(',');
 
                 UserDetails userDetails = new UserDetails(userDetailsArray);
@@ -236,9 +212,8 @@ namespace CRUD_System
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (listBoxUser.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
-                // Set userSelected on true
-                userSelected = true;
-
+                //userSelected = true; // Set userSelected on true
+                controlsHandler.UserSelected = true; // Sync selection state with ControlsHandler
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 

@@ -95,6 +95,7 @@ namespace CRUD_System
                     e.Handled = true; // Prevent the Enter key from inserting a new line
                     e.SuppressKeyPress = true; // Prevent the "ding" sound when Enter is pressed
 
+                    this.Hide();
                     // Validate username and password, and display appropriate message
                     loginHandler.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
                     this.Close();
@@ -109,6 +110,7 @@ namespace CRUD_System
         /// </summary>
         private void LoginButton_Click(object sender, EventArgs e)
         {
+            this.Hide();
             // Validate username and password, and display appropriate message
             loginHandler.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
             this.Close();

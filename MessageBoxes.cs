@@ -11,6 +11,7 @@ namespace CRUD_System
     /// </summary>
     internal class MessageBoxes
     {
+        #region CONFIRM
         public DialogResult MessageBoxConfirmNewUser(string alias)
         {
             return MessageBox.Show($"Please confirm to SAVE new user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
@@ -30,7 +31,9 @@ namespace CRUD_System
         {
             return MessageBox.Show($"Please confirm to DELETE user {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
         }
+        #endregion CONFIRM
 
+        #region SUCCES
         public DialogResult MessageUpdateSucces()
         {
             return MessageBox.Show("User Details updated successfully!", "Succes", MessageBoxButtons.OK);
@@ -40,7 +43,14 @@ namespace CRUD_System
         {
             return MessageBox.Show("User deleted successfully!", "Succes", MessageBoxButtons.OK);
         }
+        #endregion SUCCES
 
+        #region INVALID
+        public DialogResult MessageInvalidNoUserSelected()
+        {
+            return MessageBox.Show("Please select a user first");
+        }
+            
         public DialogResult MessageInvalidInput()
         {
             return MessageBox.Show("Invalid input for Name and/or Surname");
@@ -64,6 +74,7 @@ namespace CRUD_System
         {
             return MessageBox.Show("Input password and confirmation password are not the same!");
         }
+        #endregion INVALID
     }
 }
 

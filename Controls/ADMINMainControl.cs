@@ -25,9 +25,10 @@ namespace CRUD_System
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
 
         ControlsHandler controlsHandler = new ControlsHandler();
+        MessageBoxes message = new MessageBoxes();
 
         bool editMode = false;
-        bool userSelected = false;
+        //bool userSelected = false;
         bool isAdmin = false;
 
         #region Initialize DateTime for logging
@@ -56,12 +57,13 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnEditUserDetails_Click(object sender, EventArgs e)
         {
-            PerformActionIfUserSelected(() =>
+            controlsHandler.PerformActionIfUserSelected(() =>  
             {
                 // Toggle edit mode
                 editMode = !editMode;
                 InterfaceEditMode();
-            });
+             },
+             () => message.MessageInvalidNoUserSelected());
         }
 
         /// <summary>
@@ -81,10 +83,11 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnDeleteUser_Click(object sender, EventArgs e)
         {
-            PerformActionIfUserSelected(() =>
+            controlsHandler.PerformActionIfUserSelected(() =>
             {
                 DeleteUser(); // Perform delete action only if a user is selected
-            });
+            },
+             () => message.MessageInvalidNoUserSelected());
         }
 
         /// <summary>
@@ -104,10 +107,11 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnGeneratePassword_Click(object sender, EventArgs e)
         {
-            PerformActionIfUserSelected(() =>
+            controlsHandler.PerformActionIfUserSelected(() =>
             {
                 GenerateNewPassword();
-            });
+            },
+             () => message.MessageInvalidNoUserSelected());
         }
 
         /// <summary>
@@ -123,35 +127,11 @@ namespace CRUD_System
 
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
-            //Open_CreateNewPasswordForm();
             controlsHandler.Open_CreateNewPasswordForm();
-
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region METHODS MANAGEMENT CONTROLADMIN
-        /*
-        public void Open_CreateNewPasswordForm()
-        {
-            // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the CreateNewPassWordForm method.
-            // Check if ParentForm is not null and is of type MainFormADMIN
-            if (this.ParentForm is ADMINMainForm)
-            {
-                this.ParentForm.Hide();
-
-                CreateNewPassword_Form createNewPassword = new CreateNewPassword_Form();
-                createNewPassword.ShowDialog();
-
-                // Show the main controls form again after createNewPassword is closed
-                this.ParentForm.Show();
-            }
-            else
-            {
-                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        */
-
         public void GenerateNewPassword()
         {
             var currentUser = LoginHandler.CurrentUser;
@@ -223,21 +203,7 @@ namespace CRUD_System
             }
         }
 
-        /// <summary>
-        /// Ignores BTN_click action when no user is selected 
-        /// (btnEditUserDetails_Click, btnDeleteUser_Click, btnGeneratePSW_Click)
-        /// </summary>
-        public void PerformActionIfUserSelected(Action action)
-        {
-            if (userSelected)
-            {
-                action(); // Execute the action if a user is selected
-            }
-            else
-            {
-                MessageBox.Show("Please select a user first."); // Feedback if no user is selected
-            }
-        }
+
 
         /// <summary>
         /// Finds the index of a user in the CSV data by alias.
@@ -455,8 +421,8 @@ namespace CRUD_System
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
-                // Set userSelected on true
-                userSelected = true;
+                //userSelected = true; // Set userSelected on true
+                controlsHandler.UserSelected = true; // Sync selection state with ControlsHandler
 
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
