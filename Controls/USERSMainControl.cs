@@ -54,7 +54,16 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            SaveEditUserDetails();
+            UserRepository userRepository = new UserRepository();
+            var userLines = File.ReadAllLines(dataUsers).ToList();
+            var loginLines = File.ReadAllLines(dataLogin).ToList();
+            int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            if (userIndex != -1)
+            {
+                userRepository.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
+            }
+            editMode = false; // Close editMode
+            ReloadListBoxUser(userIndex); // Reload interface
         }
 
         /// <summary>
@@ -101,80 +110,6 @@ namespace CRUD_System
             txtPhonenumber.Text = userDetails.PhoneNumber;
         }
 
-        /// <summary>
-        /// Method for save changes user details
-        /// </summary>
-        public void SaveEditUserDetails()
-        {
-            var currentUser = LoginHandler.CurrentUser;
-
-            if (!string.IsNullOrEmpty(currentUser))
-            {
-                // Read lines from data_users.csv
-                var userLines = File.ReadAllLines(dataUsers).ToList();
-                var loginLines = File.ReadAllLines(dataLogin).ToList();
-                // Find user index
-                int userIndex = adminMainControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
-                int loginIndex = adminMainControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
-
-                if (userIndex >= 0)
-                {
-                    var userDetails = userLines[userIndex].Split(',');
-                    var loginDetails = loginLines[userIndex].Split(",");
-
-                    // MessageBox YesNo to confirm changes
-                    MessageBoxes messageBoxes = new MessageBoxes();
-                    DialogResult dr = messageBoxes.MessageBoxConfirmToSAVEChanges(userDetails[2]);
-
-                    if (dr != DialogResult.Yes)
-                    {
-                        return;
-                    }
-
-                    UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
-
-                    if (!string.IsNullOrEmpty(currentUser))
-                    {
-                        Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Edited details");
-
-                        string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Edited details";
-                        File.AppendAllText(logAction, newLog + Environment.NewLine);
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details");
-
-                        string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Edited details";
-                        File.AppendAllText(logAction, newLog + Environment.NewLine);
-                    }
-
-                    // MessageBox Succes
-                    messageBoxes.MessageUpdateSucces();
-
-                    FillTextboxes(userDetails); // Reload txtboxes
-                    ReloadListBoxUser(userIndex); // Reload interface
-                }
-                else
-                {
-                    // Close editMode
-                    editMode = false;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Updates the user details at the specified index in the CSV data.
-        /// Writes the updated details back to data_users.csv.
-        /// </summary>
-        /// <param name="userLines">The list of lines from data_users.csv.</param>
-        /// <param name="userIndex">The index of the user to update.</param>
-        public void UpdateUserDetails(List<string> userLines, int userIndex)
-        {
-            string currentUserDetails = userLines[userIndex].Trim();
-            userLines[userIndex] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
-            File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
-            Debug.WriteLine($"After Update: {userLines[userIndex]}");
-        }
         #endregion METHODS MANAGEMENT CONTROL USER
 
         #region LISTBOX

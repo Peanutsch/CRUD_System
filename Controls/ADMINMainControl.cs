@@ -81,7 +81,9 @@ namespace CRUD_System
             {
                 userRepository.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
             }
-            //SaveEditUserDetails();
+            editMode = false;
+            InterfaceEditMode();
+            ReloadListBoxAdmin(userIndex); // Reload listbox
         }
 
         /// <summary>
