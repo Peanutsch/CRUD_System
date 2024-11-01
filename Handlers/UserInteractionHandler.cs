@@ -1,12 +1,13 @@
-﻿using System;
+﻿using CRUD_System.FileHandlers;
+using System;
 
 namespace CRUD_System.Handlers
 {
-    internal class ControlsHandler
+    internal class UserInteractionHandler
     {
         public bool UserSelected { get; set; } // Property to store selection state
 
-        public ControlsHandler()
+        public UserInteractionHandler()
         {
             //
         }

@@ -69,7 +69,7 @@ namespace CRUD_System
         }
         public string GeneratePSW()
         {
-            return PasswordManager.GenerateUserPassword();
+            return PasswordManager.PasswordGenerator();
         }
 
 

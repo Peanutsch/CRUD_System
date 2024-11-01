@@ -24,7 +24,7 @@ namespace CRUD_System
         readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
 
-        ControlsHandler controlsHandler = new ControlsHandler();
+        UserInteractionHandler userInteractionHandler = new UserInteractionHandler();
         MessageBoxes message = new MessageBoxes();
 
         bool editMode = false;
@@ -57,7 +57,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnEditUserDetails_Click(object sender, EventArgs e)
         {
-            controlsHandler.PerformActionIfUserSelected(() =>  
+            userInteractionHandler.PerformActionIfUserSelected(() =>  
             {
                 // Toggle edit mode
                 editMode = !editMode;
@@ -73,7 +73,15 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            SaveEditUserDetails();
+            UserRepository userRepository = new UserRepository();
+            var userLines = File.ReadAllLines(dataUsers).ToList();
+            var loginLines = File.ReadAllLines(dataLogin).ToList();
+            int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            if (userIndex != -1)
+            {
+                userRepository.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
+            }
+            //SaveEditUserDetails();
         }
 
         /// <summary>
@@ -83,7 +91,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnDeleteUser_Click(object sender, EventArgs e)
         {
-            controlsHandler.PerformActionIfUserSelected(() =>
+            userInteractionHandler.PerformActionIfUserSelected(() =>
             {
                 DeleteUser(); // Perform delete action only if a user is selected
             },
@@ -107,9 +115,10 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnGeneratePassword_Click(object sender, EventArgs e)
         {
-            controlsHandler.PerformActionIfUserSelected(() =>
+            UserProfileManager editHandler = new UserProfileManager();
+            userInteractionHandler.PerformActionIfUserSelected(() =>
             {
-                GenerateNewPassword();
+                editHandler.GenerateNewPassword(txtAlias.Text, chkIsAdmin.Checked);
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -127,11 +136,12 @@ namespace CRUD_System
 
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
-            controlsHandler.Open_CreateNewPasswordForm();
+            userInteractionHandler.Open_CreateNewPasswordForm();
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region METHODS MANAGEMENT CONTROLADMIN
+        /*
         public void GenerateNewPassword()
         {
             var currentUser = LoginHandler.CurrentUser;
@@ -153,7 +163,7 @@ namespace CRUD_System
                 return;
             }
 
-            string generatedPassword = PasswordManager.GenerateUserPassword();
+            string generatedPassword = PasswordManager.PasswordGenerator();
             //txtPassword.Text = generatedPassword;
 
             loginLines[userIndex] = $"{loginDetails[0]},{generatedPassword},{isAdmin}";
@@ -178,6 +188,7 @@ namespace CRUD_System
                 File.AppendAllText(logAction, newLog + Environment.NewLine);
             }
         }
+        */
 
         /// <summary>
         /// Hides MainForm, Opens CreateForm
@@ -202,7 +213,6 @@ namespace CRUD_System
                 MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
 
         /// <summary>
@@ -264,6 +274,7 @@ namespace CRUD_System
             Debug.WriteLine($"After Update: {loginLines[userIndex]}");
         }
 
+        /*
         /// <summary>
         /// Method for save changes user details
         /// </summary>
@@ -323,7 +334,7 @@ namespace CRUD_System
                 editMode = false;
             }
         }
-
+        */
         /// <summary>
         /// Method for deleting user from data_users.csv and data_log.csv
         /// </summary>
@@ -422,7 +433,7 @@ namespace CRUD_System
             if (listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
                 //userSelected = true; // Set userSelected on true
-                controlsHandler.UserSelected = true; // Sync selection state with ControlsHandler
+                userInteractionHandler.UserSelected = true; // Sync selection state with ControlsHandler
 
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses

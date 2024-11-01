@@ -21,7 +21,7 @@ namespace CRUD_System.Handlers
         /// </summary>
         /// <param name="length">The length of the password to be generated.</param>
         /// <returns>A random password string.</returns>
-        public static string GenerateUserPassword(int length = 12)
+        public static string PasswordGenerator(int length = 12)
         {
             const string lowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
             const string upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

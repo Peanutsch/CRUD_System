@@ -22,7 +22,7 @@ namespace CRUD_System
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
 
         ADMINMainControl adminMainControl = new ADMINMainControl();
-        ControlsHandler controlsHandler = new ControlsHandler();
+        UserInteractionHandler userInteractionHandler = new UserInteractionHandler();
         MessageBoxes message = new MessageBoxes();
 
         bool editMode = false;
@@ -64,7 +64,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnEditUserDetails_Click(object sender, EventArgs e)
         {
-            controlsHandler.PerformActionIfUserSelected(
+            userInteractionHandler.PerformActionIfUserSelected(
                 () =>   {
                         // Toggle editMode
                         editMode = !editMode;
@@ -75,13 +75,12 @@ namespace CRUD_System
 
         private void ChangePassword_Click(object sender, EventArgs e)
         {
-            controlsHandler.PerformActionIfUserSelected(() => 
+            userInteractionHandler.PerformActionIfUserSelected(() => 
             {
-                controlsHandler.Open_CreateNewPasswordForm();
+                userInteractionHandler.Open_CreateNewPasswordForm();
             });
             
         }
-
         #endregion BUTTONS
 
         #region METHODS MANAGEMENT CONTROL USER
@@ -213,7 +212,7 @@ namespace CRUD_System
             if (listBoxUser.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
                 //userSelected = true; // Set userSelected on true
-                controlsHandler.UserSelected = true; // Sync selection state with ControlsHandler
+                userInteractionHandler.UserSelected = true; // Sync selection state with ControlsHandler
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
