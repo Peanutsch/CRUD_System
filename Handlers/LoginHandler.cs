@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +15,7 @@ namespace CRUD_System.Handlers
     public class LoginHandler
     {
         #region PROPERTIES
-        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_login.csv");
-        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
+        FilePaths path = new FilePaths();
 
         public static string? CurrentUser { get; set; }
 
@@ -98,9 +97,10 @@ namespace CRUD_System.Handlers
                 UsersOnline.Add(CurrentUser); // Add user to list UsersOnline
 
                 bool isAdmin = IsAdmin(inputUserName, inputUserPSW);
-                string logEntry = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{CurrentUser.ToUpper()},Logged IN";
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{CurrentUser.ToUpper()},Logged IN";
                 Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{CurrentUser.ToUpper()}] Logged IN");
-                File.AppendAllText(logAction, logEntry + Environment.NewLine);
+                //File.AppendAllText(logAction, logEntry + Environment.NewLine);
+                path.AppendToLog(newLog);
 
                 if (isAdmin)
                 {
@@ -156,7 +156,8 @@ namespace CRUD_System.Handlers
                 UsersOnline.Remove(currentUser); // Remove user from List UsersOnline
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
 
                 CurrentUser = null;
             }

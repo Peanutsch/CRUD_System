@@ -65,7 +65,8 @@ namespace CRUD_System.Handlers
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Updated user details for {alias.ToUpper()}");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Updated user details for {alias.ToUpper()}";
-                File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                //File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
 
                 // Display a success message to the user
                 message.MessageUpdateSucces();
@@ -103,7 +104,8 @@ namespace CRUD_System.Handlers
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Generated new password for {currentAlias.ToUpper()}");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Generated new password for {currentAlias.ToUpper()}";
-                File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                //File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
         }
 
@@ -119,14 +121,16 @@ namespace CRUD_System.Handlers
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] Changed password for [{alias.ToUpper()}]");
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Changed password for user [{alias.ToUpper()}]";
-                File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                //File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
             else
             {
                 // Log the action as unknown if no current user is logged in
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN] Changed password for [{alias.ToUpper()}]");
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Changed password for user [{alias.ToUpper()}]";
-                File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                //File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
         }
 
@@ -199,14 +203,16 @@ namespace CRUD_System.Handlers
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Deleted user [{aliasToDelete.ToUpper()}]");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Deleted user [{aliasToDelete.ToUpper()}]";
-                File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                //File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
             else
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Deleted user [{aliasToDelete.ToUpper()}]");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Deleted user [{aliasToDelete.ToUpper()}]";
-                File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                //File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
             messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
             userInterface.ReloadListBoxAdmin(userIndex);

@@ -20,9 +20,7 @@ namespace CRUD_System
     public partial class ADMINMainControl : UserControl
     {
         #region PROPERTIES
-        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_login.csv");
-        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
+        FilePaths path = new FilePaths();
 
         UserInteractionHandler userInteractionHandler = new UserInteractionHandler();
         MessageBoxes message = new MessageBoxes();
@@ -74,8 +72,8 @@ namespace CRUD_System
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
             UserRepository userRepository = new UserRepository();
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
+            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
+            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             if (userIndex != -1)
             {
@@ -180,14 +178,16 @@ namespace CRUD_System
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] Changed password for [{loginDetails[0].ToUpper()}]");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Changed password for user [{loginDetails[0].ToUpper()}]";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
             else
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN] Changed password for [{loginDetails[0].ToUpper()}]");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Changed password for user [{loginDetails[0].ToUpper()}]";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
         }
         */
@@ -252,7 +252,7 @@ namespace CRUD_System
             string currentUserDetails = userLines[userIndex].Trim();
 
             userLines[userIndex] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
-            File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
+            File.WriteAllLines(path.UserFilePath, userLines); // Write updated data back to data_users.csv
             Debug.WriteLine($"After Update: {userLines[userIndex]}");
         }
 
@@ -271,7 +271,7 @@ namespace CRUD_System
 
             loginLines[userIndex] = $"{currentAlias},{loginDetails[1]},{isAdmin}";
 
-            File.WriteAllLines(dataLogin, loginLines); // Write updated data back to data_login.csv
+            File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
 
             Debug.WriteLine($"After Update: {loginLines[userIndex]}");
         }
@@ -313,14 +313,16 @@ namespace CRUD_System
                     Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Edited details from user [{userDetails[2].ToUpper()}]");
 
                     string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Edited details from user [{userDetails[2].ToUpper()}]";
-                    File.AppendAllText(logAction, newLog + Environment.NewLine);
+                    //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                    path.AppendToLog(newLog);
                 }
                 else
                 {
                     Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details from user [{userDetails[2].ToUpper()}]");
 
                     string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Edited details from user [{userDetails[2].ToUpper()}]";
-                    File.AppendAllText(logAction, newLog + Environment.NewLine);
+                    //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                    path.AppendToLog(newLog);
                 }
 
                 MessageBoxes message = new MessageBoxes();
@@ -345,8 +347,8 @@ namespace CRUD_System
             var currentUser = LoginHandler.CurrentUser;
 
             // Read lines from data_users.csv and data_login.csv
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
+            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
+            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
 
             int userIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
 
@@ -366,27 +368,29 @@ namespace CRUD_System
             userLines = userLines.Where(line =>
                                         !line.Split(',')[2].Trim().Equals(aliasToDelete,
                                         StringComparison.OrdinalIgnoreCase)).ToList();
-            File.WriteAllLines(dataUsers, userLines);
+            File.WriteAllLines(path.UserFilePath, userLines);
 
             // Remove the user from data_login.csv using the alias
             loginLines = loginLines.Where(line =>
                                             !line.Split(',')[0].Trim().Equals(aliasToDelete,
                                             StringComparison.OrdinalIgnoreCase)).ToList();
-            File.WriteAllLines(dataLogin, loginLines);
+            File.WriteAllLines(path.LoginFilePath, loginLines);
 
             if (!string.IsNullOrEmpty(currentUser))
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Deleted user [{aliasToDelete.ToUpper()}]");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Deleted user [{aliasToDelete.ToUpper()}]";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
             else
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Deleted user [{aliasToDelete.ToUpper()}]");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Deleted user [{aliasToDelete.ToUpper()}]";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
 
             messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
@@ -401,7 +405,7 @@ namespace CRUD_System
         /// </summary>
         public void LoadUserDataListBox()
         {
-            var lines = File.ReadAllLines(dataUsers);
+            var lines = File.ReadAllLines(path.UserFilePath);
 
             listBoxAdmin.Items.Clear();
 
@@ -441,7 +445,7 @@ namespace CRUD_System
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
                 // Read user details
-                var userDetailsArray = File.ReadAllLines(dataUsers)
+                var userDetailsArray = File.ReadAllLines(path.UserFilePath)
                                       .Skip(2)
                                       .Select(line => line.Split(','))
                                       .FirstOrDefault(details => details[2] == selectedAlias);
@@ -452,7 +456,7 @@ namespace CRUD_System
                 }
 
                 // Read the lines from data_login.csv
-                var loginLines = File.ReadAllLines(dataLogin).Skip(2); // Skip the headers
+                var loginLines = File.ReadAllLines(path.LoginFilePath).Skip(2); // Skip the headers
                 var loginDetailsList = loginLines.Select(line => line.Split(',')); // Split each line into details
                 var loginDetails = loginDetailsList.FirstOrDefault(details => details[0] == selectedAlias); // Find the login details for the selected alias
 

@@ -22,7 +22,7 @@ namespace CRUD_System
         public int charToUpper = 3;
         public int charIsDigi = 3;
 
-        ADMINMainControl adminMethods = new ADMINMainControl();
+        ADMINMainControl adminControl = new ADMINMainControl();
 
         readonly FilePaths path = new FilePaths();
 
@@ -133,8 +133,8 @@ namespace CRUD_System
             if (!string.IsNullOrEmpty(currentUser))
             {
                 // Find userIndex in data_login.csv and data_users.csv
-                int userIndex = adminMethods.FindUserIndexByAlias(userLines, loginLines, currentUser);
-                int loginIndex = adminMethods.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                int userIndex = adminControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                int loginIndex = adminControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
 
                 string newPassword = inputChangePSW.Text;
                 int uppercaseCount = newPassword.Count(char.IsUpper);
@@ -184,7 +184,8 @@ namespace CRUD_System
             File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
 
             string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentAlias.ToUpper()},Changed password";
-            File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+            //File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
+            path.AppendToLog(newLog);
         }
 
         private void TxtLabelPSW()

@@ -4,14 +4,13 @@ using Microsoft.VisualBasic.Logging;
 using System.Diagnostics;
 using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using System.IO;
 
 namespace CRUD_System
 {
     public class UserRepository
     {
-        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_login.csv");
-        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
+        FilePaths path = new FilePaths();
 
         MessageBoxes message = new MessageBoxes();
 
@@ -32,7 +31,7 @@ namespace CRUD_System
                 return;
             }
 
-            File.WriteAllLines(dataUsers, userLines); // Write updated data back to data_users.csv
+            File.WriteAllLines(path.UserFilePath, userLines); // Write updated data back to data_users.csv
             Debug.WriteLine($"User Details after Update: {userLines[userIndex]}");
 
             var currentUser = LoginHandler.CurrentUser;
@@ -41,7 +40,8 @@ namespace CRUD_System
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Updated user details for {alias.ToUpper()}");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Updated user details for {alias.ToUpper()}";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
 
                 message.MessageUpdateSucces();
             }
@@ -60,7 +60,7 @@ namespace CRUD_System
                 return;
             }
             
-            File.WriteAllLines(dataLogin, loginLines); // Write updated data back to data_login.csv
+            File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
             Debug.WriteLine($"User Login after Update: {loginLines[userIndex]}");
 
             var currentUser = LoginHandler.CurrentUser;
@@ -69,7 +69,8 @@ namespace CRUD_System
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Generated new password for {currentAlias.ToUpper()}");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Generated new password for {currentAlias.ToUpper()}";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
         }
 
@@ -79,13 +80,15 @@ namespace CRUD_System
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] Changed password for [{alias.ToUpper()}]");
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Changed password for user [{alias.ToUpper()}]";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
             else
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN] Changed password for [{alias.ToUpper()}]");
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Changed password for user [{alias.ToUpper()}]";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
         }
 

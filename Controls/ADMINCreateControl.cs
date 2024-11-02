@@ -2,6 +2,7 @@
 using CRUD_System.Handlers;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -10,10 +11,7 @@ namespace CRUD_System
     public partial class ADMINCreateControl : UserControl
     {
         #region PROPERTIES
-        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_login.csv");
-        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
-
+        FilePaths path = new FilePaths();
         ADMINMainForm mainFormADMIN = new ADMINMainForm();
         MessageBoxes messageBoxes = new MessageBoxes();
 
@@ -108,10 +106,10 @@ namespace CRUD_System
             Debug.WriteLine($"New User Login: {newDataLogin}\nAlias: {isAlias} Password: {isPassword} Admin: {isAdmin}");
             string newDataUsers = $"{name},{surname},{isAlias},{address},{zipCode},{city},{email},{phoneNumber}";
             Debug.WriteLine($"New User Details: {newDataUsers}\n{name} {surname}, {isAlias}, {address}, {zipCode}, {city}, {email}, {phoneNumber}");
-
+            
             // Append to the CSV files
-            File.AppendAllText(dataLogin, newDataLogin + Environment.NewLine);
-            File.AppendAllText(dataUsers, newDataUsers + Environment.NewLine);
+            File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
+            File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
 
             MessageBox.Show($"User {isAlias} added successfully!");
 
@@ -121,7 +119,8 @@ namespace CRUD_System
                 Debug.WriteLine($"User {isAlias} added successfully!");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Created new user [{isAlias.ToUpper()}]";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
             else
             {
@@ -129,7 +128,8 @@ namespace CRUD_System
                 Debug.WriteLine($"User {isAlias} added successfully!");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Created new user [{isAlias.ToUpper()}]";
-                File.AppendAllText(logAction, newLog + Environment.NewLine);
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
             }
             // Close CreateFormADMIN, return to MainFormADMIN
             CloseCreateForm();
@@ -170,7 +170,7 @@ namespace CRUD_System
         private bool AliasExists(string alias)
         {
             // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines(dataLogin);
+            var loginLines = File.ReadAllLines(path.LoginFilePath);
 
             // Check if the alias already exists
             foreach (var line in loginLines)
