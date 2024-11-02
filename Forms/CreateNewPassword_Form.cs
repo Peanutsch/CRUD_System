@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,7 @@ namespace CRUD_System
 
         ADMINMainControl adminMethods = new ADMINMainControl();
 
-        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_login.csv");
-        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
+        readonly FilePaths path = new FilePaths();
 
         private bool isPasswordVisible = false;
 
@@ -126,8 +125,8 @@ namespace CRUD_System
 
         private void ValidatePSW()
         {
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
+            var userLines = path.ReadFileContent(path.UserFilePath);
+            var loginLines = path.ReadFileContent(path.LoginFilePath);
 
             var currentUser = LoginHandler.CurrentUser;
 
@@ -182,10 +181,10 @@ namespace CRUD_System
 
             Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentAlias.ToUpper()}]: Changed password");
 
-            File.WriteAllLines(dataLogin, loginLines); // Write updated data back to data_login.csv
+            File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
 
             string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentAlias.ToUpper()},Changed password";
-            File.AppendAllText(logAction, newLog + Environment.NewLine);
+            File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
         }
 
         private void TxtLabelPSW()

@@ -2,15 +2,15 @@
 {
     partial class ADMINMainControl
     {
-        private System.Windows.Forms.TextBox txtName;
-        private System.Windows.Forms.TextBox txtEmail;
-        private System.Windows.Forms.TextBox txtAddress;
-        private System.Windows.Forms.TextBox txtCity;
-        private System.Windows.Forms.TextBox txtAdmin;
+        public System.Windows.Forms.TextBox txtName;
+        public System.Windows.Forms.TextBox txtEmail;
+        public System.Windows.Forms.TextBox txtAddress;
+        public System.Windows.Forms.TextBox txtCity;
+        public System.Windows.Forms.TextBox txtAdmin;
         public System.Windows.Forms.ListBox listBoxAdmin;
-        private System.Windows.Forms.Button btnCreateUser;
-        private System.Windows.Forms.Button btnSaveEditUserDetails;
-        private System.Windows.Forms.Button btnDeleteUser;
+        public System.Windows.Forms.Button btnCreateUser;
+        public System.Windows.Forms.Button btnSaveEditUserDetails;
+        public System.Windows.Forms.Button btnDeleteUser;
 
         /// <summary> 
         /// Required designer variable.
@@ -269,13 +269,13 @@
         }
         #endregion
 
-        private TextBox txtSurname;
-        private TextBox txtAlias;
-        private TextBox txtZIPCode;
-        private TextBox txtPhonenumber;
-        private Button btnGeneratePSW;
-        private Button btnEditUserDetails;
-        private CheckBox chkIsAdmin;
-        private Button btnChangePassword;
+        public TextBox txtSurname;
+        public TextBox txtAlias;
+        public TextBox txtZIPCode;
+        public TextBox txtPhonenumber;
+        public Button btnGeneratePSW;
+        public Button btnEditUserDetails;
+        public CheckBox chkIsAdmin;
+        public Button btnChangePassword;
     }
 }

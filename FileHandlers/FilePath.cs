@@ -1,32 +1,35 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRUD_System.FileHandlers
 {
     public class FilePaths
     {
-        public string Users { get; private set; }
-        public string Login { get; private set; }
-        public string Log { get; private set; }
+        public string UserFilePath { get; private set; }
+        public string LoginFilePath { get; private set; }
+        public string LogEventFilePath { get; private set; }
 
         public FilePaths()
         {
-            string rootPath = RootPath.GetRootPath();
-            if (!string.IsNullOrEmpty(rootPath))
+            string rootPath = RootPath.GetRootPath() ?? string.Empty;
+
+            UserFilePath = Path.Combine(rootPath, "FilesUserDetails", "data_users.csv");
+            LoginFilePath = Path.Combine(rootPath, "FilesUserDetails", "data_login.csv");
+            LogEventFilePath = Path.Combine(rootPath, "FilesUserDetails", "logEvents.csv");
+        }
+
+        public List<string> ReadFileContent(string filePath)
+        {
+            return File.Exists(filePath) ? File.ReadAllLines(filePath).ToList() : new List<string>();
+        }
+
+        public void AppendToLog(string newLog)
+        {
+            if (!string.IsNullOrEmpty(LogEventFilePath))
             {
-                Users = Path.Combine(rootPath, "FilesUserDetails", "data_users.csv");
-                Login = Path.Combine(rootPath, "FilesUserDetails", "data_login.csv");
-                Log = Path.Combine(rootPath, "FilesUserDetails", "logEvents.csv");
-            }
-            else
-            {
-                // Fallback of error handling indien nodig
-                Users = string.Empty;
-                Login = string.Empty;
-                Log = string.Empty;
+                File.AppendAllText(LogEventFilePath, newLog + Environment.NewLine);
             }
         }
     }

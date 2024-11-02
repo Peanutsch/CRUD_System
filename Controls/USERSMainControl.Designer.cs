@@ -4,16 +4,14 @@ namespace CRUD_System
 {
     partial class USERSMainControl
     {
-        private System.Windows.Forms.TextBox txtName;
-        private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.TextBox txtEmail;
-        private System.Windows.Forms.TextBox txtAddress;
-        private System.Windows.Forms.TextBox txtCity;
-        private System.Windows.Forms.Button btnCreateUser;
-        private System.Windows.Forms.Button btnSaveEditUserDetails;
-        private System.Windows.Forms.Button btnDeleteUser;
-
-        private ADMINMainControl mainControlAdmin = new ADMINMainControl();
+        public System.Windows.Forms.TextBox txtName;
+        public System.Windows.Forms.TextBox txtPassword;
+        public System.Windows.Forms.TextBox txtEmail;
+        public System.Windows.Forms.TextBox txtAddress;
+        public System.Windows.Forms.TextBox txtCity;
+        public System.Windows.Forms.Button btnCreateUser;
+        public System.Windows.Forms.Button btnSaveEditUserDetails;
+        public System.Windows.Forms.Button btnDeleteUser;
 
         /// <summary> 
         /// Required designer variable.
@@ -261,14 +259,14 @@ namespace CRUD_System
         }
         #endregion
 
-        private TextBox txtSurname;
-        private TextBox txtAlias;
-        private TextBox txtZIPCode;
-        private TextBox txtPhonenumber;
-        private Button btnGeneratePSW;
-        private Button btnEditUserDetails;
-        private ListBox listBoxUser;
-        private ComboBox comboBoxStatus;
-        private Button btnChangePassword;
+        public TextBox txtSurname;
+        public TextBox txtAlias;
+        public TextBox txtZIPCode;
+        public TextBox txtPhonenumber;
+        public Button btnGeneratePSW;
+        public Button btnEditUserDetails;
+        public ListBox listBoxUser;
+        public ComboBox comboBoxStatus;
+        public Button btnChangePassword;
     }
 }
