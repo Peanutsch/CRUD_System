@@ -14,7 +14,7 @@ namespace CRUD_System
         #region CONFIRM
         public DialogResult MessageBoxConfirmNewUser(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE new user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE new account {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
 
         public DialogResult MessageBoxConfirmToSAVEChanges(string alias)
@@ -34,7 +34,7 @@ namespace CRUD_System
 
         public DialogResult MessageBoxConfirmToDELETE(string alias)
         {
-            return MessageBox.Show($"Please confirm to DELETE user {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to DELETE account {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
         }
         #endregion CONFIRM
 
@@ -46,7 +46,7 @@ namespace CRUD_System
 
         public DialogResult MessageDeleteSucces()
         {
-            return MessageBox.Show("User deleted successfully!", "Succes", MessageBoxButtons.OK);
+            return MessageBox.Show("Account deleted successfully!", "Succes", MessageBoxButtons.OK);
         }
         #endregion SUCCES
 
