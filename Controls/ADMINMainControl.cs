@@ -22,6 +22,7 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
+        UserInterface userInterface;
         Repository userRespository = new Repository();
         ProfileManager userProfileManager = new ProfileManager();
         InteractionHandler interactionHandler = new InteractionHandler();
@@ -41,10 +42,12 @@ namespace CRUD_System
         #endregion PROPERTIES
 
         #region Constructor
-        public ADMINMainControl()
+        public ADMINMainControl(UserInterface? userInterface = null)
         {
             InitializeComponent();
 
+            // Assign the UserInterface field; if no instance is provided, create a new UserInterface instance
+            this.userInterface = userInterface ?? new UserInterface(this);
             LoadUserDataListBox(); // Load data_users.csv for display in listbox
         }
         #endregion CONSTRUCTOR
@@ -59,10 +62,13 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>  
             {
+
                 // Toggle edit mode
                 editMode = !editMode;
+                //userInterface.EditMode = ToggleEditMode();
                 InterfaceEditMode();
-             },
+                //userInterface.InterfaceEditModeADMIN();
+            },
              () => message.MessageInvalidNoUserSelected());
         }
 
@@ -145,6 +151,15 @@ namespace CRUD_System
         {
             interactionHandler.Open_CreateNewPasswordForm();
         }
+
+        private bool ToggleEditMode()
+        {
+            editMode = !editMode;
+
+            return editMode;
+        }
+
+
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region METHODS MANAGEMENT CONTROLADMIN

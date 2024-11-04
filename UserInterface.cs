@@ -11,10 +11,10 @@ namespace CRUD_System
 {
     public class UserInterface
     {
+        public bool EditMode { get; set; }
+
         readonly FilePaths path = new FilePaths();
         private readonly ADMINMainControl adminControl;
-        public bool editMode;
-        
 
         public UserInterface(ADMINMainControl adminControl)
         {
@@ -24,16 +24,15 @@ namespace CRUD_System
         #region TEXTBOXES
         public void EmptyTextBoxesADMIN()
         {
-            ADMINMainControl mainControl = new ADMINMainControl();
             // Refill textboxes with empty values
-            mainControl.txtName.Text = string.Empty;
-            mainControl.txtSurname.Text = string.Empty;
-            mainControl.txtAlias.Text = string.Empty;
-            mainControl.txtAddress.Text = string.Empty;
-            mainControl.txtZIPCode.Text = string.Empty;
-            mainControl.txtCity.Text = string.Empty;
-            mainControl.txtEmail.Text = string.Empty;
-            mainControl.txtPhonenumber.Text = string.Empty;
+            adminControl.txtName.Text = string.Empty;
+            adminControl.txtSurname.Text = string.Empty;
+            adminControl.txtAlias.Text = string.Empty;
+            adminControl.txtAddress.Text = string.Empty;
+            adminControl.txtZIPCode.Text = string.Empty;
+            adminControl.txtCity.Text = string.Empty;
+            adminControl.txtEmail.Text = string.Empty;
+            adminControl.txtPhonenumber.Text = string.Empty;
         }
         #endregion TEXTBOXES
 
@@ -43,11 +42,9 @@ namespace CRUD_System
         /// </summary>
         public void LoadUserDataListBox()
         {
-            ADMINMainControl mainControl = new ADMINMainControl();
-
             var lines = File.ReadAllLines(path.UserFilePath);
 
-            mainControl.listBoxAdmin.Items.Clear();
+            adminControl.listBoxAdmin.Items.Clear();
 
             foreach (var line in lines.Skip(2)) // Skip Header and details Admin
             {
@@ -61,7 +58,7 @@ namespace CRUD_System
                 string listItem = $"{userDetails.Name} {userDetails.Surname} ({userDetails.Alias}) | {userDetails.Email} | {userDetails.PhoneNumber}";
 
                 // Add the formatted string to the listBox
-                mainControl.listBoxAdmin.Items.Add(listItem);
+                adminControl.listBoxAdmin.Items.Add(listItem);
             }
         }
 
@@ -71,62 +68,53 @@ namespace CRUD_System
         /// <param name="userIndex">The index of the updated user.</param>
         public void ReloadListBoxAdmin(int userIndex)
         {
-            ADMINMainControl mainControl = new ADMINMainControl();
-            if (userIndex >= 0 && userIndex < mainControl.listBoxAdmin.Items.Count)
+            if (userIndex >= 0 && userIndex < adminControl.listBoxAdmin.Items.Count)
             {
-                mainControl.Refresh();
+                adminControl.Refresh();
             }
 
             // Clear and reload listbox
-            mainControl.listBoxAdmin.Items.Clear();
+            adminControl.listBoxAdmin.Items.Clear();
             LoadUserDataListBox();
 
             // Reset editMode to false after saving and reload interface
-            //InterfaceEditModeADMIN();
+            InterfaceEditModeADMIN();
         }
         #endregion LISTBOX ADMIN
 
         #region EDITMODE DISPLAY
-        public void ToggleEditMode()
-        {
-            editMode = !editMode;
-            InterfaceEditModeADMIN();
-        }
 
         public void InterfaceEditModeADMIN()
         {
-            // Gebruik editMode vanuit de UserInterface
-            ADMINMainControl mainControl = new ADMINMainControl();
-
             // Toggle de text voor de edit-knop
-            mainControl.btnEditUserDetails.Text = editMode ? "Cancel" : "Edit User";
+            adminControl.btnEditUserDetails.Text = EditMode ? "Cancel" : "Edit User";
 
             // Wijzig de achtergrondkleur
-            mainControl.BackColor = editMode ? Color.Orange : SystemColors.ActiveCaption;
+            adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;
 
             // Pas de zichtbaarheid en enabled-status van knoppen en velden aan
-            mainControl.btnSaveEditUserDetails.Visible = editMode ? true : false;
-            mainControl.btnSaveEditUserDetails.BackColor = Color.LightGreen;
+            adminControl.btnSaveEditUserDetails.Visible = EditMode ? true : false;
+            adminControl.btnSaveEditUserDetails.BackColor = Color.LightGreen;
 
-            mainControl.chkIsAdmin.Visible = editMode ? true : false;
-            mainControl.chkIsAdmin.Enabled = editMode ? true : false;
+            adminControl.chkIsAdmin.Visible = EditMode ? true : false;
+            adminControl.chkIsAdmin.Enabled = EditMode ? true : false;
 
             // Maak tekstvakken in of uitgeschakeld op basis van editMode
-            mainControl.txtName.Enabled = editMode ? true : false;
-            mainControl.txtSurname.Enabled = editMode ? true : false;
-            mainControl.txtAlias.Enabled = editMode ? true : false;
-            mainControl.txtAddress.Enabled = editMode ? true : false;
-            mainControl.txtZIPCode.Enabled = editMode ? true : false;
-            mainControl.txtCity.Enabled = editMode ? true : false;
-            mainControl.txtEmail.Enabled = editMode ? true : false;
-            mainControl.txtPhonenumber.Enabled = editMode ? true : false;
+            adminControl.txtName.Enabled = EditMode ? true : false;
+            adminControl.txtSurname.Enabled = EditMode ? true : false;
+            adminControl.txtAlias.Enabled = EditMode ? true : false;
+            adminControl.txtAddress.Enabled = EditMode ? true : false;
+            adminControl.txtZIPCode.Enabled = EditMode ? true : false;
+            adminControl.txtCity.Enabled = EditMode ? true : false;
+            adminControl.txtEmail.Enabled = EditMode ? true : false;
+            adminControl.txtPhonenumber.Enabled = EditMode ? true : false;
 
-            mainControl.btnCreateUser.Visible = editMode ? true : false;
-            mainControl.btnDeleteUser.Visible = editMode ? true : false;
-            mainControl.btnGeneratePSW.Visible = editMode ? true : false;
+            adminControl.btnCreateUser.Visible = EditMode ? true : false;
+            adminControl.btnDeleteUser.Visible = EditMode ? true : false;
+            adminControl.btnGeneratePSW.Visible = EditMode ? true : false;
 
             // Beheer de status van de ListBox
-            mainControl.listBoxAdmin.Enabled = editMode ? true : false;
+            adminControl.listBoxAdmin.Enabled = EditMode ? true : false;
         }
         #endregion EDITMODE DISPLAY
     }
