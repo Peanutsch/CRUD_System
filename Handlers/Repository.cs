@@ -3,12 +3,11 @@ using System.Drawing;
 using Microsoft.VisualBasic.Logging;
 using System.Diagnostics;
 using CRUD_System.FileHandlers;
-using CRUD_System.Handlers;
 using System.IO;
 
-namespace CRUD_System
+namespace CRUD_System.Handlers
 {
-    public class UserRepository
+    public class Repository
     {
         FilePaths path = new FilePaths();
 
@@ -20,34 +19,6 @@ namespace CRUD_System
             Date = DateTime.Now.Date,
             Time = DateTime.Now
         };
-
-        /*
-        public void UpdateUserDetails(List<string> userLines, int userIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber)
-        {
-            userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber}";
-
-            DialogResult dr = message.MessageBoxConfirmToSAVEChanges(alias);
-            if (dr != DialogResult.Yes)
-            {
-                return;
-            }
-
-            File.WriteAllLines(path.UserFilePath, userLines); // Write updated data back to data_users.csv
-            Debug.WriteLine($"User Details after Update: {userLines[userIndex]}");
-
-            var currentUser = LoginHandler.CurrentUser;
-            if (!string.IsNullOrEmpty(currentUser))
-            {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Updated user details for {alias.ToUpper()}");
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Updated user details for {alias.ToUpper()}";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
-                path.AppendToLog(newLog);
-
-                message.MessageUpdateSucces();
-            }
-        }
-        */
 
         public void UpdateUserLogin(List<string> loginLines, int userIndex)
         {
@@ -61,7 +32,7 @@ namespace CRUD_System
             {
                 return;
             }
-            
+
             File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
             Debug.WriteLine($"User Login after Update: {loginLines[userIndex]}");
 

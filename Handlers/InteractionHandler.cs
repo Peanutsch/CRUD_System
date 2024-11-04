@@ -3,13 +3,40 @@ using System;
 
 namespace CRUD_System.Handlers
 {
-    internal class UserInteractionHandler
+    internal class InteractionHandler
     {
         public bool UserSelected { get; set; } // Property to store selection state
 
-        public UserInteractionHandler()
+        public InteractionHandler()
         {
             //
+        }
+
+        /// <summary>
+        /// Hides MainForm, Opens CreateForm
+        /// </summary>
+        public void OpenCreateForm(UserControl? parentControl = null)
+        {
+            // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method.
+            // Check if ParentForm is not null and is of type MainFormADMIN
+            if (parentControl != null)
+            {
+                parentControl.Hide();
+
+                using (ADMINCreateForm createFormADMIN = new ADMINCreateForm())
+                {
+                    createFormADMIN.ShowDialog(); // Show ADMINCreateForm as Dialog
+                }
+
+                if (parentControl != null)
+                {
+                    parentControl.Show(); // Restore visibility after closing the form
+                }
+            }
+            else
+            {
+                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>

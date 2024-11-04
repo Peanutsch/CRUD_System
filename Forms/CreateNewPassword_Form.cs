@@ -22,7 +22,7 @@ namespace CRUD_System
         public int charToUpper = 3;
         public int charIsDigi = 3;
 
-        UserRepository userRepository = new UserRepository();
+        Repository userRepository = new Repository();
         ADMINMainControl adminControl = new ADMINMainControl();
 
         readonly FilePaths path = new FilePaths();

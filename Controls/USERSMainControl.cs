@@ -19,10 +19,10 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
-        UserRepository userRepository = new UserRepository();
+        Repository userRepository = new Repository();
         ADMINMainControl adminMainControl = new ADMINMainControl();
-        UserProfileManager profileManager = new UserProfileManager();
-        UserInteractionHandler userInteractionHandler = new UserInteractionHandler();
+        ProfileManager profileManager = new ProfileManager();
+        InteractionHandler userInteractionHandler = new InteractionHandler();
         MessageBoxes message = new MessageBoxes();
 
         bool editMode = false;
