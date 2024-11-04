@@ -13,9 +13,9 @@ namespace CRUD_System
     internal class UserProfileManager
     {
         #region PROPERTIES
-        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_login.csv");
-        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
+        FilePaths path = new FilePaths();
+
+        MessageBoxes message = new MessageBoxes();
 
         UserRepository userRepository = new UserRepository();
 
@@ -34,13 +34,39 @@ namespace CRUD_System
         }
         #endregion CONSTRUCTOR
 
+        public void UpdateUserDetails(List<string> userLines, int userIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber)
+        {
+            userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber}";
+
+            DialogResult dr = message.MessageBoxConfirmToSAVEChanges(alias);
+            if (dr != DialogResult.Yes)
+            {
+                return;
+            }
+
+            File.WriteAllLines(path.UserFilePath, userLines); // Write updated data back to data_users.csv
+            Debug.WriteLine($"User Details after Update: {userLines[userIndex]}");
+
+            var currentUser = LoginHandler.CurrentUser;
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Updated user details for {alias.ToUpper()}");
+
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Updated user details for {alias.ToUpper()}";
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
+
+                message.MessageUpdateSucces();
+            }
+        }
+
         public void GenerateNewPassword(string alias, bool isAdmin)
         {
             var currentUser = LoginHandler.CurrentUser;
 
             // Read lines from data_users.csv
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
+            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
+            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
 
             // Find user index
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, alias);

@@ -17,11 +17,10 @@ namespace CRUD_System
     public partial class USERSMainControl : UserControl
     {
         #region PROPERTIES
-        readonly string dataLogin = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_login.csv");
-        readonly string dataUsers = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\data_users.csv");
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\logEvents.csv");
+        FilePaths path = new FilePaths();
 
         ADMINMainControl adminMainControl = new ADMINMainControl();
+        UserProfileManager profileManager = new UserProfileManager();
         UserInteractionHandler userInteractionHandler = new UserInteractionHandler();
         MessageBoxes message = new MessageBoxes();
 
@@ -55,12 +54,12 @@ namespace CRUD_System
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
             UserRepository userRepository = new UserRepository();
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
+            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
+            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             if (userIndex != -1)
             {
-                userRepository.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
+                profileManager.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
             }
             editMode = false; // Close editMode
             ReloadListBoxUser(userIndex); // Reload interface
@@ -118,8 +117,8 @@ namespace CRUD_System
         /// </summary>
         private void ListBoxThisUser()
         {
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
+            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
+            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
 
             var currentUser = LoginHandler.CurrentUser;
 
@@ -152,7 +151,7 @@ namespace CRUD_System
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
                 // Read user details
-                var userDetailsArray = File.ReadAllLines(dataUsers)
+                var userDetailsArray = File.ReadAllLines(path.UserFilePath)
                                       .Skip(2)
                                       .Select(line => line.Split(','))
                                       .FirstOrDefault(details => details[2] == selectedAlias);

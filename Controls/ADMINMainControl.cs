@@ -22,6 +22,7 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
+        UserProfileManager profileManager = new UserProfileManager();
         UserInteractionHandler userInteractionHandler = new UserInteractionHandler();
         MessageBoxes message = new MessageBoxes();
 
@@ -77,7 +78,7 @@ namespace CRUD_System
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             if (userIndex != -1)
             {
-                userRepository.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
+                profileManager.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
             }
             editMode = false;
             InterfaceEditMode();

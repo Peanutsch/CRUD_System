@@ -21,6 +21,7 @@ namespace CRUD_System
             Time = DateTime.Now
         };
 
+        /*
         public void UpdateUserDetails(List<string> userLines, int userIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber)
         {
             userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber}";
@@ -46,6 +47,7 @@ namespace CRUD_System
                 message.MessageUpdateSucces();
             }
         }
+        */
 
         public void UpdateUserLogin(List<string> loginLines, int userIndex)
         {
