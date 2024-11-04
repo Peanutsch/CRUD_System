@@ -22,6 +22,7 @@ namespace CRUD_System
         public int charToUpper = 3;
         public int charIsDigi = 3;
 
+        UserRepository userRepository = new UserRepository();
         ADMINMainControl adminControl = new ADMINMainControl();
 
         readonly FilePaths path = new FilePaths();
@@ -133,8 +134,8 @@ namespace CRUD_System
             if (!string.IsNullOrEmpty(currentUser))
             {
                 // Find userIndex in data_login.csv and data_users.csv
-                int userIndex = adminControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
-                int loginIndex = adminControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, currentUser);
 
                 string newPassword = inputChangePSW.Text;
                 int uppercaseCount = newPassword.Count(char.IsUpper);

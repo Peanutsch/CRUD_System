@@ -19,6 +19,7 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
+        UserRepository userRepository = new UserRepository();
         ADMINMainControl adminMainControl = new ADMINMainControl();
         UserProfileManager profileManager = new UserProfileManager();
         UserInteractionHandler userInteractionHandler = new UserInteractionHandler();
@@ -53,7 +54,6 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            UserRepository userRepository = new UserRepository();
             var userLines = File.ReadAllLines(path.UserFilePath).ToList();
             var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
@@ -124,7 +124,7 @@ namespace CRUD_System
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                var userIndex = adminMainControl.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                var userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, currentUser);
                 var userDetailsArray = userLines[userIndex].Split(',');
 
                 UserDetails userDetails = new UserDetails(userDetailsArray);

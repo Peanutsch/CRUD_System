@@ -13,7 +13,10 @@ namespace CRUD_System.Handlers
     {
         #region PROPERTIES
         FilePaths path = new FilePaths();
-        UserRepository userRepository;
+
+        MessageBoxes message = new MessageBoxes();
+
+        UserRepository userRepository = new UserRepository();
 
         // Initialize DateTime for logging
         LogEntryActions log = new LogEntryActions
@@ -24,60 +27,71 @@ namespace CRUD_System.Handlers
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
-        public UserProfileManager(ADMINMainControl adminControl)
+        public UserProfileManager()
         {
-            userRepository = new UserRepository(adminControl);
+            // Constructor logic here if needed
         }
         #endregion CONSTRUCTOR
 
-        /// <summary>
-        /// Generates a new password for the specified user alias and updates the login details in the system.
-        /// </summary>
-        /// <param name="alias">The alias of the user for whom the password is being generated.</param>
-        /// <param name="isAdmin">A boolean indicating whether the user has admin privileges.</param>
-        public void GenerateNewPassword(string alias, bool isAdmin)
+        public void UpdateUserDetails(List<string> userLines, int userIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber)
         {
-            // Retrieve the currently logged-in user
-            var currentUser = LoginHandler.CurrentUser;
+            userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber}";
 
-            // Read all lines from data_users.csv and data_login.csv into lists
-            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
-            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
-
-            // Find the index of the user and their login details using the provided alias
-            int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, alias);
-            int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, alias);
-            var loginDetails = loginLines[loginIndex].Split(",");
-
-            // Create a message box instance to confirm password change
-            MessageBoxes messageConfirmSave = new MessageBoxes();
-            DialogResult dr = messageConfirmSave.MessageBoxConfirmToSAVEPassword(loginDetails[0]);
-
-            // If the user cancels the action, exit the method
+            DialogResult dr = message.MessageBoxConfirmToSAVEChanges(alias);
             if (dr != DialogResult.Yes)
             {
                 return;
             }
 
-            // Generate a new password for the user
-            string generatedPassword = PasswordManager.PasswordGenerator();
+            File.WriteAllLines(path.UserFilePath, userLines); // Write updated data back to data_users.csv
+            Debug.WriteLine($"User Details after Update: {userLines[userIndex]}");
 
-            // Update the login details with the new password and admin status
+            var currentUser = LoginHandler.CurrentUser;
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Updated user details for {alias.ToUpper()}");
+
+                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Updated user details for {alias.ToUpper()}";
+                //File.AppendAllText(logAction, newLog + Environment.NewLine);
+                path.AppendToLog(newLog);
+
+                message.MessageUpdateSucces();
+            }
+        }
+
+        public void GenerateNewPassword(string alias, bool isAdmin)
+        {
+            var currentUser = LoginHandler.CurrentUser;
+
+            // Read lines from data_users.csv
+            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
+            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
+
+            // Find user index
+            int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, alias);
+            int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, alias);
+            var loginDetails = loginLines[loginIndex].Split(",");
+
+            MessageBoxes messageConfirmSave = new MessageBoxes();
+            DialogResult dr = messageConfirmSave.MessageBoxConfirmToSAVEPassword(loginDetails[0]);
+
+            if (dr != DialogResult.Yes)
+            {
+                return;
+            }
+
+            string generatedPassword = PasswordManager.PasswordGenerator();
             loginLines[loginIndex] = $"{loginDetails[0]},{generatedPassword},{isAdmin}";
 
-            // Update the login information in the repository
             userRepository.UpdateUserLogin(loginLines, loginIndex);
 
-            // Show a success message to the user
             MessageBoxes messageSucces = new MessageBoxes();
             messageSucces.MessageUpdateSucces();
 
-            // Log the password change action if there is a current user
             if (!string.IsNullOrEmpty(currentUser))
             {
                 userRepository.LogPasswordChange(currentUser, loginDetails[0]);
             }
         }
-
     }
 }

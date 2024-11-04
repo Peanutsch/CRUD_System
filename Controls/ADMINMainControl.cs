@@ -22,7 +22,8 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
-        UserProfileManager profileManager = new UserProfileManager();
+        UserRepository userRespository = new UserRepository();
+        UserProfileManager userProfileManager = new UserProfileManager();
         UserInteractionHandler userInteractionHandler = new UserInteractionHandler();
         MessageBoxes message = new MessageBoxes();
 
@@ -78,7 +79,7 @@ namespace CRUD_System
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
+                userProfileManager.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
             }
             editMode = false;
             InterfaceEditMode();
@@ -116,10 +117,10 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnGeneratePassword_Click(object sender, EventArgs e)
         {
-            UserProfileManager editHandler = new UserProfileManager();
+            UserProfileManager userProfileManager = new UserProfileManager();
             userInteractionHandler.PerformActionIfUserSelected(() =>
             {
-                editHandler.GenerateNewPassword(txtAlias.Text, chkIsAdmin.Checked);
+                userProfileManager.GenerateNewPassword(txtAlias.Text, chkIsAdmin.Checked);
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -142,56 +143,7 @@ namespace CRUD_System
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region METHODS MANAGEMENT CONTROLADMIN
-        /*
-        public void GenerateNewPassword()
-        {
-            var currentUser = LoginHandler.CurrentUser;
-
-            // Read lines from data_users.csv
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
-
-            // Find user index
-            int userIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            int loginIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            var loginDetails = loginLines[loginIndex].Split(",");
-
-            MessageBoxes messageConfirmSave = new MessageBoxes();
-            DialogResult dr = messageConfirmSave.MessageBoxConfirmToSAVEPassword(loginDetails[0]);
-
-            if (dr != DialogResult.Yes)
-            {
-                return;
-            }
-
-            string generatedPassword = PasswordManager.PasswordGenerator();
-            //txtPassword.Text = generatedPassword;
-
-            loginLines[userIndex] = $"{loginDetails[0]},{generatedPassword},{isAdmin}";
-
-            UpdateUserLogin(loginLines, loginIndex);
-
-            MessageBoxes messageSucces = new MessageBoxes();
-            messageSucces.MessageUpdateSucces();
-
-            if (!string.IsNullOrEmpty(currentUser))
-            {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] Changed password for [{loginDetails[0].ToUpper()}]");
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Changed password for user [{loginDetails[0].ToUpper()}]";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
-                path.AppendToLog(newLog);
-            }
-            else
-            {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN] Changed password for [{loginDetails[0].ToUpper()}]");
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Changed password for user [{loginDetails[0].ToUpper()}]";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
-                path.AppendToLog(newLog);
-            }
-        }
-        */
+        
 
         /// <summary>
         /// Hides MainForm, Opens CreateForm
@@ -217,7 +169,7 @@ namespace CRUD_System
             }
         }
 
-
+        /*
         /// <summary>
         /// Finds the index of a user in the CSV data by alias.
         /// Returns -1 if the alias is not found.
@@ -241,105 +193,8 @@ namespace CRUD_System
             MessageBox.Show("User not found");
             return -1;
         }
-
-        /// <summary>
-        /// Updates the user details at the specified index in the CSV data.
-        /// Writes the updated details back to data_users.csv.
-        /// </summary>
-        /// <param name="userLines">The list of lines from data_users.csv.</param>
-        /// <param name="userIndex">The index of the user to update.</param>
-        public void UpdateUserDetails(List<string> userLines, int userIndex)
-        {
-            string currentUserDetails = userLines[userIndex].Trim();
-
-            userLines[userIndex] = $"{txtName.Text},{txtSurname.Text},{txtAlias.Text},{txtAddress.Text},{txtZIPCode.Text.ToUpper()},{txtCity.Text},{txtEmail.Text},{txtPhonenumber.Text}";
-            File.WriteAllLines(path.UserFilePath, userLines); // Write updated data back to data_users.csv
-            Debug.WriteLine($"After Update: {userLines[userIndex]}");
-        }
-
-        /// <summary>
-        /// Updates the login details at the specified index in the CSV data.
-        /// Writes the updated details back to data_login.csv.
-        /// </summary>
-        /// <param name="loginLines">The list of lines from data_users.csv.</param>
-        /// <param name="userIndex">The index of the user to update.</param>
-        public void UpdateUserLogin(List<string> loginLines, int userIndex)
-        {
-            var loginDetails = loginLines[userIndex].Split(',');
-
-            // When need to keep current data on indexes
-            string currentAlias = loginDetails[0];
-
-            loginLines[userIndex] = $"{currentAlias},{loginDetails[1]},{isAdmin}";
-
-            File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
-
-            Debug.WriteLine($"After Update: {loginLines[userIndex]}");
-        }
-
-        /*
-        /// <summary>
-        /// Method for save changes user details
-        /// </summary>
-        public void SaveEditUserDetails()
-        {
-            var currentUser = LoginHandler.CurrentUser;
-
-            // Read lines from data_users.csv
-            var userLines = File.ReadAllLines(dataUsers).ToList();
-            var loginLines = File.ReadAllLines(dataLogin).ToList();
-
-            // Find user index
-            int userIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            int loginIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-
-            if (userIndex >= 0)
-            {
-                var userDetails = userLines[userIndex].Split(',');
-                var loginDetails = loginLines[userIndex].Split(",");
-
-                // MessageBox YesNo to confirm changes
-                MessageBoxes messageBoxes = new MessageBoxes();
-                DialogResult dr = messageBoxes.MessageBoxConfirmToSAVEChanges(userDetails[2]);
-
-                if (dr != DialogResult.Yes)
-                {
-                    return;
-                }
-                UpdateUserDetails(userLines, userIndex); // Save changes to data_users.csv
-                UpdateUserLogin(loginLines, loginIndex); // Save changes to data_loging.csv
-
-                if (!string.IsNullOrEmpty(currentUser))
-                {
-                    Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Edited details from user [{userDetails[2].ToUpper()}]");
-
-                    string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Edited details from user [{userDetails[2].ToUpper()}]";
-                    //File.AppendAllText(logAction, newLog + Environment.NewLine);
-                    path.AppendToLog(newLog);
-                }
-                else
-                {
-                    Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Edited details from user [{userDetails[2].ToUpper()}]");
-
-                    string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Edited details from user [{userDetails[2].ToUpper()}]";
-                    //File.AppendAllText(logAction, newLog + Environment.NewLine);
-                    path.AppendToLog(newLog);
-                }
-
-                MessageBoxes message = new MessageBoxes();
-                message.MessageUpdateSucces();
-
-                EmptyTextBoxes(); // Clear textboxes
-                FillTextboxes(userDetails); // Reload txtboxes
-                ReloadListBoxAdmin(userIndex); // Reload interface
-            }
-            else
-            {
-                // Close editMode
-                editMode = false;
-            }
-        }
         */
+
         /// <summary>
         /// Method for deleting user from data_users.csv and data_log.csv
         /// </summary>
@@ -351,7 +206,7 @@ namespace CRUD_System
             var userLines = File.ReadAllLines(path.UserFilePath).ToList();
             var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
 
-            int userIndex = FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int userIndex = userRespository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
 
             // Get alias to delete from the selected user
             string aliasToDelete = txtAlias.Text;
