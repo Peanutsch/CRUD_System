@@ -145,7 +145,6 @@ namespace CRUD_System
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (listBoxUser.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
-                //userSelected = true; // Set userSelected on true
                 userInteractionHandler.UserSelected = true; // Sync selection state with ControlsHandler
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses

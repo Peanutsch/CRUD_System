@@ -76,7 +76,6 @@ namespace CRUD_System.Handlers
                     return index;
                 }
             }
-
             // Alias not found
             MessageBox.Show("User not found");
             return -1;

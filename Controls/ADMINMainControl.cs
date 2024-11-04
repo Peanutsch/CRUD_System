@@ -24,7 +24,7 @@ namespace CRUD_System
 
         Repository userRespository = new Repository();
         ProfileManager userProfileManager = new ProfileManager();
-        InteractionHandler userInteractionHandler = new InteractionHandler();
+        InteractionHandler interactionHandler = new InteractionHandler();
         MessageBoxes message = new MessageBoxes();
 
         bool editMode = false;
@@ -57,7 +57,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnEditUserDetails_Click(object sender, EventArgs e)
         {
-            userInteractionHandler.PerformActionIfUserSelected(() =>  
+            interactionHandler.PerformActionIfUserSelected(() =>  
             {
                 // Toggle edit mode
                 editMode = !editMode;
@@ -93,9 +93,11 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnDeleteUser_Click(object sender, EventArgs e)
         {
-            userInteractionHandler.PerformActionIfUserSelected(() =>
+            interactionHandler.PerformActionIfUserSelected(() =>
             {
                 userProfileManager.DeleteUser(txtAlias.Text); // Perform delete action only if a user is selected
+                listBoxAdmin.Items.Clear();
+                LoadUserDataListBox();
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -107,7 +109,10 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
-            userInteractionHandler.OpenCreateForm(this);
+            Repository userRepository = new Repository();
+            interactionHandler.OpenCreateForm(this);
+            listBoxAdmin.Items.Clear();
+            LoadUserDataListBox();
         }
         
         /// <summary>
@@ -118,7 +123,7 @@ namespace CRUD_System
         private void btnGeneratePassword_Click(object sender, EventArgs e)
         {
             ProfileManager userProfileManager = new ProfileManager();
-            userInteractionHandler.PerformActionIfUserSelected(() =>
+            interactionHandler.PerformActionIfUserSelected(() =>
             {
                 userProfileManager.GenerateNewPassword(txtAlias.Text, chkIsAdmin.Checked);
             },
@@ -138,7 +143,7 @@ namespace CRUD_System
 
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
-            userInteractionHandler.Open_CreateNewPasswordForm();
+            interactionHandler.Open_CreateNewPasswordForm();
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
@@ -212,7 +217,7 @@ namespace CRUD_System
             if (listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
                 //userSelected = true; // Set userSelected on true
-                userInteractionHandler.UserSelected = true; // Sync selection state with ControlsHandler
+                interactionHandler.UserSelected = true; // Pass bool true to InterActionHandler
 
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses

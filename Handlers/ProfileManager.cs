@@ -67,14 +67,14 @@ namespace CRUD_System.Handlers
 
             var currentUser = LoginHandler.CurrentUser;
 
+            // Get alias to delete from the selected user
+            string aliasToDelete = alias;
+
             // Read lines from data_users.csv and data_login.csv
             var userLines = File.ReadAllLines(path.UserFilePath).ToList();
             var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
 
-            int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, adminControl.txtAlias.Text);
-
-            // Get alias to delete from the selected user
-            string aliasToDelete = alias;
+            int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, aliasToDelete);
 
             // MessageBox to confirm task
             MessageBoxes messageBoxes = new MessageBoxes();

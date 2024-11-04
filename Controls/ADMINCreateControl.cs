@@ -13,7 +13,7 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
         ADMINMainForm mainFormADMIN = new ADMINMainForm();
-        MessageBoxes messageBoxes = new MessageBoxes();
+        MessageBoxes message = new MessageBoxes();
 
         bool isAdmin = false;
 
@@ -77,7 +77,7 @@ namespace CRUD_System
 
             if (txtName.Text.Length < 2 || txtSurname.Text.Length < 2)
             {
-                messageBoxes.MessageInvalidInput();
+                message.MessageInvalidInput();
                 return;
             }
 
@@ -94,7 +94,6 @@ namespace CRUD_System
             string email = string.IsNullOrWhiteSpace(txtEmail.Text) ? string.Empty : txtEmail.Text;
             string phoneNumber = string.IsNullOrWhiteSpace(txtPhonenumber.Text) ? string.Empty : txtPhonenumber.Text;
 
-            MessageBoxes message = new MessageBoxes();
             DialogResult dr = message.MessageBoxConfirmNewUser(isAlias);
 
             if (dr != DialogResult.Yes)
