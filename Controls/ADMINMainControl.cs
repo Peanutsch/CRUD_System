@@ -69,9 +69,7 @@ namespace CRUD_System
             {
 
                 // Toggle edit mode
-                //editMode = !editMode;
                 userInterface.EditMode = ToggleEditMode();
-                //InterfaceEditMode();
                 userInterface.InterfaceEditModeADMIN();
             },
              () => message.MessageInvalidNoUserSelected());
@@ -108,8 +106,10 @@ namespace CRUD_System
             interactionHandler.PerformActionIfUserSelected(() =>
             {
                 userProfileManager.DeleteUser(txtAlias.Text); // Perform delete action only if a user is selected
+                
                 listBoxAdmin.Items.Clear();
                 userInterface.LoadUserDataListBox();
+                userInterface.EmptyTextBoxesAdmin();
             },
              () => message.MessageInvalidNoUserSelected());
         }

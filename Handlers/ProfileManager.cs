@@ -90,8 +90,6 @@ namespace CRUD_System.Handlers
                                         StringComparison.OrdinalIgnoreCase)).ToList();
             File.WriteAllLines(path.UserFilePath, userLines);
 
-            userInterface.EmptyTextBoxesAdmin();
-
             // Remove the user from data_login.csv using the alias
             loginLines = loginLines.Where(line =>
                                             !line.Split(',')[0].Trim().Equals(aliasToDelete,
@@ -112,6 +110,8 @@ namespace CRUD_System.Handlers
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Deleted user [{aliasToDelete.ToUpper()}]";
                 path.AppendToLog(newLog);
             }
+            userInterface.EmptyTextBoxesAdmin();
+
             message.MessageDeleteSucces(); // Show MessageBox Delete Succes
             userInterface.ReloadListBoxAdmin(userIndex);
         }

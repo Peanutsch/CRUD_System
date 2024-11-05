@@ -176,6 +176,8 @@ namespace CRUD_System
         #region TEXTBOXES
         public void EmptyTextBoxesAdmin()
         {
+            MessageBox.Show("EmptyTextBoxesAdmin()");
+
             // Refill textboxes with empty values
             adminControl.txtName.Text = string.Empty;
             adminControl.txtSurname.Text = string.Empty;

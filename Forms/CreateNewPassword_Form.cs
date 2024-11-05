@@ -25,6 +25,7 @@ namespace CRUD_System
 
         Repository userRepository = new Repository();
         ADMINMainControl adminControl = new ADMINMainControl();
+        MessageBoxes message = new MessageBoxes();
 
         readonly FilePaths path = new FilePaths();
 
@@ -81,7 +82,6 @@ namespace CRUD_System
         {
             if (inputConfirmPSW.Text != inputChangePSW.Text)
             {
-                MessageBoxes message = new MessageBoxes();
                 message.MessageInvalidConfirmationPassword();
                 inputConfirmPSW.Clear();
             }
@@ -188,6 +188,8 @@ namespace CRUD_System
 
             string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentAlias.ToUpper()},Changed password";
             path.AppendToLog(newLog);
+
+            message.MessageUpdateSucces();
         }
 
         private void TxtLabelPSW()
