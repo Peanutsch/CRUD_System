@@ -141,7 +141,7 @@ namespace CRUD_System.Handlers
             string generatedPassword = PasswordManager.PasswordGenerator();
             loginLines[loginIndex] = $"{loginDetails[0]},{generatedPassword},{isAdmin}";
 
-            userRepository.UpdateUserLogin(loginLines, loginIndex);
+            userRepository.UpdateUserPassword(loginLines, loginIndex);
 
             MessageBoxes messageSucces = new MessageBoxes();
             messageSucces.MessageUpdateSucces();

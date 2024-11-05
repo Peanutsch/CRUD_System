@@ -1,6 +1,7 @@
 ﻿using CRUD_System.FileHandlers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -86,35 +87,49 @@ namespace CRUD_System
 
         public void InterfaceEditModeADMIN()
         {
-            // Toggle de text voor de edit-knop
+            Debug.WriteLine($"EditMode: {EditMode}");
+
+            // Toggle Edit and Cancel button text
             adminControl.btnEditUserDetails.Text = EditMode ? "Cancel" : "Edit User";
 
-            // Wijzig de achtergrondkleur
+            // Set background color based on EditMode
             adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;
 
-            // Pas de zichtbaarheid en enabled-status van knoppen en velden aan
-            adminControl.btnSaveEditUserDetails.Visible = EditMode ? true : false;
+            // Manage visibility and enablement of buttons and controls
+            adminControl.btnSaveEditUserDetails.Visible = EditMode;
             adminControl.btnSaveEditUserDetails.BackColor = Color.LightGreen;
+            adminControl.chkIsAdmin.Visible = EditMode;
+            adminControl.chkIsAdmin.Enabled = EditMode;
 
-            adminControl.chkIsAdmin.Visible = EditMode ? true : false;
-            adminControl.chkIsAdmin.Enabled = EditMode ? true : false;
+            // Array of text fields to enable or disable in EditMode
+            var textFields = new[]
+            {
+                adminControl.txtName,
+                adminControl.txtSurname,
+                adminControl.txtAdmin,
+                adminControl.txtAddress,
+                adminControl.txtZIPCode,
+                adminControl.txtCity,
+                adminControl.txtEmail,
+                adminControl.txtPhonenumber
+            };
 
-            // Maak tekstvakken in of uitgeschakeld op basis van editMode
-            adminControl.txtName.Enabled = EditMode ? true : false;
-            adminControl.txtSurname.Enabled = EditMode ? true : false;
-            adminControl.txtAlias.Enabled = EditMode ? true : false;
-            adminControl.txtAddress.Enabled = EditMode ? true : false;
-            adminControl.txtZIPCode.Enabled = EditMode ? true : false;
-            adminControl.txtCity.Enabled = EditMode ? true : false;
-            adminControl.txtEmail.Enabled = EditMode ? true : false;
-            adminControl.txtPhonenumber.Enabled = EditMode ? true : false;
+            foreach (var field in textFields)
+            {
+                field.Enabled = EditMode;
+            }
 
-            adminControl.btnCreateUser.Visible = EditMode ? true : false;
-            adminControl.btnDeleteUser.Visible = EditMode ? true : false;
-            adminControl.btnGeneratePSW.Visible = EditMode ? true : false;
+            // Hide or show other action buttons
+            adminControl.btnCreateUser.Visible = !EditMode;
+            adminControl.btnCreateUser.Enabled = !EditMode;
+            adminControl.btnDeleteUser.Visible = !EditMode;
+            adminControl.btnDeleteUser.Enabled = !EditMode;
+            adminControl.btnGeneratePSW.Visible = !EditMode;
+            adminControl.btnGeneratePSW.Enabled = !EditMode;
 
-            // Beheer de status van de ListBox
-            adminControl.listBoxAdmin.Enabled = EditMode ? true : false;
+            // Enable or disable ListBox based on EditMode
+            adminControl.listBoxAdmin.Enabled = !EditMode;
+
         }
         #endregion EDITMODE DISPLAY
     }

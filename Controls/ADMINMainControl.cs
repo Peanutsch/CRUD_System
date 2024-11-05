@@ -64,10 +64,10 @@ namespace CRUD_System
             {
 
                 // Toggle edit mode
-                editMode = !editMode;
-                //userInterface.EditMode = ToggleEditMode();
-                InterfaceEditMode();
-                //userInterface.InterfaceEditModeADMIN();
+                //editMode = !editMode;
+                userInterface.EditMode = ToggleEditMode();
+                //InterfaceEditMode();
+                userInterface.InterfaceEditModeADMIN();
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -87,8 +87,9 @@ namespace CRUD_System
             {
                 userProfileManager.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
             }
-            editMode = false;
-            InterfaceEditMode();
+            //editMode = false;
+            userInterface.EditMode = false;
+            userInterface.InterfaceEditModeADMIN();
             ReloadListBoxAdmin(userIndex); // Reload listbox
         }
 
@@ -154,9 +155,9 @@ namespace CRUD_System
 
         private bool ToggleEditMode()
         {
-            editMode = !editMode;
+            bool modus = editMode = !editMode;
 
-            return editMode;
+            return modus;
         }
 
 
@@ -164,32 +165,6 @@ namespace CRUD_System
 
         #region METHODS MANAGEMENT CONTROLADMIN
         
-        /*
-        /// <summary>
-        /// Hides MainForm, Opens CreateForm
-        /// </summary>
-        public void OpenCreateForm()
-        {
-            // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method.
-            // Check if ParentForm is not null and is of type MainFormADMIN
-            if (this.ParentForm is ADMINMainForm)
-            {
-                this.ParentForm.Hide();
-
-                ADMINCreateForm createFormADMIN = new ADMINCreateForm();
-                createFormADMIN.ShowDialog();
-
-                // Show the main form again after CreateForm is closed
-                this.ParentForm.Show();
-                ReloadListBoxAdmin(0);
-            }
-            else
-            {
-                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        */
-
         #endregion METHODS MANAGEMENT CONTROLADMIN
 
         #region LISTBOX
@@ -374,8 +349,9 @@ namespace CRUD_System
             LoadUserDataListBox();
 
             // Reset editMode to false after saving and reload interface
-            editMode = false;
-            InterfaceEditMode();
+            //editMode = false;
+            userInterface.EditMode = false;
+            userInterface.InterfaceEditModeADMIN();
         }
 
         public void EmptyTextBoxes()

@@ -20,7 +20,7 @@ namespace CRUD_System.Handlers
             Time = DateTime.Now
         };
 
-        public void UpdateUserLogin(List<string> loginLines, int userIndex)
+        public void UpdateUserPassword(List<string> loginLines, int userIndex)
         {
             var loginDetails = loginLines[userIndex].Split(',');
             string currentAlias = loginDetails[0];
