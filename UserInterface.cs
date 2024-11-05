@@ -1,4 +1,5 @@
 ﻿using CRUD_System.FileHandlers;
+using CRUD_System.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,25 +18,12 @@ namespace CRUD_System
         readonly FilePaths path = new FilePaths();
         private readonly ADMINMainControl adminControl;
 
-        public UserInterface(ADMINMainControl adminControl)
+        #region CONSTRUCTOR
+        public UserInterface(ADMINMainControl? adminControl = null)
         {
-            this.adminControl = adminControl;
+            this.adminControl = adminControl ?? new ADMINMainControl();
         }
-
-        #region TEXTBOXES
-        public void EmptyTextBoxesADMIN()
-        {
-            // Refill textboxes with empty values
-            adminControl.txtName.Text = string.Empty;
-            adminControl.txtSurname.Text = string.Empty;
-            adminControl.txtAlias.Text = string.Empty;
-            adminControl.txtAddress.Text = string.Empty;
-            adminControl.txtZIPCode.Text = string.Empty;
-            adminControl.txtCity.Text = string.Empty;
-            adminControl.txtEmail.Text = string.Empty;
-            adminControl.txtPhonenumber.Text = string.Empty;
-        }
-        #endregion TEXTBOXES
+        #endregion CONSTRUCTOR
 
         #region LISTBOX ADMIN
         /// <summary>
@@ -80,6 +68,58 @@ namespace CRUD_System
 
             // Reset editMode to false after saving and reload interface
             InterfaceEditModeADMIN();
+        }
+
+        public void ListBoxAdmin_SelectedIndexChanged()
+        {
+            // Get the selected user from the ListBox; ignore clicks on empty line in listBox
+            if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
+            {
+                // Set UserSelected on true
+                adminControl.InteractionHandler.UserSelected = true; // Pass bool true to InterActionHandler
+
+                // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
+                string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
+
+                // Read user details
+                var userDetailsArray = File.ReadAllLines(path.UserFilePath)
+                                      .Skip(2)
+                                      .Select(line => line.Split(','))
+                                      .FirstOrDefault(details => details[2] == selectedAlias);
+
+                if (userDetailsArray != null)
+                {
+                    FillTextboxes(userDetailsArray);
+                }
+
+                // Read the lines from data_login.csv
+                var loginLines = File.ReadAllLines(path.LoginFilePath).Skip(2); // Skip the headers
+                var loginDetailsList = loginLines.Select(line => line.Split(',')); // Split each line into details
+                var loginDetails = loginDetailsList.FirstOrDefault(details => details[0] == selectedAlias); // Find the login details for the selected alias
+
+                // Check if loginDetails is not null
+                if (loginDetails != null)
+                {
+                    // Check if the admin status is true
+                    if (loginDetails[2]! == "True") // Use '==' for comparison
+                    {
+                        // Show the admin label
+                        adminControl.txtAdmin.Visible = true;
+                        adminControl.chkIsAdmin.Checked = true; // checkbox chkAdmin checked
+                    }
+                    else
+                    {
+                        // Hide the admin label if not an admin
+                        adminControl.txtAdmin.Visible = false;
+                        adminControl.chkIsAdmin.Checked = false; // checkbox chkAdmin unchecked
+                    }
+                }
+                else
+                {
+                    // Handle the case where loginDetails is null (optional)
+                    adminControl.txtAdmin.Visible = false; // Hide the textbox if no details found
+                }
+            }
         }
         #endregion LISTBOX ADMIN
 
@@ -132,5 +172,35 @@ namespace CRUD_System
 
         }
         #endregion EDITMODE DISPLAY
+
+        #region TEXTBOXES
+        public void EmptyTextBoxesAdmin()
+        {
+            // Refill textboxes with empty values
+            adminControl.txtName.Text = string.Empty;
+            adminControl.txtSurname.Text = string.Empty;
+            adminControl.txtAlias.Text = string.Empty;
+            adminControl.txtAddress.Text = string.Empty;
+            adminControl.txtZIPCode.Text = string.Empty;
+            adminControl.txtCity.Text = string.Empty;
+            adminControl.txtEmail.Text = string.Empty;
+            adminControl.txtPhonenumber.Text = string.Empty;
+        }
+        public void FillTextboxes(string[] userDetailsArray)
+        {
+            // Initialize the UserDetails object with the array of user details
+            UserDetails userDetails = new UserDetails(userDetailsArray);
+
+            // Populate the text fields with the details of the selected user
+            adminControl.txtName.Text = userDetails.Name;
+            adminControl.txtSurname.Text = userDetails.Surname;
+            adminControl.txtAlias.Text = userDetails.Alias;
+            adminControl.txtAddress.Text = userDetails.Address;
+            adminControl.txtZIPCode.Text = userDetails.ZIPCode;
+            adminControl.txtCity.Text = userDetails.City;
+            adminControl.txtEmail.Text = userDetails.Email;
+            adminControl.txtPhonenumber.Text = userDetails.PhoneNumber;
+        }
+        #endregion TEXTBOXES
     }
 }

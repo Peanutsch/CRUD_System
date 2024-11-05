@@ -63,8 +63,6 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void DeleteUser(string alias)
         {
-            ADMINMainControl adminControl = new ADMINMainControl(); // Temp object for ReloadListBoxAdmin and EmptyTextBoxes
-
             var currentUser = LoginHandler.CurrentUser;
 
             // Get alias to delete from the selected user
@@ -111,10 +109,11 @@ namespace CRUD_System.Handlers
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Deleted user [{aliasToDelete.ToUpper()}]";
                 path.AppendToLog(newLog);
             }
-
             messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
-            adminControl.ReloadListBoxAdmin(userIndex);
-            adminControl.EmptyTextBoxes();
+
+            UserInterface userInterface = new UserInterface();
+            userInterface.ReloadListBoxAdmin(userIndex);
+            userInterface.EmptyTextBoxesAdmin();
         }
 
         public void GenerateNewPassword(string alias, bool isAdmin)

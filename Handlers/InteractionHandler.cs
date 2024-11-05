@@ -3,7 +3,7 @@ using System;
 
 namespace CRUD_System.Handlers
 {
-    internal class InteractionHandler
+    public class InteractionHandler
     {
         public bool UserSelected { get; set; } // Property to store selection state
 
