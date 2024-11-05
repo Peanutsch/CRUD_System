@@ -24,7 +24,7 @@ namespace CRUD_System
         public int charIsDigi = 3;
 
         Repository userRepository = new Repository();
-        ADMINMainControl adminControl = new ADMINMainControl();
+        AdminMainControl adminControl = new AdminMainControl();
         MessageBoxes message = new MessageBoxes();
 
         readonly FilePaths path = new FilePaths();

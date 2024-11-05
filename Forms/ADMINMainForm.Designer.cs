@@ -31,7 +31,7 @@
             textBoxUserName = new TextBox();
             buttonLOGOUT = new Button();
             labelAlias = new Label();
-            UserControl = new ADMINMainControl();
+            UserControl = new AdminMainControl();
             SuspendLayout();
             // 
             // textBoxUserName
@@ -102,6 +102,6 @@
         public TextBox textBoxUserName;
         public Button buttonLOGOUT;
         public Label labelAlias;
-        public ADMINMainControl UserControl;
+        public AdminMainControl UserControl;
     }
 }

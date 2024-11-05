@@ -11,17 +11,17 @@ using System.Xml.Linq;
 
 namespace CRUD_System
 {
-    public class UserInterface
+    public class AdminInterface
     {
         public bool EditMode { get; set; }
 
         readonly FilePaths path = new FilePaths();
-        private readonly ADMINMainControl adminControl;
+        private readonly AdminMainControl adminControl;
 
         #region CONSTRUCTOR
-        public UserInterface(ADMINMainControl? adminControl = null)
+        public AdminInterface(AdminMainControl? adminControl = null)
         {
-            this.adminControl = adminControl ?? new ADMINMainControl();
+            this.adminControl = adminControl ?? new AdminMainControl();
         }
         #endregion CONSTRUCTOR
 
@@ -29,7 +29,7 @@ namespace CRUD_System
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
-        public void LoadUserDataListBox()
+        public void LoadUserDetailsListBox()
         {
             var lines = File.ReadAllLines(path.UserFilePath);
 
@@ -64,7 +64,7 @@ namespace CRUD_System
 
             // Clear and reload listbox
             adminControl.listBoxAdmin.Items.Clear();
-            LoadUserDataListBox();
+            LoadUserDetailsListBox();
 
             // Reset editMode to false after saving and reload interface
             InterfaceEditModeADMIN();
@@ -89,7 +89,7 @@ namespace CRUD_System
 
                 if (userDetailsArray != null)
                 {
-                    FillTextboxesaDMIN(userDetailsArray);
+                    FillTextboxesAdmin(userDetailsArray);
                 }
 
                 // Read the lines from data_login.csv
@@ -173,7 +173,7 @@ namespace CRUD_System
         }
         #endregion EDITMODE DISPLAY
 
-        #region TEXTBOXES
+        #region TEXTBOXES ADMIN
         public void EmptyTextBoxesAdmin()
         {
             MessageBox.Show("EmptyTextBoxesAdmin()");
@@ -189,7 +189,7 @@ namespace CRUD_System
             adminControl.txtPhonenumber.Text = string.Empty;
         }
 
-        public void FillTextboxesaDMIN(string[] userDetailsArray)
+        public void FillTextboxesAdmin(string[] userDetailsArray)
         {
             // Initialize the UserDetails object with the array of user details
             UserDetails userDetails = new UserDetails(userDetailsArray);
@@ -204,6 +204,6 @@ namespace CRUD_System
             adminControl.txtEmail.Text = userDetails.Email;
             adminControl.txtPhonenumber.Text = userDetails.PhoneNumber;
         }
-        #endregion TEXTBOXES
+        #endregion TEXTBOXES ADMIN
     }
 }

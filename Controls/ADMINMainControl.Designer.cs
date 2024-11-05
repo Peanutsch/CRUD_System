@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class ADMINMainControl
+    partial class AdminMainControl
     {
         public System.Windows.Forms.TextBox txtName;
         public System.Windows.Forms.TextBox txtEmail;

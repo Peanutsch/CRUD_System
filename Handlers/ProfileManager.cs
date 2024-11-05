@@ -51,7 +51,6 @@ namespace CRUD_System.Handlers
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Updated user details for {alias.ToUpper()}");
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Updated user details for {alias.ToUpper()}";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
                 path.AppendToLog(newLog);
 
                 message.MessageUpdateSucces();
@@ -63,7 +62,7 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void DeleteUser(string alias)
         {
-            UserInterface userInterface = new UserInterface();
+            AdminInterface userInterface = new AdminInterface();
 
             var currentUser = LoginHandler.CurrentUser;
 
@@ -110,8 +109,6 @@ namespace CRUD_System.Handlers
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Deleted user [{aliasToDelete.ToUpper()}]";
                 path.AppendToLog(newLog);
             }
-            userInterface.EmptyTextBoxesAdmin();
-
             message.MessageDeleteSucces(); // Show MessageBox Delete Succes
             userInterface.ReloadListBoxAdmin(userIndex);
         }

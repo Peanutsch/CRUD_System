@@ -20,7 +20,7 @@ namespace CRUD_System
         FilePaths path = new FilePaths();
 
         Repository userRepository = new Repository();
-        ADMINMainControl adminMainControl = new ADMINMainControl();
+        AdminMainControl adminMainControl = new AdminMainControl();
         ProfileManager profileManager = new ProfileManager();
         InteractionHandler userInteractionHandler = new InteractionHandler();
         MessageBoxes message = new MessageBoxes();
