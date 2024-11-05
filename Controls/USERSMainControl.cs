@@ -24,7 +24,7 @@ namespace CRUD_System
         AdminMainControl adminMainControl = new AdminMainControl();
         ProfileManager profileManager = new ProfileManager();
         InteractionHandler interactionHandler = new InteractionHandler();
-        UserInterface userInterface = new UserInterface();
+        //UserInterface userInterface = new UserInterface();
         MessageBoxes message = new MessageBoxes();
 
         // Property to expose the InteractionHandler instance for external access
@@ -46,7 +46,8 @@ namespace CRUD_System
         {
             InitializeComponent();
 
-            this.userInterface.ListBoxThisUser();
+            //this.userInterface.ListBoxThisUser();
+            ListBoxThisUser();
         }
         #endregion CONSTRUCTOR
 
@@ -103,6 +104,7 @@ namespace CRUD_System
         #endregion BUTTONS
 
         #region METHODS MANAGEMENT CONTROL USER
+
         public void FillTextboxes(string[] userDetailsArray)
         {
             // Initialize the UserDetails object with the array of user details
@@ -121,7 +123,6 @@ namespace CRUD_System
         #endregion METHODS MANAGEMENT CONTROL USER
 
         #region LISTBOX
-        /*
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
@@ -149,7 +150,8 @@ namespace CRUD_System
 
             listBoxUser.SelectedIndex = 0; // auto select user to fill textboxes
         }
-        */
+
+
         public void ListBoxUser_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
@@ -185,7 +187,8 @@ namespace CRUD_System
 
             // Clear and reload listbox
             listBoxUser.Items.Clear();
-            userInterface.ListBoxThisUser();
+            //userInterface.ListBoxThisUser();
+            ListBoxThisUser();
 
             // Reset editMode to false after saving and reload interface
             editMode = false;

@@ -63,28 +63,6 @@ namespace CRUD_System.Interfaces
             userControl.listBoxUser.SelectedIndex = 0; // auto select user to fill textboxes
         }
 
-        public void ListBoxUser_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Get the selected user from the ListBox; ignore clicks on empty line in listBox
-            if (userControl.listBoxUser.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
-            {
-                userControl.InteractionHandler.UserSelected = true; // Sync selection state with ControlsHandler
-                // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
-                string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
-
-                // Read user details
-                var userDetailsArray = File.ReadAllLines(path.UserFilePath)
-                                      .Skip(2)
-                                      .Select(line => line.Split(','))
-                                      .FirstOrDefault(details => details[2] == selectedAlias);
-
-                if (userDetailsArray != null)
-                {
-                    FillTextboxes(userDetailsArray);
-                }
-            }
-        }
-
         /// <summary>
         /// Reloads the user interface after saving changes.
         /// </summary>
