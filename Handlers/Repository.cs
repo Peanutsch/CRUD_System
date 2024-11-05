@@ -20,18 +20,12 @@ namespace CRUD_System.Handlers
             Time = DateTime.Now
         };
 
-        public void UpdateUserPassword(List<string> loginLines, int userIndex)
+        public void UpdateGeneratedPassword(List<string> loginLines, int userIndex)
         {
             var loginDetails = loginLines[userIndex].Split(',');
             string currentAlias = loginDetails[0];
 
             loginLines[userIndex] = $"{currentAlias},{loginDetails[1]},{loginDetails[2]}"; // Keep current admin status
-
-            DialogResult dr = message.MessageBoxConfirmToGeneratePassword(currentAlias);
-            if (dr != DialogResult.Yes)
-            {
-                return;
-            }
 
             File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
             Debug.WriteLine($"User Login after Update: {loginLines[userIndex]}");
@@ -47,20 +41,18 @@ namespace CRUD_System.Handlers
             }
         }
 
-        public void LogPasswordChange(string currentUser, string alias)
+        public void LogEventPasswordGenerated(string currentUser, string alias)
         {
             if (!string.IsNullOrEmpty(currentUser))
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] Changed password for [{alias.ToUpper()}]");
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Changed password for user [{alias.ToUpper()}]";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
                 path.AppendToLog(newLog);
             }
             else
             {
                 Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN] Changed password for [{alias.ToUpper()}]");
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Changed password for user [{alias.ToUpper()}]";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
                 path.AppendToLog(newLog);
             }
         }

@@ -178,37 +178,5 @@ namespace CRUD_System
         {
             userInterface.ListBoxAdmin_SelectedIndexChanged();
         }
-
-        #region INTERFACE
-        public void EmptyTextBoxes()
-        {
-            // Refill textboxes with empty values
-            txtName.Text = string.Empty;
-            txtSurname.Text = string.Empty;
-            txtAlias.Text = string.Empty;
-            txtAddress.Text = string.Empty;
-            txtZIPCode.Text = string.Empty;
-            txtCity.Text = string.Empty;
-            txtEmail.Text = string.Empty;
-            txtPhonenumber.Text = string.Empty;
-        }
-
-        public void FillTextboxes(string[] userDetailsArray)
-        {
-            // Initialize the UserDetails object with the array of user details
-            UserDetails userDetails = new UserDetails(userDetailsArray);
-
-            // Populate the text fields with the details of the selected user
-            txtName.Text = userDetails.Name;
-            txtSurname.Text = userDetails.Surname;
-            txtAlias.Text = userDetails.Alias;
-            txtAddress.Text = userDetails.Address;
-            txtZIPCode.Text = userDetails.ZIPCode;
-            txtCity.Text = userDetails.City;
-            txtEmail.Text = userDetails.Email;
-            txtPhonenumber.Text = userDetails.PhoneNumber;
-        }
-        #endregion INTERFACE
-
     }
 }

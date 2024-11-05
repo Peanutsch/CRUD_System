@@ -1,5 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,7 +38,7 @@ namespace CRUD_System
         };
         #endregion
 
-
+        #region CONSTRUCTOR
         public CreateNewPassword_Form()
         {
             InitializeComponent();
@@ -45,6 +46,7 @@ namespace CRUD_System
             TxtLabelPSW();
             EnterKey();
         }
+        #endregion CONSTRUCTOR
 
         private void Form_Load(object sender, EventArgs e)
         {
@@ -185,7 +187,6 @@ namespace CRUD_System
             File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
 
             string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentAlias.ToUpper()},Changed password";
-            //File.AppendAllText(path.LogEventFilePath, newLog + Environment.NewLine);
             path.AppendToLog(newLog);
         }
 

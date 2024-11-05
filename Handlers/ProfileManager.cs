@@ -28,7 +28,7 @@ namespace CRUD_System.Handlers
         #region CONSTRUCTOR
         public ProfileManager()
         {
-            // Constructor logic here if needed
+            // 
         }
         #endregion CONSTRUCTOR
 
@@ -63,6 +63,8 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void DeleteUser(string alias)
         {
+            UserInterface userInterface = new UserInterface();
+
             var currentUser = LoginHandler.CurrentUser;
 
             // Get alias to delete from the selected user
@@ -75,8 +77,7 @@ namespace CRUD_System.Handlers
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, aliasToDelete);
 
             // MessageBox to confirm task
-            MessageBoxes messageBoxes = new MessageBoxes();
-            DialogResult dr = messageBoxes.MessageBoxConfirmToDELETE(aliasToDelete);
+            DialogResult dr = message.MessageBoxConfirmToDELETE(aliasToDelete);
 
             if (dr != DialogResult.Yes)
             {
@@ -88,6 +89,8 @@ namespace CRUD_System.Handlers
                                         !line.Split(',')[2].Trim().Equals(aliasToDelete,
                                         StringComparison.OrdinalIgnoreCase)).ToList();
             File.WriteAllLines(path.UserFilePath, userLines);
+
+            userInterface.EmptyTextBoxesAdmin();
 
             // Remove the user from data_login.csv using the alias
             loginLines = loginLines.Where(line =>
@@ -109,11 +112,8 @@ namespace CRUD_System.Handlers
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Deleted user [{aliasToDelete.ToUpper()}]";
                 path.AppendToLog(newLog);
             }
-            messageBoxes.MessageDeleteSucces(); // Show MessageBox Delete Succes
-
-            UserInterface userInterface = new UserInterface();
+            message.MessageDeleteSucces(); // Show MessageBox Delete Succes
             userInterface.ReloadListBoxAdmin(userIndex);
-            userInterface.EmptyTextBoxesAdmin();
         }
 
         public void GenerateNewPassword(string alias, bool isAdmin)
@@ -129,8 +129,7 @@ namespace CRUD_System.Handlers
             int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, alias);
             var loginDetails = loginLines[loginIndex].Split(",");
 
-            MessageBoxes messageConfirmSave = new MessageBoxes();
-            DialogResult dr = messageConfirmSave.MessageBoxConfirmToSAVEPassword(loginDetails[0]);
+            DialogResult dr = message.MessageBoxConfirmToGeneratePassword(loginDetails[0]);
 
             if (dr != DialogResult.Yes)
             {
@@ -140,14 +139,13 @@ namespace CRUD_System.Handlers
             string generatedPassword = PasswordManager.PasswordGenerator();
             loginLines[loginIndex] = $"{loginDetails[0]},{generatedPassword},{isAdmin}";
 
-            userRepository.UpdateUserPassword(loginLines, loginIndex);
+            userRepository.UpdateGeneratedPassword(loginLines, loginIndex);
 
-            MessageBoxes messageSucces = new MessageBoxes();
-            messageSucces.MessageUpdateSucces();
+            message.MessageUpdateSucces();
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                userRepository.LogPasswordChange(currentUser, loginDetails[0]);
+                userRepository.LogEventPasswordGenerated(currentUser, loginDetails[0]);
             }
         }
     }

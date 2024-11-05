@@ -89,7 +89,7 @@ namespace CRUD_System
 
                 if (userDetailsArray != null)
                 {
-                    FillTextboxes(userDetailsArray);
+                    FillTextboxesaDMIN(userDetailsArray);
                 }
 
                 // Read the lines from data_login.csv
@@ -186,7 +186,8 @@ namespace CRUD_System
             adminControl.txtEmail.Text = string.Empty;
             adminControl.txtPhonenumber.Text = string.Empty;
         }
-        public void FillTextboxes(string[] userDetailsArray)
+
+        public void FillTextboxesaDMIN(string[] userDetailsArray)
         {
             // Initialize the UserDetails object with the array of user details
             UserDetails userDetails = new UserDetails(userDetailsArray);
