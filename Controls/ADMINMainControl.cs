@@ -14,6 +14,7 @@ using System.Xml.Linq;
 using System.Diagnostics;
 using CRUD_System.Handlers;
 using CRUD_System.FileHandlers;
+using CRUD_System.Interfaces;
 
 namespace CRUD_System
 {
@@ -69,7 +70,7 @@ namespace CRUD_System
             {
                 // Toggle edit mode
                 userInterface.EditMode = ToggleEditMode();
-                userInterface.InterfaceEditModeADMIN();
+                userInterface.InterfaceEditModeAmin();
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -90,7 +91,7 @@ namespace CRUD_System
                 userProfileManager.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
             }
             userInterface.EditMode = false;
-            userInterface.InterfaceEditModeADMIN();
+            userInterface.InterfaceEditModeAmin();
             userInterface.ReloadListBoxAdmin(userIndex); // Reload listbox
         }
 

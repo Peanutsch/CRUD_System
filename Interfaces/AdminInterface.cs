@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace CRUD_System
+namespace CRUD_System.Interfaces
 {
     public class AdminInterface
     {
@@ -67,7 +67,7 @@ namespace CRUD_System
             LoadUserDetailsListBox();
 
             // Reset editMode to false after saving and reload interface
-            InterfaceEditModeADMIN();
+            InterfaceEditModeAmin();
         }
 
         public void ListBoxAdmin_SelectedIndexChanged()
@@ -125,9 +125,9 @@ namespace CRUD_System
 
         #region EDITMODE DISPLAY
 
-        public void InterfaceEditModeADMIN()
+        public void InterfaceEditModeAmin()
         {
-            Debug.WriteLine($"EditMode: {EditMode}");
+            Debug.WriteLine($"EditMode AdminInterface: {EditMode}");
 
             // Toggle Edit and Cancel button text
             adminControl.btnEditUserDetails.Text = EditMode ? "Cancel" : "Edit User";
@@ -169,7 +169,6 @@ namespace CRUD_System
 
             // Enable or disable ListBox based on EditMode
             adminControl.listBoxAdmin.Enabled = !EditMode;
-
         }
         #endregion EDITMODE DISPLAY
 

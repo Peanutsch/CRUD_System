@@ -1,5 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using CRUD_System.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,11 +23,14 @@ namespace CRUD_System
         Repository userRepository = new Repository();
         AdminMainControl adminMainControl = new AdminMainControl();
         ProfileManager profileManager = new ProfileManager();
-        InteractionHandler userInteractionHandler = new InteractionHandler();
+        InteractionHandler interactionHandler = new InteractionHandler();
+        UserInterface userInterface = new UserInterface();
         MessageBoxes message = new MessageBoxes();
 
+        // Property to expose the InteractionHandler instance for external access
+        public InteractionHandler InteractionHandler => interactionHandler;
+
         bool editMode = false;
-        //bool userSelected = false;
 
         #region Initialize DateTime for logging
         LogEntryActions log = new LogEntryActions
@@ -42,7 +46,7 @@ namespace CRUD_System
         {
             InitializeComponent();
 
-            ListBoxThisUser();
+            this.userInterface.ListBoxThisUser();
         }
         #endregion CONSTRUCTOR
 
@@ -72,27 +76,33 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnEditUserDetails_Click(object sender, EventArgs e)
         {
-            userInteractionHandler.PerformActionIfUserSelected(
+            interactionHandler.PerformActionIfUserSelected(
                 () =>   {
-                        // Toggle editMode
-                        editMode = !editMode;
-                        InterfaceEditMode();
+                            // Toggle editMode
+                            editMode = ToggleEditMode();
+                            InterfaceEditMode();
                         },
                 () => message.MessageInvalidNoUserSelected());
         }
 
         private void ChangePassword_Click(object sender, EventArgs e)
         {
-            userInteractionHandler.PerformActionIfUserSelected(() => 
+            interactionHandler.PerformActionIfUserSelected(() => 
             {
-                userInteractionHandler.Open_CreateNewPasswordForm();
+                interactionHandler.Open_CreateNewPasswordForm();
             });
             
+        }
+
+        private bool ToggleEditMode()
+        {
+            bool modus = editMode = !editMode;
+
+            return modus;
         }
         #endregion BUTTONS
 
         #region METHODS MANAGEMENT CONTROL USER
-
         public void FillTextboxes(string[] userDetailsArray)
         {
             // Initialize the UserDetails object with the array of user details
@@ -108,10 +118,10 @@ namespace CRUD_System
             txtEmail.Text = userDetails.Email;
             txtPhonenumber.Text = userDetails.PhoneNumber;
         }
-
         #endregion METHODS MANAGEMENT CONTROL USER
 
         #region LISTBOX
+        /*
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
@@ -139,13 +149,13 @@ namespace CRUD_System
 
             listBoxUser.SelectedIndex = 0; // auto select user to fill textboxes
         }
-
+        */
         public void ListBoxUser_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (listBoxUser.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
-                userInteractionHandler.UserSelected = true; // Sync selection state with ControlsHandler
+                interactionHandler.UserSelected = true; // Sync selection state with ControlsHandler
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
@@ -175,13 +185,11 @@ namespace CRUD_System
 
             // Clear and reload listbox
             listBoxUser.Items.Clear();
-            ListBoxThisUser();
+            userInterface.ListBoxThisUser();
 
             // Reset editMode to false after saving and reload interface
             editMode = false;
             InterfaceEditMode();
-
-            //listBoxUser.SelectedIndex = 0;
         }
         #endregion LISTBOX
 
