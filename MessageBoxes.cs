@@ -53,6 +53,11 @@ namespace CRUD_System
         {
             return MessageBox.Show($"Password for [{alias.ToUpper()}] updated succesfully!");
         }
+
+        public DialogResult MessageNewAccountSucces(string alias)
+        {
+            return MessageBox.Show($"New account {alias} created succesfully!");
+        }
         #endregion SUCCES
 
         #region INVALID
@@ -60,7 +65,7 @@ namespace CRUD_System
         {
             return MessageBox.Show("Please select a user first");
         }
-            
+
         public DialogResult MessageInvalidInput()
         {
             return MessageBox.Show("Invalid input for Name and/or Surname");
@@ -83,6 +88,11 @@ namespace CRUD_System
         public DialogResult MessageInvalidConfirmationPassword()
         {
             return MessageBox.Show("Input password and confirmation password are not the same!");
+        }
+
+        public DialogResult MessageSomethingWentWrong()
+        {
+            return MessageBox.Show("Something went wrong! No currentUser known.");
         }
         #endregion INVALID
     }

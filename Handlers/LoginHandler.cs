@@ -22,14 +22,9 @@ namespace CRUD_System.Handlers
         public List<string> UsersOnline = new List<string>();
 
         ReadFiles ReadDataFiles = new ReadFiles();
+        Repository_LogEvents logEvents = new Repository_LogEvents();
+        MessageBoxes message = new MessageBoxes();
 
-        #region Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
-        #endregion Initialize DateTime
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -97,10 +92,8 @@ namespace CRUD_System.Handlers
                 UsersOnline.Add(CurrentUser); // Add user to list UsersOnline
 
                 bool isAdmin = IsAdmin(inputUserName, inputUserPSW);
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{CurrentUser.ToUpper()},Logged IN";
-                Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{CurrentUser.ToUpper()}] Logged IN");
-                //File.AppendAllText(logAction, logEntry + Environment.NewLine);
-                path.AppendToLog(newLog);
+
+                logEvents.UserLoggedIn(CurrentUser);
 
                 if (isAdmin)
                 {
@@ -152,14 +145,14 @@ namespace CRUD_System.Handlers
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] logged OUT");
+                logEvents.UserLoggedOut(currentUser);
                 UsersOnline.Remove(currentUser); // Remove user from List UsersOnline
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
-                path.AppendToLog(newLog);
-
                 CurrentUser = null;
+            }
+            else
+            {
+                message.MessageSomethingWentWrong();
+                return;
             }
         }
         #endregion LOGOUT

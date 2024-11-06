@@ -35,14 +35,6 @@ namespace CRUD_System
 
         bool editMode = false;
         bool isAdmin = false;
-
-        #region Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
-        #endregion
         #endregion PROPERTIES
 
         #region Constructor

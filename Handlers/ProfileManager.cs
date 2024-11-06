@@ -17,13 +17,7 @@ namespace CRUD_System.Handlers
 
         MessageBoxes message = new MessageBoxes();
         Repository userRepository = new Repository();
-
-        // Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
+        Repository_LogEvents logEvents = new Repository_LogEvents();
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -43,18 +37,18 @@ namespace CRUD_System.Handlers
                 return;
             }
 
-            File.WriteAllLines(path.UserFilePath, userLines); // Write updated data back to data_users.csv
-            Debug.WriteLine($"User Details after Update: {userLines[userIndex]}");
-
             var currentUser = LoginHandler.CurrentUser;
             if (!string.IsNullOrEmpty(currentUser))
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Updated user details for {alias.ToUpper()}");
+                File.WriteAllLines(path.UserFilePath, userLines); // Write updated data back to data_users.csv
+                Debug.WriteLine($"User Details after Update: {userLines[userIndex]}");
 
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Updated user details for {alias.ToUpper()}";
-                path.AppendToLog(newLog);
-
+                logEvents.LogEventUpdateUserDetails(currentUser, alias);
                 message.MessageUpdateSucces();
+            }
+            else
+            {
+                message.MessageSomethingWentWrong();
             }
         }
 
@@ -98,19 +92,12 @@ namespace CRUD_System.Handlers
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Deleted user [{aliasToDelete.ToUpper()}]");
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Deleted user [{aliasToDelete.ToUpper()}]";
-                path.AppendToLog(newLog);
-
+                logEvents.LogEventDeleteUser(currentUser, aliasToDelete);
                 message.MessageDeleteSucces(aliasToDelete); // Show MessageBox Delete Succes
             }
             else
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Deleted user [{aliasToDelete.ToUpper()}]");
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Deleted user [{aliasToDelete.ToUpper()}]";
-                path.AppendToLog(newLog);
+                message.MessageSomethingWentWrong();
             }
             userInterface.ReloadListBoxAdmin(userIndex);
         }
@@ -142,8 +129,8 @@ namespace CRUD_System.Handlers
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                userRepository.LogEventPasswordGenerated(currentUser, loginDetails[0]);
-                message.MessageChangePasswordSucces(currentUser);
+                logEvents.LogEventPasswordGenerated(currentUser, loginDetails[0]);
+                message.MessageChangePasswordSucces(loginDetails[0]);
             }
         }
     }

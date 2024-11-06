@@ -26,6 +26,7 @@ namespace CRUD_System
         Repository userRepository = new Repository();
         AdminMainControl adminControl = new AdminMainControl();
         MessageBoxes message = new MessageBoxes();
+        Repository_LogEvents logEvents = new Repository_LogEvents();
 
         readonly FilePaths path = new FilePaths();
 
@@ -125,7 +126,6 @@ namespace CRUD_System
             };
         }
 
-
         private void ValidatePSW()
         {
             var userLines = path.ReadFileContent(path.UserFilePath);
@@ -182,14 +182,9 @@ namespace CRUD_System
 
             loginLines[userIndex] = $"{currentAlias},{newPassword},{currentAdminBool}";
 
-            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentAlias.ToUpper()}]: Changed password");
-
             File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
-
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentAlias.ToUpper()},Changed password";
-            path.AppendToLog(newLog);
-
-            message.MessageUpdateSucces();
+            logEvents.LogEventNewPasswordCreated(currentAlias); // log event to logEvents.csv
+            message.MessageChangePasswordSucces(currentAlias); // Show messagebox
         }
 
         private void TxtLabelPSW()

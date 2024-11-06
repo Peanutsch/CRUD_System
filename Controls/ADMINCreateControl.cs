@@ -14,17 +14,9 @@ namespace CRUD_System
         FilePaths path = new FilePaths();
         ADMINMainForm mainFormADMIN = new ADMINMainForm();
         MessageBoxes message = new MessageBoxes();
+        Repository_LogEvents logEvents = new Repository_LogEvents();
 
         bool isAdmin = false;
-
-        #region Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
-        #endregion
-
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -102,33 +94,24 @@ namespace CRUD_System
             }
 
             string newDataLogin = $"{isAlias},{isPassword},{isAdmin}";
-            Debug.WriteLine($"New User Login: {newDataLogin}\nAlias: {isAlias} Password: {isPassword} Admin: {isAdmin}");
+            //Debug.WriteLine($"New User Login: {newDataLogin}\nAlias: {isAlias} Password: {isPassword} Admin: {isAdmin}");
             string newDataUsers = $"{name},{surname},{isAlias},{address},{zipCode},{city},{email},{phoneNumber}";
-            Debug.WriteLine($"New User Details: {newDataUsers}\n{name} {surname}, {isAlias}, {address}, {zipCode}, {city}, {email}, {phoneNumber}");
+            //Debug.WriteLine($"New User Details: {newDataUsers}\n{name} {surname}, {isAlias}, {address}, {zipCode}, {city}, {email}, {phoneNumber}");
             
             // Append to the CSV files
             File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
             File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
 
-            MessageBox.Show($"User {isAlias} added successfully!");
+            
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Created new user [{isAlias.ToUpper()}]");
-                Debug.WriteLine($"User {isAlias} added successfully!");
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Created new user [{isAlias.ToUpper()}]";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
-                path.AppendToLog(newLog);
+                logEvents.NewAccount(currentUser, isAlias);
+                message.MessageNewAccountSucces(isAlias);
             }
             else
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN]: Created new user [{isAlias.ToUpper()}]");
-                Debug.WriteLine($"User {isAlias} added successfully!");
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Created new user [{isAlias.ToUpper()}]";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
-                path.AppendToLog(newLog);
+                message.MessageSomethingWentWrong();
             }
             // Close CreateFormADMIN, return to MainFormADMIN
             CloseCreateForm();
@@ -156,7 +139,7 @@ namespace CRUD_System
 
 
             txtAlias.Text = finalAlias;
-            Debug.WriteLine($"Alias user: {finalAlias}");
+            //Debug.WriteLine($"Alias user: {finalAlias}");
             
             return finalAlias;
         }
