@@ -23,7 +23,7 @@ namespace CRUD_System
         public int charToUpper = 3;
         public int charIsDigi = 3;
 
-        Repository userRepository = new Repository();
+        UserRepository userRepository = new UserRepository();
         AdminMainControl adminControl = new AdminMainControl();
         MessageBoxes message = new MessageBoxes();
         Repository_LogEvents logEvents = new Repository_LogEvents();
@@ -128,13 +128,13 @@ namespace CRUD_System
 
         private void ValidatePSW()
         {
-            var userLines = path.ReadFileContent(path.UserFilePath);
-            var loginLines = path.ReadFileContent(path.LoginFilePath);
-
             var currentUser = LoginHandler.CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {
+                var userLines = path.ReadFileContent(path.UserFilePath);
+                var loginLines = path.ReadFileContent(path.LoginFilePath);
+
                 // Find userIndex in data_login.csv and data_users.csv
                 int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, currentUser);
                 int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, currentUser);
@@ -152,8 +152,6 @@ namespace CRUD_System
                     {
                         return;
                     }
-
-                    Debug.WriteLine($"New User psw: {newPassword}");
                     UpdateNewPassword(loginLines, userIndex, newPassword);
                     this.Close();
                 }
@@ -182,9 +180,12 @@ namespace CRUD_System
 
             loginLines[userIndex] = $"{currentAlias},{newPassword},{currentAdminBool}";
 
-            File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
-            logEvents.LogEventNewPasswordCreated(currentAlias); // log event to logEvents.csv
-            message.MessageChangePasswordSucces(currentAlias); // Show messagebox
+            // Write updated data back to data_login.csv
+            File.WriteAllLines(path.LoginFilePath, loginLines);
+            // log event to logEvents.csv
+            logEvents.LogEventNewPasswordCreated(currentAlias);
+            
+            message.MessageChangePasswordSucces(currentAlias);
         }
 
         private void TxtLabelPSW()

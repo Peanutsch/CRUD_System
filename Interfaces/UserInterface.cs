@@ -21,7 +21,7 @@ namespace CRUD_System.Interfaces
 
         FilePaths path = new FilePaths();
 
-        Repository repository = new Repository();
+        UserRepository repository = new UserRepository();
         UserMainControl userControl = new UserMainControl();
 
         #endregion PROPERTIES

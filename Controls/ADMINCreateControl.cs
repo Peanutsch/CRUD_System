@@ -93,19 +93,16 @@ namespace CRUD_System
                 return;
             }
 
-            string newDataLogin = $"{isAlias},{isPassword},{isAdmin}";
-            //Debug.WriteLine($"New User Login: {newDataLogin}\nAlias: {isAlias} Password: {isPassword} Admin: {isAdmin}");
-            string newDataUsers = $"{name},{surname},{isAlias},{address},{zipCode},{city},{email},{phoneNumber}";
-            //Debug.WriteLine($"New User Details: {newDataUsers}\n{name} {surname}, {isAlias}, {address}, {zipCode}, {city}, {email}, {phoneNumber}");
-            
-            // Append to the CSV files
-            File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
-            File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
-
-            
-
             if (!string.IsNullOrEmpty(currentUser))
             {
+                string newDataLogin = $"{isAlias},{isPassword},{isAdmin}";
+                string newDataUsers = $"{name},{surname},{isAlias},{address},{zipCode},{city},{email},{phoneNumber}";
+
+                // Append to the CSV files
+                File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
+                File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
+
+                // Log event
                 logEvents.NewAccount(currentUser, isAlias);
                 message.MessageNewAccountSucces(isAlias);
             }

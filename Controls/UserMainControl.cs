@@ -20,7 +20,7 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
-        Repository userRepository = new Repository();
+        UserRepository userRepository = new UserRepository();
         AdminMainControl adminMainControl = new AdminMainControl();
         ProfileManager profileManager = new ProfileManager();
         InteractionHandler interactionHandler = new InteractionHandler();

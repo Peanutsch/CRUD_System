@@ -94,6 +94,11 @@ namespace CRUD_System
         {
             return MessageBox.Show("Something went wrong! No currentUser known.");
         }
+
+        public DialogResult MessageUserNotFound(string alias)
+        {
+            return MessageBox.Show($"Something went wrong! User {alias} not found.");
+        }
         #endregion INVALID
     }
 }

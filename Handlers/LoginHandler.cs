@@ -99,6 +99,8 @@ namespace CRUD_System.Handlers
         /// <param name="inputUserPSW">The password input provided by the user.</param>
         public void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
+            //UsersOnline.Add("admin");
+
             // Validate login input
             if (ValidateLogin(inputUserName, inputUserPSW) && ValidateStatus(inputUserName))
             {

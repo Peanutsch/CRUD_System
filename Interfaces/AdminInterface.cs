@@ -11,12 +11,20 @@ using System.Xml.Linq;
 
 namespace CRUD_System.Interfaces
 {
+    /// <summary>
+    /// Class for handling setup/layout Admin interface
+    /// </summary>
     public class AdminInterface
     {
+        #region PROPERTIES
+        /// <summary>
+        /// Indicates whether the interface is in edit mode.
+        /// </summary>
         public bool EditMode { get; set; }
 
         readonly FilePaths path = new FilePaths();
         private readonly AdminMainControl adminControl;
+        #endregion PROPERTIES
 
         #region CONSTRUCTOR
         public AdminInterface(AdminMainControl? adminControl = null)
@@ -52,7 +60,7 @@ namespace CRUD_System.Interfaces
         }
 
         /// <summary>
-        /// Reloads the user interface after saving changes.
+        /// Reloads the user list box after making changes, refreshing the interface display.
         /// </summary>
         /// <param name="userIndex">The index of the updated user.</param>
         public void ReloadListBoxAdmin(int userIndex)
@@ -70,6 +78,9 @@ namespace CRUD_System.Interfaces
             InterfaceEditModeAmin();
         }
 
+        /// <summary>
+        /// Handles the event when a user is selected in the list box, filling the details for the selected user in the textboxes.
+        /// </summary>
         public void ListBoxAdmin_SelectedIndexChanged()
         {
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
@@ -124,7 +135,9 @@ namespace CRUD_System.Interfaces
         #endregion LISTBOX ADMIN
 
         #region EDITMODE DISPLAY
-
+        /// <summary>
+        /// Manages the interface display and controls based on edit mode status.
+        /// </summary>
         public void InterfaceEditModeAmin()
         {
             Debug.WriteLine($"EditMode AdminInterface: {EditMode}");
@@ -173,10 +186,11 @@ namespace CRUD_System.Interfaces
         #endregion EDITMODE DISPLAY
 
         #region TEXTBOXES ADMIN
+        /// <summary>
+        /// Clears all textboxes in the interface, resetting their content.
+        /// </summary>
         public void EmptyTextBoxesAdmin()
         {
-            MessageBox.Show("EmptyTextBoxesAdmin()");
-
             // Refill textboxes with empty values
             adminControl.txtName.Text = string.Empty;
             adminControl.txtSurname.Text = string.Empty;
@@ -188,6 +202,10 @@ namespace CRUD_System.Interfaces
             adminControl.txtPhonenumber.Text = string.Empty;
         }
 
+        /// <summary>
+        /// Populates the textboxes with the details of a selected user.
+        /// </summary>
+        /// <param name="userDetailsArray">Array containing the user details.</param>
         public void FillTextboxesAdmin(string[] userDetailsArray)
         {
             // Initialize the UserDetails object with the array of user details

@@ -23,8 +23,8 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
-        AdminInterface userInterface;
-        Repository userRespository = new Repository();
+        AdminInterface adminInterface;
+        UserRepository userRespository = new UserRepository();
         ProfileManager userProfileManager = new ProfileManager();
         InteractionHandler interactionHandler = new InteractionHandler();
 
@@ -38,15 +38,15 @@ namespace CRUD_System
         #endregion PROPERTIES
 
         #region Constructor
-        public AdminMainControl(AdminInterface? userInterface = null)
+        public AdminMainControl(AdminInterface? adminInterface = null)
         {
             InitializeComponent();
 
             // Assign the UserInterface field; if no instance is provided, create a new UserInterface instance
-            this.userInterface = userInterface ?? new AdminInterface(this);
+            this.adminInterface = adminInterface ?? new AdminInterface(this);
 
             // Load data_users.csv for display in listbox
-            this.userInterface.LoadUserDetailsListBox();
+            this.adminInterface.LoadUserDetailsListBox();
         }
         #endregion CONSTRUCTOR
 
@@ -61,8 +61,8 @@ namespace CRUD_System
             interactionHandler.PerformActionIfUserSelected(() =>  
             {
                 // Toggle edit mode
-                userInterface.EditMode = ToggleEditMode();
-                userInterface.InterfaceEditModeAmin();
+                adminInterface.EditMode = ToggleEditMode();
+                adminInterface.InterfaceEditModeAmin();
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -74,7 +74,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            Repository userRepository = new Repository();
+            UserRepository userRepository = new UserRepository();
             var userLines = File.ReadAllLines(path.UserFilePath).ToList();
             var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
@@ -82,9 +82,9 @@ namespace CRUD_System
             {
                 userProfileManager.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
             }
-            userInterface.EditMode = false;
-            userInterface.InterfaceEditModeAmin();
-            userInterface.ReloadListBoxAdmin(userIndex); // Reload listbox
+            adminInterface.EditMode = false;
+            adminInterface.InterfaceEditModeAmin();
+            adminInterface.ReloadListBoxAdmin(userIndex); // Reload listbox
         }
 
         /// <summary>
@@ -99,8 +99,11 @@ namespace CRUD_System
                 userProfileManager.DeleteUser(txtAlias.Text); // Perform delete action only if a user is selected
                 
                 listBoxAdmin.Items.Clear();
-                userInterface.LoadUserDetailsListBox();
-                userInterface.EmptyTextBoxesAdmin();
+                adminInterface.LoadUserDetailsListBox();
+                adminInterface.EmptyTextBoxesAdmin();
+
+                // Update button states after deleting user
+                InteractionHandler.UserSelected = false;
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -112,10 +115,10 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
-            Repository userRepository = new Repository();
+            UserRepository userRepository = new UserRepository();
             interactionHandler.OpenCreateForm(this);
             listBoxAdmin.Items.Clear();
-            userInterface.LoadUserDetailsListBox();
+            adminInterface.LoadUserDetailsListBox();
         }
         
         /// <summary>
@@ -158,7 +161,7 @@ namespace CRUD_System
 
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
-            userInterface.ListBoxAdmin_SelectedIndexChanged();
+            adminInterface.ListBoxAdmin_SelectedIndexChanged();
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
     }
