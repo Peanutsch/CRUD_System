@@ -3,6 +3,7 @@ using Microsoft.VisualBasic.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -74,6 +75,19 @@ namespace CRUD_System.Handlers
             // Return the admin status if the user is found
             return user != default && user.IsAdmin;
         }
+
+        public bool ValidateStatus(string inputUserName)
+        {
+            foreach (string item in UsersOnline)
+            {
+                if (item.Equals(inputUserName))
+                {
+                    MessageBox.Show($"User [{inputUserName}] is already online");
+                    return false;
+                }
+            }
+            return true;
+        }
         #endregion LOGIN VALIDATION
 
         #region LOGIN
@@ -86,7 +100,7 @@ namespace CRUD_System.Handlers
         public void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
             // Validate login input
-            if (ValidateLogin(inputUserName, inputUserPSW))
+            if (ValidateLogin(inputUserName, inputUserPSW) && ValidateStatus(inputUserName))
             {
                 CurrentUser = inputUserName.ToLower();
                 UsersOnline.Add(CurrentUser); // Add user to list UsersOnline
@@ -148,12 +162,7 @@ namespace CRUD_System.Handlers
                 logEvents.UserLoggedOut(currentUser);
                 UsersOnline.Remove(currentUser); // Remove user from List UsersOnline
                 CurrentUser = null;
-            }
-            else
-            {
-                message.MessageSomethingWentWrong();
-                return;
-            }
+            }           
         }
         #endregion LOGOUT
     }

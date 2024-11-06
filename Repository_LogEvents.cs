@@ -30,6 +30,13 @@ namespace CRUD_System
             Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{CurrentUser.ToUpper()}] Logged IN");
             path.AppendToLog(newLog);
         }
+
+        public void UserLoggedOut(string currentUser)
+        {
+            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] logged OUT");
+            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
+            path.AppendToLog(newLog);
+        }
         #endregion LOGINHANDLER
 
         #region ADMINCREATECONTROL
