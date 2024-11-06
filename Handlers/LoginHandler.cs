@@ -110,7 +110,7 @@ namespace CRUD_System.Handlers
                 }
                 else
                 {
-                    USERSMainForm usersForm = new USERSMainForm();
+                    UserMainForm usersForm = new UserMainForm();
                     DisplayUserAlias(usersForm, !isAdmin); // Pass usersForm, !isAdmin to DisplayUserAlias
                     usersForm.ShowDialog(); // Open usersForm
                 }

@@ -22,22 +22,17 @@ namespace CRUD_System.Handlers
 
         public void UpdateGeneratedPassword(List<string> loginLines, int userIndex)
         {
+            var currentUser = LoginHandler.CurrentUser;
             var loginDetails = loginLines[userIndex].Split(',');
             string currentAlias = loginDetails[0];
 
             loginLines[userIndex] = $"{currentAlias},{loginDetails[1]},{loginDetails[2]}"; // Keep current admin status
 
             File.WriteAllLines(path.LoginFilePath, loginLines); // Write updated data back to data_login.csv
-            Debug.WriteLine($"User Login after Update: {loginLines[userIndex]}");
-
-            var currentUser = LoginHandler.CurrentUser;
+            
             if (!string.IsNullOrEmpty(currentUser))
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Generated new password for {currentAlias.ToUpper()}");
-
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Generated new password for {currentAlias.ToUpper()}";
-                //File.AppendAllText(logAction, newLog + Environment.NewLine);
-                path.AppendToLog(newLog);
+                LogEventPasswordGenerated(currentUser, currentAlias);
             }
         }
 

@@ -15,7 +15,7 @@ using static System.Windows.Forms.LinkLabel;
 
 namespace CRUD_System
 {
-    public partial class USERSMainControl : UserControl
+    public partial class UserMainControl : UserControl
     {
         #region PROPERTIES
         FilePaths path = new FilePaths();
@@ -42,7 +42,7 @@ namespace CRUD_System
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
-        public USERSMainControl()
+        public UserMainControl()
         {
             InitializeComponent();
 

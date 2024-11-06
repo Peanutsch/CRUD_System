@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace CRUD_System
 {
-    public partial class ADMINCreateControl : UserControl
+    public partial class AdminCreateControl : UserControl
     {
         #region PROPERTIES
         FilePaths path = new FilePaths();
@@ -28,7 +28,7 @@ namespace CRUD_System
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
-        public ADMINCreateControl()
+        public AdminCreateControl()
         {
             InitializeComponent();
         }

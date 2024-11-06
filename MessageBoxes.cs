@@ -32,9 +32,9 @@ namespace CRUD_System
             return MessageBox.Show($"Please confirm to GENERATE a NEW password for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToDELETE(string alias)
+        public DialogResult MessageBoxConfirmToDELETE(string aliasToDelete)
         {
-            return MessageBox.Show($"Please confirm to DELETE account {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to DELETE account {aliasToDelete.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
         }
         #endregion CONFIRM
 
@@ -44,9 +44,14 @@ namespace CRUD_System
             return MessageBox.Show("User Details updated successfully!", "Succes", MessageBoxButtons.OK);
         }
 
-        public DialogResult MessageDeleteSucces()
+        public DialogResult MessageDeleteSucces(string aliasToDelete)
         {
-            return MessageBox.Show("Account deleted successfully!", "Succes", MessageBoxButtons.OK);
+            return MessageBox.Show($"Account deleted [{aliasToDelete.ToUpper()}] successfully!", "Succes", MessageBoxButtons.OK);
+        }
+
+        public DialogResult MessageChangePasswordSucces(string alias)
+        {
+            return MessageBox.Show($"Password for [{alias.ToUpper()}] updated succesfully!");
         }
         #endregion SUCCES
 

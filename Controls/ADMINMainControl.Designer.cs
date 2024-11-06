@@ -239,7 +239,7 @@
             btnChangePassword.UseVisualStyleBackColor = false;
             btnChangePassword.Click += btnChangePassword_Click;
             // 
-            // ADMINMainControl
+            // AdminMainControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -262,7 +262,7 @@
             Controls.Add(listBoxAdmin);
             Controls.Add(btnSaveEditUserDetails);
             Controls.Add(btnDeleteUser);
-            Name = "ADMINMainControl";
+            Name = "AdminMainControl";
             Size = new Size(1440, 410);
             ResumeLayout(false);
             PerformLayout();

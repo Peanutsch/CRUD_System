@@ -2,7 +2,7 @@
 
 namespace CRUD_System
 {
-    partial class USERSMainControl
+    partial class UserMainControl
     {
         public System.Windows.Forms.TextBox txtName;
         public System.Windows.Forms.TextBox txtPassword;
@@ -233,7 +233,7 @@ namespace CRUD_System
             btnChangePassword.Visible = true;
             btnChangePassword.Click += ChangePassword_Click;
             // 
-            // USERSMainControl
+            // UserMainControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -252,7 +252,7 @@ namespace CRUD_System
             Controls.Add(txtAddress);
             Controls.Add(txtCity);
             Controls.Add(btnSaveEditUserDetails);
-            Name = "USERSMainControl";
+            Name = "UserMainControl";
             Size = new Size(1192, 317);
             ResumeLayout(false);
             PerformLayout();

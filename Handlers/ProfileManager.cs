@@ -102,6 +102,8 @@ namespace CRUD_System.Handlers
 
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Deleted user [{aliasToDelete.ToUpper()}]";
                 path.AppendToLog(newLog);
+
+                message.MessageDeleteSucces(aliasToDelete); // Show MessageBox Delete Succes
             }
             else
             {
@@ -110,7 +112,6 @@ namespace CRUD_System.Handlers
                 string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Deleted user [{aliasToDelete.ToUpper()}]";
                 path.AppendToLog(newLog);
             }
-            message.MessageDeleteSucces(); // Show MessageBox Delete Succes
             userInterface.ReloadListBoxAdmin(userIndex);
         }
 
@@ -139,11 +140,10 @@ namespace CRUD_System.Handlers
 
             userRepository.UpdateGeneratedPassword(loginLines, loginIndex);
 
-            message.MessageUpdateSucces();
-
             if (!string.IsNullOrEmpty(currentUser))
             {
                 userRepository.LogEventPasswordGenerated(currentUser, loginDetails[0]);
+                message.MessageChangePasswordSucces(currentUser);
             }
         }
     }

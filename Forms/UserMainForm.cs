@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace CRUD_System
 {
-    public partial class USERSMainForm : Form
+    public partial class UserMainForm : Form
     {
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\log.csv");
 
@@ -27,7 +27,7 @@ namespace CRUD_System
         };
         #endregion
 
-        public USERSMainForm()
+        public UserMainForm()
         {
             InitializeComponent();
         }

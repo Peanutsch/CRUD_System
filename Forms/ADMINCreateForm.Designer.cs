@@ -30,7 +30,7 @@ namespace CRUD_System
         /// </summary>
         private void InitializeComponent()
         {
-            ADMINCreateControl createControlADMIN = new ADMINCreateControl();
+            AdminCreateControl createControlADMIN = new AdminCreateControl();
 
             this.focusButton = new Button();
             this.SuspendLayout();
