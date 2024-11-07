@@ -123,7 +123,7 @@ namespace CRUD_System
             btnSaveEditUserDetails.Location = new Point(821, 105);
             btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
             btnSaveEditUserDetails.Size = new Size(150, 30);
-            btnSaveEditUserDetails.TabIndex = 10;
+            btnSaveEditUserDetails.TabIndex = 9;
             btnSaveEditUserDetails.Text = "Save Edit";
             btnSaveEditUserDetails.UseVisualStyleBackColor = false;
             btnSaveEditUserDetails.Visible = false;
@@ -178,7 +178,7 @@ namespace CRUD_System
             txtPhonenumber.Name = "txtPhonenumber";
             txtPhonenumber.PlaceholderText = "Phonenumber";
             txtPhonenumber.Size = new Size(199, 26);
-            txtPhonenumber.TabIndex = 21;
+            txtPhonenumber.TabIndex = 7;
             txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
             // btnGeneratePSW
@@ -195,7 +195,7 @@ namespace CRUD_System
             btnEditUserDetails.Location = new Point(821, 69);
             btnEditUserDetails.Name = "btnEditUserDetails";
             btnEditUserDetails.Size = new Size(150, 30);
-            btnEditUserDetails.TabIndex = 25;
+            btnEditUserDetails.TabIndex = 8;
             btnEditUserDetails.Text = "Edit Details";
             btnEditUserDetails.UseVisualStyleBackColor = false;
             btnEditUserDetails.Click += btnEditUserDetails_Click;
@@ -216,6 +216,7 @@ namespace CRUD_System
             comboBoxStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             comboBoxStatus.FormattingEnabled = true;
             comboBoxStatus.Location = new Point(821, 30);
+            comboBoxStatus.MaxDropDownItems = 9;
             comboBoxStatus.Name = "comboBoxStatus";
             comboBoxStatus.Size = new Size(150, 26);
             comboBoxStatus.TabIndex = 28;
@@ -227,10 +228,9 @@ namespace CRUD_System
             btnChangePassword.Location = new Point(821, 141);
             btnChangePassword.Name = "btnChangePassword";
             btnChangePassword.Size = new Size(150, 30);
-            btnChangePassword.TabIndex = 30;
+            btnChangePassword.TabIndex = 10;
             btnChangePassword.Text = "Change PSW";
             btnChangePassword.UseVisualStyleBackColor = true;
-            btnChangePassword.Visible = true;
             btnChangePassword.Click += ChangePassword_Click;
             // 
             // UserMainControl

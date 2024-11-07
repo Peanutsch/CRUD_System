@@ -119,7 +119,7 @@
             btnSaveEditUserDetails.Location = new Point(681, 255);
             btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
             btnSaveEditUserDetails.Size = new Size(150, 30);
-            btnSaveEditUserDetails.TabIndex = 10;
+            btnSaveEditUserDetails.TabIndex = 9;
             btnSaveEditUserDetails.Text = "Save Edit";
             btnSaveEditUserDetails.UseVisualStyleBackColor = false;
             btnSaveEditUserDetails.Visible = false;
@@ -173,7 +173,7 @@
             txtPhonenumber.Name = "txtPhonenumber";
             txtPhonenumber.PlaceholderText = "Phonenumber";
             txtPhonenumber.Size = new Size(199, 23);
-            txtPhonenumber.TabIndex = 21;
+            txtPhonenumber.TabIndex = 7;
             txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
             // btnGeneratePSW
@@ -221,7 +221,7 @@
             chkIsAdmin.Location = new Point(536, 315);
             chkIsAdmin.Name = "chkIsAdmin";
             chkIsAdmin.Size = new Size(97, 22);
-            chkIsAdmin.TabIndex = 27;
+            chkIsAdmin.TabIndex = 8;
             chkIsAdmin.Text = "isAdmin";
             chkIsAdmin.UseVisualStyleBackColor = true;
             chkIsAdmin.Visible = false;
