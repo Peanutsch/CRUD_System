@@ -30,6 +30,16 @@ namespace CRUD_System.Handlers
             // 
         }
         #endregion CONSTRUCTOR
+        /// <summary>
+        /// Returns path userLines and loginLines
+        /// </summary>
+        /// <returns></returns>
+        private (List<string> userLines, List<string> loginLines) ReadUserAndLoginData()
+        {
+            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
+            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
+            return (userLines, loginLines);
+        }
 
         /// <summary>
         /// Updates user details in the data_users.csv
@@ -74,8 +84,7 @@ namespace CRUD_System.Handlers
             string aliasToDelete = alias;
 
             // Read lines from data_users.csv and data_login.csv
-            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
-            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
+            (var userLines, var loginLines) = ReadUserAndLoginData();
 
             // Find user index
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, aliasToDelete);
@@ -129,8 +138,7 @@ namespace CRUD_System.Handlers
             var currentUser = LoginHandler.CurrentUser;
 
             // Read lines from data_users.csv
-            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
-            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
+            (var userLines, var loginLines) = ReadUserAndLoginData();
 
             // Find user index
             int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, alias);
@@ -163,6 +171,100 @@ namespace CRUD_System.Handlers
             }
         }
 
+        #region SAVE NEW USER
+        /// <summary>
+        /// Saves a new user by collecting input data from the form, generating an alias and password,
+        /// and appending the new user data to the relevant CSV files. It also logs the event and shows
+        /// appropriate messages based on the result.
+        /// </summary>
+        public void SaveNewUser(string Name, string Surname,
+                                string Address, string ZIPCode,
+                                string City, string Email,
+                                string Phonenumber, bool isAdmin)
+        {
+            if (!ValidateUserInput(Name, Surname))
+            {
+                return;
+            }
+
+            string isAlias = GenerateAlias(Name, Surname);
+            string isPassword = PasswordManager.PasswordGenerator();
+
+            if (ConfirmNewUserCreation(isAlias))
+            {
+                SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin);
+                LogNewAccountCreation(isAlias);
+                message.MessageNewAccountSucces(isAlias);
+            }
+        }
+
+        /// <summary>
+        /// Validates the user input to ensure that required fields are not empty.
+        /// </summary>
+        private bool ValidateUserInput(string name, string surname)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname))
+            {
+                message.MessageInvalidInput();
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Generates a unique alias for the user based on their name and surname.
+        /// </summary>
+        private string GenerateAlias(string name, string surname)
+        {
+            return userRepository.CreateTXTAlias(name, surname);
+        }
+
+        /// <summary>
+        /// Confirms the creation of the new user with a dialog box.
+        /// </summary>
+        private bool ConfirmNewUserCreation(string alias)
+        {
+            DialogResult dr = message.MessageBoxConfirmNewUser(alias);
+            return dr == DialogResult.Yes;
+        }
+
+        /// <summary>
+        /// Saves the new user data to the CSV files.
+        /// </summary>
+        private void SaveUserData(string alias, string password, string name, string surname,
+                                   string address, string zipCode, string city, string email,
+                                   string phoneNumber, bool isAdmin)
+        {
+            string newDataLogin = $"{alias},{password},{isAdmin}";
+            string newDataUsers = $"{name},{surname},{alias},{address},{zipCode},{city},{email},{phoneNumber}";
+
+            File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
+            File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
+        }
+
+        /// <summary>
+        /// Logs the creation of a new user account.
+        /// </summary>
+        private void LogNewAccountCreation(string alias)
+        {
+            var currentUser = LoginHandler.CurrentUser;
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                logEvents.NewAccount(currentUser, alias);
+            }
+            else
+            {
+                message.MessageSomethingWentWrong();
+            }
+        }
+        #endregion SAVE NEW USER
+
+        /*
+        /// <summary>
+        /// Saves a new user by collecting input data from the form, generating an alias and password,
+        /// and appending the new user data to the relevant CSV files. It also logs the event and shows
+        /// appropriate messages based on the result.
+        /// </summary>
         public void SaveNewUser(string Name, string Surname,
                                 string Address, string ZIPCode,
                                 string City, string Email,
@@ -214,5 +316,6 @@ namespace CRUD_System.Handlers
                 message.MessageSomethingWentWrong();
             }
         }
+        */
     }
 }

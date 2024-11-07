@@ -28,3 +28,18 @@ DATE, TIME, USER, ACTION
 7-11-2024,12:25,ADMIN,Logged IN
 7-11-2024,12:25,ADMIN,Created new user [DETO001]
 7-11-2024,12:25,ADMIN,Logged OUT
+7-11-2024,12:41,ADMIN,Logged IN
+7-11-2024,12:41,ADMIN,Created new user [TTTT001]
+7-11-2024,12:41,ADMIN,Deleted user [TTTT001]
+7-11-2024,12:56,ADMIN,Logged IN
+7-11-2024,12:56,ADMIN,Changed password for user [DETO001]
+7-11-2024,12:56,ADMIN,Changed password for user [DETO001]
+7-11-2024,12:56,ADMIN,Changed password for user [DETO001]
+7-11-2024,12:56,ADMIN,Deleted user [DETO001]
+7-11-2024,12:56,ADMIN,Deleted user [NIUW001]
+7-11-2024,12:56,ADMIN,Updated user details for NIEW001
+7-11-2024,12:56,ADMIN,Logged OUT
+7-11-2024,13:02,ADMIN,Logged IN
+7-11-2024,13:02,ADMIN,Created new user [NEUW001]
+7-11-2024,13:05,ADMIN,Created new user [KJJH001]
+7-11-2024,13:05,ADMIN,Created new user [ARGR001]
