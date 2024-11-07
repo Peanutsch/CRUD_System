@@ -46,7 +46,7 @@ namespace CRUD_System
             this.adminInterface = adminInterface ?? new AdminInterface(this);
 
             // Load data_users.csv for display in listbox
-            this.adminInterface.LoadUserDetailsListBox();
+            this.adminInterface.LoadDetailsListBox();
         }
         #endregion CONSTRUCTOR
 
@@ -99,7 +99,7 @@ namespace CRUD_System
                 userProfileManager.DeleteUser(txtAlias.Text); // Perform delete action only if a user is selected
                 
                 listBoxAdmin.Items.Clear();
-                adminInterface.LoadUserDetailsListBox();
+                adminInterface.LoadDetailsListBox();
                 adminInterface.EmptyTextBoxesAdmin();
             },
              () => message.MessageInvalidNoUserSelected());
@@ -116,7 +116,7 @@ namespace CRUD_System
             interactionHandler.OpenCreateForm(this);
             // Reload listbox
             listBoxAdmin.Items.Clear();
-            adminInterface.LoadUserDetailsListBox();
+            adminInterface.LoadDetailsListBox();
             // Empty Textboxes
             adminInterface.EmptyTextBoxesAdmin();
         }

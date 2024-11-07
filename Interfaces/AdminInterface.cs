@@ -37,7 +37,7 @@ namespace CRUD_System.Interfaces
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
-        public void LoadUserDetailsListBox()
+        public void LoadDetailsListBox()
         {
             var lines = File.ReadAllLines(path.UserFilePath);
 
@@ -72,7 +72,7 @@ namespace CRUD_System.Interfaces
 
             // Clear and reload listbox
             adminControl.listBoxAdmin.Items.Clear();
-            LoadUserDetailsListBox();
+            LoadDetailsListBox();
 
             // Reset editMode to false after saving and reload interface
             InterfaceEditModeAmin();
@@ -134,7 +134,7 @@ namespace CRUD_System.Interfaces
         }
         #endregion LISTBOX ADMIN
 
-        #region EDITMODE DISPLAY
+        #region EDIT MODE DISPLAY ADMIN
         /// <summary>
         /// Manages the interface display and controls based on edit mode status.
         /// </summary>

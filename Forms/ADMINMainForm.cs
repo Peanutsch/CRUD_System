@@ -20,14 +20,6 @@ namespace CRUD_System
 
         LoginHandler loginHandler = new LoginHandler();
 
-        #region Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
-        #endregion
-
         public ADMINMainForm()
         {
             InitializeComponent();
@@ -55,13 +47,11 @@ namespace CRUD_System
 
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //loginManager.PerformLogout();
             loginHandler.PerformLogout();
         }
 
         public void LogOutButton()
         {
-            //loginManager.PerformLogout();
             loginHandler.PerformLogout();
             this.Hide();
         }

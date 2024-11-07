@@ -19,14 +19,6 @@ namespace CRUD_System
 
         LoginHandler loginHandler = new LoginHandler();
 
-        #region Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
-        #endregion
-
         public UserMainForm()
         {
             InitializeComponent();
@@ -36,27 +28,6 @@ namespace CRUD_System
         {
             // Set focus to the logout button when the form is loaded
             this.ActiveControl = buttonLOGOUT;
-        }
-
-        /// <summary>
-        /// Displays the username in uppercase in the username text box
-        /// and validates the user's rights based on the provided username and password.
-        /// </summary>
-        public void DisplayUserInformationForm()
-        {
-            var currentUser = LoginHandler.CurrentUser;
-
-            if (!string.IsNullOrEmpty(currentUser))
-            {
-                textBoxUserName.Text = $"{currentUser.ToUpper()}";
-            }
-            else
-            {
-                textBoxUserName.Text = "UNKNOWN";
-            }
-            labelAlias.TextAlign = ContentAlignment.TopLeft;
-            labelAlias.BackColor = Color.LightGreen;
-            labelAlias.Text = "User";
         }
 
         /// <summary>

@@ -20,34 +20,27 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
+        UserInterface userInterface;
         UserRepository userRepository = new UserRepository();
-        AdminMainControl adminMainControl = new AdminMainControl();
         ProfileManager profileManager = new ProfileManager();
         InteractionHandler interactionHandler = new InteractionHandler();
-        //UserInterface userInterface = new UserInterface();
+
         MessageBoxes message = new MessageBoxes();
 
         // Property to expose the InteractionHandler instance for external access
         public InteractionHandler InteractionHandler => interactionHandler;
 
         bool editMode = false;
-
-        #region Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
-        #endregion
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
-        public UserMainControl()
+        public UserMainControl(UserInterface? userInterface = null)
         {
             InitializeComponent();
+            this.userInterface = userInterface ?? new UserInterface(this);
 
-            //this.userInterface.ListBoxThisUser();
-            ListBoxThisUser();
+            this.userInterface.LoadDetailsListBoxThisUser();
+            //LoadDetailsListBoxThisUser();
         }
         #endregion CONSTRUCTOR
 
@@ -126,7 +119,7 @@ namespace CRUD_System
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
-        private void ListBoxThisUser()
+        private void LoadDetailsListBoxThisUser()
         {
             var userLines = File.ReadAllLines(path.UserFilePath).ToList();
             var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
@@ -187,12 +180,11 @@ namespace CRUD_System
 
             // Clear and reload listbox
             listBoxUser.Items.Clear();
-            //userInterface.ListBoxThisUser();
-            ListBoxThisUser();
+            userInterface.LoadDetailsListBoxThisUser();
 
             // Reset editMode to false after saving and reload interface
             editMode = false;
-            InterfaceEditMode();
+            userInterface.InterfaceEditModeUser();
         }
         #endregion LISTBOX
 

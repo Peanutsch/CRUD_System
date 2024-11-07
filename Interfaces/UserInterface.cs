@@ -21,15 +21,14 @@ namespace CRUD_System.Interfaces
 
         FilePaths path = new FilePaths();
 
-        UserRepository repository = new UserRepository();
-        UserMainControl userControl = new UserMainControl();
-
+        readonly UserRepository repository = new UserRepository();
+        private readonly UserMainControl userControl;
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
-        public UserInterface()
+        public UserInterface(UserMainControl? userControl = null)
         {
-
+            this.userControl = userControl ?? new UserMainControl();
         }
         #endregion CONSTRUCTOR
 
@@ -37,7 +36,7 @@ namespace CRUD_System.Interfaces
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
-        private void ListBoxThisUser()
+        public void LoadDetailsListBoxThisUser()
         {
             var userLines = File.ReadAllLines(path.UserFilePath).ToList();
             var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
@@ -76,7 +75,7 @@ namespace CRUD_System.Interfaces
 
             // Clear and reload listbox
             userControl.listBoxUser.Items.Clear();
-            ListBoxThisUser();
+            LoadDetailsListBoxThisUser();
 
             // Reset editMode to false after saving and reload interface
             EditMode = false;
@@ -119,7 +118,7 @@ namespace CRUD_System.Interfaces
             // Enable or disable ListBox based on EditMode
             userControl.listBoxUser.Enabled = !EditMode;
         }
-        #endregion INTERFACE USERS
+        #endregion EDIT MODE DISPLAY USERS
 
         #region TEXTBOXES
         public void FillTextboxes(string[] userDetailsArray)
