@@ -1,5 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using CRUD_System.Interfaces;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -14,6 +15,7 @@ namespace CRUD_System
         FilePaths path = new FilePaths();
         ADMINMainForm mainFormADMIN = new ADMINMainForm();
         MessageBoxes message = new MessageBoxes();
+        UserRepository userRepository = new UserRepository();
         Repository_LogEvents logEvents = new Repository_LogEvents();
 
         bool isAdmin = false;
@@ -44,6 +46,7 @@ namespace CRUD_System
         #endregion
 
         #region METHODS CREATE CONTROL ADMIN
+        #region Move to UserRepository
         public void CloseCreateForm()
         {
             // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method
@@ -61,21 +64,18 @@ namespace CRUD_System
         {
             return PasswordManager.PasswordGenerator();
         }
-
+        #endregion Move to UserRepository
 
         public void SaveNewUser()
         {
+            
             var currentUser = LoginHandler.CurrentUser;
 
-            if (txtName.Text.Length < 2 || txtSurname.Text.Length < 2)
+            if (string.IsNullOrEmpty(txtName.Text) || string.IsNullOrEmpty(txtSurname.Text))
             {
                 message.MessageInvalidInput();
                 return;
             }
-
-            // Create a new record
-            string isAlias = CreateTXTAlias();
-            string isPassword = GeneratePSW();
 
             // Check each field and assign string.Empty if it is empty
             string name = txtName.Text;
@@ -85,6 +85,10 @@ namespace CRUD_System
             string city = string.IsNullOrWhiteSpace(txtCity.Text) ? string.Empty : txtCity.Text;
             string email = string.IsNullOrWhiteSpace(txtEmail.Text) ? string.Empty : txtEmail.Text;
             string phoneNumber = string.IsNullOrWhiteSpace(txtPhonenumber.Text) ? string.Empty : txtPhonenumber.Text;
+
+            // Create a new record
+            string isAlias = userRepository.CreateTXTAlias(name, surname);
+            string isPassword = GeneratePSW();
 
             DialogResult dr = message.MessageBoxConfirmNewUser(isAlias);
 
@@ -113,65 +117,15 @@ namespace CRUD_System
             // Close CreateFormADMIN, return to MainFormADMIN
             CloseCreateForm();
         }
-
-        #region ALIAS
-        /// <summary>
-        /// Generates a unique alias for the user based on the first two letters of the first name
-        /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
-        /// </summary>
-        /// <returns>A unique alias as a string.</returns>
-        public string CreateTXTAlias()
-        {
-            string initialAlias = txtName.Text.Substring(0, 2).ToLower() + txtSurname.Text.Substring(txtSurname.Text.Length - 2).ToLower();
-            int counter = 1;
-            string finalAlias = initialAlias + "001";
-
-            // Check if the alias already exists and increment the number if necessary
-            while (AliasExists(finalAlias))
-            {
-                counter++;
-                string newNumber = counter.ToString("D3"); // Ensures it always has 3 digits
-                finalAlias = initialAlias + newNumber;
-            }
-
-
-            txtAlias.Text = finalAlias;
-            //Debug.WriteLine($"Alias user: {finalAlias}");
-            
-            return finalAlias;
-        }
-
-        /// <summary>
-        /// Checks if the given alias already exists in the data_login.csv file.
-        /// </summary>
-        /// <param name="alias">The alias to check for existence.</param>
-        /// <returns>True if the alias exists; otherwise, false.</returns>
-        private bool AliasExists(string alias)
-        {
-            // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines(path.LoginFilePath);
-
-            // Check if the alias already exists
-            foreach (var line in loginLines)
-            {
-                var loginDetails = line.Split(',');
-                if (loginDetails[0] == alias)
-                {
-                    Debug.WriteLine($"Alias {alias} already exist");
-                    return true; // Alias already exists
-                }
-            }
-
-            return false; // Alias does not exist
-        }
+        
 
         private void TxtAlias_TextChanged(object sender, EventArgs e)
         {
             // Check if both txtName and txtSurname have at least 2 characters
-            if (txtName.Text.Length >= 2 && txtSurname.Text.Length >= 2)
+            if (txtName.Text.Length >= 1 && txtSurname.Text.Length >= 1)
             {
                 // Generate and display the alias
-                string displayAlias = CreateTXTAlias();
+                string displayAlias = userRepository.CreateTXTAlias(txtName.Text, txtSurname.Text);
                 txtAlias.Text = displayAlias;
             }
             else
@@ -181,7 +135,6 @@ namespace CRUD_System
                 txtAlias.PlaceholderText = "Alias";
             }
         }
-        #endregion ALIAS
         #endregion METHODS CREATE CONTROL ADMIN
     }
 }

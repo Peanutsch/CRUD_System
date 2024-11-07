@@ -178,16 +178,16 @@
 
         #endregion
 
-        private CheckBox chkIsAdmin;
-        private Button btnCancel;
-        private TextBox txtPhonenumber;
-        private TextBox txtZIPCode;
-        private TextBox txtAlias;
-        private TextBox txtSurname;
-        private TextBox txtName;
-        private TextBox txtEmail;
-        private TextBox txtAddress;
-        private TextBox txtCity;
-        private Button btnSaveEdit;
+        public CheckBox chkIsAdmin;
+        public Button btnCancel;
+        public TextBox txtPhonenumber;
+        public TextBox txtZIPCode;
+        public TextBox txtAlias;
+        public TextBox txtSurname;
+        public TextBox txtName;
+        public TextBox txtEmail;
+        public TextBox txtAddress;
+        public TextBox txtCity;
+        public Button btnSaveEdit;
     }
 }
