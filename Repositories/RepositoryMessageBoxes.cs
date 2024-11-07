@@ -102,7 +102,7 @@ namespace CRUD_System.Repositories
 
         public DialogResult MessageUserAlreadyOnline(string alias)
         {
-            return MessageBox.Show($"User with alias [{alias}] is already online");
+            return MessageBox.Show($"User with alias [{alias.ToUpper()}] is already online");
         }
         #endregion INVALID
     }

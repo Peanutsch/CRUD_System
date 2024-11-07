@@ -80,7 +80,6 @@ namespace CRUD_System.Handlers
         {
             if (UsersOnline.Contains(inputUserName))
             {
-                message.MessageUserAlreadyOnline(inputUserName);
                 return false;
             }
             return true;
@@ -96,6 +95,7 @@ namespace CRUD_System.Handlers
         /// <param name="inputUserPSW">The password input provided by the user.</param>
         public void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
+            // Test
             UsersOnline.Add("mist001");
 
             // Validate login input and user online status
@@ -123,11 +123,18 @@ namespace CRUD_System.Handlers
             }
             else
             {
-                RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-                message.MessageInvalidNamePassword();
-
                 LoginForm loginForm = new LoginForm();
-                loginForm.ShowDialog(); // Open LoginForm
+                if (UsersOnline.Contains(inputUserName))
+                {
+                    message.MessageUserAlreadyOnline(inputUserName);
+                    loginForm.ShowDialog(); // Open LoginForm
+                }
+                if (!ValidateLogin(inputUserName, inputUserPSW))
+                {
+                    RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+                    message.MessageInvalidNamePassword();
+                    loginForm.ShowDialog(); // Open LoginForm
+                }
             }
         }
 
