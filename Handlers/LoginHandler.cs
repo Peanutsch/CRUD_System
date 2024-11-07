@@ -76,69 +76,98 @@ namespace CRUD_System.Handlers
             return user != default && user.IsAdmin;
         }
 
+        /// <summary>
+        /// Checks if the user is offline (not currently in UsersOnline).
+        /// </summary>
+        /// <param name="inputUserName">The username to check.</param>
+        /// <returns>True if the user is offline; otherwise, false.</returns>
         public bool ValidateStatus(string inputUserName)
         {
-            if (UsersOnline.Contains(inputUserName))
-            {
-                return false;
-            }
-            return true;
+            return !UsersOnline.Contains(inputUserName);
         }
         #endregion LOGIN VALIDATION
 
         #region LOGIN
         /// <summary>
-        /// Authenticates the user's login credentials by checking the provided
-        /// username and password against the login data stored in the CSV file.
+        /// Authenticates the user's login credentials and handles login processing.
         /// </summary>
         /// <param name="inputUserName">The username input provided by the user.</param>
         /// <param name="inputUserPSW">The password input provided by the user.</param>
         public void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
-            // Test
-            UsersOnline.Add("mist001");
+            // T E S T //
+            UsersOnline.Add("peer001");
+            // _ _ _ _ //
 
-            // Validate login input and user online status
-            if (ValidateLogin(inputUserName, inputUserPSW) && ValidateStatus(inputUserName))
+            if (!ValidateUserLogin(inputUserName, inputUserPSW))
             {
-                CurrentUser = inputUserName.ToLower();
-                UsersOnline.Add(CurrentUser); // Add user to list UsersOnline
+                return;
+            }
 
-                bool isAdmin = IsAdmin(inputUserName, inputUserPSW);
+            ProcessSuccessfulLogin(inputUserName, inputUserPSW);
+        }
 
-                logEvents.UserLoggedIn(CurrentUser);
+        /// <summary>
+        /// Validates the user's login credentials and online status.
+        /// </summary>
+        /// <param name="inputUserName">The username input provided by the user.</param>
+        /// <param name="inputUserPSW">The password input provided by the user.</param>
+        /// <returns>True if the user credentials and status are valid; otherwise, false.</returns>
+        private bool ValidateUserLogin(string inputUserName, string inputUserPSW)
+        {
+            LoginForm loginForm = new LoginForm();
 
-                if (isAdmin)
-                {
-                    ADMINMainForm adminForm = new ADMINMainForm();
-                    DisplayUserAlias(adminForm, isAdmin); // Pass adminForm, isAdmin to DisplayUserAlias
-                    adminForm.ShowDialog(); // Open adminForm
-                }
-                else
-                {
-                    UserMainForm usersForm = new UserMainForm();
-                    DisplayUserAlias(usersForm, !isAdmin); // Pass usersForm, !isAdmin to DisplayUserAlias
-                    usersForm.ShowDialog(); // Open usersForm
-                }
+            // Validate login credentials
+            if (!ValidateLogin(inputUserName, inputUserPSW))
+            {
+                message.MessageInvalidNamePassword();
+                loginForm.ShowDialog(); // Reopen LoginForm for retry
+                return false;
+            }
+
+            // Check user online status
+            if (!ValidateStatus(inputUserName))
+            {
+                message.MessageUserAlreadyOnline(inputUserName);
+                loginForm.ShowDialog(); // Reopen LoginForm for retry
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Processes actions upon a successful login.
+        /// </summary>
+        /// <param name="inputUserName">The validated username.</param>
+        /// <param name="inputUserPSW">The validated password.</param>
+        private void ProcessSuccessfulLogin(string inputUserName, string inputUserPSW)
+        {
+            CurrentUser = inputUserName.ToLower();
+            UsersOnline.Add(CurrentUser);
+            logEvents.UserLoggedIn(CurrentUser);
+
+            bool isAdmin = IsAdmin(inputUserName, inputUserPSW);
+            if (isAdmin)
+            {
+                ADMINMainForm adminForm = new ADMINMainForm();
+                DisplayUserAlias(adminForm, isAdmin);
+                adminForm.ShowDialog();
             }
             else
             {
-                LoginForm loginForm = new LoginForm();
-                if (UsersOnline.Contains(inputUserName))
-                {
-                    message.MessageUserAlreadyOnline(inputUserName);
-                    loginForm.ShowDialog(); // Open LoginForm
-                }
-                if (!ValidateLogin(inputUserName, inputUserPSW))
-                {
-                    RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-                    message.MessageInvalidNamePassword();
-                    loginForm.ShowDialog(); // Open LoginForm
-                }
+                UserMainForm usersForm = new UserMainForm();
+                DisplayUserAlias(usersForm, !isAdmin);
+                usersForm.ShowDialog();
             }
         }
 
-        // Adjust DisplayUserAlias to accept the correct form type as a parameter
+        /// <summary>
+        /// Displays the current user's alias and role in the specified form.
+        /// Updates the form's text fields with the username and sets the role label
+        /// to indicate if the user is an Admin or a regular User.
+        /// </summary>
+        /// <param name="form">The form where the user information will be displayed.</param>
+        /// <param name="isAdmin">Indicates if the current user has admin privileges.</param>
         public void DisplayUserAlias(dynamic form, bool isAdmin)
         {
             var currentUser = CurrentUser;
@@ -159,6 +188,10 @@ namespace CRUD_System.Handlers
         #endregion LOGIN
 
         #region LOGOUT
+        /// <summary>
+        /// Logs out the current user by removing them from the online user list,
+        /// logging the logout event, and clearing the CurrentUser.
+        /// </summary>
         public void PerformLogout()
         {
             var currentUser = CurrentUser;
