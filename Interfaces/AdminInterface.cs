@@ -200,6 +200,9 @@ namespace CRUD_System.Interfaces
             adminControl.txtCity.Text = string.Empty;
             adminControl.txtEmail.Text = string.Empty;
             adminControl.txtPhonenumber.Text = string.Empty;
+
+            // Update button states to false
+            adminControl.InteractionHandler.UserSelected = false;
         }
 
         /// <summary>

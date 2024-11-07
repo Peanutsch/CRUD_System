@@ -101,9 +101,6 @@ namespace CRUD_System
                 listBoxAdmin.Items.Clear();
                 adminInterface.LoadUserDetailsListBox();
                 adminInterface.EmptyTextBoxesAdmin();
-
-                // Update button states after deleting user
-                InteractionHandler.UserSelected = false;
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -117,8 +114,11 @@ namespace CRUD_System
         {
             UserRepository userRepository = new UserRepository();
             interactionHandler.OpenCreateForm(this);
+            // Reload listbox
             listBoxAdmin.Items.Clear();
             adminInterface.LoadUserDetailsListBox();
+            // Empty Textboxes
+            adminInterface.EmptyTextBoxesAdmin();
         }
         
         /// <summary>
