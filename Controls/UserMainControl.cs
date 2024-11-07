@@ -1,6 +1,7 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
 using CRUD_System.Interfaces;
+using CRUD_System.Repositories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,17 +22,16 @@ namespace CRUD_System
         FilePaths path = new FilePaths();
 
         UserInterface userInterface;
-        UserRepository userRepository = new UserRepository();
+        AccountManager userRepository = new AccountManager();
         ProfileManager profileManager = new ProfileManager();
-        InteractionHandler interactionHandler = new InteractionHandler();
+        FormInteractionHandler interactionHandler = new FormInteractionHandler();
 
-        MessageBoxes message = new MessageBoxes();
+        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         // Property to expose the InteractionHandler instance for external access
-        public InteractionHandler InteractionHandler => interactionHandler;
+        public FormInteractionHandler InteractionHandler => interactionHandler;
 
         bool editMode = false;
-
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -88,6 +88,7 @@ namespace CRUD_System
             });
             
         }
+
 
         private bool ToggleEditMode()
         {

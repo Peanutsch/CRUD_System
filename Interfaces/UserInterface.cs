@@ -1,5 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using CRUD_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,7 +22,7 @@ namespace CRUD_System.Interfaces
 
         FilePaths path = new FilePaths();
 
-        readonly UserRepository repository = new UserRepository();
+        readonly AccountManager repository = new AccountManager();
         readonly ProfileManager profileManager = new ProfileManager();
         private readonly UserMainControl userControl;
         #endregion PROPERTIES

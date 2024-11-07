@@ -1,4 +1,5 @@
 ﻿using CRUD_System.FileHandlers;
+using CRUD_System.Repositories;
 using Microsoft.VisualBasic.Logging;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,8 @@ namespace CRUD_System.Handlers
         public List<string> UsersOnline = new List<string>();
 
         ReadFiles ReadDataFiles = new ReadFiles();
-        Repository_LogEvents logEvents = new Repository_LogEvents();
-        MessageBoxes message = new MessageBoxes();
+        RepositoryLogEvents logEvents = new RepositoryLogEvents();
+        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -125,7 +126,7 @@ namespace CRUD_System.Handlers
             }
             else
             {
-                MessageBoxes message = new MessageBoxes();
+                RepositoryMessageBoxes message = new RepositoryMessageBoxes();
                 message.MessageInvalidNamePassword();
 
                 LoginForm loginForm = new LoginForm();

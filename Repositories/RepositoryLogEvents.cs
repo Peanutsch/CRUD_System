@@ -10,14 +10,14 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_System
+namespace CRUD_System.Repositories
 {
-    internal class Repository_LogEvents
+    internal class RepositoryLogEvents
     {
         FilePaths path = new FilePaths();
 
         // Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
+        private readonly LogDateTime log = new LogDateTime
         {
             Date = DateTime.Now.Date,
             Time = DateTime.Now

@@ -1,6 +1,7 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
 using CRUD_System.Interfaces;
+using CRUD_System.Repositories;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -14,11 +15,11 @@ namespace CRUD_System
         #region PROPERTIES
         FilePaths path = new FilePaths();
         ADMINMainForm mainFormADMIN = new ADMINMainForm();
-        MessageBoxes message = new MessageBoxes();
-        UserRepository userRepository = new UserRepository();
-        Repository_LogEvents logEvents = new Repository_LogEvents();
+        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        AccountManager userRepository = new AccountManager();
+        RepositoryLogEvents logEvents = new RepositoryLogEvents();
         ProfileManager profileManager = new ProfileManager();
-        InteractionHandler interactionHandler = new InteractionHandler();
+        FormInteractionHandler interactionHandler = new FormInteractionHandler();
 
         bool isAdmin = false;
         #endregion PROPERTIES

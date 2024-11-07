@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD_System.Handlers
 {
-    internal class LogEntryActions
+    internal class LogDateTime
     {
         public DateTime Date { get; set; }
         public DateTime Time { get; set; }

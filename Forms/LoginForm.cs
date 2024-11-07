@@ -16,14 +16,6 @@ namespace CRUD_System
         LoginHandler loginHandler = new LoginHandler();
 
         private bool isPasswordVisible = false;
-
-        #region Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
-        #endregion Initialize DateTime
         #endregion PROPERTIES
 
         #region CONSTRUCTOR

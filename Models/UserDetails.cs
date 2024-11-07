@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_System
+namespace CRUD_System.Models
 {
     public class UserDetails
     {

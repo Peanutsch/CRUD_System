@@ -3,11 +3,11 @@ using System;
 
 namespace CRUD_System.Handlers
 {
-    public class InteractionHandler
+    public class FormInteractionHandler
     {
         public bool UserSelected { get; set; } // Property to store selection state
 
-        public InteractionHandler()
+        public FormInteractionHandler()
         {
             //
         }
@@ -65,7 +65,7 @@ namespace CRUD_System.Handlers
                 parentControl.Hide();
             }
 
-            using (CreateNewPassword_Form createNewPassword = new CreateNewPassword_Form())
+            using (CreateNewPasswordForm createNewPassword = new CreateNewPasswordForm())
             {
                 createNewPassword.ShowDialog(); // Show CreateNewPassword_Form as a dialog
             }

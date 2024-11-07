@@ -5,17 +5,18 @@ using System.Diagnostics;
 using CRUD_System.FileHandlers;
 using System.IO;
 using System.Xml.Linq;
+using CRUD_System.Repositories;
 
 namespace CRUD_System.Handlers
 {
     /// <summary>
     /// Provides data access methods for user information, including searching by alias.
     /// </summary>
-    public class UserRepository
+    public class AccountManager
     {
         FilePaths path = new FilePaths();
 
-        MessageBoxes message = new MessageBoxes();
+        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         public int FindUserIndexByAlias(List<string> userLines, List<string> loginLines, string alias)
         {

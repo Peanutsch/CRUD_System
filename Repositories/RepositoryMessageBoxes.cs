@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_System
+namespace CRUD_System.Repositories
 {
     /// <summary>
     /// Class for all MessageBoxes
     /// </summary>
-    internal class MessageBoxes
+    internal class RepositoryMessageBoxes
     {
         #region CONFIRM
         public DialogResult MessageBoxConfirmNewUser(string alias)
@@ -78,7 +78,7 @@ namespace CRUD_System
 
         public DialogResult MessageInvalidPassword()
         {
-            CreateNewPassword_Form psw = new CreateNewPassword_Form();
+            CreateNewPasswordForm psw = new CreateNewPasswordForm();
             return MessageBox.Show($"Invalid Password\n" +
                                    $"Must contain {psw.lengthPsw} or more chars.\n" +
                                    $"Must contain at least {psw.charToUpper} capital letters\n" +
@@ -103,4 +103,4 @@ namespace CRUD_System
     }
 }
 
-    
+

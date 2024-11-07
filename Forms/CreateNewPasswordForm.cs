@@ -1,5 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using CRUD_System.Repositories;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -16,32 +17,24 @@ using System.Xml.Linq;
 
 namespace CRUD_System
 {
-    public partial class CreateNewPassword_Form : Form
+    public partial class CreateNewPasswordForm : Form
     {
         // Password conditions
         public int lengthPsw = 12;
         public int charToUpper = 3;
         public int charIsDigi = 3;
 
-        UserRepository userRepository = new UserRepository();
+        AccountManager userRepository = new AccountManager();
         AdminMainControl adminControl = new AdminMainControl();
-        MessageBoxes message = new MessageBoxes();
-        Repository_LogEvents logEvents = new Repository_LogEvents();
+        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        RepositoryLogEvents logEvents = new RepositoryLogEvents();
 
         readonly FilePaths path = new FilePaths();
 
         private bool isPasswordVisible = false;
 
-        #region Initialize DateTime for logging
-        LogEntryActions log = new LogEntryActions
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
-        #endregion
-
         #region CONSTRUCTOR
-        public CreateNewPassword_Form()
+        public CreateNewPasswordForm()
         {
             InitializeComponent();
 
@@ -113,7 +106,7 @@ namespace CRUD_System
 
                     if (inputChangePSW.Text != inputConfirmPSW.Text)
                     {
-                        MessageBoxes message = new MessageBoxes();
+                        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
                         message.MessageInvalidConfirmationPassword();
                         inputConfirmPSW.Clear();
                     }
@@ -145,7 +138,7 @@ namespace CRUD_System
 
                 if (newPassword.Length >= lengthPsw && uppercaseCount >= charToUpper && digitCount >= charIsDigi)
                 {
-                    MessageBoxes message = new MessageBoxes();
+                    RepositoryMessageBoxes message = new RepositoryMessageBoxes();
                     DialogResult dr = message.MessageBoxConfirmToSAVEPassword(currentUser);
 
                     if (dr != DialogResult.Yes)
@@ -157,7 +150,7 @@ namespace CRUD_System
                 }
                 else
                 {
-                    MessageBoxes message = new MessageBoxes();
+                    RepositoryMessageBoxes message = new RepositoryMessageBoxes();
                     message.MessageInvalidPassword();
                 }
             }

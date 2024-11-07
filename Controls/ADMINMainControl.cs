@@ -15,6 +15,7 @@ using System.Diagnostics;
 using CRUD_System.Handlers;
 using CRUD_System.FileHandlers;
 using CRUD_System.Interfaces;
+using CRUD_System.Repositories;
 
 namespace CRUD_System
 {
@@ -24,14 +25,14 @@ namespace CRUD_System
         FilePaths path = new FilePaths();
 
         AdminInterface adminInterface;
-        UserRepository userRepository = new UserRepository();
+        AccountManager userRepository = new AccountManager();
         ProfileManager userProfileManager = new ProfileManager();
-        InteractionHandler interactionHandler = new InteractionHandler();
+        FormInteractionHandler interactionHandler = new FormInteractionHandler();
 
         // Property to expose the InteractionHandler instance for external access
-        public InteractionHandler InteractionHandler => interactionHandler;
+        public FormInteractionHandler InteractionHandler => interactionHandler;
 
-        MessageBoxes message = new MessageBoxes();
+        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         bool editMode = false;
         bool isAdmin = false;
@@ -112,7 +113,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
-            UserRepository userRepository = new UserRepository();
+            AccountManager userRepository = new AccountManager();
             interactionHandler.OpenCreateForm(this);
             // Reload listbox
             listBoxAdmin.Items.Clear();

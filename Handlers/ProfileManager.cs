@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using CRUD_System.Interfaces;
+using CRUD_System.Repositories;
 
 namespace CRUD_System.Handlers
 {
@@ -18,10 +19,10 @@ namespace CRUD_System.Handlers
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
-        MessageBoxes message = new MessageBoxes();
-        UserRepository userRepository = new UserRepository();
-        Repository_LogEvents logEvents = new Repository_LogEvents();
-        InteractionHandler interactionHandler = new InteractionHandler();
+        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        AccountManager userRepository = new AccountManager();
+        RepositoryLogEvents logEvents = new RepositoryLogEvents();
+        FormInteractionHandler interactionHandler = new FormInteractionHandler();
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
