@@ -208,7 +208,7 @@
             txtAdmin.Name = "txtAdmin";
             txtAdmin.Size = new Size(199, 23);
             txtAdmin.TabIndex = 26;
-            txtAdmin.Text = "User is ADMIN";
+            txtAdmin.Text = "User is Admin";
             txtAdmin.TextAlign = HorizontalAlignment.Center;
             txtAdmin.Visible = false;
             // 

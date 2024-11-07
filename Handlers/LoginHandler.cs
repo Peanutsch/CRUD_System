@@ -150,7 +150,7 @@ namespace CRUD_System.Handlers
 
             form.labelAlias.TextAlign = ContentAlignment.TopLeft;
             form.labelAlias.BackColor = Color.LightGreen;
-            form.labelAlias.Text = isAdmin ? "ADMIN" : "USER";
+            form.labelAlias.Text = isAdmin ? "Admin" : "User";
         }
         #endregion LOGIN
 

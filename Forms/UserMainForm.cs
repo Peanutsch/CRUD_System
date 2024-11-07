@@ -56,7 +56,7 @@ namespace CRUD_System
             }
             labelAlias.TextAlign = ContentAlignment.TopLeft;
             labelAlias.BackColor = Color.LightGreen;
-            labelAlias.Text = "USER";
+            labelAlias.Text = "User";
         }
 
         /// <summary>

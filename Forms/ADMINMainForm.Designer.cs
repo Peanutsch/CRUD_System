@@ -64,7 +64,7 @@
             labelAlias.Name = "labelUserName";
             labelAlias.Size = new Size(58, 18);
             labelAlias.TabIndex = 3;
-            labelAlias.Text = "ADMIN";
+            labelAlias.Text = "Admin";
             labelAlias.TextAlign = ContentAlignment.TopCenter;
             //
             // UserControl
