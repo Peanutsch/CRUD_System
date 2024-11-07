@@ -17,6 +17,8 @@ namespace CRUD_System
         MessageBoxes message = new MessageBoxes();
         UserRepository userRepository = new UserRepository();
         Repository_LogEvents logEvents = new Repository_LogEvents();
+        ProfileManager profileManager = new ProfileManager();
+        InteractionHandler interactionHandler = new InteractionHandler();
 
         bool isAdmin = false;
         #endregion PROPERTIES
@@ -31,7 +33,7 @@ namespace CRUD_System
         #region BUTTONS
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            CloseCreateForm();
+            interactionHandler.CloseCreateForm(this.ParentForm);
         }
 
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
@@ -46,7 +48,7 @@ namespace CRUD_System
         #endregion
 
         #region METHODS CREATE CONTROL ADMIN
-        #region Move to UserRepository
+        /*
         public void CloseCreateForm()
         {
             // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method
@@ -60,15 +62,9 @@ namespace CRUD_System
                 MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public string GeneratePSW()
-        {
-            return PasswordManager.PasswordGenerator();
-        }
-        #endregion Move to UserRepository
-
+        */
         public void SaveNewUser()
         {
-            
             var currentUser = LoginHandler.CurrentUser;
 
             if (string.IsNullOrEmpty(txtName.Text) || string.IsNullOrEmpty(txtSurname.Text))
@@ -88,7 +84,7 @@ namespace CRUD_System
 
             // Create a new record
             string isAlias = userRepository.CreateTXTAlias(name, surname);
-            string isPassword = GeneratePSW();
+            string isPassword = PasswordManager.PasswordGenerator();
 
             DialogResult dr = message.MessageBoxConfirmNewUser(isAlias);
 
@@ -115,7 +111,7 @@ namespace CRUD_System
                 message.MessageSomethingWentWrong();
             }
             // Close CreateFormADMIN, return to MainFormADMIN
-            CloseCreateForm();
+            interactionHandler.CloseCreateForm(this.ParentForm);
         }
         
 

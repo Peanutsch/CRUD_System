@@ -39,6 +39,21 @@ namespace CRUD_System.Handlers
             }
         }
 
+        public void CloseCreateForm(Form? parentForm = null)
+        {
+            // MustNeed: explicitly cast ParentForm to MainFormADMIN before passing it to the OpenCreateForm method
+            // Check if ParentForm is not null and is of type MainFormADMIN
+            if (parentForm != null)
+            {
+                parentForm.Close();
+            }
+            else
+            {
+                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
         /// <summary>
         /// Opens a form to create a new password, optionally hiding a parent control during the form display.
         /// </summary>
