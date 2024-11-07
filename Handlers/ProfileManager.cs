@@ -21,6 +21,7 @@ namespace CRUD_System.Handlers
         MessageBoxes message = new MessageBoxes();
         UserRepository userRepository = new UserRepository();
         Repository_LogEvents logEvents = new Repository_LogEvents();
+        InteractionHandler interactionHandler = new InteractionHandler();
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -159,6 +160,58 @@ namespace CRUD_System.Handlers
             {
                 message.MessageSomethingWentWrong();
                 return;
+            }
+        }
+
+        public void SaveNewUser(string Name, string Surname,
+                                string Address, string ZIPCode,
+                                string City, string Email,
+                                string Phonenumber, bool isAdmin)
+        {
+            var currentUser = LoginHandler.CurrentUser;
+
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Surname))
+            {
+                message.MessageInvalidInput();
+                return;
+            }
+
+            // Check each field and assign string.Empty if it is empty
+            string name = Name;
+            string surname = Surname;
+            string address = string.IsNullOrWhiteSpace(Address) ? string.Empty : Address;
+            string zipCode = string.IsNullOrWhiteSpace(ZIPCode) ? string.Empty : ZIPCode;
+            string city = string.IsNullOrWhiteSpace(City) ? string.Empty : City;
+            string email = string.IsNullOrWhiteSpace(Email) ? string.Empty : Email;
+            string phoneNumber = string.IsNullOrWhiteSpace(Phonenumber) ? string.Empty : Phonenumber;
+
+            // Create a new record
+            string isAlias = userRepository.CreateTXTAlias(name, surname);
+            string isPassword = PasswordManager.PasswordGenerator();
+
+            DialogResult dr = message.MessageBoxConfirmNewUser(isAlias);
+
+            if (dr != DialogResult.Yes)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                string newDataLogin = $"{isAlias},{isPassword},{isAdmin}";
+                string newDataUsers = $"{name},{surname},{isAlias},{address},{zipCode},{city},{email},{phoneNumber}";
+
+                // Append to the CSV files
+                File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
+                File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
+
+                // Log event
+                logEvents.NewAccount(currentUser, isAlias);
+                message.MessageNewAccountSucces(isAlias);
+            }
+            else
+            {
+                message.MessageSomethingWentWrong();
             }
         }
     }
