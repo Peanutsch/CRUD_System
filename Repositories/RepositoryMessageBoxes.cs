@@ -99,6 +99,11 @@ namespace CRUD_System.Repositories
         {
             return MessageBox.Show($"Something went wrong! User {alias} not found.");
         }
+
+        public DialogResult MessageUserAlreadyOnline(string alias)
+        {
+            return MessageBox.Show($"User with alias [{alias}] is already online");
+        }
         #endregion INVALID
     }
 }

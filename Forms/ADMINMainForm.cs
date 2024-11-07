@@ -16,7 +16,7 @@ namespace CRUD_System
 {
     public partial class ADMINMainForm : Form
     {
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"FilesUserDetails\log.csv");
+        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"CSV\log.csv");
 
         LoginHandler loginHandler = new LoginHandler();
 

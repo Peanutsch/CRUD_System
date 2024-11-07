@@ -15,9 +15,9 @@ namespace CRUD_System.FileHandlers
         {
             string rootPath = RootPath.GetRootPath() ?? string.Empty;
 
-            UserFilePath = Path.Combine(rootPath, "FilesUserDetails", "data_users.csv");
-            LoginFilePath = Path.Combine(rootPath, "FilesUserDetails", "data_login.csv");
-            LogEventFilePath = Path.Combine(rootPath, "FilesUserDetails", "logEvents.csv");
+            UserFilePath = Path.Combine(rootPath, "CSV", "data_users.csv");
+            LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
+            LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
         }
 
         public List<string> ReadFileContent(string filePath)

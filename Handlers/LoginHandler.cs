@@ -78,13 +78,10 @@ namespace CRUD_System.Handlers
 
         public bool ValidateStatus(string inputUserName)
         {
-            foreach (string item in UsersOnline)
+            if (UsersOnline.Contains(inputUserName))
             {
-                if (item.Equals(inputUserName))
-                {
-                    MessageBox.Show($"User [{inputUserName}] is already online");
-                    return false;
-                }
+                message.MessageUserAlreadyOnline(inputUserName);
+                return false;
             }
             return true;
         }
@@ -99,9 +96,9 @@ namespace CRUD_System.Handlers
         /// <param name="inputUserPSW">The password input provided by the user.</param>
         public void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
-            //UsersOnline.Add("admin");
+            UsersOnline.Add("mist001");
 
-            // Validate login input
+            // Validate login input and user online status
             if (ValidateLogin(inputUserName, inputUserPSW) && ValidateStatus(inputUserName))
             {
                 CurrentUser = inputUserName.ToLower();
