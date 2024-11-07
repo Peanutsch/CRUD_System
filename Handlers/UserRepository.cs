@@ -42,11 +42,11 @@ namespace CRUD_System.Handlers
         {
             if (Name.Length < 2)
             {
-                Name = Name + Name;
+                Name += Name; // Double name
             }
             if (Surname.Length < 2)
             {
-                Surname = Surname + Surname;
+                Surname += Surname; // Double surmame
             }
 
             string initialAlias = Name.Substring(0, 2).ToLower() + Surname.Substring(Surname.Length - 2).ToLower();
@@ -86,7 +86,6 @@ namespace CRUD_System.Handlers
                     return true; // Alias already exists
                 }
             }
-
             return false; // Alias does not exist
         }
     }

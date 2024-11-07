@@ -25,7 +25,6 @@ namespace CRUD_System.Handlers
         ReadFiles ReadDataFiles = new ReadFiles();
         Repository_LogEvents logEvents = new Repository_LogEvents();
         MessageBoxes message = new MessageBoxes();
-
         #endregion PROPERTIES
 
         #region CONSTRUCTOR

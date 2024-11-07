@@ -81,7 +81,7 @@ namespace CRUD_System.Interfaces
         /// <summary>
         /// Handles the event when a user is selected in the list box, filling the details for the selected user in the textboxes.
         /// </summary>
-        public void ListBoxAdmin_SelectedIndexChanged()
+        public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))

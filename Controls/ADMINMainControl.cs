@@ -24,7 +24,7 @@ namespace CRUD_System
         FilePaths path = new FilePaths();
 
         AdminInterface adminInterface;
-        UserRepository userRespository = new UserRepository();
+        UserRepository userRepository = new UserRepository();
         ProfileManager userProfileManager = new ProfileManager();
         InteractionHandler interactionHandler = new InteractionHandler();
 
@@ -74,9 +74,9 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            UserRepository userRepository = new UserRepository();
-            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
-            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
+            
+            // Read lines from data_users.csv and data_login.csv
+            (var userLines, var loginLines) = userProfileManager.ReadUserAndLoginData();
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             if (userIndex != -1)
             {
@@ -161,7 +161,7 @@ namespace CRUD_System
 
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
-            adminInterface.ListBoxAdmin_SelectedIndexChanged();
+            adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
     }
