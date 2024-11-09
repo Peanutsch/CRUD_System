@@ -224,13 +224,14 @@ namespace CRUD_System
             // 
             // btnChangePassword
             // 
+            btnChangePassword.BackColor = SystemColors.ActiveCaption;
             btnChangePassword.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnChangePassword.Location = new Point(821, 141);
+            btnChangePassword.Location = new Point(821, 105);
             btnChangePassword.Name = "btnChangePassword";
             btnChangePassword.Size = new Size(150, 30);
             btnChangePassword.TabIndex = 10;
             btnChangePassword.Text = "Change PSW";
-            btnChangePassword.UseVisualStyleBackColor = true;
+            btnChangePassword.UseVisualStyleBackColor = false;
             btnChangePassword.Click += ChangePassword_Click;
             // 
             // UserMainControl

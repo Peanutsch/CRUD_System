@@ -156,7 +156,7 @@ namespace CRUD_System.Handlers
             else
             {
                 UserMainForm usersForm = new UserMainForm();
-                DisplayUserAlias(usersForm, !isAdmin);
+                DisplayUserAlias(usersForm, isAdmin);
                 usersForm.ShowDialog();
             }
         }
@@ -182,7 +182,7 @@ namespace CRUD_System.Handlers
             }
 
             form.labelAlias.TextAlign = ContentAlignment.TopLeft;
-            form.labelAlias.BackColor = Color.LightGreen;
+            form.labelAlias.BackColor = isAdmin ? Color.LightGreen : Color.LightBlue;
             form.labelAlias.Text = isAdmin ? "Admin" : "User";
         }
         #endregion LOGIN
