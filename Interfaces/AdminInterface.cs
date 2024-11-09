@@ -18,9 +18,7 @@ namespace CRUD_System.Interfaces
     public class AdminInterface
     {
         #region PROPERTIES
-        /// <summary>
-        /// Indicates whether the interface is in edit mode.
-        /// </summary>
+
         public bool EditMode { get; set; }
 
         readonly FilePaths path = new FilePaths();

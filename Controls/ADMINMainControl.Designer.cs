@@ -203,12 +203,12 @@
             txtAdmin.BackColor = Color.LightGreen;
             txtAdmin.Enabled = false;
             txtAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAdmin.Location = new Point(434, 313);
+            txtAdmin.Location = new Point(536, 312);
             txtAdmin.Multiline = true;
             txtAdmin.Name = "txtAdmin";
-            txtAdmin.Size = new Size(199, 23);
+            txtAdmin.Size = new Size(97, 23);
             txtAdmin.TabIndex = 26;
-            txtAdmin.Text = "User is Admin";
+            txtAdmin.Text = "Admin";
             txtAdmin.TextAlign = HorizontalAlignment.Center;
             txtAdmin.Visible = false;
             // 
@@ -218,11 +218,12 @@
             chkIsAdmin.CheckAlign = ContentAlignment.MiddleRight;
             chkIsAdmin.Enabled = false;
             chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkIsAdmin.Location = new Point(536, 315);
+            chkIsAdmin.Location = new Point(434, 314);
             chkIsAdmin.Name = "chkIsAdmin";
             chkIsAdmin.Size = new Size(97, 22);
             chkIsAdmin.TabIndex = 8;
             chkIsAdmin.Text = "isAdmin";
+            chkIsAdmin.TextAlign = ContentAlignment.MiddleRight;
             chkIsAdmin.UseVisualStyleBackColor = true;
             chkIsAdmin.Visible = false;
             chkIsAdmin.CheckedChanged += chkIsAdmin_CheckedChanged;

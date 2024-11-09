@@ -13,13 +13,12 @@ namespace CRUD_System
     public partial class AdminCreateControl : UserControl
     {
         #region PROPERTIES
-        FilePaths path = new FilePaths();
-        ADMINMainForm mainFormADMIN = new ADMINMainForm();
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        AccountManager userRepository = new AccountManager();
-        RepositoryLogEvents logEvents = new RepositoryLogEvents();
-        ProfileManager profileManager = new ProfileManager();
-        FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        private readonly ADMINMainForm mainFormADMIN = new ADMINMainForm();
+        private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        private readonly AccountManager userRepository = new AccountManager();
+        private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
+        private readonly ProfileManager profileManager = new ProfileManager();
+        private readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
 
         bool isAdmin = false;
         #endregion PROPERTIES

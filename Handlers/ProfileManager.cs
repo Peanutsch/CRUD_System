@@ -31,23 +31,19 @@ namespace CRUD_System.Handlers
             // 
         }
         #endregion CONSTRUCTOR
-        /// <summary>
-        /// Returns path userLines and loginLines
-        /// </summary>
-        /// <returns></returns>
-        public (List<string> userLines, List<string> loginLines) ReadUserAndLoginData()
-        {
-            var userLines = File.ReadAllLines(path.UserFilePath).ToList();
-            var loginLines = File.ReadAllLines(path.LoginFilePath).ToList();
-            return (userLines, loginLines);
-        }
 
         /// <summary>
-        /// Updates user details in the data_users.csv
+        /// Updates user details in data_users.csv
+        /// Updates isAdmin in data_login.csv
         /// </summary>
-        public void UpdateUserDetails(List<string> userLines, int userIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber)
+        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin)
         {
+            var loginDetails = loginLines[loginIndex].Split(",");
+            string currentAlias = loginDetails[0];
+            string currentPassword = loginDetails[1];
+
             userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber}";
+            loginLines[loginIndex] = $"{currentAlias},{currentPassword},{isAdmin}";
 
             DialogResult dr = message.MessageBoxConfirmToSAVEChanges(alias);
             if (dr != DialogResult.Yes)
@@ -60,6 +56,7 @@ namespace CRUD_System.Handlers
             {
                 // Write updated data back to data_users.csv
                 File.WriteAllLines(path.UserFilePath, userLines); 
+                File.WriteAllLines(path.LoginFilePath, loginLines);
 
                 logEvents.LogEventUpdateUserDetails(currentUser, alias);
                 message.MessageUpdateSucces();
@@ -85,7 +82,7 @@ namespace CRUD_System.Handlers
             string aliasToDelete = alias;
 
             // Read lines from data_users.csv and data_login.csv
-            (var userLines, var loginLines) = ReadUserAndLoginData();
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
             // Find user index
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, aliasToDelete);
@@ -139,7 +136,7 @@ namespace CRUD_System.Handlers
             var currentUser = LoginHandler.CurrentUser;
 
             // Read lines from data_users.csv
-            (var userLines, var loginLines) = ReadUserAndLoginData();
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
             // Find user index
             int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, alias);

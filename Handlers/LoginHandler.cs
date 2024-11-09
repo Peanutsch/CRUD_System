@@ -96,7 +96,7 @@ namespace CRUD_System.Handlers
         public void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
             // T E S T //
-            UsersOnline.Add("peer001");
+            //UsersOnline.Add("peer001");
             // _ _ _ _ //
 
             if (!ValidateUserLogin(inputUserName, inputUserPSW))

@@ -32,5 +32,16 @@ namespace CRUD_System.FileHandlers
                 File.AppendAllText(LogEventFilePath, newLog + Environment.NewLine);
             }
         }
+
+        /// <summary>
+        /// Returns path userLines and loginLines
+        /// </summary>
+        /// <returns></returns>
+        public (List<string> userLines, List<string> loginLines) ReadUserAndLoginData()
+        {
+            var userLines = File.ReadAllLines(UserFilePath).ToList();
+            var loginLines = File.ReadAllLines(LoginFilePath).ToList();
+            return (userLines, loginLines);
+        }
     }
 }

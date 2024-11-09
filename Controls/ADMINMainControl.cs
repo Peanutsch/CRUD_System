@@ -22,6 +22,8 @@ namespace CRUD_System
     public partial class AdminMainControl : UserControl
     {
         #region PROPERTIES
+        //public bool IsAdmin { get; set; }
+        
         FilePaths path = new FilePaths();
 
         AdminInterface adminInterface;
@@ -35,7 +37,7 @@ namespace CRUD_System
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         bool editMode = false;
-        bool isAdmin = false;
+        public bool isAdmin = false;
         #endregion PROPERTIES
 
         #region Constructor
@@ -77,11 +79,12 @@ namespace CRUD_System
         {
             
             // Read lines from data_users.csv and data_login.csv
-            (var userLines, var loginLines) = userProfileManager.ReadUserAndLoginData();
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             if (userIndex != -1)
             {
-                userProfileManager.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
+                userProfileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin);
             }
             adminInterface.EditMode = false;
             adminInterface.InterfaceEditModeAmin();

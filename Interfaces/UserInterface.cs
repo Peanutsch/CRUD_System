@@ -41,7 +41,7 @@ namespace CRUD_System.Interfaces
         public void LoadDetailsListBoxThisUser()
         {
             // Read lines from data_users.csv and data_login.csv
-            (var userLines, var loginLines) = profileManager.ReadUserAndLoginData();
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
             var currentUser = LoginHandler.CurrentUser;
 

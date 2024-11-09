@@ -52,13 +52,15 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
+            AdminMainControl adminControl = new AdminMainControl();
             // Read lines from data_users.csv and data_login.csv
-            (var userLines, var loginLines) = profileManager.ReadUserAndLoginData();
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
             int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, userIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text);
+                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, adminControl.isAdmin);
             }
             editMode = false; // Close editMode
             userInterface.ReloadListBoxUser(userIndex); // Reload interface
