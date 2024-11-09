@@ -84,6 +84,11 @@ namespace CRUD_System.Interfaces
             InterfaceEditModeUser();
         }
 
+        /// <summary>
+        /// Handles the event when a user is selected in the ListBox. 
+        /// Retrieves the alias from the selected item and fetches user details from the user file.
+        /// If user details are found, populates the textboxes with the retrieved information.
+        /// </summary>
         public void ListBoxUser_SelectedIndexChangedHandler()
         {
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
@@ -108,6 +113,11 @@ namespace CRUD_System.Interfaces
         #endregion LISTBOX USER
 
         #region INTERFACE USERS
+        /// <summary>
+        /// Toggles the interface elements between edit mode and view mode for user details.
+        /// Adjusts the button text, background color, visibility, and enablement of controls 
+        /// based on the current edit mode status.
+        /// </summary>
         public void InterfaceEditModeUser()
         {
             // Toggle Edit and Cancel button text
@@ -145,6 +155,10 @@ namespace CRUD_System.Interfaces
         #endregion INTERFACE USERS
 
         #region TEXTBOXES
+        /// <summary>
+        /// Populates the user interface text fields with details from the specified user details array.
+        /// Initializes a UserDetails object from the array and assigns values to the respective text fields.
+        /// </summary>
         public void FillTextboxes(string[] userDetailsArray)
         {
             // Initialize the UserDetails object with the array of user details

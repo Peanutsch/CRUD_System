@@ -10,6 +10,12 @@ using System.Xml.Linq;
 
 namespace CRUD_System
 {
+    /// <summary>
+    /// Provides functionality for creating new users in the CRUD system. It includes actions such as saving 
+    /// new user details, toggling admin status, generating user aliases based on the name and surname, and 
+    /// canceling the creation process. It integrates with ProfileManager for user data management, 
+    /// FormInteractionHandler for form control, and AccountManager for alias generation.
+    /// </summary>
     public partial class AdminCreateControl : UserControl
     {
         #region PROPERTIES
@@ -31,16 +37,30 @@ namespace CRUD_System
         #endregion CONSTRUCTOR
 
         #region BUTTONS
+        /// <summary>
+        /// Initializes the components of the AdminCreateControl class.
+        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             interactionHandler.CloseCreateForm(this.ParentForm);
         }
 
+        /// <summary>
+        /// Handles the click event to cancel the user creation process and close the form.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             isAdmin = !isAdmin; // Toggle between true and false
         }
 
+        /// <summary>
+        /// Handles the click event to save the new user's details to the database. 
+        /// It saves the data and then closes the user creation form.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void btnSaveEdit_Click(object sender, EventArgs e)
         {
             profileManager.SaveNewUser(txtName.Text, txtSurname.Text, 
@@ -54,6 +74,12 @@ namespace CRUD_System
         #endregion BUTTONS
 
         #region HANDLERS
+        /// <summary>
+        /// Handles the event when the alias text is changed. It generates and displays an alias 
+        /// based on the first name and surname if both have at least one character.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void TxtAlias_TextChanged(object sender, EventArgs e)
         {
             // Check if both txtName and txtSurname have at least 2 characters

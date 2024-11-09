@@ -19,6 +19,13 @@ using CRUD_System.Repositories;
 
 namespace CRUD_System
 {
+    /// <summary>
+    /// Provides administrative control functionalities in the CRUD system, enabling user management tasks 
+    /// like editing, saving, deleting, and creating users, as well as setting admin permissions and 
+    /// generating passwords. Integrates with other components including AdminInterface, 
+    /// ProfileManager, FormInteractionHandler, and FilePaths to manage user interactions, data updates, 
+    /// and interface updates.
+    /// </summary>
     public partial class AdminMainControl : UserControl
     {
         #region PROPERTIES
@@ -151,11 +158,20 @@ namespace CRUD_System
             isAdmin = !isAdmin; // Toggle between true and false
         }
 
+        /// <summary>
+        /// Handles click event to open for for creating new password 
+        /// </summary>
+        /// <param name="sender">The source of the event</param>
+        /// <param name="e">The event data</param>
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
             interactionHandler.Open_CreateNewPasswordForm();
         }
 
+        /// <summary>
+        /// Toggle between editMode and !editMode
+        /// </summary>
+        /// <returns></returns>
         private bool ToggleEditMode()
         {
             bool modus = editMode = !editMode;
@@ -163,6 +179,12 @@ namespace CRUD_System
             return modus;
         }
 
+        /// <summary>
+        /// Handles the selection change event for the ListBox in the admin interface.
+        /// Triggers the appropriate selection handler in AdminInterface.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();

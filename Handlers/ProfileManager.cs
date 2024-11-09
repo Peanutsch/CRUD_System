@@ -175,7 +175,7 @@ namespace CRUD_System.Handlers
         /// and appending the new user data to the relevant CSV files. It also logs the event and shows
         /// appropriate messages based on the result.
         /// </summary>
-        public void SaveNewUser(string Name, string Surname,
+        public void SaveNewUser(string Name,string Surname,
                                 string Address, string ZIPCode,
                                 string City, string Email,
                                 string Phonenumber, bool isAdmin)
@@ -210,8 +210,11 @@ namespace CRUD_System.Handlers
         }
 
         /// <summary>
-        /// Generates a unique alias for the user based on their name and surname.
+        /// Generates a unique alias by calling the userRepository's CreateTXTAlias method.
         /// </summary>
+        /// <param name="name">The user's first name.</param>
+        /// <param name="surname">The user's surname.</param>
+        /// <returns>A generated alias string.</returns>
         private string GenerateAlias(string name, string surname)
         {
             return userRepository.CreateTXTAlias(name, surname);

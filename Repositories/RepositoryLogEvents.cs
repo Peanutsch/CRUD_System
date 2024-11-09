@@ -12,11 +12,18 @@ using System.Threading.Tasks;
 
 namespace CRUD_System.Repositories
 {
+    /// <summary>
+    /// Handles logging events, such as user login/logout, account creation, user updates, password changes and deletions. 
+    /// Logs include date, time, user information, and event details.
+    /// </summary>
     internal class RepositoryLogEvents
     {
         FilePaths path = new FilePaths();
 
-        // Initialize DateTime for logging
+        /// <summary>
+        /// Stores the current date and time for logging purposes.
+        /// Initializes with the current date and time when the instance is created.
+        /// </summary>
         private readonly LogDateTime log = new LogDateTime
         {
             Date = DateTime.Now.Date,
