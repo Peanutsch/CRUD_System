@@ -12,10 +12,15 @@ namespace CRUD_System.Handlers
     /// </summary>
     internal class PasswordManager
     {
+        #region PROPERTIES
         private const int SaltSize = 16; // 16 bytes for salt
         private const int HashSize = 20; // 20 bytes for hash
         private const int Iterations = 100000; // Recommended number of iterations
 
+        internal string encryptionKey = "kw2qgJYEA2zKxNtY/xGU8hehZabBbN/ptirj47tX2b7kRPtrLGnRDVFGpioZfiF6";
+        #endregion PROPERTIES
+
+        #region GENERATOR
         /// <summary>
         /// Generates a secure random password of the specified length.
         /// </summary>
@@ -62,7 +67,7 @@ namespace CRUD_System.Handlers
 
             return new string(password.ToArray());
         }
-
+        #endregion GENERATOR
 
         #region HASH
         /// <summary>
@@ -113,30 +118,8 @@ namespace CRUD_System.Handlers
             return true; // Password matches
         }
 
-        /// <summary>
-        /// Encrypts the CSV data and saves it to a specified file.
-        /// </summary>
-        /// <param name="csvData">The CSV data to encrypt.</param>
-        /// <param name="filePath">The path where the encrypted file should be saved.</param>
-        /// <param name="password">The password used for encryption.</param>
-        public static void EncryptCsv(string csvData, string filePath, string password)
-        {
-            byte[] encryptedData = AesEncryption.Encrypt(csvData, password);
-            File.WriteAllBytes(filePath, encryptedData);
-        }
-
-        /// <summary>
-        /// Decrypts the CSV data from a specified file.
-        /// </summary>
-        /// <param name="filePath">The path of the encrypted CSV file.</param>
-        /// <param name="password">The password used for decryption.</param>
-        /// <returns>The decrypted CSV data.</returns>
-        public static string DecryptCsv(string filePath, string password)
-        {
-            byte[] encryptedData = File.ReadAllBytes(filePath);
-            return AesEncryption.Decrypt(encryptedData, password);
-        }
-
+        /*
+        // TEST //
         /// <summary>
         /// Verifies a password by hashing it and checking it against a stored hash.
         /// This method demonstrates how to hash a password and verify it 
@@ -148,85 +131,17 @@ namespace CRUD_System.Handlers
             // Example of password hashing and verification using PBKDF2
             string password = "mijnVeiligWachtwoord";
 
+            Debug.WriteLine($"Password: {password}");
+
             // Hash the password
             string hashedPassword = GenerateHash(password);
-            Console.WriteLine($"Hashed Password: {hashedPassword}");
+            Debug.WriteLine($"Hashed Password: {hashedPassword}");
 
             // During login
             bool isCorrect = Verify("Entered Password:", hashedPassword);
             Debug.WriteLine($"Password correct? {isCorrect}");
         }
-
-    }
-    #endregion
-
-    /// <summary>
-    /// Provides AES encryption and decryption methods.
-    /// </summary>
-    public static class AesEncryption
-    {
-        // Encrypt the plaintext and return the encrypted bytes
-        public static byte[] Encrypt(string plainText, string password)
-        {
-            using (Aes aes = Aes.Create())
-            {
-                // Generate a new salt
-                byte[] salt = GenerateSalt();
-                // Derive a key from the password and salt
-                using (var rfc2898 = new Rfc2898DeriveBytes(password, salt, 10000, HashAlgorithmName.SHA256))
-                {
-                    aes.Key = rfc2898.GetBytes(32); // AES-256
-                }
-
-                using (var ms = new MemoryStream())
-                {
-                    // Prepend the salt to the encrypted file
-                    ms.Write(salt, 0, salt.Length);
-                    using (var cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
-                    using (var writer = new StreamWriter(cs))
-                    {
-                        writer.Write(plainText);
-                    }
-                    return ms.ToArray();
-                }
-            }
-        }
-
-        // Decrypt the encrypted bytes back to plaintext
-        public static string Decrypt(byte[] cipherText, string password)
-        {
-            using (Aes aes = Aes.Create())
-            {
-                using (var ms = new MemoryStream(cipherText))
-                {
-                    // Read the salt from the beginning of the memory stream
-                    byte[] salt = new byte[16]; // Salt size
-                    ms.Read(salt, 0, salt.Length);
-
-                    // Derive the key from the password and salt
-                    using (var rfc2898 = new Rfc2898DeriveBytes(password, salt, 10000, HashAlgorithmName.SHA256))
-                    {
-                        aes.Key = rfc2898.GetBytes(32);
-                    }
-
-                    using (var cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Read))
-                    using (var reader = new StreamReader(cs))
-                    {
-                        return reader.ReadToEnd();
-                    }
-                }
-            }
-        }
-
-        // Generate a random salt
-        private static byte[] GenerateSalt()
-        {
-            byte[] salt = new byte[16]; // 16 bytes salt
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
-            return salt;
-        }
+        */
+        #endregion HASH
     }
 }
