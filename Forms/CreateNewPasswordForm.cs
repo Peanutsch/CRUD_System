@@ -24,7 +24,7 @@ namespace CRUD_System
         public int charToUpper = 3;
         public int charIsDigi = 3;
 
-        AccountManager userRepository = new AccountManager();
+        AccountManager accountManager = new AccountManager();
         AdminMainControl adminControl = new AdminMainControl();
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
@@ -129,8 +129,8 @@ namespace CRUD_System
                 var loginLines = path.ReadFileContent(path.LoginFilePath);
 
                 // Find userIndex in data_login.csv and data_users.csv
-                int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, currentUser);
-                int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, currentUser);
+                int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, currentUser);
 
                 string newPassword = inputChangePSW.Text;
                 int uppercaseCount = newPassword.Count(char.IsUpper);

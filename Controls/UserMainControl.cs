@@ -28,7 +28,7 @@ namespace CRUD_System
         FilePaths path = new FilePaths();
 
         UserInterface userInterface;
-        AccountManager userRepository = new AccountManager();
+        AccountManager accountManager = new AccountManager();
         ProfileManager profileManager = new ProfileManager();
         FormInteractionHandler interactionHandler = new FormInteractionHandler();
 
@@ -62,8 +62,8 @@ namespace CRUD_System
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
-            int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             if (userIndex != -1)
             {
                 profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, adminControl.isAdmin);

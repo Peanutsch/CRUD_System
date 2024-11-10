@@ -21,7 +21,7 @@ namespace CRUD_System
         #region PROPERTIES
         private readonly ADMINMainForm mainFormADMIN = new ADMINMainForm();
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        private readonly AccountManager userRepository = new AccountManager();
+        private readonly AccountManager accountManager = new AccountManager();
         private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
         private readonly ProfileManager profileManager = new ProfileManager();
         private readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
@@ -86,7 +86,7 @@ namespace CRUD_System
             if (txtName.Text.Length >= 1 && txtSurname.Text.Length >= 1)
             {
                 // Generate and display the alias
-                string displayAlias = userRepository.CreateTXTAlias(txtName.Text, txtSurname.Text);
+                string displayAlias = accountManager.CreateTXTAlias(txtName.Text, txtSurname.Text);
                 txtAlias.Text = displayAlias;
             }
             else

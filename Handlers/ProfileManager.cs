@@ -20,7 +20,7 @@ namespace CRUD_System.Handlers
         FilePaths path = new FilePaths();
 
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        AccountManager userRepository = new AccountManager();
+        AccountManager accountManager = new AccountManager();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
         FormInteractionHandler interactionHandler = new FormInteractionHandler();
         #endregion PROPERTIES
@@ -85,7 +85,7 @@ namespace CRUD_System.Handlers
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
             // Find user index
-            int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, aliasToDelete);
+            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, aliasToDelete);
 
             // MessageBox to confirm task
             DialogResult dr = message.MessageBoxConfirmToDELETE(aliasToDelete);
@@ -135,11 +135,11 @@ namespace CRUD_System.Handlers
         {
             var currentUser = LoginHandler.CurrentUser;
 
-            // Read lines from data_users.csv
+            // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
             // Find user index
-            int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, alias);
+            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, alias);
             var loginDetails = loginLines[loginIndex].Split(",");
 
             DialogResult dr = message.MessageBoxConfirmToGeneratePassword(loginDetails[0]);
@@ -210,14 +210,14 @@ namespace CRUD_System.Handlers
         }
 
         /// <summary>
-        /// Generates a unique alias by calling the userRepository's CreateTXTAlias method.
+        /// Generates a unique alias by calling the accountManager's CreateTXTAlias method.
         /// </summary>
         /// <param name="name">The user's first name.</param>
         /// <param name="surname">The user's surname.</param>
         /// <returns>A generated alias string.</returns>
         private string GenerateAlias(string name, string surname)
         {
-            return userRepository.CreateTXTAlias(name, surname);
+            return accountManager.CreateTXTAlias(name, surname);
         }
 
         /// <summary>

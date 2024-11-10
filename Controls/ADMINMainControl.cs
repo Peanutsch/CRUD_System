@@ -34,7 +34,7 @@ namespace CRUD_System
         FilePaths path = new FilePaths();
 
         AdminInterface adminInterface;
-        AccountManager userRepository = new AccountManager();
+        AccountManager accountManager = new AccountManager();
         ProfileManager userProfileManager = new ProfileManager();
         FormInteractionHandler interactionHandler = new FormInteractionHandler();
 
@@ -87,8 +87,8 @@ namespace CRUD_System
             
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
-            int userIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            int loginIndex = userRepository.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             if (userIndex != -1)
             {
                 userProfileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin);
@@ -123,7 +123,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
-            AccountManager userRepository = new AccountManager();
+            AccountManager accountManager = new AccountManager();
             interactionHandler.OpenCreateForm(this);
             // Reload listbox
             listBoxAdmin.Items.Clear();

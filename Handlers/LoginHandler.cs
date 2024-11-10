@@ -21,11 +21,13 @@ namespace CRUD_System.Handlers
 
         public static string? CurrentUser { get; set; }
 
-        public List<string> UsersOnline = new List<string>();
+        //public List<string> UsersOnline = new List<string>();
 
-        ReadFiles ReadDataFiles = new ReadFiles();
+        ReadFiles readFiles = new ReadFiles();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+
+        public bool onlineStatus = false;
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -45,7 +47,7 @@ namespace CRUD_System.Handlers
         public bool ValidateLogin(string inputUserName, string inputUserPSW)
         {
             // Get login data from the CSV file
-            List<(string Username, string Password, bool IsAdmin)> loginData = ReadDataFiles.GetLoginData();
+            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
 
             // Find the user in the list where both username and password match
             var user = loginData.FirstOrDefault(u =>
@@ -65,7 +67,7 @@ namespace CRUD_System.Handlers
         public bool IsAdmin(string inputUserName, string inputUserPSW)
         {
             // Get login data from the CSV file
-            List<(string Username, string Password, bool IsAdmin)> loginData = ReadDataFiles.GetLoginData();
+            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
 
             // Find the user in the list where both username and password match
             var user = loginData.FirstOrDefault(u =>
@@ -81,13 +83,40 @@ namespace CRUD_System.Handlers
         /// </summary>
         /// <param name="inputUserName">The username to check.</param>
         /// <returns>True if the user is offline; otherwise, false.</returns>
-        public bool ValidateStatus(string inputUserName)
+        public bool ValidateOnlineStatus(string inputUserName, string inputUserPSW)
         {
-            return !UsersOnline.Contains(inputUserName);
+            //return !UsersOnline.Contains(inputUserName);
+            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
+            // Find the user in the list where both username and password match
+            var user = loginData.FirstOrDefault(u =>
+                u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
+                u.Password == inputUserPSW);
+
+            return user != default && user.onlineStatus;
         }
         #endregion LOGIN VALIDATION
 
         #region LOGIN
+
+        public void OnlineStatusHandler(string alias, bool status)
+        {
+            AccountManager accountManager = new AccountManager();
+            
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
+
+            // Find user index
+            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, alias);
+            var loginDetails = loginLines[loginIndex].Split(",");
+
+            string currentUserName = loginDetails[0];
+            string currentPassword = loginDetails[1];
+            string currentIsAdmin = loginDetails[2];
+
+            loginLines[loginIndex] = $"{currentUserName},{currentPassword},{currentIsAdmin},{status}";
+
+            File.WriteAllLines(path.LoginFilePath, loginLines);
+        }
+
         /// <summary>
         /// Authenticates the user's login credentials and handles login processing.
         /// </summary>
@@ -124,7 +153,13 @@ namespace CRUD_System.Handlers
                 loginForm.ShowDialog(); // Reopen LoginForm for retry
                 return false;
             }
-
+            if (ValidateOnlineStatus(inputUserName, inputUserPSW))
+            {
+                message.MessageUserAlreadyOnline(inputUserName);
+                loginForm.ShowDialog(); // Reopen LoginForm for retry
+                return false;
+            }
+            /*
             // Check user online status
             if (!ValidateStatus(inputUserName))
             {
@@ -132,6 +167,7 @@ namespace CRUD_System.Handlers
                 loginForm.ShowDialog(); // Reopen LoginForm for retry
                 return false;
             }
+            */
             return true;
         }
 
@@ -143,7 +179,9 @@ namespace CRUD_System.Handlers
         private void ProcessSuccessfulLogin(string inputUserName, string inputUserPSW)
         {
             CurrentUser = inputUserName.ToLower();
-            UsersOnline.Add(CurrentUser);
+            //UsersOnline.Add(CurrentUser);
+            OnlineStatusHandler(CurrentUser, true);
+
             logEvents.UserLoggedIn(CurrentUser);
 
             bool isAdmin = IsAdmin(inputUserName, inputUserPSW);
@@ -199,7 +237,8 @@ namespace CRUD_System.Handlers
             if (!string.IsNullOrEmpty(currentUser))
             {
                 logEvents.UserLoggedOut(currentUser);
-                UsersOnline.Remove(currentUser); // Remove user from List UsersOnline
+                //UsersOnline.Remove(currentUser); // Remove user from List UsersOnline
+                OnlineStatusHandler(currentUser, false);
                 CurrentUser = null;
             }           
         }

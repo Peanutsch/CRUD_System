@@ -23,9 +23,9 @@ namespace CRUD_System.FileHandlers
         /// </returns>
         /// <remarks>
         /// The CSV file is expected to have each row in the following format:
-        /// Username, Password, IsAdmin
+        /// Username, Password, IsAdmin, onlineStatus
         /// </remarks>
-        public List<(string Username, string Password, bool IsAdmin)> GetLoginData()
+        public List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> GetLoginData()
         {
             // Construct the full path to the CSV file
             string file = Path.Combine(RootPath.GetRootPath(), @"CSV\data_login.csv");
@@ -35,11 +35,11 @@ namespace CRUD_System.FileHandlers
             if (!File.Exists(file))
             {
                 Debug.WriteLine($"Error! No such file with path {file}\nRootPath = {RootPath.GetRootPath}");
-                return new List<(string Username, string Password, bool IsAdmin)>();
+                return new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
             }
 
             // List to store the login data from the CSV
-            List<(string Username, string Password, bool IsAdmin)> loginData = new List<(string Username, string Password, bool IsAdmin)>();
+            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
 
             // Read the CSV file line by line
             using (StreamReader reader = new StreamReader(file))
@@ -54,14 +54,15 @@ namespace CRUD_System.FileHandlers
                     string[] values = line.Split(',');
 
                     // Ensure the line has exactly 3 elements before proceeding
-                    if (values.Length == 3)
+                    if (values.Length == 4)
                     {
                         string username = values[0].Trim(); // Alias
                         string password = values[1].Trim(); // Password
                         bool isAdmin = bool.Parse(values[2].Trim()); // True or False IsAdmin
+                        bool onlineStatus = bool.Parse(values[3].Trim());
 
                         // Add the extracted data to the loginData list
-                        loginData.Add((username, password, isAdmin));
+                        loginData.Add((username, password, isAdmin, onlineStatus));
                     }
                 }
             }
