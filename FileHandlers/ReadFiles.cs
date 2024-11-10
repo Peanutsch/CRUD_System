@@ -20,6 +20,7 @@ namespace CRUD_System.FileHandlers
         /// - Username (string): The user's username
         /// - Password (string): The user's password
         /// - IsAdmin (bool): A flag indicating whether the user is an admin (true) or not (false)
+        /// - statusOnline (bool): A flag indicating wheter the user is online (true) or not (false)
         /// </returns>
         /// <remarks>
         /// The CSV file is expected to have each row in the following format:

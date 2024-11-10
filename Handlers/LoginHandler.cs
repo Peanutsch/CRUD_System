@@ -8,9 +8,12 @@ using System.Diagnostics.Eventing.Reader;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace CRUD_System.Handlers
 {
@@ -97,24 +100,45 @@ namespace CRUD_System.Handlers
         #endregion LOGIN VALIDATION
 
         #region LOGIN
+        /// <summary>
+        /// Updates the online status of a user by alias in both login and user data files.
+        /// If the user is not found, displays an error message.
+        /// </summary>
+        /// <param name="alias">The alias of the user whose online status needs to be updated.</param>
+        /// <param name="onlineStatus">The new online status to set for the user (true for online, false for offline).</param>
 
-        public void OnlineStatusHandler(string alias, bool status)
+        public void UpdateUserOnlineStatus(string alias, bool onlineStatus)
         {
             AccountManager accountManager = new AccountManager();
             
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
             // Find user index
-            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, alias);
-            var loginDetails = loginLines[loginIndex].Split(",");
+            int accountIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, alias);
 
-            string currentUserName = loginDetails[0];
-            string currentPassword = loginDetails[1];
-            string currentIsAdmin = loginDetails[2];
+            if (accountIndex == -1)
+            {
+                message.MessageUserNotFound(alias);
+                return;
+            }
 
-            loginLines[loginIndex] = $"{currentUserName},{currentPassword},{currentIsAdmin},{status}";
+            var loginDetails = loginLines[accountIndex].Split(",");
+            var userDetails = userLines[accountIndex].Split(",");
 
+            // Update online status in login and user data using string.Join
+            loginDetails[3] = onlineStatus.ToString(); // Update only the onlineStatus field
+            loginLines[accountIndex] = string.Join(",", loginDetails);
+
+            userDetails[8] = onlineStatus.ToString(); // Update only the onlineStatus field
+            userLines[accountIndex] = string.Join(",", userDetails);
+
+            //loginLines[accountIndex] = $"{loginDetails[0]},{loginDetails[1]},{loginDetails[2]},{onlineStatus}";
+            //userLines[accountIndex] = $"{userDetails[0]},{userDetails[1]},{userDetails[2]},{userDetails[3]},{userDetails[4]},{userDetails[5]},{userDetails[6]},{userDetails[7]},{onlineStatus}";
+
+
+            // Update details in data_users.csv and data_login.csv
             File.WriteAllLines(path.LoginFilePath, loginLines);
+            File.WriteAllLines(path.UserFilePath, userLines);
         }
 
         /// <summary>
@@ -124,10 +148,6 @@ namespace CRUD_System.Handlers
         /// <param name="inputUserPSW">The password input provided by the user.</param>
         public void AuthenticateUser(string inputUserName, string inputUserPSW)
         {
-            // T E S T //
-            //UsersOnline.Add("peer001");
-            // _ _ _ _ //
-
             if (!ValidateUserLogin(inputUserName, inputUserPSW))
             {
                 return;
@@ -159,15 +179,6 @@ namespace CRUD_System.Handlers
                 loginForm.ShowDialog(); // Reopen LoginForm for retry
                 return false;
             }
-            /*
-            // Check user online status
-            if (!ValidateStatus(inputUserName))
-            {
-                message.MessageUserAlreadyOnline(inputUserName);
-                loginForm.ShowDialog(); // Reopen LoginForm for retry
-                return false;
-            }
-            */
             return true;
         }
 
@@ -179,8 +190,7 @@ namespace CRUD_System.Handlers
         private void ProcessSuccessfulLogin(string inputUserName, string inputUserPSW)
         {
             CurrentUser = inputUserName.ToLower();
-            //UsersOnline.Add(CurrentUser);
-            OnlineStatusHandler(CurrentUser, true);
+            UpdateUserOnlineStatus(CurrentUser, true);
 
             logEvents.UserLoggedIn(CurrentUser);
 
@@ -218,7 +228,6 @@ namespace CRUD_System.Handlers
             {
                 form.textBoxUserName.Text = "UNKNOWN";
             }
-
             form.labelAlias.TextAlign = ContentAlignment.TopLeft;
             form.labelAlias.BackColor = isAdmin ? Color.LightGreen : Color.LightBlue;
             form.labelAlias.Text = isAdmin ? "Admin" : "User";
@@ -237,8 +246,7 @@ namespace CRUD_System.Handlers
             if (!string.IsNullOrEmpty(currentUser))
             {
                 logEvents.UserLoggedOut(currentUser);
-                //UsersOnline.Remove(currentUser); // Remove user from List UsersOnline
-                OnlineStatusHandler(currentUser, false);
+                UpdateUserOnlineStatus(currentUser, false);
                 CurrentUser = null;
             }           
         }

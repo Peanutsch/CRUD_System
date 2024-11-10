@@ -188,11 +188,17 @@ namespace CRUD_System.Handlers
             string isAlias = GenerateAlias(Name, Surname);
             string isPassword = PasswordManager.PasswordGenerator();
 
+            bool onlineStatus = false;
+
             if (ConfirmNewUserCreation(isAlias))
             {
-                SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin);
+                SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin, onlineStatus);
                 LogNewAccountCreation(isAlias);
                 message.MessageNewAccountSucces(isAlias);
+            }
+            else
+            {
+                return;
             }
         }
 
@@ -234,10 +240,10 @@ namespace CRUD_System.Handlers
         /// </summary>
         private void SaveUserData(string alias, string password, string name, string surname,
                                    string address, string zipCode, string city, string email,
-                                   string phoneNumber, bool isAdmin)
+                                   string phoneNumber, bool isAdmin, bool onlineStatus)
         {
-            string newDataLogin = $"{alias},{password},{isAdmin}";
-            string newDataUsers = $"{name},{surname},{alias},{address},{zipCode},{city},{email},{phoneNumber}";
+            string newDataLogin = $"{alias},{password},{isAdmin},{onlineStatus}";
+            string newDataUsers = $"{name},{surname},{alias},{address},{zipCode},{city},{email},{phoneNumber},{onlineStatus}";
 
             File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
             File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);

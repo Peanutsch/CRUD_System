@@ -42,7 +42,8 @@ namespace CRUD_System
         /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            interactionHandler.CloseCreateForm(this.ParentForm);
+            return;
+            //interactionHandler.CloseCreateForm(this.ParentForm);
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace CRUD_System
         }
         #endregion BUTTONS
 
-        #region HANDLERS
+        #region ALIAS TEXTBOX HANDLER
         /// <summary>
         /// Handles the event when the alias text is changed. It generates and displays an alias 
         /// based on the first name and surname if both have at least one character.
@@ -96,6 +97,6 @@ namespace CRUD_System
                 txtAlias.PlaceholderText = "Alias";
             }
         }
-        #endregion HANDLERS
+        #endregion ALIAS TEXTBOX HANDLER
     }
 }
