@@ -1,6 +1,6 @@
 Alias, PSW, ADMIN, ONLINESTATUS
 admin,admin,True,False
-mist001,mist001,True,False
+mist001,mist001,True,True
 peer001,peer001,False,False
 pewn001,pewn001,False,False
 moes001,DRAMaandag1313!!,False,False

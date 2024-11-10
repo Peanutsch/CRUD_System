@@ -33,11 +33,14 @@ namespace CRUD_System.Interfaces
         #endregion CONSTRUCTOR
 
         #region LISTBOX ADMIN
+        /*
         /// <summary>
         /// Loads user data from data_users.csv and populates the list box with user names.
         /// </summary>
         public void LoadDetailsListBox()
         {
+            string isOnline = string.Empty;
+
             var lines = File.ReadAllLines(path.UserFilePath);
 
             adminControl.listBoxAdmin.Items.Clear();
@@ -50,13 +53,82 @@ namespace CRUD_System.Interfaces
                 // Create a UserDetails object using the array
                 UserDetails userDetails = new UserDetails(userDetailsArray);
 
+                if (userDetails.OnlineStatus)
+                {
+                    isOnline = "ONLINE";
+                    isOnline.Color = Color.Green;
+                }
+
                 // Use the UserDetails properties to format the string for the listBox
-                string listItem = $"{userDetails.Name} {userDetails.Surname} ({userDetails.Alias}) | {userDetails.Email} | {userDetails.PhoneNumber}";
+                string listItem = $"{userDetails.Name} {userDetails.Surname} ({userDetails.Alias}) | {userDetails.Email} | {userDetails.PhoneNumber} | {isOnline}";
 
                 // Add the formatted string to the listBox
                 adminControl.listBoxAdmin.Items.Add(listItem);
             }
         }
+        */
+        /// <summary>
+        /// Loads user details from data_users.csv and populates the ListBox with formatted information.
+        /// The method reads data from the user file, skips the header and admin details, and processes each user's details.
+        /// It formats the list item to display the user's name, surname, alias, email, phone number, 
+        /// and indicates whether the user is online based on the data in the file.
+        /// </summary>>
+        public void LoadDetailsListBox()
+        {
+            var lines = File.ReadAllLines(path.UserFilePath);
+            adminControl.listBoxAdmin.Items.Clear();
+
+            foreach (var line in lines.Skip(2)) // Skip header
+            {
+                var userDetailsArray = line.Split(',');
+                string name = userDetailsArray[0];
+                string surname = userDetailsArray[1];
+                string alias = userDetailsArray[2];
+                string email = userDetailsArray[3];
+                string phoneNumber = userDetailsArray[4];
+                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
+
+                // Directly format list item
+                string listItem = $"{name} {surname} ({alias}) | {email} | {phoneNumber} {isOnline}";
+                adminControl.listBoxAdmin.Items.Add(listItem);
+            }
+        }
+
+        /// <summary>
+        /// Handles the custom drawing of items in the ListBox, allowing for conditional formatting based on the item content.
+        /// This method modifies the color of the text based on whether the item contains the word "ONLINE" and ensures
+        /// that the list item is not null before attempting to draw it. It also ensures that a fallback font is used if needed.
+        /// </summary>
+        /// <param name="sender">The source of the event, expected to be the ListBox control.</param>
+        /// <param name="e">The event data that contains drawing parameters, such as the item to be drawn and the graphics context.</param>
+
+        public void ListBoxAdmin_DrawItemHandler(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            // Safely cast sender to ListBox and check if it’s null
+            if (sender is not ListBox listBox) return;
+
+            // Get the item from the list and handle possible null
+            string? listItem = listBox.Items[e.Index]?.ToString();
+            if (listItem == null) return;
+
+            e.DrawBackground();
+
+            // Determine the color based on item content
+            Color textColor = listItem.Contains("ONLINE") ? Color.DarkOliveGreen : Color.Black;
+
+            // Use a fallback font if e.Font is null
+            Font font = e.Font ?? SystemFonts.DefaultFont;
+
+            using (Brush brush = new SolidBrush(textColor))
+            {
+                e.Graphics.DrawString(listItem, font, brush, e.Bounds);
+            }
+            e.DrawFocusRectangle();
+        }
+
+
 
         /// <summary>
         /// Reloads the user list box after making changes, refreshing the interface display.

@@ -100,7 +100,9 @@
             listBoxAdmin.Name = "listBoxAdmin";
             listBoxAdmin.Size = new Size(963, 229);
             listBoxAdmin.TabIndex = 0;
+            listBoxAdmin.DrawMode = DrawMode.OwnerDrawFixed;
             listBoxAdmin.SelectedIndexChanged += ListBoxAdmin_SelectedIndexChanged;
+            listBoxAdmin.DrawItem += ListBoxAdmin_DrawItem;
             // 
             // btnCreateUser
             // 

@@ -190,5 +190,17 @@ namespace CRUD_System
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
+
+        /// <summary>
+        /// Handles the drawing of items in the ListBox. This method delegates the actual drawing 
+        /// process to the <see cref="ListBoxAdmin_DrawItemHandler"/> method in the AdminInterface.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the ListBox control.</param>
+        /// <param name="e">The event data that contains the drawing information for the item.</param>
+        private void ListBoxAdmin_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            adminInterface.ListBoxAdmin_DrawItemHandler(sender, e);
+        }
+
     }
 }
