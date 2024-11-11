@@ -30,7 +30,7 @@ namespace CRUD_System
     {
         #region PROPERTIES
         //public bool IsAdmin { get; set; }
-        
+
         FilePaths path = new FilePaths();
 
         AdminInterface adminInterface;
@@ -68,7 +68,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnEditUserDetails_Click(object sender, EventArgs e)
         {
-            interactionHandler.PerformActionIfUserSelected(() =>  
+            interactionHandler.PerformActionIfUserSelected(() =>
             {
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
@@ -84,7 +84,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            
+
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
@@ -108,7 +108,7 @@ namespace CRUD_System
             interactionHandler.PerformActionIfUserSelected(() =>
             {
                 userProfileManager.DeleteUser(txtAlias.Text); // Perform delete action only if a user is selected
-                
+
                 listBoxAdmin.Items.Clear();
                 adminInterface.LoadDetailsListBox();
                 adminInterface.EmptyTextBoxesAdmin();
@@ -131,7 +131,7 @@ namespace CRUD_System
             // Empty Textboxes
             adminInterface.EmptyTextBoxesAdmin();
         }
-        
+
         /// <summary>
         /// Handles click event to create a new password
         /// </summary>
@@ -168,6 +168,45 @@ namespace CRUD_System
             interactionHandler.Open_CreateNewPasswordForm();
         }
 
+        private void btnForceLogOutUser_Click(object sender, EventArgs e)
+        {
+            // Check if an item is selected in the ListBox
+            if (listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
+            {
+                // Safely extract the alias from the selected user string
+                string? selectedAlias = selectedUserString.Split('(', ')').ElementAtOrDefault(1);
+
+                if (!string.IsNullOrEmpty(selectedAlias))
+                {
+                    interactionHandler.PerformActionIfUserSelected(() =>
+                    {
+                        // Pass selectedAlias to SetBtnForceLogOutUser
+                        adminInterface.SetBtnForceLogOutUser(selectedAlias);
+                        AuthenticationService authenticationService = new AuthenticationService();
+                        AccountManager accountManager = new AccountManager();
+                        authenticationService.UpdateUserOnlineStatus(selectedAlias, false); // Set user as offline
+                        authenticationService.PerformForcedLogOutByAdmin(selectedAlias); // Force log out user
+
+                        // Read lines from data_users.csv and data_login.csv
+                        (var userLines, var loginLines) = path.ReadUserAndLoginData();
+                        int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+                        adminInterface.ReloadListBoxAdmin(userIndex);
+                    },
+                    () => message.MessageInvalidNoUserSelected());
+                }
+                else
+                {
+                    // Handle the case where the alias is not available
+                    message.MessageInvalidNoUserSelected();
+                }
+            }
+            else
+            {
+                // Handle the case where no user is selected
+                message.MessageInvalidNoUserSelected();
+            }
+        }
+
         /// <summary>
         /// Toggle between editMode and !editMode
         /// </summary>
@@ -189,7 +228,6 @@ namespace CRUD_System
         {
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }
-        #endregion BUTTONS SoC (Seperate of Concerns)
 
         /// <summary>
         /// Handles the drawing of items in the ListBox. This method delegates the actual drawing 
@@ -201,6 +239,6 @@ namespace CRUD_System
         {
             adminInterface.ListBoxAdmin_DrawItemHandler(sender, e);
         }
-
+        #endregion BUTTONS SoC (Seperate of Concerns)
     }
 }

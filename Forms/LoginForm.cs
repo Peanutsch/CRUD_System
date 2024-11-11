@@ -13,7 +13,7 @@ namespace CRUD_System
     public partial class LoginForm : Form
     {
         #region PROPERTIES
-        LoginHandler loginHandler = new LoginHandler();
+        AuthenticationService loginHandler = new AuthenticationService();
 
         private bool isPasswordVisible = false;
         #endregion PROPERTIES

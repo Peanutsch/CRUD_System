@@ -17,7 +17,7 @@ namespace CRUD_System
     {
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"CSV\log.csv");
 
-        LoginHandler loginHandler = new LoginHandler();
+        AuthenticationService loginHandler = new AuthenticationService();
 
         public UserMainForm()
         {

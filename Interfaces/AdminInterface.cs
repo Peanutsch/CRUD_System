@@ -165,9 +165,9 @@ namespace CRUD_System.Interfaces
 
                 // Read user details
                 var userDetailsArray = File.ReadAllLines(path.UserFilePath)
-                                      .Skip(2)
-                                      .Select(line => line.Split(','))
-                                      .FirstOrDefault(details => details[2] == selectedAlias);
+                                           .Skip(2)
+                                           .Select(line => line.Split(','))
+                                           .FirstOrDefault(details => details[2] == selectedAlias);
 
                 if (userDetailsArray != null)
                 {
@@ -183,7 +183,7 @@ namespace CRUD_System.Interfaces
                 if (loginDetails != null)
                 {
                     // Check if the admin status is true
-                    if (loginDetails[2]! == "True") // Use '==' for comparison
+                    if (loginDetails[2] == "True") // Use '==' for comparison
                     {
                         // Show the admin label
                         adminControl.txtAdmin.Visible = true;
@@ -195,6 +195,11 @@ namespace CRUD_System.Interfaces
                         adminControl.txtAdmin.Visible = false;
                         adminControl.chkIsAdmin.Checked = false; // checkbox chkAdmin unchecked
                     }
+
+                    // Check if the user is online and enable the logout button
+                    var currentUser = AuthenticationService.CurrentUser;
+                    if (currentUser != selectedAlias)
+                    SetBtnForceLogOutUser(selectedAlias); // Pass selectedAlias to check if the user is online
                 }
                 else
                 {
@@ -253,6 +258,33 @@ namespace CRUD_System.Interfaces
 
             // Enable or disable ListBox based on EditMode
             adminControl.listBoxAdmin.Enabled = !EditMode;
+        }
+
+        /// <summary>
+        /// Sets the enabled state of the Force Log Out User button based on the user's online status.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the selected user to check online status.</param>
+        public void SetBtnForceLogOutUser(string selectedAlias)
+        {
+            var lines = File.ReadAllLines(path.UserFilePath);
+            bool isOnline = false;  // Flag to track if the selected user is online
+
+            foreach (var line in lines.Skip(2)) // Skip header
+            {
+                var userDetailsArray = line.Split(',');
+
+                // Check if the array has enough elements before accessing index 8
+                if (userDetailsArray.Length > 8 && userDetailsArray[2] == selectedAlias) // Match alias first
+                {
+                    isOnline = userDetailsArray[8] == "True"; // Assign and check online status
+
+                    // Exit loop early if we found the selected user
+                    break;
+                }
+            }
+            // Set button Enable and Visible only if the selected user is online
+            adminControl.btnForceLogOutUser.Enabled = isOnline;
+            adminControl.btnForceLogOutUser.Visible = isOnline;
         }
         #endregion EDITMODE DISPLAY
 

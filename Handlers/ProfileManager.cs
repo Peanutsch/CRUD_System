@@ -51,7 +51,7 @@ namespace CRUD_System.Handlers
                 return;
             }
 
-            var currentUser = LoginHandler.CurrentUser;
+            var currentUser = AuthenticationService.CurrentUser;
             if (!string.IsNullOrEmpty(currentUser))
             {
                 // Write updated data back to data_users.csv
@@ -76,7 +76,7 @@ namespace CRUD_System.Handlers
         {
             AdminInterface adminInterface = new AdminInterface();
 
-            var currentUser = LoginHandler.CurrentUser;
+            var currentUser = AuthenticationService.CurrentUser;
 
             // Get alias to delete from the selected user
             string aliasToDelete = alias;
@@ -133,7 +133,7 @@ namespace CRUD_System.Handlers
         /// <param name="isAdmin">Indicates if the user has admin privileges.</param>
         public void GenerateNewPassword(string alias, bool isAdmin)
         {
-            var currentUser = LoginHandler.CurrentUser;
+            var currentUser = AuthenticationService.CurrentUser;
 
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
@@ -254,7 +254,7 @@ namespace CRUD_System.Handlers
         /// </summary>
         private void LogNewAccountCreation(string alias)
         {
-            var currentUser = LoginHandler.CurrentUser;
+            var currentUser = AuthenticationService.CurrentUser;
             if (!string.IsNullOrEmpty(currentUser))
             {
                 logEvents.NewAccount(currentUser, alias);

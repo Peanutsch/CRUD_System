@@ -121,7 +121,7 @@ namespace CRUD_System
 
         private void ValidatePSW()
         {
-            var currentUser = LoginHandler.CurrentUser;
+            var currentUser = AuthenticationService.CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {

@@ -17,7 +17,12 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace CRUD_System.Handlers
 {
-    public class LoginHandler
+    /// <summary>
+    /// Responsible for managing user authentication, login validation, and session handling.
+    /// It validates user credentials, checks login status, updates the online status of users, and handles user login and logout processes.
+    /// This class also determines user roles (admin or regular user) and manages session transitions, including updating the user interface of the form with the appropriate user information.
+    /// </summary>
+    public class AuthenticationService
     {
         #region PROPERTIES
         FilePaths path = new FilePaths();
@@ -34,7 +39,7 @@ namespace CRUD_System.Handlers
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
-        public LoginHandler()
+        public AuthenticationService()
         {
 
         }
@@ -249,6 +254,18 @@ namespace CRUD_System.Handlers
                 UpdateUserOnlineStatus(currentUser, false);
                 CurrentUser = null;
             }           
+        }
+
+        public void PerformForcedLogOutByAdmin(string userAlias)
+        {
+            UserMainForm userForm = new UserMainForm();
+            var admin = CurrentUser;
+
+            if (!string.IsNullOrEmpty(admin))
+            {
+                logEvents.ForceUserLogOut(admin, userAlias);
+                userForm.Hide();
+            }
         }
         #endregion LOGOUT
     }

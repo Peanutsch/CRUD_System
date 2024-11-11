@@ -51,6 +51,7 @@
             txtAdmin = new TextBox();
             chkIsAdmin = new CheckBox();
             btnChangePassword = new Button();
+            btnForceLogOutUser = new Button();
             SuspendLayout();
             // 
             // txtName
@@ -95,14 +96,14 @@
             // 
             // listBoxAdmin
             // 
+            listBoxAdmin.DrawMode = DrawMode.OwnerDrawFixed;
             listBoxAdmin.ItemHeight = 15;
             listBoxAdmin.Location = new Point(24, 20);
             listBoxAdmin.Name = "listBoxAdmin";
             listBoxAdmin.Size = new Size(963, 229);
             listBoxAdmin.TabIndex = 0;
-            listBoxAdmin.DrawMode = DrawMode.OwnerDrawFixed;
-            listBoxAdmin.SelectedIndexChanged += ListBoxAdmin_SelectedIndexChanged;
             listBoxAdmin.DrawItem += ListBoxAdmin_DrawItem;
+            listBoxAdmin.SelectedIndexChanged += ListBoxAdmin_SelectedIndexChanged;
             // 
             // btnCreateUser
             // 
@@ -242,12 +243,27 @@
             btnChangePassword.UseVisualStyleBackColor = false;
             btnChangePassword.Click += btnChangePassword_Click;
             // 
+            // btnForceLogOutUser
+            // 
+            btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
+            btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnForceLogOutUser.Location = new Point(681, 359);
+            btnForceLogOutUser.Name = "btnForceLogOutUser";
+            btnForceLogOutUser.Size = new Size(150, 30);
+            btnForceLogOutUser.TabIndex = 32;
+            btnForceLogOutUser.Text = "Force LogOut";
+            btnForceLogOutUser.Visible = false;
+            btnForceLogOutUser.Enabled = false;
+            btnForceLogOutUser.UseVisualStyleBackColor = false;
+            btnForceLogOutUser.Click += btnForceLogOutUser_Click;
+            // 
             // AdminMainControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(btnForceLogOutUser);
             Controls.Add(btnCreateUser);
             Controls.Add(btnChangePassword);
             Controls.Add(chkIsAdmin);
@@ -280,5 +296,6 @@
         public Button btnEditUserDetails;
         public CheckBox chkIsAdmin;
         public Button btnChangePassword;
+        public Button btnForceLogOutUser;
     }
 }

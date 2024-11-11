@@ -43,7 +43,7 @@ namespace CRUD_System.Interfaces
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
-            var currentUser = LoginHandler.CurrentUser;
+            var currentUser = AuthenticationService.CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {

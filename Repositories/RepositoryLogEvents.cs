@@ -30,7 +30,7 @@ namespace CRUD_System.Repositories
             Time = DateTime.Now
         };
 
-        #region LOGINHANDLER
+        #region AUTHENTICATIONSERVICE
         public void UserLoggedIn(string CurrentUser)
         {
             string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{CurrentUser.ToUpper()},Logged IN";
@@ -44,7 +44,14 @@ namespace CRUD_System.Repositories
             string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
             path.AppendToLog(newLog);
         }
-        #endregion LOGINHANDLER
+
+        public void ForceUserLogOut(string currentUser, string alias)
+        {
+            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Forced [{alias.ToUpper()}] logged OUT");
+            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Forced [{alias.ToUpper()}] to log OUT\")";
+            path.AppendToLog(newLog);
+        }
+        #endregion AUTHENTICATIONSERVICE
 
         #region ADMINCREATECONTROL
         public void NewAccount(string currentUser, string isAlias)
