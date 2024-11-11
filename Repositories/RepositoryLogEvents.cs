@@ -53,7 +53,7 @@ namespace CRUD_System.Repositories
         }
         #endregion AUTHENTICATIONSERVICE
 
-        #region ADMINCREATECONTROL
+        #region AdminCreateControl
         public void NewAccount(string currentUser, string isAlias)
         {
             Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Created new user [{isAlias.ToUpper()}]");
@@ -62,7 +62,7 @@ namespace CRUD_System.Repositories
             string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Created new user [{isAlias.ToUpper()}]";
             path.AppendToLog(newLog);
         }
-        #endregion ADMINCREATECONTROL
+        #endregion AdminCreateControl
 
         #region PROFILEMANAGER
         public void LogEventPasswordGenerated(string currentUser, string alias)

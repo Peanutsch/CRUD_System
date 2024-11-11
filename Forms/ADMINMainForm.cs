@@ -14,13 +14,13 @@ using System.Windows.Forms;
 
 namespace CRUD_System
 {
-    public partial class ADMINMainForm : Form
+    public partial class AdminMainForm : Form
     {
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"CSV\log.csv");
 
         AuthenticationService loginHandler = new AuthenticationService();
 
-        public ADMINMainForm()
+        public AdminMainForm()
         {
             InitializeComponent();
         }

@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class ADMINMainForm
+    partial class AdminMainForm
     {
         /// <summary>
         /// Required designer variable.

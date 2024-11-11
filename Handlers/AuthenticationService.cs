@@ -202,7 +202,7 @@ namespace CRUD_System.Handlers
             bool isAdmin = IsAdmin(inputUserName, inputUserPSW);
             if (isAdmin)
             {
-                ADMINMainForm adminForm = new ADMINMainForm();
+                AdminMainForm adminForm = new AdminMainForm();
                 DisplayUserAlias(adminForm, isAdmin);
                 adminForm.ShowDialog();
             }
