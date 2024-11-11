@@ -64,9 +64,16 @@ namespace CRUD_System
 
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+
+            var loginDetails = loginLines[loginIndex].Split(",");
+
+            // Parse the admin status and online status as bools
+            bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
+            bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
+
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, adminControl.isAdmin);
+                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
             }
             editMode = false; // Close editMode
             userInterface.ReloadListBoxUser(userIndex); // Reload interface

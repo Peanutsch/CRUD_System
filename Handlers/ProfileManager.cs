@@ -36,14 +36,14 @@ namespace CRUD_System.Handlers
         /// Updates user details in data_users.csv
         /// Updates isAdmin in data_login.csv
         /// </summary>
-        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin)
+        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin, bool onlineStatus)
         {
             var loginDetails = loginLines[loginIndex].Split(",");
             string currentAlias = loginDetails[0];
             string currentPassword = loginDetails[1];
 
-            userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber}";
-            loginLines[loginIndex] = $"{currentAlias},{currentPassword},{isAdmin}";
+            userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber},{onlineStatus}";
+            loginLines[loginIndex] = $"{currentAlias},{currentPassword},{isAdmin},{onlineStatus}";
 
             DialogResult dr = message.MessageBoxConfirmToSAVEChanges(alias);
             if (dr != DialogResult.Yes)
