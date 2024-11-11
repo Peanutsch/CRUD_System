@@ -84,7 +84,6 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
@@ -132,7 +131,7 @@ namespace CRUD_System
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
             AccountManager accountManager = new AccountManager();
-            interactionHandler.OpenCreateForm(this);
+            interactionHandler.Open_CreateForm(this);
             // Reload listbox
             listBoxAdmin.Items.Clear();
             adminInterface.LoadDetailsListBox();

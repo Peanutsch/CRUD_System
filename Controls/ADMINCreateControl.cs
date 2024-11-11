@@ -42,8 +42,7 @@ namespace CRUD_System
         /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            return;
-            //interactionHandler.CloseCreateForm(this.ParentForm);
+            interactionHandler.Close_CreateForm(this.ParentForm);
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace CRUD_System
                                        txtPhonenumber.Text, isAdmin);
 
             // Close CreateFormADMIN, return to MainFormADMIN
-            interactionHandler.CloseCreateForm(this.ParentForm);
+            interactionHandler.Close_CreateForm(this.ParentForm);
         }
         #endregion BUTTONS
 

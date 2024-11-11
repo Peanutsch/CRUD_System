@@ -46,7 +46,7 @@
             this.checkBoxTogglePSW.TabIndex = 2;
             this.checkBoxTogglePSW.Text = "Show Password";
             this.checkBoxTogglePSW.UseVisualStyleBackColor = true;
-            this.checkBoxTogglePSW.CheckedChanged += this.checkBoxTogglePSW_CheckedChanged;
+            this.checkBoxTogglePSW.CheckedChanged += this.checkBoxTogglePassword_CheckedChanged;
             // 
             // inputChangePSW
             // 
@@ -60,7 +60,7 @@
             this.inputChangePSW.Size = new Size(441, 26);
             this.inputChangePSW.TabIndex = 0;
             this.inputChangePSW.TextAlign = HorizontalAlignment.Center;
-            this.inputChangePSW.TextChanged += this.inputChangePSW1_TextChanged;
+            this.inputChangePSW.TextChanged += this.inputChangePassword_TextChanged;
             // 
             // lblPassword
             // 
@@ -81,7 +81,7 @@
             this.btnApplyPSW.TabIndex = 3;
             this.btnApplyPSW.Text = "Apply";
             this.btnApplyPSW.UseVisualStyleBackColor = true;
-            this.btnApplyPSW.Click += this.btnApplyPSW_Click;
+            this.btnApplyPSW.Click += this.btnApplyPassword_Click;
             // 
             // inputConfirmPSW
             // 
@@ -96,7 +96,7 @@
             this.inputConfirmPSW.Size = new Size(441, 26);
             this.inputConfirmPSW.TabIndex = 1;
             this.inputConfirmPSW.TextAlign = HorizontalAlignment.Center;
-            this.inputConfirmPSW.TextChanged += this.inputConfirmPSW_TextChanged;
+            this.inputConfirmPSW.TextChanged += this.inputConfirmPassword_TextChanged;
             // 
             // btnCancel
             // 

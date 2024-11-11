@@ -29,8 +29,6 @@ namespace CRUD_System.Handlers
 
         public static string? CurrentUser { get; set; }
 
-        //public List<string> UsersOnline = new List<string>();
-
         ReadFiles readFiles = new ReadFiles();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
@@ -50,9 +48,9 @@ namespace CRUD_System.Handlers
         /// Validates the provided username and password by checking them against the stored data in the CSV.
         /// </summary>
         /// <param name="inputUserName">The username entered by the user.</param>
-        /// <param name="inputUserPSW">The password entered by the user.</param>
+        /// <param name="inputUserPassword">The password entered by the user.</param>
         /// <returns>True if the credentials are valid; otherwise, false.</returns>
-        public bool ValidateLogin(string inputUserName, string inputUserPSW)
+        public bool ValidateLogin(string inputUserName, string inputUserPassword)
         {
             // Get login data from the CSV file
             List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
@@ -60,7 +58,7 @@ namespace CRUD_System.Handlers
             // Find the user in the list where both username and password match
             var user = loginData.FirstOrDefault(u =>
                                                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
-                                                u.Password == inputUserPSW);
+                                                u.Password == inputUserPassword);
 
             // If user is found, credentials are valid
             return user != default;
@@ -72,7 +70,7 @@ namespace CRUD_System.Handlers
         /// <param name="inputUserName">The username of the user.</param>
         /// <param name="inputUserPSW">The password of the user.</param>
         /// <returns>True if the user is an admin; otherwise, false.</returns>
-        public bool IsAdmin(string inputUserName, string inputUserPSW)
+        public bool IsAdmin(string inputUserName, string inputUserPassword)
         {
             // Get login data from the CSV file
             List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
@@ -80,25 +78,25 @@ namespace CRUD_System.Handlers
             // Find the user in the list where both username and password match
             var user = loginData.FirstOrDefault(u =>
                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
-                u.Password == inputUserPSW);
+                u.Password == inputUserPassword);
 
             // Return the admin status if the user is found
             return user != default && user.IsAdmin;
         }
 
         /// <summary>
-        /// Checks if the user is offline (not currently in UsersOnline).
+        /// Checks if the user is offline.
         /// </summary>
         /// <param name="inputUserName">The username to check.</param>
         /// <returns>True if the user is offline; otherwise, false.</returns>
-        public bool ValidateOnlineStatus(string inputUserName, string inputUserPSW)
+        public bool ValidateOnlineStatus(string inputUserName, string inputUserPassword)
         {
             //return !UsersOnline.Contains(inputUserName);
             List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
             // Find the user in the list where both username and password match
             var user = loginData.FirstOrDefault(u =>
                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
-                u.Password == inputUserPSW);
+                u.Password == inputUserPassword);
 
             return user != default && user.onlineStatus;
         }
@@ -130,16 +128,16 @@ namespace CRUD_System.Handlers
             var loginDetails = loginLines[accountIndex].Split(",");
             var userDetails = userLines[accountIndex].Split(",");
 
-            // Update online status in login and user data using string.Join
-            loginDetails[3] = onlineStatus.ToString(); // Update only the onlineStatus field
-            loginLines[accountIndex] = string.Join(",", loginDetails);
-
-            userDetails[8] = onlineStatus.ToString(); // Update only the onlineStatus field
-            userLines[accountIndex] = string.Join(",", userDetails);
-
             //loginLines[accountIndex] = $"{loginDetails[0]},{loginDetails[1]},{loginDetails[2]},{onlineStatus}";
             //userLines[accountIndex] = $"{userDetails[0]},{userDetails[1]},{userDetails[2]},{userDetails[3]},{userDetails[4]},{userDetails[5]},{userDetails[6]},{userDetails[7]},{onlineStatus}";
 
+            // Update online status in data_login.csv using string.Join
+            loginDetails[3] = onlineStatus.ToString(); // Update only the onlineStatus field
+            loginLines[accountIndex] = string.Join(",", loginDetails);
+
+            // Update online status in data_user,csv using string.Join
+            userDetails[8] = onlineStatus.ToString(); // Update only the onlineStatus field
+            userLines[accountIndex] = string.Join(",", userDetails);
 
             // Update details in data_users.csv and data_login.csv
             File.WriteAllLines(path.LoginFilePath, loginLines);
@@ -150,35 +148,34 @@ namespace CRUD_System.Handlers
         /// Authenticates the user's login credentials and handles login processing.
         /// </summary>
         /// <param name="inputUserName">The username input provided by the user.</param>
-        /// <param name="inputUserPSW">The password input provided by the user.</param>
-        public void AuthenticateUser(string inputUserName, string inputUserPSW)
+        /// <param name="inputUserPassword">The password input provided by the user.</param>
+        public void AuthenticateUser(string inputUserName, string inputUserPassword)
         {
-            if (!ValidateUserLogin(inputUserName, inputUserPSW))
+            if (!ValidateUserLogin(inputUserName, inputUserPassword))
             {
                 return;
             }
 
-            ProcessSuccessfulLogin(inputUserName, inputUserPSW);
+            ProcessSuccessfulLogin(inputUserName, inputUserPassword);
         }
 
         /// <summary>
         /// Validates the user's login credentials and online status.
         /// </summary>
         /// <param name="inputUserName">The username input provided by the user.</param>
-        /// <param name="inputUserPSW">The password input provided by the user.</param>
+        /// <param name="inputUserPassword">The password input provided by the user.</param>
         /// <returns>True if the user credentials and status are valid; otherwise, false.</returns>
-        private bool ValidateUserLogin(string inputUserName, string inputUserPSW)
+        private bool ValidateUserLogin(string inputUserName, string inputUserPassword)
         {
             LoginForm loginForm = new LoginForm();
 
-            // Validate login credentials
-            if (!ValidateLogin(inputUserName, inputUserPSW))
+            if (!ValidateLogin(inputUserName, inputUserPassword))
             {
                 message.MessageInvalidNamePassword();
                 loginForm.ShowDialog(); // Reopen LoginForm for retry
                 return false;
             }
-            if (ValidateOnlineStatus(inputUserName, inputUserPSW))
+            if (ValidateOnlineStatus(inputUserName, inputUserPassword))
             {
                 message.MessageUserAlreadyOnline(inputUserName);
                 loginForm.ShowDialog(); // Reopen LoginForm for retry
@@ -189,24 +186,28 @@ namespace CRUD_System.Handlers
 
         /// <summary>
         /// Processes actions upon a successful login.
+        /// Updates the user's online status, logs the login event, 
+        /// and directs the user to the admin or user interface based on their role.
         /// </summary>
         /// <param name="inputUserName">The validated username.</param>
-        /// <param name="inputUserPSW">The validated password.</param>
-        private void ProcessSuccessfulLogin(string inputUserName, string inputUserPSW)
+        /// <param name="inputUserPassword">The validated password.</param>
+        private void ProcessSuccessfulLogin(string inputUserName, string inputUserPassword)
         {
             CurrentUser = inputUserName.ToLower();
+
+            // Online Status = true
             UpdateUserOnlineStatus(CurrentUser, true);
 
             logEvents.UserLoggedIn(CurrentUser);
 
-            bool isAdmin = IsAdmin(inputUserName, inputUserPSW);
-            if (isAdmin)
+            bool isAdmin = IsAdmin(inputUserName, inputUserPassword);
+            if (isAdmin) // Send to admin interface
             {
                 AdminMainForm adminForm = new AdminMainForm();
                 DisplayUserAlias(adminForm, isAdmin);
                 adminForm.ShowDialog();
             }
-            else
+            else // Send to user interface
             {
                 UserMainForm usersForm = new UserMainForm();
                 DisplayUserAlias(usersForm, isAdmin);
@@ -241,8 +242,8 @@ namespace CRUD_System.Handlers
 
         #region LOGOUT
         /// <summary>
-        /// Logs out the current user by removing them from the online user list,
-        /// logging the logout event, and clearing the CurrentUser.
+        /// Logs out the current user by updating their online status to offline,
+        /// logging the logout event, and clearing the current user.
         /// </summary>
         public void PerformLogout()
         {
@@ -253,9 +254,14 @@ namespace CRUD_System.Handlers
                 logEvents.UserLoggedOut(currentUser);
                 UpdateUserOnlineStatus(currentUser, false);
                 CurrentUser = null;
-            }           
+            }
         }
 
+        /// <summary>
+        /// Forces a user to log out by an admin, logging the forced logout event
+        /// and hiding the user's main form if active.
+        /// </summary>
+        /// <param name="userAlias">The alias of the user to be logged out by admin.</param>
         public void PerformForcedLogOutByAdmin(string userAlias)
         {
             UserMainForm userForm = new UserMainForm();

@@ -84,12 +84,15 @@ namespace CRUD_System.Interfaces
                 string name = userDetailsArray[0];
                 string surname = userDetailsArray[1];
                 string alias = userDetailsArray[2];
-                string email = userDetailsArray[3];
-                string phoneNumber = userDetailsArray[4];
+                string address = userDetailsArray[3];
+                string zipcode = userDetailsArray[4];
+                string city = userDetailsArray[5];
+                string email = userDetailsArray[6];
+                string phonenumber = userDetailsArray[7];
                 string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
 
                 // Directly format list item
-                string listItem = $"{name} {surname} ({alias}) | {email} | {phoneNumber} {isOnline}";
+                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
                 adminControl.listBoxAdmin.Items.Add(listItem);
             }
         }
