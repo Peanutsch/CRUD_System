@@ -33,7 +33,6 @@ namespace CRUD_System.FileHandlers
         /// </summary>
         /// <param name="filePath">The path of the file to read.</param>
         /// <returns>A list of strings containing each line of the file, or an empty list if the file does not exist.</returns>
-
         public List<string> ReadFileContent(string filePath)
         {
             return File.Exists(filePath) ? File.ReadAllLines(filePath).ToList() : new List<string>();

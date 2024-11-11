@@ -107,7 +107,7 @@ namespace CRUD_System.Interfaces
             if (e.Index < 0) return;
 
             // Safely cast sender to ListBox and check if it’s null
-            if (sender is not ListBox listBox) return;
+            if (sender is not ListBox listBox ) return;
 
             // Get the item from the list and handle possible null
             string? listItem = listBox.Items[e.Index]?.ToString();
@@ -150,10 +150,13 @@ namespace CRUD_System.Interfaces
         }
 
         /// <summary>
-        /// Handles the event when a user is selected in the list box, filling the details for the selected user in the textboxes.
+        /// Handles the event when a user is selected in the ListBox. It fills the details for the selected user in the textboxes,
+        /// and disables the Force Log Out button if the selected user is the current admin user.
         /// </summary>
         public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
+            var currentUser = AuthenticationService.CurrentUser;
+
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
@@ -162,6 +165,13 @@ namespace CRUD_System.Interfaces
 
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
+
+                // Ignore btnForceLogOutUser when selection is users own admin account 
+                if (currentUser == selectedAlias)
+                {
+                    adminControl.btnForceLogOutUser.Enabled = false;
+                    adminControl.btnForceLogOutUser.Visible = false;
+                }
 
                 // Read user details
                 var userDetailsArray = File.ReadAllLines(path.UserFilePath)
@@ -173,39 +183,49 @@ namespace CRUD_System.Interfaces
                 {
                     FillTextboxesAdmin(userDetailsArray);
                 }
+                HandleSelectedUserStatus(selectedAlias);
+            }
+        }
 
-                // Read the lines from data_login.csv
-                var loginLines = File.ReadAllLines(path.LoginFilePath).Skip(2); // Skip the headers
-                var loginDetailsList = loginLines.Select(line => line.Split(',')); // Split each line into details
-                var loginDetails = loginDetailsList.FirstOrDefault(details => details[0] == selectedAlias); // Find the login details for the selected alias
+        /// <summary>
+        /// Validates the selected user alias and updates the UI accordingly. It checks the login details for the selected alias, 
+        /// determines if the user is an admin, and updates the visibility of admin-related fields. 
+        /// It also checks if the user is online and enables/disables the Force Log Out button.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the selected user to be validated.</param>
+        public void HandleSelectedUserStatus(string selectedAlias)
+        {
+            var currentUser = AuthenticationService.CurrentUser;
+            // Read the lines from data_login.csv
+            var loginLines = File.ReadAllLines(path.LoginFilePath).Skip(2); // Skip the headers
+            var loginDetailsList = loginLines.Select(line => line.Split(',')); // Split each line into details
+            var loginDetails = loginDetailsList.FirstOrDefault(details => details[0] == selectedAlias); // Find the login details for the selected alias
 
-                // Check if loginDetails is not null
-                if (loginDetails != null)
+            // Check if loginDetails is not null
+            if (loginDetails != null)
+            {
+                // Check if the admin status is true
+                if (loginDetails[2] == "True") // Use '==' for comparison
                 {
-                    // Check if the admin status is true
-                    if (loginDetails[2] == "True") // Use '==' for comparison
-                    {
-                        // Show the admin label
-                        adminControl.txtAdmin.Visible = true;
-                        adminControl.chkIsAdmin.Checked = true; // checkbox chkAdmin checked
-                    }
-                    else
-                    {
-                        // Hide the admin label if not an admin
-                        adminControl.txtAdmin.Visible = false;
-                        adminControl.chkIsAdmin.Checked = false; // checkbox chkAdmin unchecked
-                    }
-
-                    // Check if the user is online and enable the logout button
-                    var currentUser = AuthenticationService.CurrentUser;
-                    if (currentUser != selectedAlias)
-                    SetBtnForceLogOutUser(selectedAlias); // Pass selectedAlias to check if the user is online
+                    // Show the admin label
+                    adminControl.txtAdmin.Visible = true;
+                    adminControl.chkIsAdmin.Checked = true; // checkbox chkAdmin checked
                 }
                 else
                 {
-                    // Handle the case where loginDetails is null (optional)
-                    adminControl.txtAdmin.Visible = false; // Hide the textbox if no details found
+                    // Hide the admin label if not an admin
+                    adminControl.txtAdmin.Visible = false;
+                    adminControl.chkIsAdmin.Checked = false; // checkbox chkAdmin unchecked
                 }
+
+                // Check if the user is online and enable the logout button
+                if (currentUser != selectedAlias)
+                    SetForceLogOutUserBtn(selectedAlias); // Pass selectedAlias to check if the user is online
+            }
+            else
+            {
+                // Handle the case where loginDetails is null (optional)
+                adminControl.txtAdmin.Visible = false; // Hide the textbox if no details found
             }
         }
         #endregion LISTBOX ADMIN
@@ -264,7 +284,7 @@ namespace CRUD_System.Interfaces
         /// Sets the enabled state of the Force Log Out User button based on the user's online status.
         /// </summary>
         /// <param name="selectedAlias">The alias of the selected user to check online status.</param>
-        public void SetBtnForceLogOutUser(string selectedAlias)
+        public void SetForceLogOutUserBtn(string selectedAlias)
         {
             var lines = File.ReadAllLines(path.UserFilePath);
             bool isOnline = false;  // Flag to track if the selected user is online

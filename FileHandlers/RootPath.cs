@@ -44,8 +44,6 @@ namespace CRUD_System.FileHandlers
             }
             else
             {
-                //Debug.WriteLine("Error: 'CRUD_System' directory not found in path.");
-                //MessageBox.Show("Error: 'CRUD_System' directory not found in path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return string.Empty; // Return an empty string
             }
         }

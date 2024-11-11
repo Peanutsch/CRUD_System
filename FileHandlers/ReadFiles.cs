@@ -30,7 +30,6 @@ namespace CRUD_System.FileHandlers
         {
             // Construct the full path to the CSV file
             string file = Path.Combine(RootPath.GetRootPath(), @"CSV\data_login.csv");
-            //Debug.WriteLine($"RootPath data_login.csv: {RootPath.GetRootPath}");
 
             // Check if the file exists; if not, log an error and return an empty list
             if (!File.Exists(file))
@@ -67,7 +66,6 @@ namespace CRUD_System.FileHandlers
                     }
                 }
             }
-
             // Return the populated list of login data
             return loginData;
         }
@@ -109,7 +107,6 @@ namespace CRUD_System.FileHandlers
                     users.Add((name, surname, address, zipCode, city, emailAddress));
                 }
             }
-
             return users;
         }
 

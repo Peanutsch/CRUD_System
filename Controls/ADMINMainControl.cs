@@ -84,7 +84,6 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
@@ -170,6 +169,8 @@ namespace CRUD_System
 
         private void btnForceLogOutUser_Click(object sender, EventArgs e)
         {
+            AuthenticationService authenticationService = new AuthenticationService();
+
             // Check if an item is selected in the ListBox
             if (listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
@@ -180,17 +181,21 @@ namespace CRUD_System
                 {
                     interactionHandler.PerformActionIfUserSelected(() =>
                     {
-                        // Pass selectedAlias to SetBtnForceLogOutUser
-                        adminInterface.SetBtnForceLogOutUser(selectedAlias);
-                        AuthenticationService authenticationService = new AuthenticationService();
-                        AccountManager accountManager = new AccountManager();
-                        authenticationService.UpdateUserOnlineStatus(selectedAlias, false); // Set user as offline
-                        authenticationService.PerformForcedLogOutByAdmin(selectedAlias); // Force log out user
+                        // Pass selectedAlias to SetForceLogOutUserBtn
+                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
+                        
+                        // Set user as offline
+                        authenticationService.UpdateUserOnlineStatus(selectedAlias, false);
+                        // Force log out user
+                        authenticationService.PerformForcedLogOutByAdmin(selectedAlias);
 
-                        // Read lines from data_users.csv and data_login.csv
+                        // Read lines from data_users.csv and data_login.csv for userIndex
                         (var userLines, var loginLines) = path.ReadUserAndLoginData();
                         int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+                        // Reload ListBoxAdmin
                         adminInterface.ReloadListBoxAdmin(userIndex);
+
+                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
                     },
                     () => message.MessageInvalidNoUserSelected());
                 }

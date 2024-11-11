@@ -48,7 +48,7 @@ namespace CRUD_System.Repositories
         public void ForceUserLogOut(string currentUser, string alias)
         {
             Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Forced [{alias.ToUpper()}] logged OUT");
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Forced [{alias.ToUpper()}] to log OUT\")";
+            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Forced [{alias.ToUpper()}] to log OUT)";
             path.AppendToLog(newLog);
         }
         #endregion AUTHENTICATIONSERVICE
