@@ -33,40 +33,6 @@ namespace CRUD_System.Interfaces
         #endregion CONSTRUCTOR
 
         #region LISTBOX ADMIN
-        /*
-        /// <summary>
-        /// Loads user data from data_users.csv and populates the list box with user names.
-        /// </summary>
-        public void LoadDetailsListBox()
-        {
-            string isOnline = string.Empty;
-
-            var lines = File.ReadAllLines(path.UserFilePath);
-
-            adminControl.listBoxAdmin.Items.Clear();
-
-            foreach (var line in lines.Skip(2)) // Skip Header and details Admin
-            {
-                // Split each line into an array of user details
-                var userDetailsArray = line.Split(',');
-
-                // Create a UserDetails object using the array
-                UserDetails userDetails = new UserDetails(userDetailsArray);
-
-                if (userDetails.OnlineStatus)
-                {
-                    isOnline = "ONLINE";
-                    isOnline.Color = Color.Green;
-                }
-
-                // Use the UserDetails properties to format the string for the listBox
-                string listItem = $"{userDetails.Name} {userDetails.Surname} ({userDetails.Alias}) | {userDetails.Email} | {userDetails.PhoneNumber} | {isOnline}";
-
-                // Add the formatted string to the listBox
-                adminControl.listBoxAdmin.Items.Add(listItem);
-            }
-        }
-        */
         /// <summary>
         /// Loads user details from data_users.csv and populates the ListBox with formatted information.
         /// The method reads data from the user file, skips the header and admin details, and processes each user's details.
@@ -131,8 +97,6 @@ namespace CRUD_System.Interfaces
             e.DrawFocusRectangle();
         }
 
-
-
         /// <summary>
         /// Reloads the user list box after making changes, refreshing the interface display.
         /// </summary>
@@ -149,7 +113,7 @@ namespace CRUD_System.Interfaces
             LoadDetailsListBox();
 
             // Reset editMode to false after saving and reload interface
-            InterfaceEditModeAmin();
+            InterfaceEditModeAdmin();
         }
 
         /// <summary>
@@ -235,25 +199,23 @@ namespace CRUD_System.Interfaces
 
         #region EDIT MODE DISPLAY ADMIN
         /// <summary>
-        /// Manages the interface display and controls based on edit mode status.
+        /// Manages the interface display and controls based on the edit mode status.
         /// </summary>
-        public void InterfaceEditModeAmin()
+        public void InterfaceEditModeAdmin()
         {
             Debug.WriteLine($"EditMode AdminInterface: {EditMode}");
 
-            // Toggle Edit and Cancel button text
+            // Toggle Edit and Cancel button text based on EditMode status
             adminControl.btnEditUserDetails.Text = EditMode ? "Cancel" : "Edit User";
 
-            // Set background color based on EditMode
+            // Set the background color based on EditMode for visual feedback
             adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;
 
-            // Manage visibility and enablement of buttons and controls
-            adminControl.btnSaveEditUserDetails.Visible = EditMode;
-            adminControl.btnSaveEditUserDetails.BackColor = Color.LightGreen;
-            adminControl.chkIsAdmin.Visible = EditMode;
-            adminControl.chkIsAdmin.Enabled = EditMode;
+            // Adjust visibility and enablement of buttons based on EditMode
+            ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
+            ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
 
-            // Array of text fields to enable or disable in EditMode
+            // Array of text fields to enable or disable in EditMode for user editing
             var textFields = new[]
             {
                 adminControl.txtName,
@@ -264,23 +226,46 @@ namespace CRUD_System.Interfaces
                 adminControl.txtCity,
                 adminControl.txtEmail,
                 adminControl.txtPhonenumber
-            };
+             };
 
             foreach (var field in textFields)
             {
-                field.Enabled = EditMode;
+                if (field != null) // Check for null to prevent runtime errors
+                {
+                    field.Enabled = EditMode;
+                }
             }
 
-            // Hide or show other action buttons
-            adminControl.btnCreateUser.Visible = !EditMode;
-            adminControl.btnCreateUser.Enabled = !EditMode;
-            adminControl.btnDeleteUser.Visible = !EditMode;
-            adminControl.btnDeleteUser.Enabled = !EditMode;
-            adminControl.btnGeneratePSW.Visible = !EditMode;
-            adminControl.btnGeneratePSW.Enabled = !EditMode;
+            // Adjust other action buttons based on EditMode status
+            ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
+            ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
+            ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
 
-            // Enable or disable ListBox based on EditMode
-            adminControl.listBoxAdmin.Enabled = !EditMode;
+            // Disable ListBox when in edit mode to prevent user changes in selection
+            if (adminControl.listBoxAdmin != null)
+            {
+                adminControl.listBoxAdmin.Enabled = !EditMode;
+            }
+        }
+
+        /// <summary>
+        /// Helper method to set control visibility, enablement, and optional background color.
+        /// </summary>
+        /// <param name="control">The control to modify.</param>
+        /// <param name="isVisible">Whether the control should be visible.</param>
+        /// <param name="backColor">Optional background color to set when control is visible.</param>
+        private void ToggleControlVisibility(Control control, bool isVisible, Color? backColor = null)
+        {
+            if (control != null) // Check if control is not null
+            {
+                control.Visible = isVisible;
+                control.Enabled = isVisible;
+
+                if (isVisible && backColor.HasValue)
+                {
+                    control.BackColor = backColor.Value;
+                }
+            }
         }
 
         /// <summary>
@@ -289,23 +274,13 @@ namespace CRUD_System.Interfaces
         /// <param name="selectedAlias">The alias of the selected user to check online status.</param>
         public void SetForceLogOutUserBtn(string selectedAlias)
         {
-            var lines = File.ReadAllLines(path.UserFilePath);
-            bool isOnline = false;  // Flag to track if the selected user is online
+            bool isOnline = File.ReadLines(path.UserFilePath)
+                                .Skip(2) // Skip header
+                                .Select(line => line.Split(','))
+                                .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == selectedAlias) // Match alias
+                                .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check online status
 
-            foreach (var line in lines.Skip(2)) // Skip header
-            {
-                var userDetailsArray = line.Split(',');
-
-                // Check if the array has enough elements before accessing index 8
-                if (userDetailsArray.Length > 8 && userDetailsArray[2] == selectedAlias) // Match alias first
-                {
-                    isOnline = userDetailsArray[8] == "True"; // Assign and check online status
-
-                    // Exit loop early if we found the selected user
-                    break;
-                }
-            }
-            // Set button Enable and Visible only if the selected user is online
+            // Enable and show the button if the user is online and in edit mode
             adminControl.btnForceLogOutUser.Enabled = isOnline;
             adminControl.btnForceLogOutUser.Visible = isOnline;
         }
@@ -337,18 +312,15 @@ namespace CRUD_System.Interfaces
         /// <param name="userDetailsArray">Array containing the user details.</param>
         public void FillTextboxesAdmin(string[] userDetailsArray)
         {
-            // Initialize the UserDetails object with the array of user details
-            UserDetails userDetails = new UserDetails(userDetailsArray);
-
             // Populate the text fields with the details of the selected user
-            adminControl.txtName.Text = userDetails.Name;
-            adminControl.txtSurname.Text = userDetails.Surname;
-            adminControl.txtAlias.Text = userDetails.Alias;
-            adminControl.txtAddress.Text = userDetails.Address;
-            adminControl.txtZIPCode.Text = userDetails.ZIPCode;
-            adminControl.txtCity.Text = userDetails.City;
-            adminControl.txtEmail.Text = userDetails.Email;
-            adminControl.txtPhonenumber.Text = userDetails.PhoneNumber;
+            adminControl.txtName.Text = userDetailsArray[0];
+            adminControl.txtSurname.Text = userDetailsArray[1];
+            adminControl.txtAlias.Text = userDetailsArray[2];
+            adminControl.txtAddress.Text = userDetailsArray[3];
+            adminControl.txtZIPCode.Text = userDetailsArray[4];
+            adminControl.txtCity.Text = userDetailsArray[5];
+            adminControl.txtEmail.Text = userDetailsArray[6];
+            adminControl.txtPhonenumber.Text = userDetailsArray[7];
         }
         #endregion TEXTBOXES ADMIN
     }

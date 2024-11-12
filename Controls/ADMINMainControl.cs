@@ -29,8 +29,6 @@ namespace CRUD_System
     public partial class AdminMainControl : UserControl
     {
         #region PROPERTIES
-        //public bool IsAdmin { get; set; }
-
         FilePaths path = new FilePaths();
 
         AdminInterface adminInterface;
@@ -72,7 +70,7 @@ namespace CRUD_System
             {
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
-                adminInterface.InterfaceEditModeAmin();
+                adminInterface.InterfaceEditModeAdmin();
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -92,16 +90,19 @@ namespace CRUD_System
             var loginDetails = loginLines[loginIndex].Split(",");
             
             // Parse the admin status and online status as bools
-            bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
+            //bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
             bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
+
+            Debug.WriteLine("ADMINMainControl.btnSaveEditUserDetails_Click");
+            Debug.WriteLine($"isAdmin = {isAdmin}");
+            Debug.WriteLine($"omlineStatus = {onlineStatus}");
 
             if (userIndex != -1)
             {
-
                 userProfileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
             }
             adminInterface.EditMode = false;
-            adminInterface.InterfaceEditModeAmin();
+            adminInterface.InterfaceEditModeAdmin();
             adminInterface.ReloadListBoxAdmin(userIndex); // Reload listbox
         }
 
@@ -119,6 +120,10 @@ namespace CRUD_System
                 listBoxAdmin.Items.Clear();
                 adminInterface.LoadDetailsListBox();
                 adminInterface.EmptyTextBoxesAdmin();
+                
+                // Toggle edit mode
+                adminInterface.EditMode = ToggleEditMode();
+                adminInterface.InterfaceEditModeAdmin();
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -162,7 +167,9 @@ namespace CRUD_System
         /// <param name="e">The event data (checkbox change).</param>
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
-            isAdmin = !isAdmin; // Toggle between true and false
+            //isAdmin = !isAdmin; // Toggle between true and false
+            isAdmin = chkIsAdmin.Checked;
+            Debug.WriteLine($"isAdmin updated to: {isAdmin}");
         }
 
         /// <summary>
@@ -178,46 +185,7 @@ namespace CRUD_System
         private void btnForceLogOutUser_Click(object sender, EventArgs e)
         {
             AuthenticationService authenticationService = new AuthenticationService();
-
-            // Check if an item is selected in the ListBox
-            if (listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
-            {
-                // Safely extract the alias from the selected user string
-                string? selectedAlias = selectedUserString.Split('(', ')').ElementAtOrDefault(1);
-
-                if (!string.IsNullOrEmpty(selectedAlias))
-                {
-                    interactionHandler.PerformActionIfUserSelected(() =>
-                    {
-                        // Pass selectedAlias to SetForceLogOutUserBtn
-                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
-                        
-                        // Set user as offline
-                        authenticationService.UpdateUserOnlineStatus(selectedAlias, false);
-                        // Force log out user
-                        authenticationService.PerformForcedLogOutByAdmin(selectedAlias);
-
-                        // Read lines from data_users.csv and data_login.csv for userIndex
-                        (var userLines, var loginLines) = path.ReadUserAndLoginData();
-                        int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-                        // Reload ListBoxAdmin
-                        adminInterface.ReloadListBoxAdmin(userIndex);
-
-                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
-                    },
-                    () => message.MessageInvalidNoUserSelected());
-                }
-                else
-                {
-                    // Handle the case where the alias is not available
-                    message.MessageInvalidNoUserSelected();
-                }
-            }
-            else
-            {
-                // Handle the case where no user is selected
-                message.MessageInvalidNoUserSelected();
-            }
+            authenticationService.ForceLogOut();
         }
 
         /// <summary>

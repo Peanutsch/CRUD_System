@@ -41,8 +41,9 @@ namespace CRUD_System.Handlers
             var loginDetails = loginLines[loginIndex].Split(",");
             string currentAlias = loginDetails[0];
             string currentPassword = loginDetails[1];
+            bool currentOnlineStatus = onlineStatus;
 
-            userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber},{onlineStatus}";
+            userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber},{currentOnlineStatus}";
             loginLines[loginIndex] = $"{currentAlias},{currentPassword},{isAdmin},{onlineStatus}";
 
             DialogResult dr = message.MessageBoxConfirmToSAVEChanges(alias);
@@ -95,21 +96,20 @@ namespace CRUD_System.Handlers
                 return;
             }
 
-            // Remove the user from data_users.csv by alias
-            userLines = userLines.Where(
-                                        line =>
-                                        !line.Split(',')[2].Trim().Equals(aliasToDelete,
-                                        StringComparison.OrdinalIgnoreCase)).ToList();
-            
-            // Remove the user from data_login.csv using the alias
-            loginLines = loginLines.Where(
-                                            line =>
-                                            !line.Split(',')[0].Trim().Equals(aliasToDelete,
-                                            StringComparison.OrdinalIgnoreCase)).ToList();
-            
-
             if (!string.IsNullOrEmpty(currentUser))
             {
+                // Remove the user from data_users.csv by alias
+                userLines = userLines.Where(
+                                            line =>
+                                            !line.Split(',')[2].Trim().Equals(aliasToDelete,
+                                            StringComparison.OrdinalIgnoreCase)).ToList();
+
+                // Remove the user from data_login.csv using the alias
+                loginLines = loginLines.Where(
+                                                line =>
+                                                !line.Split(',')[0].Trim().Equals(aliasToDelete,
+                                                StringComparison.OrdinalIgnoreCase)).ToList();
+
                 // Delete account from data_users.csv and data_login.csv
                 File.WriteAllLines(path.UserFilePath, userLines);
                 File.WriteAllLines(path.LoginFilePath, loginLines);

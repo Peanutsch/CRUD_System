@@ -86,21 +86,22 @@ namespace CRUD_System
         private void btnEditUserDetails_Click(object sender, EventArgs e)
         {
             interactionHandler.PerformActionIfUserSelected(
-                () =>   {
-                        // Toggle editMode
-                        userInterface.EditMode = ToggleEditMode();
-                        userInterface.InterfaceEditModeUser();
-                        },
+                () =>
+                {
+                    // Toggle editMode
+                    userInterface.EditMode = ToggleEditMode();
+                    userInterface.InterfaceEditModeUser();
+                },
                 () => message.MessageInvalidNoUserSelected());
         }
 
         private void ChangePassword_Click(object sender, EventArgs e)
         {
-            interactionHandler.PerformActionIfUserSelected(() => 
+            interactionHandler.PerformActionIfUserSelected(() =>
             {
                 interactionHandler.Open_CreateNewPasswordForm();
             });
-            
+
         }
 
         private bool ToggleEditMode()
@@ -114,6 +115,11 @@ namespace CRUD_System
         public void ListBoxUser_SelectedIndexChanged(object sender, EventArgs e)
         {
             userInterface.ListBoxUser_SelectedIndexChangedHandler();
+        }
+
+        private void comboBoxStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

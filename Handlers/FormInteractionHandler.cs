@@ -86,7 +86,6 @@ namespace CRUD_System.Handlers
         }
         #endregion CREATE NEW PASSWORD
 
-
         /// <summary>
         /// Executes a specified action if a user is selected, otherwise executes a fallback action if provided.
         /// </summary>

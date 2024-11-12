@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD_System.Models
 {
+    /*
     public class UserDetails
     {
         // Properties
@@ -31,4 +32,5 @@ namespace CRUD_System.Models
             PhoneNumber = userDetails[7];
         }
     }
+    */
 }

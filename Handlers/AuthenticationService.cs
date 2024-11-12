@@ -1,4 +1,5 @@
 ﻿using CRUD_System.FileHandlers;
+using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
 using Microsoft.VisualBasic.Logging;
 using System;
@@ -241,6 +242,55 @@ namespace CRUD_System.Handlers
         #endregion LOGIN
 
         #region LOGOUT
+
+        public void ForceLogOut()
+        {
+            AdminMainControl adminControl = new AdminMainControl();
+            FormInteractionHandler interactionHandler = new FormInteractionHandler();
+            AdminInterface adminInterface = new AdminInterface();
+            AccountManager accountManager = new AccountManager();
+
+            // Check if an item is selected in the ListBox
+            if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
+            {
+                // Safely extract the alias from the selected user string
+                string? selectedAlias = selectedUserString.Split('(', ')').ElementAtOrDefault(1);
+
+                if (!string.IsNullOrEmpty(selectedAlias))
+                {
+                    interactionHandler.PerformActionIfUserSelected(() =>
+                    {
+                        // Pass selectedAlias to SetForceLogOutUserBtn
+                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
+
+                        // Set user as offline
+                        UpdateUserOnlineStatus(selectedAlias, false);
+                        // Force log out user
+                        PerformForcedLogOutByAdmin(selectedAlias);
+
+                        // Read lines from data_users.csv and data_login.csv for userIndex
+                        (var userLines, var loginLines) = path.ReadUserAndLoginData();
+                        int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, adminControl.txtAlias.Text);
+                        // Reload ListBoxAdmin
+                        adminInterface.ReloadListBoxAdmin(userIndex);
+
+                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
+                    },
+                    () => message.MessageInvalidNoUserSelected());
+                }
+                else
+                {
+                    // Handle the case where the alias is not available
+                    message.MessageInvalidNoUserSelected();
+                }
+            }
+            else
+            {
+                // Handle the case where no user is selected
+                message.MessageInvalidNoUserSelected();
+            }
+        }
+
         /// <summary>
         /// Logs out the current user by updating their online status to offline,
         /// logging the logout event, and clearing the current user.

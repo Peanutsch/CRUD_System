@@ -120,7 +120,7 @@ namespace CRUD_System
             // 
             this.btnSaveEditUserDetails.BackColor = Color.LightGreen;
             this.btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnSaveEditUserDetails.Location = new Point(596, 200);
+            this.btnSaveEditUserDetails.Location = new Point(430, 200);
             this.btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
             this.btnSaveEditUserDetails.Size = new Size(160, 30);
             this.btnSaveEditUserDetails.TabIndex = 9;
@@ -221,12 +221,13 @@ namespace CRUD_System
             this.comboBoxStatus.Size = new Size(150, 26);
             this.comboBoxStatus.TabIndex = 28;
             this.comboBoxStatus.Text = "User Status";
+            this.comboBoxStatus.SelectedIndexChanged += this.comboBoxStatus_SelectedIndexChanged;
             // 
             // btnChangePassword
             // 
             this.btnChangePassword.BackColor = SystemColors.ActiveCaption;
             this.btnChangePassword.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnChangePassword.Location = new Point(431, 200);
+            this.btnChangePassword.Location = new Point(596, 200);
             this.btnChangePassword.Name = "btnChangePassword";
             this.btnChangePassword.Size = new Size(160, 30);
             this.btnChangePassword.TabIndex = 10;
