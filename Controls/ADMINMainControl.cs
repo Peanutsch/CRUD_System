@@ -167,7 +167,6 @@ namespace CRUD_System
         /// <param name="e">The event data (checkbox change).</param>
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
-            //isAdmin = !isAdmin; // Toggle between true and false
             isAdmin = chkIsAdmin.Checked;
             Debug.WriteLine($"isAdmin updated to: {isAdmin}");
         }
@@ -185,7 +184,11 @@ namespace CRUD_System
         private void btnForceLogOutUser_Click(object sender, EventArgs e)
         {
             AuthenticationService authenticationService = new AuthenticationService();
-            authenticationService.ForceLogOut();
+            interactionHandler.PerformActionIfUserSelected(() =>
+            {
+                authenticationService.ForceLogOut();
+            },
+            () => message.MessageInvalidNoUserSelected());
         }
 
         /// <summary>
