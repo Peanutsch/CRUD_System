@@ -130,7 +130,7 @@ namespace CRUD_System.Interfaces
             userControl.btnSaveEditUserDetails.Visible = EditMode;
             userControl.btnSaveEditUserDetails.BackColor = Color.LightGreen;
             
-            userControl.btnChangePassword.Visible = !EditMode;
+            userControl.btnChangePassword.Visible = EditMode;
 
             // Array of text fields to enable or disable in EditMode
             var textFields = new[]

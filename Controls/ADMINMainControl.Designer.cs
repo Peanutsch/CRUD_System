@@ -34,257 +34,257 @@
 
         private void InitializeComponent()
         {
-            txtName = new TextBox();
-            txtEmail = new TextBox();
-            txtAddress = new TextBox();
-            txtCity = new TextBox();
-            listBoxAdmin = new ListBox();
-            btnCreateUser = new Button();
-            btnSaveEditUserDetails = new Button();
-            btnDeleteUser = new Button();
-            txtSurname = new TextBox();
-            txtAlias = new TextBox();
-            txtZIPCode = new TextBox();
-            txtPhonenumber = new TextBox();
-            btnGeneratePSW = new Button();
-            btnEditUserDetails = new Button();
-            txtAdmin = new TextBox();
-            chkIsAdmin = new CheckBox();
-            btnChangePassword = new Button();
-            btnForceLogOutUser = new Button();
-            SuspendLayout();
+            this.txtName = new TextBox();
+            this.txtEmail = new TextBox();
+            this.txtAddress = new TextBox();
+            this.txtCity = new TextBox();
+            this.listBoxAdmin = new ListBox();
+            this.btnCreateUser = new Button();
+            this.btnSaveEditUserDetails = new Button();
+            this.btnDeleteUser = new Button();
+            this.txtSurname = new TextBox();
+            this.txtAlias = new TextBox();
+            this.txtZIPCode = new TextBox();
+            this.txtPhonenumber = new TextBox();
+            this.btnGeneratePSW = new Button();
+            this.btnEditUserDetails = new Button();
+            this.txtAdmin = new TextBox();
+            this.chkIsAdmin = new CheckBox();
+            this.btnChangePassword = new Button();
+            this.btnForceLogOutUser = new Button();
+            this.SuspendLayout();
             // 
             // txtName
             // 
-            txtName.Enabled = false;
-            txtName.Location = new Point(229, 255);
-            txtName.Name = "txtName";
-            txtName.PlaceholderText = "Name";
-            txtName.Size = new Size(199, 23);
-            txtName.TabIndex = 1;
-            txtName.TextAlign = HorizontalAlignment.Center;
+            this.txtName.Enabled = false;
+            this.txtName.Location = new Point(283, 269);
+            this.txtName.Name = "txtName";
+            this.txtName.PlaceholderText = "Name";
+            this.txtName.Size = new Size(325, 23);
+            this.txtName.TabIndex = 1;
+            this.txtName.TextAlign = HorizontalAlignment.Center;
             // 
             // txtEmail
             // 
-            txtEmail.Enabled = false;
-            txtEmail.Location = new Point(24, 313);
-            txtEmail.Name = "txtEmail";
-            txtEmail.PlaceholderText = "E-mail";
-            txtEmail.Size = new Size(199, 23);
-            txtEmail.TabIndex = 6;
-            txtEmail.TextAlign = HorizontalAlignment.Center;
+            this.txtEmail.Enabled = false;
+            this.txtEmail.Location = new Point(283, 326);
+            this.txtEmail.Name = "txtEmail";
+            this.txtEmail.PlaceholderText = "E-mail";
+            this.txtEmail.Size = new Size(443, 23);
+            this.txtEmail.TabIndex = 6;
+            this.txtEmail.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAddress
             // 
-            txtAddress.Enabled = false;
-            txtAddress.Location = new Point(24, 284);
-            txtAddress.Name = "txtAddress";
-            txtAddress.PlaceholderText = "Adress";
-            txtAddress.Size = new Size(199, 23);
-            txtAddress.TabIndex = 3;
-            txtAddress.TextAlign = HorizontalAlignment.Center;
+            this.txtAddress.Enabled = false;
+            this.txtAddress.Location = new Point(283, 298);
+            this.txtAddress.Name = "txtAddress";
+            this.txtAddress.PlaceholderText = "Adress";
+            this.txtAddress.Size = new Size(325, 23);
+            this.txtAddress.TabIndex = 3;
+            this.txtAddress.TextAlign = HorizontalAlignment.Center;
             // 
             // txtCity
             // 
-            txtCity.Enabled = false;
-            txtCity.Location = new Point(434, 284);
-            txtCity.Name = "txtCity";
-            txtCity.PlaceholderText = "City";
-            txtCity.Size = new Size(199, 23);
-            txtCity.TabIndex = 5;
-            txtCity.TextAlign = HorizontalAlignment.Center;
+            this.txtCity.Enabled = false;
+            this.txtCity.Location = new Point(732, 297);
+            this.txtCity.Name = "txtCity";
+            this.txtCity.PlaceholderText = "City";
+            this.txtCity.Size = new Size(207, 23);
+            this.txtCity.TabIndex = 5;
+            this.txtCity.TextAlign = HorizontalAlignment.Center;
             // 
             // listBoxAdmin
             // 
-            listBoxAdmin.DrawMode = DrawMode.OwnerDrawFixed;
-            listBoxAdmin.ItemHeight = 15;
-            listBoxAdmin.Location = new Point(24, 20);
-            listBoxAdmin.Name = "listBoxAdmin";
-            listBoxAdmin.Size = new Size(963, 229);
-            listBoxAdmin.TabIndex = 0;
-            listBoxAdmin.DrawItem += ListBoxAdmin_DrawItem;
-            listBoxAdmin.SelectedIndexChanged += ListBoxAdmin_SelectedIndexChanged;
+            this.listBoxAdmin.DrawMode = DrawMode.OwnerDrawFixed;
+            this.listBoxAdmin.ItemHeight = 15;
+            this.listBoxAdmin.Location = new Point(24, 35);
+            this.listBoxAdmin.Name = "listBoxAdmin";
+            this.listBoxAdmin.Size = new Size(915, 229);
+            this.listBoxAdmin.TabIndex = 0;
+            this.listBoxAdmin.DrawItem += this.ListBoxAdmin_DrawItem;
+            this.listBoxAdmin.SelectedIndexChanged += this.ListBoxAdmin_SelectedIndexChanged;
             // 
             // btnCreateUser
             // 
-            btnCreateUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnCreateUser.Location = new Point(837, 291);
-            btnCreateUser.Name = "btnCreateUser";
-            btnCreateUser.Size = new Size(150, 30);
-            btnCreateUser.TabIndex = 11;
-            btnCreateUser.Text = "Create User";
-            btnCreateUser.Click += btnCreateUser_Click;
+            this.btnCreateUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.btnCreateUser.Location = new Point(583, 355);
+            this.btnCreateUser.Name = "btnCreateUser";
+            this.btnCreateUser.Size = new Size(200, 30);
+            this.btnCreateUser.TabIndex = 11;
+            this.btnCreateUser.Text = "Create User";
+            this.btnCreateUser.Click += this.btnCreateUser_Click;
             // 
             // btnSaveEditUserDetails
             // 
-            btnSaveEditUserDetails.BackColor = Color.LightGreen;
-            btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSaveEditUserDetails.Location = new Point(681, 255);
-            btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
-            btnSaveEditUserDetails.Size = new Size(150, 30);
-            btnSaveEditUserDetails.TabIndex = 9;
-            btnSaveEditUserDetails.Text = "Save Edit";
-            btnSaveEditUserDetails.UseVisualStyleBackColor = false;
-            btnSaveEditUserDetails.Visible = false;
-            btnSaveEditUserDetails.Click += btnSaveEditUserDetails_Click;
+            this.btnSaveEditUserDetails.BackColor = Color.LightGreen;
+            this.btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnSaveEditUserDetails.Location = new Point(24, 298);
+            this.btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
+            this.btnSaveEditUserDetails.Size = new Size(150, 30);
+            this.btnSaveEditUserDetails.TabIndex = 9;
+            this.btnSaveEditUserDetails.Text = "Save Edit";
+            this.btnSaveEditUserDetails.UseVisualStyleBackColor = false;
+            this.btnSaveEditUserDetails.Visible = false;
+            this.btnSaveEditUserDetails.Click += this.btnSaveEditUserDetails_Click;
             // 
             // btnDeleteUser
             // 
-            btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnDeleteUser.Location = new Point(837, 327);
-            btnDeleteUser.Name = "btnDeleteUser";
-            btnDeleteUser.Size = new Size(150, 30);
-            btnDeleteUser.TabIndex = 9;
-            btnDeleteUser.Text = "Delete User";
-            btnDeleteUser.Click += btnDeleteUser_Click;
+            this.btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.btnDeleteUser.Location = new Point(789, 355);
+            this.btnDeleteUser.Name = "btnDeleteUser";
+            this.btnDeleteUser.Size = new Size(150, 30);
+            this.btnDeleteUser.TabIndex = 9;
+            this.btnDeleteUser.Text = "Delete User";
+            this.btnDeleteUser.Click += this.btnDeleteUser_Click;
             // 
             // txtSurname
             // 
-            txtSurname.Enabled = false;
-            txtSurname.Location = new Point(434, 255);
-            txtSurname.Name = "txtSurname";
-            txtSurname.PlaceholderText = "Surname";
-            txtSurname.Size = new Size(199, 23);
-            txtSurname.TabIndex = 2;
-            txtSurname.TextAlign = HorizontalAlignment.Center;
+            this.txtSurname.Enabled = false;
+            this.txtSurname.Location = new Point(614, 269);
+            this.txtSurname.Name = "txtSurname";
+            this.txtSurname.PlaceholderText = "Surname";
+            this.txtSurname.Size = new Size(325, 23);
+            this.txtSurname.TabIndex = 2;
+            this.txtSurname.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAlias
             // 
-            txtAlias.Enabled = false;
-            txtAlias.Location = new Point(24, 255);
-            txtAlias.Name = "txtAlias";
-            txtAlias.PlaceholderText = "Alias";
-            txtAlias.ReadOnly = true;
-            txtAlias.Size = new Size(199, 23);
-            txtAlias.TabIndex = 20;
-            txtAlias.TextAlign = HorizontalAlignment.Center;
+            this.txtAlias.Enabled = false;
+            this.txtAlias.Location = new Point(180, 270);
+            this.txtAlias.Name = "txtAlias";
+            this.txtAlias.PlaceholderText = "Alias";
+            this.txtAlias.ReadOnly = true;
+            this.txtAlias.Size = new Size(97, 23);
+            this.txtAlias.TabIndex = 20;
+            this.txtAlias.TextAlign = HorizontalAlignment.Center;
             // 
             // txtZIPCode
             // 
-            txtZIPCode.Enabled = false;
-            txtZIPCode.Location = new Point(229, 284);
-            txtZIPCode.Name = "txtZIPCode";
-            txtZIPCode.PlaceholderText = "ZIP Code";
-            txtZIPCode.Size = new Size(199, 23);
-            txtZIPCode.TabIndex = 4;
-            txtZIPCode.TextAlign = HorizontalAlignment.Center;
+            this.txtZIPCode.Enabled = false;
+            this.txtZIPCode.Location = new Point(614, 297);
+            this.txtZIPCode.Name = "txtZIPCode";
+            this.txtZIPCode.PlaceholderText = "ZIP Code";
+            this.txtZIPCode.Size = new Size(112, 23);
+            this.txtZIPCode.TabIndex = 4;
+            this.txtZIPCode.TextAlign = HorizontalAlignment.Center;
             // 
             // txtPhonenumber
             // 
-            txtPhonenumber.Enabled = false;
-            txtPhonenumber.Location = new Point(229, 313);
-            txtPhonenumber.Name = "txtPhonenumber";
-            txtPhonenumber.PlaceholderText = "Phonenumber";
-            txtPhonenumber.Size = new Size(199, 23);
-            txtPhonenumber.TabIndex = 7;
-            txtPhonenumber.TextAlign = HorizontalAlignment.Center;
+            this.txtPhonenumber.Enabled = false;
+            this.txtPhonenumber.Location = new Point(732, 326);
+            this.txtPhonenumber.Name = "txtPhonenumber";
+            this.txtPhonenumber.PlaceholderText = "Phonenumber";
+            this.txtPhonenumber.Size = new Size(207, 23);
+            this.txtPhonenumber.TabIndex = 7;
+            this.txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
             // btnGeneratePSW
             // 
-            btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnGeneratePSW.Location = new Point(837, 359);
-            btnGeneratePSW.Name = "btnGeneratePSW";
-            btnGeneratePSW.Size = new Size(150, 30);
-            btnGeneratePSW.TabIndex = 22;
-            btnGeneratePSW.Text = "Gen. Password";
-            btnGeneratePSW.Click += btnGeneratePassword_Click;
+            this.btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.btnGeneratePSW.Location = new Point(427, 355);
+            this.btnGeneratePSW.Name = "btnGeneratePSW";
+            this.btnGeneratePSW.Size = new Size(150, 30);
+            this.btnGeneratePSW.TabIndex = 22;
+            this.btnGeneratePSW.Text = "Gen. Password";
+            this.btnGeneratePSW.Click += this.btnGeneratePassword_Click;
             // 
             // btnEditUserDetails
             // 
-            btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
-            btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnEditUserDetails.Location = new Point(837, 255);
-            btnEditUserDetails.Name = "btnEditUserDetails";
-            btnEditUserDetails.Size = new Size(150, 30);
-            btnEditUserDetails.TabIndex = 25;
-            btnEditUserDetails.Text = "Edit Details";
-            btnEditUserDetails.UseVisualStyleBackColor = false;
-            btnEditUserDetails.Click += btnEditUserDetails_Click;
+            this.btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
+            this.btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnEditUserDetails.Location = new Point(24, 269);
+            this.btnEditUserDetails.Name = "btnEditUserDetails";
+            this.btnEditUserDetails.Size = new Size(150, 30);
+            this.btnEditUserDetails.TabIndex = 25;
+            this.btnEditUserDetails.Text = "Edit Details";
+            this.btnEditUserDetails.UseVisualStyleBackColor = false;
+            this.btnEditUserDetails.Click += this.btnEditUserDetails_Click;
             // 
             // txtAdmin
             // 
-            txtAdmin.BackColor = Color.LightGreen;
-            txtAdmin.Enabled = false;
-            txtAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAdmin.Location = new Point(536, 312);
-            txtAdmin.Multiline = true;
-            txtAdmin.Name = "txtAdmin";
-            txtAdmin.Size = new Size(97, 23);
-            txtAdmin.TabIndex = 26;
-            txtAdmin.Text = "Admin";
-            txtAdmin.TextAlign = HorizontalAlignment.Center;
-            txtAdmin.Visible = false;
+            this.txtAdmin.BackColor = Color.LightGreen;
+            this.txtAdmin.Enabled = false;
+            this.txtAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.txtAdmin.Location = new Point(180, 298);
+            this.txtAdmin.Multiline = true;
+            this.txtAdmin.Name = "txtAdmin";
+            this.txtAdmin.Size = new Size(97, 23);
+            this.txtAdmin.TabIndex = 26;
+            this.txtAdmin.Text = "Admin";
+            this.txtAdmin.TextAlign = HorizontalAlignment.Center;
+            this.txtAdmin.Visible = false;
             // 
             // chkIsAdmin
             // 
-            chkIsAdmin.AutoSize = true;
-            chkIsAdmin.CheckAlign = ContentAlignment.MiddleRight;
-            chkIsAdmin.Enabled = false;
-            chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkIsAdmin.Location = new Point(434, 314);
-            chkIsAdmin.Name = "chkIsAdmin";
-            chkIsAdmin.Size = new Size(97, 22);
-            chkIsAdmin.TabIndex = 8;
-            chkIsAdmin.Text = "isAdmin";
-            chkIsAdmin.TextAlign = ContentAlignment.MiddleRight;
-            chkIsAdmin.UseVisualStyleBackColor = true;
-            chkIsAdmin.Visible = false;
-            chkIsAdmin.CheckedChanged += chkIsAdmin_CheckedChanged;
+            this.chkIsAdmin.AutoSize = true;
+            this.chkIsAdmin.CheckAlign = ContentAlignment.MiddleRight;
+            this.chkIsAdmin.Enabled = false;
+            this.chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.chkIsAdmin.Location = new Point(180, 327);
+            this.chkIsAdmin.Name = "chkIsAdmin";
+            this.chkIsAdmin.Size = new Size(97, 22);
+            this.chkIsAdmin.TabIndex = 8;
+            this.chkIsAdmin.Text = "isAdmin";
+            this.chkIsAdmin.TextAlign = ContentAlignment.MiddleRight;
+            this.chkIsAdmin.UseVisualStyleBackColor = true;
+            this.chkIsAdmin.Visible = false;
+            this.chkIsAdmin.CheckedChanged += this.chkIsAdmin_CheckedChanged;
             // 
             // btnChangePassword
             // 
-            btnChangePassword.BackColor = SystemColors.ActiveCaption;
-            btnChangePassword.Font = new Font("Courier New", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnChangePassword.Location = new Point(24, 359);
-            btnChangePassword.Name = "btnChangePassword";
-            btnChangePassword.Size = new Size(199, 30);
-            btnChangePassword.TabIndex = 31;
-            btnChangePassword.Text = "Change own Password";
-            btnChangePassword.UseVisualStyleBackColor = false;
-            btnChangePassword.Click += btnChangePassword_Click;
+            this.btnChangePassword.BackColor = SystemColors.ActiveCaption;
+            this.btnChangePassword.Font = new Font("Courier New", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnChangePassword.Location = new Point(24, 3);
+            this.btnChangePassword.Name = "btnChangePassword";
+            this.btnChangePassword.Size = new Size(200, 30);
+            this.btnChangePassword.TabIndex = 31;
+            this.btnChangePassword.Text = "Change own Password";
+            this.btnChangePassword.UseVisualStyleBackColor = false;
+            this.btnChangePassword.Click += this.btnChangePassword_Click;
             // 
             // btnForceLogOutUser
             // 
-            btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
-            btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnForceLogOutUser.Location = new Point(681, 359);
-            btnForceLogOutUser.Name = "btnForceLogOutUser";
-            btnForceLogOutUser.Size = new Size(150, 30);
-            btnForceLogOutUser.TabIndex = 32;
-            btnForceLogOutUser.Text = "Force LogOut";
-            btnForceLogOutUser.Visible = false;
-            btnForceLogOutUser.Enabled = false;
-            btnForceLogOutUser.UseVisualStyleBackColor = false;
-            btnForceLogOutUser.Click += btnForceLogOutUser_Click;
+            this.btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
+            this.btnForceLogOutUser.Enabled = false;
+            this.btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnForceLogOutUser.Location = new Point(283, 355);
+            this.btnForceLogOutUser.Name = "btnForceLogOutUser";
+            this.btnForceLogOutUser.Size = new Size(138, 30);
+            this.btnForceLogOutUser.TabIndex = 32;
+            this.btnForceLogOutUser.Text = "Force LogOut";
+            this.btnForceLogOutUser.UseVisualStyleBackColor = false;
+            this.btnForceLogOutUser.Visible = false;
+            this.btnForceLogOutUser.Click += this.btnForceLogOutUser_Click;
             // 
             // AdminMainControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ActiveCaption;
-            BorderStyle = BorderStyle.FixedSingle;
-            Controls.Add(btnForceLogOutUser);
-            Controls.Add(btnCreateUser);
-            Controls.Add(btnChangePassword);
-            Controls.Add(chkIsAdmin);
-            Controls.Add(txtAdmin);
-            Controls.Add(btnEditUserDetails);
-            Controls.Add(btnGeneratePSW);
-            Controls.Add(txtPhonenumber);
-            Controls.Add(txtZIPCode);
-            Controls.Add(txtAlias);
-            Controls.Add(txtSurname);
-            Controls.Add(txtName);
-            Controls.Add(txtEmail);
-            Controls.Add(txtAddress);
-            Controls.Add(txtCity);
-            Controls.Add(listBoxAdmin);
-            Controls.Add(btnSaveEditUserDetails);
-            Controls.Add(btnDeleteUser);
-            Name = "AdminMainControl";
-            Size = new Size(1440, 410);
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new SizeF(7F, 15F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.BackColor = SystemColors.ActiveCaption;
+            this.BorderStyle = BorderStyle.FixedSingle;
+            this.Controls.Add(this.btnForceLogOutUser);
+            this.Controls.Add(this.btnCreateUser);
+            this.Controls.Add(this.btnChangePassword);
+            this.Controls.Add(this.chkIsAdmin);
+            this.Controls.Add(this.txtAdmin);
+            this.Controls.Add(this.btnEditUserDetails);
+            this.Controls.Add(this.btnGeneratePSW);
+            this.Controls.Add(this.txtPhonenumber);
+            this.Controls.Add(this.txtZIPCode);
+            this.Controls.Add(this.txtAlias);
+            this.Controls.Add(this.txtSurname);
+            this.Controls.Add(this.txtName);
+            this.Controls.Add(this.txtEmail);
+            this.Controls.Add(this.txtAddress);
+            this.Controls.Add(this.txtCity);
+            this.Controls.Add(this.listBoxAdmin);
+            this.Controls.Add(this.btnSaveEditUserDetails);
+            this.Controls.Add(this.btnDeleteUser);
+            this.Name = "AdminMainControl";
+            this.Size = new Size(968, 391);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
         #endregion
 
