@@ -110,7 +110,6 @@ namespace CRUD_System.Handlers
         /// </summary>
         /// <param name="alias">The alias of the user whose online status needs to be updated.</param>
         /// <param name="onlineStatus">The new online status to set for the user (true for online, false for offline).</param>
-
         public void UpdateUserOnlineStatus(string alias, bool onlineStatus)
         {
             AccountManager accountManager = new AccountManager();
@@ -242,53 +241,29 @@ namespace CRUD_System.Handlers
         #endregion LOGIN
 
         #region LOGOUT
-
-        public void ForceLogOut()
+        public void ForceLogOut(string aliasToLogOut)
         {
             AdminMainControl adminControl = new AdminMainControl();
-            FormInteractionHandler interactionHandler = new FormInteractionHandler();
             AdminInterface adminInterface = new AdminInterface();
             AccountManager accountManager = new AccountManager();
 
-            // Check if an item is selected in the ListBox
-            if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
-            {
-                // Safely extract the alias from the selected user string
-                string? selectedAlias = selectedUserString.Split('(', ')').ElementAtOrDefault(1);
+            // Pass selectedAlias to SetForceLogOutUserBtn
+            adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
 
-                if (!string.IsNullOrEmpty(selectedAlias))
-                {
-                    interactionHandler.PerformActionIfUserSelected(() =>
-                    {
-                        // Pass selectedAlias to SetForceLogOutUserBtn
-                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
+            // Set user as offline
+            UpdateUserOnlineStatus(aliasToLogOut, false);
+            // Force log out user
+            PerformForcedLogOutByAdmin(aliasToLogOut);
 
-                        // Set user as offline
-                        UpdateUserOnlineStatus(selectedAlias, false);
-                        // Force log out user
-                        PerformForcedLogOutByAdmin(selectedAlias);
+            adminControl.listBoxAdmin.Items.Clear();
 
-                        // Read lines from data_users.csv and data_login.csv for userIndex
-                        (var userLines, var loginLines) = path.ReadUserAndLoginData();
-                        int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, adminControl.txtAlias.Text);
-                        // Reload ListBoxAdmin
-                        adminInterface.ReloadListBoxAdmin(userIndex);
+            // Read lines from data_users.csv and data_login.csv for userIndex
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
+            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, adminControl.txtAlias.Text);
+            // Reload ListBoxAdmin
+            adminInterface.ReloadListBoxAdmin(userIndex);
 
-                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
-                    },
-                    () => message.MessageInvalidNoUserSelected());
-                }
-                else
-                {
-                    // Handle the case where the alias is not available
-                    message.MessageInvalidNoUserSelected();
-                }
-            }
-            else
-            {
-                // Handle the case where no user is selected
-                message.MessageInvalidNoUserSelected();
-            }
+            //adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
         }
 
         /// <summary>
@@ -312,14 +287,14 @@ namespace CRUD_System.Handlers
         /// and hiding the user's main form if active.
         /// </summary>
         /// <param name="userAlias">The alias of the user to be logged out by admin.</param>
-        public void PerformForcedLogOutByAdmin(string userAlias)
+        public void PerformForcedLogOutByAdmin(string aliasToLogOut)
         {
             UserMainForm userForm = new UserMainForm();
             var admin = CurrentUser;
 
             if (!string.IsNullOrEmpty(admin))
             {
-                logEvents.ForceUserLogOut(admin, userAlias);
+                logEvents.ForceUserLogOut(admin, aliasToLogOut);
                 userForm.Hide();
             }
         }
