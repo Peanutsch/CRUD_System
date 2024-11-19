@@ -52,6 +52,8 @@
             this.chkIsAdmin = new CheckBox();
             this.btnChangePassword = new Button();
             this.btnForceLogOutUser = new Button();
+            this.txtAliasToSearch = new TextBox();
+            this.lblSearchTxt = new Label();
             this.SuspendLayout();
             // 
             // txtName
@@ -108,7 +110,7 @@
             // btnCreateUser
             // 
             this.btnCreateUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.btnCreateUser.Location = new Point(789, 3);
+            this.btnCreateUser.Location = new Point(789, 264);
             this.btnCreateUser.Name = "btnCreateUser";
             this.btnCreateUser.Size = new Size(150, 30);
             this.btnCreateUser.TabIndex = 11;
@@ -250,7 +252,7 @@
             this.btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
             this.btnForceLogOutUser.Enabled = false;
             this.btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnForceLogOutUser.Location = new Point(789, 264);
+            this.btnForceLogOutUser.Location = new Point(789, 296);
             this.btnForceLogOutUser.Name = "btnForceLogOutUser";
             this.btnForceLogOutUser.Size = new Size(150, 30);
             this.btnForceLogOutUser.TabIndex = 32;
@@ -259,12 +261,37 @@
             this.btnForceLogOutUser.Visible = false;
             this.btnForceLogOutUser.Click += this.btnForceLogOutUser_Click;
             // 
+            // txtAliasToSearch
+            // 
+            this.txtAliasToSearch.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.txtAliasToSearch.Location = new Point(846, 7);
+            this.txtAliasToSearch.Name = "txtAliasToSearch";
+            this.txtAliasToSearch.PlaceholderText = "alias";
+            this.txtAliasToSearch.Size = new Size(93, 26);
+            this.txtAliasToSearch.TabIndex = 33;
+            this.txtAliasToSearch.TextAlign = HorizontalAlignment.Center;
+            this.txtAliasToSearch.TextChanged += this.txtAliasToSearch_TextChanged;
+            // 
+            // lblSearchTxt
+            // 
+            this.lblSearchTxt.AutoSize = true;
+            this.lblSearchTxt.BackColor = SystemColors.ActiveCaption;
+            this.lblSearchTxt.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.lblSearchTxt.Location = new Point(762, 10);
+            this.lblSearchTxt.Name = "lblSearchTxt";
+            this.lblSearchTxt.Size = new Size(78, 18);
+            this.lblSearchTxt.TabIndex = 34;
+            this.lblSearchTxt.Text = "Search:";
+            this.lblSearchTxt.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // AdminMainControl
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
             this.BorderStyle = BorderStyle.FixedSingle;
+            this.Controls.Add(this.lblSearchTxt);
+            this.Controls.Add(this.txtAliasToSearch);
             this.Controls.Add(this.btnForceLogOutUser);
             this.Controls.Add(this.btnCreateUser);
             this.Controls.Add(this.btnChangePassword);
@@ -299,5 +326,7 @@
         public CheckBox chkIsAdmin;
         public Button btnChangePassword;
         public Button btnForceLogOutUser;
+        private TextBox txtAliasToSearch;
+        private Label lblSearchTxt;
     }
 }

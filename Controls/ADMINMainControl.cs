@@ -35,6 +35,7 @@ namespace CRUD_System
         AccountManager accountManager = new AccountManager();
         ProfileManager userProfileManager = new ProfileManager();
         FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        UserSearchService search = new UserSearchService();
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
@@ -86,9 +87,9 @@ namespace CRUD_System
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            
+
             var loginDetails = loginLines[loginIndex].Split(",");
-            
+
             // Parse the admin status and online status as bools
             //bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
             bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
@@ -120,7 +121,7 @@ namespace CRUD_System
                 listBoxAdmin.Items.Clear();
                 adminInterface.LoadDetailsListBox();
                 adminInterface.EmptyTextBoxesAdmin();
-                
+
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
                 adminInterface.InterfaceEditModeAdmin();
@@ -225,5 +226,29 @@ namespace CRUD_System
             adminInterface.ListBoxAdmin_DrawItemHandler(sender, e);
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
+
+        private void txtAliasToSearch_TextChanged(object sender, EventArgs e)
+        {
+            string searchTerm = txtAliasToSearch.Text.Trim().ToLower();
+
+            // Only perform the search if there's some text entered
+            if (searchTerm.Length > 0)
+            {
+                // Get all users that match the search term
+                var matchingUsers = search.SearchByAlias(searchTerm);
+
+                // Clear the listBox before adding the new results
+                listBoxAdmin.Items.Clear();
+
+                // Add the matching results to the listBox
+                listBoxAdmin.Items.AddRange(matchingUsers.ToArray());
+            }
+            else
+            {
+                // If no search term, clear the listBox to show all items
+                listBoxAdmin.Items.Clear();
+                listBoxAdmin.Items.AddRange(search.SearchByAlias("").ToArray());  // Add all items back (this could be adjusted depending on your logic)
+            }
+        }
     }
 }
