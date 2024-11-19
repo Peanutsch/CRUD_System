@@ -30,15 +30,6 @@ namespace CRUD_System
             // Read user and login data from CSV files using the 'ReadUserAndLoginData' method
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
-            // Return all users if alias is empty
-            if (string.IsNullOrEmpty(alias))
-            {
-                AdminInterface adminInterface = new AdminInterface();
-                adminInterface.LoadDetailsListBox();
-                // Assuming you want to return all users when the input is empty
-                //return userLines.Select(line => line.Split(',')[0]).ToList();  // Adjust as necessary to return the desired format
-            }
-
             // Proceed with matching based on the alias prefix
             var matchedUsers = userLines
                 .Select(line => line.Split(','))

@@ -44,7 +44,7 @@ namespace CRUD_System.Interfaces
             var lines = File.ReadAllLines(path.UserFilePath);
             adminControl.listBoxAdmin.Items.Clear();
 
-            foreach (var line in lines.Skip(2)) // Skip header
+            foreach (var line in lines.Skip(2)) // Skip first 2 lines
             {
                 var userDetailsArray = line.Split(',');
                 string name = userDetailsArray[0];

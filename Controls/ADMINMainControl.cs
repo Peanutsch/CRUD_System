@@ -227,28 +227,39 @@ namespace CRUD_System
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
+        /// <summary>
+        /// Handles the text changed event for the alias search textbox. It dynamically updates the list of users
+        /// displayed in the listbox based on the search input. If the input is empty, it loads all users;
+        /// otherwise, it filters the users based on the provided alias prefix.
+        /// </summary>
+        /// <param name="sender">The source of the event (typically the text box control that triggered the event).</param>
+        /// <param name="e">The event data, which contains information about the text change event.</param>
         private void txtAliasToSearch_TextChanged(object sender, EventArgs e)
         {
-            string searchTerm = txtAliasToSearch.Text.Trim().ToLower();
+            // Get the alias input by the user in the search box
+            string alias = txtAliasToSearch.Text;
 
-            // Only perform the search if there's some text entered
-            if (searchTerm.Length > 0)
+            // If the alias is empty, load all users into the listbox
+            if (string.IsNullOrEmpty(alias))
             {
-                // Get all users that match the search term
-                var matchingUsers = search.SearchByAlias(searchTerm);
-
-                // Clear the listBox before adding the new results
-                listBoxAdmin.Items.Clear();
-
-                // Add the matching results to the listBox
-                listBoxAdmin.Items.AddRange(matchingUsers.ToArray());
+                // Load all user details into the listbox (when no search term is entered)
+                adminInterface.LoadDetailsListBox();
             }
             else
             {
-                // If no search term, clear the listBox to show all items
+                // If alias is not empty, search for users by the alias prefix
+                var searchResults = new UserSearchService().SearchByAlias(alias);
+
+                // Clear the current items in the listbox to display the search results
                 listBoxAdmin.Items.Clear();
-                listBoxAdmin.Items.AddRange(search.SearchByAlias("").ToArray());  // Add all items back (this could be adjusted depending on your logic)
+
+                // Add each matched result (user details) to the listbox
+                foreach (var result in searchResults)
+                {
+                    listBoxAdmin.Items.Add(result);
+                }
             }
         }
     }
 }
+
