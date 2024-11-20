@@ -271,6 +271,7 @@ namespace CRUD_System
             {
                 // Load all user details into the listbox (when no search term is entered)
                 adminInterface.LoadDetailsListBox();
+                adminInterface.EmptyTextBoxesAdmin();
             }
             else
             {

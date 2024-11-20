@@ -47,12 +47,11 @@ namespace CRUD_System.Interfaces
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                
+
                 var userIndex = repository.FindUserIndexByAlias(userLines, loginLines, currentUser);
                 var userDetailsArray = userLines[userIndex].Split(',');
 
-                //UserDetails userDetails = new UserDetails(userDetailsArray);
-                string listItem = $"{userDetailsArray[0]} {userDetailsArray[1]} ({userDetailsArray[3]}) | {userDetailsArray[6]} | {userDetailsArray[7]}";
+                string listItem = $"{userDetailsArray[0]} {userDetailsArray[1]} ({userDetailsArray[2]}) | {userDetailsArray[6]} | {userDetailsArray[7]}";
 
                 userControl.listBoxUser.Items.Add(listItem);
             }
@@ -129,8 +128,8 @@ namespace CRUD_System.Interfaces
             // Manage visibility and enablement of buttons and controls
             userControl.btnSaveEditUserDetails.Visible = EditMode;
             userControl.btnSaveEditUserDetails.BackColor = Color.LightGreen;
-            
-            userControl.btnChangePassword.Visible = !EditMode;
+
+            userControl.btnChangePassword.Visible = EditMode;
 
             // Array of text fields to enable or disable in EditMode
             var textFields = new[]
@@ -152,6 +151,11 @@ namespace CRUD_System.Interfaces
             // Enable or disable ListBox based on EditMode
             userControl.listBoxUser.Enabled = !EditMode;
         }
+
+        public void cbStatus()
+        {
+            // Items combobox Status
+        }
         #endregion INTERFACE USERS
 
         #region TEXTBOXES
@@ -161,9 +165,6 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void FillTextboxes(string[] userDetailsArray)
         {
-            // Initialize the UserDetails object with the array of user details
-            //UserDetails userDetails = new UserDetails(userDetailsArray);
-
             // Populate the text fields with the details of the selected user
             userControl.txtName.Text = userDetailsArray[0];
             userControl.txtSurname.Text = userDetailsArray[1];
