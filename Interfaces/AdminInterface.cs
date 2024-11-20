@@ -33,40 +33,6 @@ namespace CRUD_System.Interfaces
         #endregion CONSTRUCTOR
 
         #region LISTBOX ADMIN
-        /*
-        /// <summary>
-        /// Loads user data from data_users.csv and populates the list box with user names.
-        /// </summary>
-        public void LoadDetailsListBox()
-        {
-            string isOnline = string.Empty;
-
-            var lines = File.ReadAllLines(path.UserFilePath);
-
-            adminControl.listBoxAdmin.Items.Clear();
-
-            foreach (var line in lines.Skip(2)) // Skip Header and details Admin
-            {
-                // Split each line into an array of user details
-                var userDetailsArray = line.Split(',');
-
-                // Create a UserDetails object using the array
-                UserDetails userDetails = new UserDetails(userDetailsArray);
-
-                if (userDetails.OnlineStatus)
-                {
-                    isOnline = "ONLINE";
-                    isOnline.Color = Color.Green;
-                }
-
-                // Use the UserDetails properties to format the string for the listBox
-                string listItem = $"{userDetails.Name} {userDetails.Surname} ({userDetails.Alias}) | {userDetails.Email} | {userDetails.PhoneNumber} | {isOnline}";
-
-                // Add the formatted string to the listBox
-                adminControl.listBoxAdmin.Items.Add(listItem);
-            }
-        }
-        */
         /// <summary>
         /// Loads user details from data_users.csv and populates the ListBox with formatted information.
         /// The method reads data from the user file, skips the header and admin details, and processes each user's details.
@@ -274,10 +240,10 @@ namespace CRUD_System.Interfaces
             // Hide or show other action buttons
             adminControl.btnCreateUser.Visible = !EditMode;
             adminControl.btnCreateUser.Enabled = !EditMode;
-            adminControl.btnDeleteUser.Visible = !EditMode;
-            adminControl.btnDeleteUser.Enabled = !EditMode;
-            adminControl.btnGeneratePSW.Visible = !EditMode;
-            adminControl.btnGeneratePSW.Enabled = !EditMode;
+            adminControl.btnDeleteUser.Visible = EditMode;
+            adminControl.btnDeleteUser.Enabled = EditMode;
+            adminControl.btnGeneratePSW.Visible = EditMode;
+            adminControl.btnGeneratePSW.Enabled = EditMode;
 
             // Enable or disable ListBox based on EditMode
             adminControl.listBoxAdmin.Enabled = !EditMode;
@@ -338,17 +304,17 @@ namespace CRUD_System.Interfaces
         public void FillTextboxesAdmin(string[] userDetailsArray)
         {
             // Initialize the UserDetails object with the array of user details
-            UserDetails userDetails = new UserDetails(userDetailsArray);
+            //UserDetails userDetails = new UserDetails(userDetailsArray);
 
             // Populate the text fields with the details of the selected user
-            adminControl.txtName.Text = userDetails.Name;
-            adminControl.txtSurname.Text = userDetails.Surname;
-            adminControl.txtAlias.Text = userDetails.Alias;
-            adminControl.txtAddress.Text = userDetails.Address;
-            adminControl.txtZIPCode.Text = userDetails.ZIPCode;
-            adminControl.txtCity.Text = userDetails.City;
-            adminControl.txtEmail.Text = userDetails.Email;
-            adminControl.txtPhonenumber.Text = userDetails.PhoneNumber;
+            adminControl.txtName.Text = userDetailsArray[0];
+            adminControl.txtSurname.Text = userDetailsArray[1];
+            adminControl.txtAlias.Text = userDetailsArray[2];
+            adminControl.txtAddress.Text = userDetailsArray[3];
+            adminControl.txtZIPCode.Text = userDetailsArray[4];
+            adminControl.txtCity.Text = userDetailsArray[5];
+            adminControl.txtEmail.Text = userDetailsArray[6];
+            adminControl.txtPhonenumber.Text = userDetailsArray[7];
         }
         #endregion TEXTBOXES ADMIN
     }

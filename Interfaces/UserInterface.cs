@@ -51,8 +51,8 @@ namespace CRUD_System.Interfaces
                 var userIndex = repository.FindUserIndexByAlias(userLines, loginLines, currentUser);
                 var userDetailsArray = userLines[userIndex].Split(',');
 
-                UserDetails userDetails = new UserDetails(userDetailsArray);
-                string listItem = $"{userDetails.Name} {userDetails.Surname} ({userDetails.Alias}) | {userDetails.Email} | {userDetails.PhoneNumber}";
+                //UserDetails userDetails = new UserDetails(userDetailsArray);
+                string listItem = $"{userDetailsArray[0]} {userDetailsArray[1]} ({userDetailsArray[3]}) | {userDetailsArray[6]} | {userDetailsArray[7]}";
 
                 userControl.listBoxUser.Items.Add(listItem);
             }
@@ -162,17 +162,17 @@ namespace CRUD_System.Interfaces
         public void FillTextboxes(string[] userDetailsArray)
         {
             // Initialize the UserDetails object with the array of user details
-            UserDetails userDetails = new UserDetails(userDetailsArray);
+            //UserDetails userDetails = new UserDetails(userDetailsArray);
 
             // Populate the text fields with the details of the selected user
-            userControl.txtName.Text = userDetails.Name;
-            userControl.txtSurname.Text = userDetails.Surname;
-            userControl.txtAlias.Text = userDetails.Alias;
-            userControl.txtAddress.Text = userDetails.Address;
-            userControl.txtZIPCode.Text = userDetails.ZIPCode;
-            userControl.txtCity.Text = userDetails.City;
-            userControl.txtEmail.Text = userDetails.Email;
-            userControl.txtPhonenumber.Text = userDetails.PhoneNumber;
+            userControl.txtName.Text = userDetailsArray[0];
+            userControl.txtSurname.Text = userDetailsArray[1];
+            userControl.txtAlias.Text = userDetailsArray[2];
+            userControl.txtAddress.Text = userDetailsArray[3];
+            userControl.txtZIPCode.Text = userDetailsArray[4];
+            userControl.txtCity.Text = userDetailsArray[5];
+            userControl.txtEmail.Text = userDetailsArray[6];
+            userControl.txtPhonenumber.Text = userDetailsArray[7];
         }
         #endregion TEXTBOXES
     }

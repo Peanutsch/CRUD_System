@@ -52,45 +52,46 @@
             chkIsAdmin = new CheckBox();
             btnChangePassword = new Button();
             btnForceLogOutUser = new Button();
+            txtSearch = new TextBox();
             SuspendLayout();
             // 
             // txtName
             // 
             txtName.Enabled = false;
-            txtName.Location = new Point(229, 255);
+            txtName.Location = new Point(127, 272);
             txtName.Name = "txtName";
             txtName.PlaceholderText = "Name";
-            txtName.Size = new Size(199, 23);
+            txtName.Size = new Size(350, 23);
             txtName.TabIndex = 1;
             txtName.TextAlign = HorizontalAlignment.Center;
             // 
             // txtEmail
             // 
             txtEmail.Enabled = false;
-            txtEmail.Location = new Point(24, 313);
+            txtEmail.Location = new Point(127, 328);
             txtEmail.Name = "txtEmail";
             txtEmail.PlaceholderText = "E-mail";
-            txtEmail.Size = new Size(199, 23);
+            txtEmail.Size = new Size(438, 23);
             txtEmail.TabIndex = 6;
             txtEmail.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAddress
             // 
             txtAddress.Enabled = false;
-            txtAddress.Location = new Point(24, 284);
+            txtAddress.Location = new Point(127, 300);
             txtAddress.Name = "txtAddress";
             txtAddress.PlaceholderText = "Adress";
-            txtAddress.Size = new Size(199, 23);
+            txtAddress.Size = new Size(348, 23);
             txtAddress.TabIndex = 3;
             txtAddress.TextAlign = HorizontalAlignment.Center;
             // 
             // txtCity
             // 
             txtCity.Enabled = false;
-            txtCity.Location = new Point(434, 284);
+            txtCity.Location = new Point(571, 301);
             txtCity.Name = "txtCity";
             txtCity.PlaceholderText = "City";
-            txtCity.Size = new Size(199, 23);
+            txtCity.Size = new Size(260, 23);
             txtCity.TabIndex = 5;
             txtCity.TextAlign = HorizontalAlignment.Center;
             // 
@@ -98,7 +99,7 @@
             // 
             listBoxAdmin.DrawMode = DrawMode.OwnerDrawFixed;
             listBoxAdmin.ItemHeight = 15;
-            listBoxAdmin.Location = new Point(24, 20);
+            listBoxAdmin.Location = new Point(24, 37);
             listBoxAdmin.Name = "listBoxAdmin";
             listBoxAdmin.Size = new Size(963, 229);
             listBoxAdmin.TabIndex = 0;
@@ -108,7 +109,7 @@
             // btnCreateUser
             // 
             btnCreateUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnCreateUser.Location = new Point(837, 291);
+            btnCreateUser.Location = new Point(731, 3);
             btnCreateUser.Name = "btnCreateUser";
             btnCreateUser.Size = new Size(150, 30);
             btnCreateUser.TabIndex = 11;
@@ -119,9 +120,9 @@
             // 
             btnSaveEditUserDetails.BackColor = Color.LightGreen;
             btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSaveEditUserDetails.Location = new Point(681, 255);
+            btnSaveEditUserDetails.Location = new Point(283, 357);
             btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
-            btnSaveEditUserDetails.Size = new Size(150, 30);
+            btnSaveEditUserDetails.Size = new Size(126, 30);
             btnSaveEditUserDetails.TabIndex = 9;
             btnSaveEditUserDetails.Text = "Save Edit";
             btnSaveEditUserDetails.UseVisualStyleBackColor = false;
@@ -131,69 +132,71 @@
             // btnDeleteUser
             // 
             btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnDeleteUser.Location = new Point(837, 327);
+            btnDeleteUser.Location = new Point(571, 357);
             btnDeleteUser.Name = "btnDeleteUser";
             btnDeleteUser.Size = new Size(150, 30);
             btnDeleteUser.TabIndex = 9;
             btnDeleteUser.Text = "Delete User";
+            btnDeleteUser.Visible = false;
             btnDeleteUser.Click += btnDeleteUser_Click;
             // 
             // txtSurname
             // 
             txtSurname.Enabled = false;
-            txtSurname.Location = new Point(434, 255);
+            txtSurname.Location = new Point(481, 272);
             txtSurname.Name = "txtSurname";
             txtSurname.PlaceholderText = "Surname";
-            txtSurname.Size = new Size(199, 23);
+            txtSurname.Size = new Size(350, 23);
             txtSurname.TabIndex = 2;
             txtSurname.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAlias
             // 
             txtAlias.Enabled = false;
-            txtAlias.Location = new Point(24, 255);
+            txtAlias.Location = new Point(24, 272);
             txtAlias.Name = "txtAlias";
             txtAlias.PlaceholderText = "Alias";
             txtAlias.ReadOnly = true;
-            txtAlias.Size = new Size(199, 23);
+            txtAlias.Size = new Size(97, 23);
             txtAlias.TabIndex = 20;
             txtAlias.TextAlign = HorizontalAlignment.Center;
             // 
             // txtZIPCode
             // 
             txtZIPCode.Enabled = false;
-            txtZIPCode.Location = new Point(229, 284);
+            txtZIPCode.Location = new Point(481, 300);
             txtZIPCode.Name = "txtZIPCode";
             txtZIPCode.PlaceholderText = "ZIP Code";
-            txtZIPCode.Size = new Size(199, 23);
+            txtZIPCode.Size = new Size(84, 23);
             txtZIPCode.TabIndex = 4;
             txtZIPCode.TextAlign = HorizontalAlignment.Center;
             // 
             // txtPhonenumber
             // 
             txtPhonenumber.Enabled = false;
-            txtPhonenumber.Location = new Point(229, 313);
+            txtPhonenumber.Location = new Point(571, 329);
             txtPhonenumber.Name = "txtPhonenumber";
             txtPhonenumber.PlaceholderText = "Phonenumber";
-            txtPhonenumber.Size = new Size(199, 23);
+            txtPhonenumber.Size = new Size(260, 23);
             txtPhonenumber.TabIndex = 7;
             txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
             // btnGeneratePSW
             // 
             btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnGeneratePSW.Location = new Point(837, 359);
+            btnGeneratePSW.Location = new Point(415, 357);
             btnGeneratePSW.Name = "btnGeneratePSW";
             btnGeneratePSW.Size = new Size(150, 30);
             btnGeneratePSW.TabIndex = 22;
             btnGeneratePSW.Text = "Gen. Password";
+            btnGeneratePSW.Visible = false;
             btnGeneratePSW.Click += btnGeneratePassword_Click;
             // 
             // btnEditUserDetails
             // 
             btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
             btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnEditUserDetails.Location = new Point(837, 255);
+            btnEditUserDetails.Location = new Point(127, 357);
             btnEditUserDetails.Name = "btnEditUserDetails";
             btnEditUserDetails.Size = new Size(150, 30);
             btnEditUserDetails.TabIndex = 25;
@@ -206,7 +209,7 @@
             txtAdmin.BackColor = Color.LightGreen;
             txtAdmin.Enabled = false;
             txtAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAdmin.Location = new Point(536, 312);
+            txtAdmin.Location = new Point(24, 300);
             txtAdmin.Multiline = true;
             txtAdmin.Name = "txtAdmin";
             txtAdmin.Size = new Size(97, 23);
@@ -221,7 +224,7 @@
             chkIsAdmin.CheckAlign = ContentAlignment.MiddleRight;
             chkIsAdmin.Enabled = false;
             chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkIsAdmin.Location = new Point(434, 314);
+            chkIsAdmin.Location = new Point(24, 329);
             chkIsAdmin.Name = "chkIsAdmin";
             chkIsAdmin.Size = new Size(97, 22);
             chkIsAdmin.TabIndex = 8;
@@ -235,7 +238,7 @@
             // 
             btnChangePassword.BackColor = SystemColors.ActiveCaption;
             btnChangePassword.Font = new Font("Courier New", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnChangePassword.Location = new Point(24, 359);
+            btnChangePassword.Location = new Point(24, 3);
             btnChangePassword.Name = "btnChangePassword";
             btnChangePassword.Size = new Size(199, 30);
             btnChangePassword.TabIndex = 31;
@@ -246,16 +249,27 @@
             // btnForceLogOutUser
             // 
             btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
+            btnForceLogOutUser.Enabled = false;
             btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnForceLogOutUser.Location = new Point(681, 359);
+            btnForceLogOutUser.Location = new Point(837, 268);
             btnForceLogOutUser.Name = "btnForceLogOutUser";
             btnForceLogOutUser.Size = new Size(150, 30);
             btnForceLogOutUser.TabIndex = 32;
             btnForceLogOutUser.Text = "Force LogOut";
-            btnForceLogOutUser.Visible = false;
-            btnForceLogOutUser.Enabled = false;
             btnForceLogOutUser.UseVisualStyleBackColor = false;
+            btnForceLogOutUser.Visible = false;
             btnForceLogOutUser.Click += btnForceLogOutUser_Click;
+            // 
+            // txtSearch
+            // 
+            txtSearch.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtSearch.Location = new Point(887, 7);
+            txtSearch.Name = "txtSearch";
+            txtSearch.PlaceholderText = "Search";
+            txtSearch.Size = new Size(100, 26);
+            txtSearch.TabIndex = 33;
+            txtSearch.TextAlign = HorizontalAlignment.Center;
+            txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // AdminMainControl
             // 
@@ -263,6 +277,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(txtSearch);
             Controls.Add(btnForceLogOutUser);
             Controls.Add(btnCreateUser);
             Controls.Add(btnChangePassword);
@@ -282,7 +297,7 @@
             Controls.Add(btnSaveEditUserDetails);
             Controls.Add(btnDeleteUser);
             Name = "AdminMainControl";
-            Size = new Size(1440, 410);
+            Size = new Size(1030, 457);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -297,5 +312,6 @@
         public CheckBox chkIsAdmin;
         public Button btnChangePassword;
         public Button btnForceLogOutUser;
+        private TextBox txtSearch;
     }
 }
