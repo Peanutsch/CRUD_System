@@ -13,6 +13,8 @@ namespace CRUD_System
     /// </summary>
     public static class AesEncryption
     {
+        internal static string EncryptionKey = "kw2qgJYEA2zKxNtY/xGU8hehZabBbN/ptirj47tX2b7kRPtrLGnRDVFGpioZfiF6";
+
         /// <summary>
         /// Encrypt the plaintext and return the encrypted bytes
         /// </summary>

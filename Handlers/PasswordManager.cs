@@ -16,8 +16,6 @@ namespace CRUD_System.Handlers
         private const int SaltSize = 16; // 16 bytes for salt
         private const int HashSize = 20; // 20 bytes for hash
         private const int Iterations = 100000; // Recommended number of iterations
-
-        internal string encryptionKey = "kw2qgJYEA2zKxNtY/xGU8hehZabBbN/ptirj47tX2b7kRPtrLGnRDVFGpioZfiF6";
         #endregion PROPERTIES
 
         #region GENERATOR

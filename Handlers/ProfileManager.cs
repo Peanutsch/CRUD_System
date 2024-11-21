@@ -186,7 +186,9 @@ namespace CRUD_System.Handlers
             }
 
             string isAlias = GenerateAlias(Name, Surname);
-            string isPassword = PasswordManager.PasswordGenerator();
+            // -> Temp setting psw = alias
+            string isPassword = isAlias;
+            //string isPassword = PasswordManager.PasswordGenerator();
 
             bool onlineStatus = false;
 
@@ -236,6 +238,51 @@ namespace CRUD_System.Handlers
         }
 
         /// <summary>
+        /// Encrypts and saves user data, including login and user details, to respective CSV files.
+        /// The method encrypts sensitive information using AES encryption and stores the encrypted data
+        /// in Base64 format in the files specified for login and user data.
+        /// </summary>
+        /// <param name="alias">The alias (username) of the user.</param>
+        /// <param name="password">The user's password.</param>
+        /// <param name="name">The user's first name.</param>
+        /// <param name="surname">The user's last name.</param>
+        /// <param name="address">The user's address.</param>
+        /// <param name="zipCode">The user's zip code.</param>
+        /// <param name="city">The user's city.</param>
+        /// <param name="email">The user's email address.</param>
+        /// <param name="phoneNumber">The user's phone number.</param>
+        /// <param name="isAdmin">Indicates whether the user has admin privileges.</param>
+        /// <param name="onlineStatus">Indicates whether the user is online.</param>
+        private void SaveUserData(string alias, string password, string name, string surname,
+                          string address, string zipCode, string city, string email,
+                          string phoneNumber, bool isAdmin, bool onlineStatus)
+        {
+            string encryptionPassword = AesEncryption.EncryptionKey;
+
+            string encryptedAlias = Convert.ToBase64String(AesEncryption.Encrypt(alias.ToString(), encryptionPassword));
+            string encryptedPassword = Convert.ToBase64String(AesEncryption.Encrypt(password, encryptionPassword));
+            string encryptedIsAdmin = Convert.ToBase64String(AesEncryption.Encrypt(isAdmin.ToString(), encryptionPassword));
+            string encryptedOnlineStatus = Convert.ToBase64String(AesEncryption.Encrypt(onlineStatus.ToString(), encryptionPassword));
+
+            string encryptedName = Convert.ToBase64String(AesEncryption.Encrypt(name, encryptionPassword));
+            string encryptedSurname = Convert.ToBase64String(AesEncryption.Encrypt(surname, encryptionPassword));
+            string encryptedAddress = Convert.ToBase64String(AesEncryption.Encrypt(address, encryptionPassword));
+            string encryptedzipCode = Convert.ToBase64String(AesEncryption.Encrypt(zipCode, encryptionPassword));
+            string encryptedCity = Convert.ToBase64String(AesEncryption.Encrypt(city, encryptionPassword));
+            string encryptedEmail = Convert.ToBase64String(AesEncryption.Encrypt(email, encryptionPassword));
+            string encryptedPhonenumber = Convert.ToBase64String(AesEncryption.Encrypt(phoneNumber, encryptionPassword));
+
+            string newDataLogin = $"{encryptedAlias},{encryptedPassword},{isAdmin.ToString()},{onlineStatus.ToString()}";
+            string newDataUsers = $"{encryptedName},{encryptedSurname},{encryptedAlias},{encryptedAddress},{encryptedzipCode},{encryptedCity},{encryptedEmail},{encryptedPhonenumber},{onlineStatus.ToString()}";
+
+            // Schrijf versleutelde data naar bestanden
+            File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
+            File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
+        }
+
+
+        /*
+        /// <summary>
         /// Saves the new user data to the CSV files.
         /// </summary>
         private void SaveUserData(string alias, string password, string name, string surname,
@@ -248,6 +295,7 @@ namespace CRUD_System.Handlers
             File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
             File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
         }
+        */
 
         /// <summary>
         /// Logs the creation of a new user account.

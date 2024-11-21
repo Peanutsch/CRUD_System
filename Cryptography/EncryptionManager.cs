@@ -18,7 +18,7 @@ namespace CRUD_System
         /// <param name="csvData">The CSV data to encrypt.</param>
         /// <param name="filePath">The path where the encrypted file should be saved.</param>
         /// <param name="password">The password used for encryption.</param>
-        public void EncryptCsvData(string csvFilePath, string outputFilePath, string encryptionPassword)
+        public void EncryptData(string csvFilePath, string outputFilePath, string encryptionPassword)
         {
             // Read each line from the CSV file
             var lines = File.ReadAllLines(csvFilePath);

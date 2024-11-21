@@ -52,15 +52,15 @@ namespace CRUD_System.Handlers
         /// <returns>True if the credentials are valid; otherwise, false.</returns>
         public bool ValidateLogin(string inputUserName, string inputUserPassword)
         {
-            // Get login data from the CSV file
+            // For non-admin users, get login data from the CSV file
             List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
 
-            // Find the user in the list where both username and password match
+            // Check if the username and password match a user in the login data
             var user = loginData.FirstOrDefault(u =>
                                                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
                                                 u.Password == inputUserPassword);
 
-            // If user is found, credentials are valid
+            // Return true if user is found and valid
             return user != default;
         }
 
