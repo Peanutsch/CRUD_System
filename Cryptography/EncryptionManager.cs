@@ -11,7 +11,7 @@ namespace CRUD_System
     /// </summary>
     internal class EncryptionManager
     {
-        #region Encrypt Decrypt
+        #region Encrypt
         /// <summary>
         /// Encrypts the CSV data and saves it to a specified file.
         /// </summary>
@@ -39,8 +39,9 @@ namespace CRUD_System
             // Write the encrypted data back to the specified file
             File.WriteAllLines(outputFilePath, encryptedLines);
         }
+        #endregion Encrypt
 
-
+        #region Decrypt
         /// <summary>
         /// Decrypts the CSV data from a specified file.
         /// </summary>
@@ -74,6 +75,6 @@ namespace CRUD_System
             // Join all decrypted lines with newlines to reconstruct the CSV structure
             return string.Join(Environment.NewLine, decryptedLines);
         }
-        #endregion Encrypt Decrypt
+        #endregion Decrypt
     }
 }
