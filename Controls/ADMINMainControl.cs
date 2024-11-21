@@ -254,7 +254,7 @@ namespace CRUD_System
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         /// <summary>
-        /// Handles the text changed event for the alias search textbox. It dynamically updates the list of users
+        /// Handles the text changed event for the search textbox. It dynamically updates the list of users
         /// displayed in the listbox based on the search input. If the input is empty, it loads all users;
         /// otherwise, it filters the users based on the provided alias prefix.
         /// </summary>
@@ -263,10 +263,10 @@ namespace CRUD_System
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
             // Get the alias input by the user in the search box
-            string alias = txtSearch.Text;
+            string searchTerm = txtSearch.Text;
 
             // If the alias is empty, load all users into the listbox
-            if (string.IsNullOrEmpty(alias))
+            if (string.IsNullOrEmpty(searchTerm))
             {
                 // When no search term is entered:
                 adminInterface.LoadDetailsListBox(); // Load all user details into the listbox
@@ -274,8 +274,8 @@ namespace CRUD_System
             }
             else
             {
-                // If alias is not empty, search for users by the alias prefix
-                var searchResults = new UserSearchService().SearchByAlias(alias);
+                // If searchTerm is not empty, search for users by the searchTerm prefix
+                var searchResults = new UserSearchService().SearchUsers(searchTerm);
 
                 // Clear the current items in the listbox to display the search results
                 listBoxAdmin.Items.Clear();

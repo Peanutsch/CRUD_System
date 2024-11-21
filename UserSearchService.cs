@@ -19,33 +19,46 @@ namespace CRUD_System
         }
 
         /// <summary>
-        /// Searches for users by alias in the user data and returns a list of formatted user details.
-        /// It filters the users based on the provided alias and returns their name, surname, email, 
-        /// phone number, and online status (if available).
+        /// Searches for users in the user data based on a search term. 
+        /// The search term is matched against the user's name, surname, alias, and email address.
         /// </summary>
-        /// <param name="alias">The alias of the user to search for.</param>
-        /// <returns>A list of formatted strings representing the matched users' details.</returns>
-        public List<string> SearchByAlias(string alias)
+        /// <param name="searchTerm">The search term used to filter users.</param>
+        /// <returns>
+        /// A list of formatted strings representing the details of matched users, 
+        /// including name, surname, alias, email, phone number, and online status (if available).
+        /// </returns>
+        public List<string> SearchUsers(string searchTerm)
         {
-            // Read user and login data from CSV files using the 'ReadUserAndLoginData' method
+            // Read user and login data from CSV files
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
-            // Proceed with matching based on the alias prefix
+            // Search for matches in different fields
             var matchedUsers = userLines
-                .Select(line => line.Split(','))
-                .Where(userDetails => userDetails.Length > 2 && userDetails[2].StartsWith(alias, StringComparison.OrdinalIgnoreCase))  // Match prefixes
+                .Select(line => line.Split(',')) // Split each line into individual fields
+                .Where(userDetails =>
+                {
+                    // Check if the search term matches the alias, name, surname or email
+                    return userDetails.Length > 2 &&
+                          (userDetails[0].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Name
+                           userDetails[1].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Surname
+                           userDetails[2].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Alias
+                          (userDetails.Length > 6 && userDetails[6].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase))); // Email
+                })
                 .Select(userDetails =>
                 {
                     string name = userDetails[0];
                     string surname = userDetails[1];
+                    string alias = userDetails[2];
                     string email = userDetails.Length > 6 ? userDetails[6] : string.Empty;
                     string phonenumber = userDetails.Length > 7 ? userDetails[7] : string.Empty;
                     string isOnline = userDetails.Length > 8 && userDetails[8] == "True" ? "| [ONLINE]" : string.Empty;
 
+                    // Format the matched user details as a string
                     return $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
                 })
                 .ToList();
 
+            // Return the list of matched users
             return matchedUsers;
         }
     }
