@@ -33,14 +33,14 @@ namespace CRUD_System
             // Proceed with matching based on the alias prefix
             var matchedUsers = userLines
                 .Select(line => line.Split(','))
-                .Where(details => details.Length > 2 && details[2].StartsWith(alias, StringComparison.OrdinalIgnoreCase))  // Match prefixes
-                .Select(details =>
+                .Where(userDetails => userDetails.Length > 2 && userDetails[2].StartsWith(alias, StringComparison.OrdinalIgnoreCase))  // Match prefixes
+                .Select(userDetails =>
                 {
-                    string name = details[0];
-                    string surname = details[1];
-                    string email = details.Length > 6 ? details[6] : string.Empty;
-                    string phonenumber = details.Length > 7 ? details[7] : string.Empty;
-                    string isOnline = details.Length > 8 && details[8] == "True" ? "| [ONLINE]" : string.Empty;
+                    string name = userDetails[0];
+                    string surname = userDetails[1];
+                    string email = userDetails.Length > 6 ? userDetails[6] : string.Empty;
+                    string phonenumber = userDetails.Length > 7 ? userDetails[7] : string.Empty;
+                    string isOnline = userDetails.Length > 8 && userDetails[8] == "True" ? "| [ONLINE]" : string.Empty;
 
                     return $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
                 })

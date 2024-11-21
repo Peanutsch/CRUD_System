@@ -1,6 +1,5 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
-using CRUD_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -174,7 +173,7 @@ namespace CRUD_System.Interfaces
             if (loginDetails != null)
             {
                 // Check if the admin status is true
-                if (loginDetails[2] == "True") // Use '==' for comparison
+                if (loginDetails[2] == "True")
                 {
                     // Show the admin label
                     adminControl.txtAdmin.Visible = true;
@@ -188,8 +187,9 @@ namespace CRUD_System.Interfaces
                 }
 
                 // Check if the user is online and enable the logout button
+                // Prevent admin force himself to logout by ForceLogOutUserbtn
                 if (currentUser != selectedAlias)
-                    SetForceLogOutUserBtn(selectedAlias); // Pass selectedAlias to check if the user is online
+                    SetStateForceLogOutUserBtn(selectedAlias); // Pass selectedAlias to check if the user is online
             }
             else
             {
@@ -253,7 +253,7 @@ namespace CRUD_System.Interfaces
         /// Sets the enabled state of the Force Log Out User button based on the user's online status.
         /// </summary>
         /// <param name="selectedAlias">The alias of the selected user to check online status.</param>
-        public void SetForceLogOutUserBtn(string selectedAlias)
+        public void SetStateForceLogOutUserBtn(string selectedAlias)
         {
             var lines = File.ReadAllLines(path.UserFilePath);
             bool isOnline = false;  // Flag to track if the selected user is online

@@ -68,10 +68,10 @@ namespace CRUD_System.Handlers
             }
 
             string initialAlias = Name.Substring(0, 2).ToLower() + Surname.Substring(Surname.Length - 2).ToLower();
-            int counter = 1;
             string finalAlias = initialAlias + "001";
 
             // Check if the alias already exists and increment the number if necessary
+            int counter = 1;
             while (AliasExists(finalAlias))
             {
                 counter++;

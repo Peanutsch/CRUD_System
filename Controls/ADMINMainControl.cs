@@ -189,13 +189,12 @@ namespace CRUD_System
                 {
                     interactionHandler.PerformActionIfUserSelected(() =>
                     {
-                        // Pass selectedAlias to SetForceLogOutUserBtn
-                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
-
-                        // Set user as offline
-                        authenticationService.UpdateUserOnlineStatus(selectedAlias, false);
+                        // Pass selectedAlias to SetStateForceLogOutUserBtn
+                        adminInterface.SetStateForceLogOutUserBtn(selectedAlias);
                         // Force log out user
                         authenticationService.PerformForcedLogOutByAdmin(selectedAlias);
+                        // Set user as offline
+                        authenticationService.UpdateUserOnlineStatus(selectedAlias, false);
 
                         // Read lines from data_users.csv and data_login.csv for userIndex
                         (var userLines, var loginLines) = path.ReadUserAndLoginData();
@@ -203,7 +202,7 @@ namespace CRUD_System
                         // Reload ListBoxAdmin
                         adminInterface.ReloadListBoxAdmin(userIndex);
 
-                        adminInterface.SetForceLogOutUserBtn(selectedAlias);
+                        adminInterface.SetStateForceLogOutUserBtn(selectedAlias);
                     },
                     () => message.MessageInvalidNoUserSelected());
                 }
@@ -269,9 +268,9 @@ namespace CRUD_System
             // If the alias is empty, load all users into the listbox
             if (string.IsNullOrEmpty(alias))
             {
-                // Load all user details into the listbox (when no search term is entered)
-                adminInterface.LoadDetailsListBox();
-                adminInterface.EmptyTextBoxesAdmin();
+                // When no search term is entered:
+                adminInterface.LoadDetailsListBox(); // Load all user details into the listbox
+                adminInterface.EmptyTextBoxesAdmin(); // Empty the textboxes
             }
             else
             {
