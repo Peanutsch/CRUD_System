@@ -237,10 +237,14 @@ namespace CRUD_System
         private void txtAliasToSearch_TextChanged(object sender, EventArgs e)
         {
             // Get the alias input by the user in the search box
+<<<<<<< Updated upstream
             string alias = txtAliasToSearch.Text;
+=======
+            string searchTerm = txtSearch.Text;
+>>>>>>> Stashed changes
 
             // If the alias is empty, load all users into the listbox
-            if (string.IsNullOrEmpty(alias))
+            if (string.IsNullOrEmpty(searchTerm))
             {
                 // Load all user details into the listbox (when no search term is entered)
                 adminInterface.LoadDetailsListBox();
@@ -248,7 +252,7 @@ namespace CRUD_System
             else
             {
                 // If alias is not empty, search for users by the alias prefix
-                var searchResults = new UserSearchService().SearchByAlias(alias);
+                var searchResults = new UserSearchService().SearchByAlias(searchTerm);
 
                 // Clear the current items in the listbox to display the search results
                 listBoxAdmin.Items.Clear();
