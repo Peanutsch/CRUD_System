@@ -33,29 +33,6 @@ namespace CRUD_System.Interfaces
         #endregion CONSTRUCTOR
 
         #region LISTBOX ADMIN
-
-        public void LoadDetailsListBox()
-        {
-            string decryptedCsvData = EncryptionManager.DecryptCsv(path.UserFilePath, "encryptionPassword");
-            var lines = decryptedCsvData.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            adminControl.listBoxAdmin.Items.Clear();
-
-            foreach (var line in lines.Skip(2)) // Skip header
-            {
-                var userDetailsArray = line.Split(',');
-                string name = userDetailsArray[0];
-                string surname = userDetailsArray[1];
-                string alias = userDetailsArray[2];
-                string email = userDetailsArray[6];
-                string phonenumber = userDetailsArray[7];
-                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
-
-                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
-                adminControl.listBoxAdmin.Items.Add(listItem);
-            }
-        }
-
-        /*
         /// <summary>
         /// Loads user details from data_users.csv and populates the ListBox with formatted information.
         /// The method reads data from the user file, skips the header and admin details, and processes each user's details.
@@ -85,7 +62,6 @@ namespace CRUD_System.Interfaces
                 adminControl.listBoxAdmin.Items.Add(listItem);
             }
         }
-        */
 
         /// <summary>
         /// Handles the custom drawing of items in the ListBox, allowing for conditional formatting based on the item content.
@@ -320,20 +296,6 @@ namespace CRUD_System.Interfaces
             adminControl.InteractionHandler.UserSelected = false;
         }
 
-        public void FillTextboxesAdmin(string[] userDetailsArray)
-        {
-            // Als de gegevens versleuteld zijn, kun je hier de decryptiemethode gebruiken
-            adminControl.txtName.Text = userDetailsArray[0];
-            adminControl.txtSurname.Text = userDetailsArray[1];
-            adminControl.txtAlias.Text = userDetailsArray[2];
-            adminControl.txtAddress.Text = userDetailsArray[3];
-            adminControl.txtZIPCode.Text = userDetailsArray[4];
-            adminControl.txtCity.Text = userDetailsArray[5];
-            adminControl.txtEmail.Text = userDetailsArray[6];
-            adminControl.txtPhonenumber.Text = userDetailsArray[7];
-        }
-
-        /*
         /// <summary>
         /// Populates the textboxes with the details of a selected user.
         /// </summary>
@@ -353,7 +315,6 @@ namespace CRUD_System.Interfaces
             adminControl.txtEmail.Text = userDetailsArray[6];
             adminControl.txtPhonenumber.Text = userDetailsArray[7];
         }
-        */
         #endregion TEXTBOXES ADMIN
     }
 }

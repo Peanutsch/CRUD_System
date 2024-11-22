@@ -237,6 +237,7 @@ namespace CRUD_System.Handlers
             return dr == DialogResult.Yes;
         }
 
+        /* Save encrypted
         /// <summary>
         /// Encrypts and saves user data, including login and user details, to respective CSV files.
         /// The method encrypts sensitive information using AES encryption and stores the encrypted data
@@ -279,9 +280,8 @@ namespace CRUD_System.Handlers
             File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
             File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
         }
+        */
 
-
-        /*
         /// <summary>
         /// Saves the new user data to the CSV files.
         /// </summary>
@@ -295,7 +295,6 @@ namespace CRUD_System.Handlers
             File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
             File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
         }
-        */
 
         /// <summary>
         /// Logs the creation of a new user account.
