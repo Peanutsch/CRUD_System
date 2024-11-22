@@ -18,7 +18,7 @@ namespace CRUD_System
         /// <param name="csvData">The CSV data to encrypt.</param>
         /// <param name="filePath">The path where the encrypted file should be saved.</param>
         /// <param name="password">The password used for encryption.</param>
-        public void EncryptData(string csvFilePath, string outputFilePath, string encryptionPassword)
+        public void EncryptData(string csvFilePath, string outputFilePath, string encryptionKey)
         {
             // Read each line from the CSV file
             var lines = File.ReadAllLines(csvFilePath);
@@ -30,7 +30,7 @@ namespace CRUD_System
                 for (int i = 0; i < fields.Length; i++)
                 {
                     // Encrypt each field
-                    fields[i] = Convert.ToBase64String(AesEncryption.Encrypt(fields[i], encryptionPassword));
+                    fields[i] = Convert.ToBase64String(AesEncryption.Encrypt(fields[i], encryptionKey));
                 }
                 // Join encrypted fields and add to list
                 encryptedLines.Add(string.Join(",", fields));

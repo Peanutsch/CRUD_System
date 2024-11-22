@@ -105,12 +105,12 @@ namespace CRUD_System.FileHandlers
                 var values = lines[i].Split(',');
 
                 // Assign "None" to any missing or empty value
-                string name = string.IsNullOrWhiteSpace(values[0]) ? "None" : values[0].Trim();
-                string surname = string.IsNullOrWhiteSpace(values[1]) ? "None" : values[1].Trim();
-                string address = string.IsNullOrWhiteSpace(values[2]) ? "None" : values[2].Trim();
-                string zipCode = string.IsNullOrWhiteSpace(values[3]) ? "None" : values[3].Trim();
-                string city = string.IsNullOrWhiteSpace(values[4]) ? "None" : values[4].Trim();
-                string emailAddress = string.IsNullOrWhiteSpace(values[5]) ? "None" : values[5].Trim();
+                string name = string.IsNullOrWhiteSpace(values[0]) ? string.Empty : values[0].Trim();
+                string surname = string.IsNullOrWhiteSpace(values[1]) ? string.Empty : values[1].Trim();
+                string address = string.IsNullOrWhiteSpace(values[2]) ? string.Empty : values[2].Trim();
+                string zipCode = string.IsNullOrWhiteSpace(values[3]) ? string.Empty : values[3].Trim();
+                string city = string.IsNullOrWhiteSpace(values[4]) ? string.Empty : values[4].Trim();
+                string emailAddress = string.IsNullOrWhiteSpace(values[5]) ? string.Empty : values[5].Trim();
 
                 // Add the user data as a tuple to the list
                 users.Add((name, surname, address, zipCode, city, emailAddress));

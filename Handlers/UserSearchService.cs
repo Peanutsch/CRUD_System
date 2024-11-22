@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_System
+namespace CRUD_System.Handlers
 {
     internal class UserSearchService
     {
@@ -42,7 +42,7 @@ namespace CRUD_System
                           (userDetails[0].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Name
                            userDetails[1].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Surname
                            userDetails[2].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Alias
-                          (userDetails.Length > 6 && userDetails[6].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase))); // Email
+                          userDetails.Length > 6 && userDetails[6].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase)); // Email
                 })
                 .Select(userDetails =>
                 {

@@ -56,10 +56,10 @@ namespace CRUD_System.Repositories
         #region AdminCreateControl
         public void NewAccount(string currentUser, string isAlias)
         {
-            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Created new user [{isAlias.ToUpper()}]");
+            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Created new account [{isAlias.ToUpper()}]");
             Debug.WriteLine($"User {isAlias} added successfully!");
 
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Created new user [{isAlias.ToUpper()}]";
+            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Created new account [{isAlias.ToUpper()}]";
             path.AppendToLog(newLog);
         }
         #endregion AdminCreateControl

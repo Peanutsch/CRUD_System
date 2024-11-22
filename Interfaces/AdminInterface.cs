@@ -302,9 +302,6 @@ namespace CRUD_System.Interfaces
         /// <param name="userDetailsArray">Array containing the user details.</param>
         public void FillTextboxesAdmin(string[] userDetailsArray)
         {
-            // Initialize the UserDetails object with the array of user details
-            //UserDetails userDetails = new UserDetails(userDetailsArray);
-
             // Populate the text fields with the details of the selected user
             adminControl.txtName.Text = userDetailsArray[0];
             adminControl.txtSurname.Text = userDetailsArray[1];
