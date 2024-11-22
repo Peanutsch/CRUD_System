@@ -25,24 +25,13 @@ namespace CRUD_System
         /// </summary>
         /// <param name="alias">The alias of the user to search for.</param>
         /// <returns>A list of formatted strings representing the matched users' details.</returns>
-        public List<string> SearchByAlias(string searchTerm)
+        public List<string> SearchUsers(string searchTerm)
         {
             // Read user and login data from CSV files
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
             // Search for matches in different fields
             var matchedUsers = userLines
-<<<<<<< Updated upstream
-                .Select(line => line.Split(','))
-                .Where(details => details.Length > 2 && details[2].StartsWith(alias, StringComparison.OrdinalIgnoreCase))  // Match prefixes
-                .Select(details =>
-                {
-                    string name = details[0];
-                    string surname = details[1];
-                    string email = details.Length > 6 ? details[6] : string.Empty;
-                    string phonenumber = details.Length > 7 ? details[7] : string.Empty;
-                    string isOnline = details.Length > 8 && details[8] == "True" ? "| [ONLINE]" : string.Empty;
-=======
                 .Select(line => line.Split(',')) // Split each line into individual fields
                 .Where(userDetails =>
                 {
@@ -61,7 +50,6 @@ namespace CRUD_System
                     string email = userDetails.Length > 6 ? userDetails[6] : string.Empty;
                     string phonenumber = userDetails.Length > 7 ? userDetails[7] : string.Empty;
                     string isOnline = userDetails.Length > 8 && userDetails[8] == "True" ? "| [ONLINE]" : string.Empty;
->>>>>>> Stashed changes
 
                     // Format the matched user details as a string
                     return $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";

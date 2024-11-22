@@ -52,7 +52,7 @@
             this.chkIsAdmin = new CheckBox();
             this.btnChangePassword = new Button();
             this.btnForceLogOutUser = new Button();
-            this.txtAliasToSearch = new TextBox();
+            this.txtSearch = new TextBox();
             this.lblSearchTxt = new Label();
             this.SuspendLayout();
             // 
@@ -261,16 +261,16 @@
             this.btnForceLogOutUser.Visible = false;
             this.btnForceLogOutUser.Click += this.btnForceLogOutUser_Click;
             // 
-            // txtAliasToSearch
+            // txtSearch
             // 
-            this.txtAliasToSearch.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.txtAliasToSearch.Location = new Point(846, 7);
-            this.txtAliasToSearch.Name = "txtAliasToSearch";
-            this.txtAliasToSearch.PlaceholderText = "alias";
-            this.txtAliasToSearch.Size = new Size(93, 26);
-            this.txtAliasToSearch.TabIndex = 33;
-            this.txtAliasToSearch.TextAlign = HorizontalAlignment.Center;
-            this.txtAliasToSearch.TextChanged += this.txtAliasToSearch_TextChanged;
+            this.txtSearch.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.txtSearch.Location = new Point(846, 7);
+            this.txtSearch.Name = "txtAliasToSearch";
+            this.txtSearch.PlaceholderText = "alias";
+            this.txtSearch.Size = new Size(93, 26);
+            this.txtSearch.TabIndex = 33;
+            this.txtSearch.TextAlign = HorizontalAlignment.Center;
+            this.txtSearch.TextChanged += this.txtAliasToSearch_TextChanged;
             // 
             // lblSearchTxt
             // 
@@ -291,7 +291,7 @@
             this.BackColor = SystemColors.ActiveCaption;
             this.BorderStyle = BorderStyle.FixedSingle;
             this.Controls.Add(this.lblSearchTxt);
-            this.Controls.Add(this.txtAliasToSearch);
+            this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.btnForceLogOutUser);
             this.Controls.Add(this.btnCreateUser);
             this.Controls.Add(this.btnChangePassword);
@@ -326,7 +326,7 @@
         public CheckBox chkIsAdmin;
         public Button btnChangePassword;
         public Button btnForceLogOutUser;
-        private TextBox txtAliasToSearch;
+        private TextBox txtSearch;
         private Label lblSearchTxt;
     }
 }

@@ -1,5 +1,5 @@
 [0]NAME, [1] SURNAME, [2] ALIAS, [3] ADRESS, [4] ZIPCODE, [5] CITY, [6] EMAIL ADRESS, [7] PHONENUMBER, [8] ONLINE STATUS
-Admin,Adminimaxi,admin,Enschedesestraat 6,7554RX,Hengelo,admin@admin.com,+31534256987,False
+Admin,Adminimaxi,admin,Enschedesestraat 6,7554RX,Hengelo,admin@admin.com,+31534256987,True
 Michiel,ter Elst,mist001,Hengelosestraat 13,7557 AA,Enschede,peanutsch@duck.com,+31642027905,False
 Peer,Usher,peer001,Userstraat 26,6969 BJ,Oldenzaal,p.usher@mail.nl,0747789654,False
 Persona,NewInTown,pewn001,straat 6,1234 AA,Almelo,pintown@mail.nl,+31123456789,False
@@ -9,12 +9,9 @@ Tamara,Ramat,taat001,Street 42,5678 BC,Almelo,tamar@mail.nl,0645109853,True
 May,Newkreation,maon001,NoStreet 13,1234 MY,Hengelo,nomore@mail.com,0456821369,True
 Niewertje,New,niew001,Straat 69,6969 BJ,Hengelo,nieuw@mail.com,0541667852,False
 Iodio,Admin,ioin001,Straat,6969 AD,Stad,mail@mail.com,0885633477,False
-<<<<<<< Updated upstream
 Lord Perak,Poesch Wizzert the First,pest001,Straat 42,6666 MW,Hengelo,poesch@mail.com,0887995521,False
 Léone,Sierra,lera001,Straat 13,1234 GG,Hengelo,leone@mail.com,0887726119,False
-=======
 Lord Perak,Poesch Wizzert the First,pest001,Straat 6,6666 MW,Hengelo,poesch@mail.com,0887995521,False
 Léon,Sierra,lera001,Straat 13,1234 GG,Hengelo,mail@mail.com,0887723554,False
 Bart,of Valor,baor001,Straat 13,1234 MM,Hengelo,mail@bardsofvalor.nl,0677424467,False
 Bartholomew,of Valor,baor002,Straat 42,4242 EP,Hengelo,mail@mail.com,0644234268,False
->>>>>>> Stashed changes

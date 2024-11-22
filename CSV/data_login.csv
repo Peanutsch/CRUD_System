@@ -1,5 +1,5 @@
 [0] Alias, [1] PASSWORD, [2] ADMIN, [3] ONLINESTATUS
-admin,admin,True,False
+admin,admin,True,True
 mist001,mist001,True,False
 peer001,peer001,False,False
 pewn001,pewn001,False,False
@@ -10,10 +10,7 @@ maon001,maon001,False,True
 niew001,niew001,False,False
 ioin001,ioin001,False,False
 pest001,pest001,False,False
-<<<<<<< Updated upstream
 lera001,89SBT4hB4HsS,True,False
-=======
 lera001,lera001,False,False
 baor001,baor001,False,False
 baor002,baor002,False,False
->>>>>>> Stashed changes
