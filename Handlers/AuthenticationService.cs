@@ -44,6 +44,35 @@ namespace CRUD_System.Handlers
         #endregion CONSTRUCTOR
 
         #region LOGIN VALIDATION
+
+        #region TEST DECRYPTION
+        /*
+        public bool ValidateLogin(string inputUserName, string inputUserPassword)
+        {
+            // For non-admin users, get login data from the CSV file
+            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
+
+            // Decrypt the passwords before comparison
+            var user = loginData.FirstOrDefault(u =>
+                                                u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
+                                                DecryptPassword(u.Password) == inputUserPassword);
+
+            // Return true if user is found and valid
+            return user != default;
+        }
+
+        private string DecryptPassword(string encryptedPassword)
+        {
+            // Convert the encrypted password string (assuming it is Base64 encoded) to a byte array
+            byte[] encryptedPasswordBytes = Convert.FromBase64String(encryptedPassword);
+
+            // Use the AES decryption method to decrypt the password
+            return AesEncryption.Decrypt(encryptedPasswordBytes, AesEncryption.EncryptionKey);  // Pass byte[] and the encryption key
+        }
+        */
+        #endregion TEST DECRYPTION
+
+
         /// <summary>
         /// Validates the provided username and password by checking them against the stored data in the CSV.
         /// </summary>

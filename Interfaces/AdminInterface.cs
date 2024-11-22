@@ -46,6 +46,43 @@ namespace CRUD_System.Interfaces
 
             foreach (var line in lines.Skip(2)) // Skip header
             {
+                try
+                {
+                    // Decrypt the line
+                    string decryptedLine = AesEncryption.Decrypt(Convert.FromBase64String(line), AesEncryption.EncryptionKey);
+
+                    var userDetailsArray = decryptedLine.Split(',');
+
+                    string name = userDetailsArray[0];
+                    string surname = userDetailsArray[1];
+                    string alias = userDetailsArray[2];
+                    string address = userDetailsArray[3];
+                    string zipcode = userDetailsArray[4];
+                    string city = userDetailsArray[5];
+                    string email = userDetailsArray[6];
+                    string phonenumber = userDetailsArray[7];
+                    string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
+
+                    // Directly format list item
+                    string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
+                    adminControl.listBoxAdmin.Items.Add(listItem);
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception if decryption fails
+                    Debug.WriteLine($"Failed to decrypt line: {line}, Error: {ex.Message}");
+                }
+            }
+        }
+
+        /* LoadDetailsListBox() without decryption
+        public void LoadDetailsListBox()
+        {
+            var lines = File.ReadAllLines(path.UserFilePath);
+            adminControl.listBoxAdmin.Items.Clear();
+
+            foreach (var line in lines.Skip(2)) // Skip header
+            {
                 var userDetailsArray = line.Split(',');
                 string name = userDetailsArray[0];
                 string surname = userDetailsArray[1];
@@ -62,6 +99,7 @@ namespace CRUD_System.Interfaces
                 adminControl.listBoxAdmin.Items.Add(listItem);
             }
         }
+        */
 
         /// <summary>
         /// Handles the custom drawing of items in the ListBox, allowing for conditional formatting based on the item content.
@@ -302,6 +340,38 @@ namespace CRUD_System.Interfaces
         /// <param name="userDetailsArray">Array containing the user details.</param>
         public void FillTextboxesAdmin(string[] userDetailsArray)
         {
+            // Decrypt the user details before filling the textboxes
+            try
+            {
+                // Assuming userDetailsArray contains encrypted data
+                string decryptedName = AesEncryption.Decrypt(Convert.FromBase64String(userDetailsArray[0]), AesEncryption.EncryptionKey);
+                string decryptedSurname = AesEncryption.Decrypt(Convert.FromBase64String(userDetailsArray[1]), AesEncryption.EncryptionKey);
+                string decryptedAlias = AesEncryption.Decrypt(Convert.FromBase64String(userDetailsArray[2]), AesEncryption.EncryptionKey);
+                string decryptedAddress = AesEncryption.Decrypt(Convert.FromBase64String(userDetailsArray[3]), AesEncryption.EncryptionKey);
+                string decryptedZIPCode = AesEncryption.Decrypt(Convert.FromBase64String(userDetailsArray[4]), AesEncryption.EncryptionKey);
+                string decryptedCity = AesEncryption.Decrypt(Convert.FromBase64String(userDetailsArray[5]), AesEncryption.EncryptionKey);
+                string decryptedEmail = AesEncryption.Decrypt(Convert.FromBase64String(userDetailsArray[6]), AesEncryption.EncryptionKey);
+                string decryptedPhoneNumber = AesEncryption.Decrypt(Convert.FromBase64String(userDetailsArray[7]), AesEncryption.EncryptionKey);
+
+                // Populate the text fields with decrypted user details
+                adminControl.txtName.Text = decryptedName;
+                adminControl.txtSurname.Text = decryptedSurname;
+                adminControl.txtAlias.Text = decryptedAlias;
+                adminControl.txtAddress.Text = decryptedAddress;
+                adminControl.txtZIPCode.Text = decryptedZIPCode;
+                adminControl.txtCity.Text = decryptedCity;
+                adminControl.txtEmail.Text = decryptedEmail;
+                adminControl.txtPhonenumber.Text = decryptedPhoneNumber;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to decrypt user details: {ex.Message}");
+                // Handle the decryption error, possibly showing an error message to the user
+            }
+        }
+        /* FillTextboxesAdmin without decryption
+        public void FillTextboxesAdmin(string[] userDetailsArray)
+        {
             // Populate the text fields with the details of the selected user
             adminControl.txtName.Text = userDetailsArray[0];
             adminControl.txtSurname.Text = userDetailsArray[1];
@@ -312,6 +382,7 @@ namespace CRUD_System.Interfaces
             adminControl.txtEmail.Text = userDetailsArray[6];
             adminControl.txtPhonenumber.Text = userDetailsArray[7];
         }
+        */
         #endregion TEXTBOXES ADMIN
     }
 }

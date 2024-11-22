@@ -56,6 +56,48 @@ namespace CRUD_System
         // Decrypt the encrypted bytes back to plaintext
         public static string Decrypt(byte[] cipherText, string password)
         {
+            try
+            {
+                using (Aes aes = Aes.Create())
+                {
+                    using (var ms = new MemoryStream(cipherText))
+                    {
+                        byte[] salt = new byte[16]; // Salt size
+                        ms.Read(salt, 0, salt.Length);
+
+                        using (var rfc2898 = new Rfc2898DeriveBytes(password, salt, 10000, HashAlgorithmName.SHA256))
+                        {
+                            aes.Key = rfc2898.GetBytes(32);
+                        }
+
+                        using (var cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                        using (var reader = new StreamReader(cs))
+                        {
+                            string decrypted = reader.ReadToEnd();
+                            return decrypted ?? string.Empty; // Return empty if decrypted is null
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Decryption failed. Error: {ex.Message}");
+                return string.Empty; // Return empty string if exception occurs
+            }
+        }
+
+
+
+        /*
+        /// <summary>
+        /// Decrypts an AES-256 encrypted byte array back to plaintext.
+        /// </summary>
+        /// <param name="cipherText">The encrypted data to be decrypted.</param>
+        /// <param name="password">The password used to derive the decryption key.</param>
+        /// <returns>A decrypted byte array.</returns>
+        // Decrypt the encrypted bytes back to plaintext
+        public static string Decrypt(byte[] cipherText, string password)
+        {
             using (Aes aes = Aes.Create())
             {
                 using (var ms = new MemoryStream(cipherText))
@@ -78,6 +120,7 @@ namespace CRUD_System
                 }
             }
         }
+        */
 
         /// <summary>
         /// Generates a 16-byte random salt for encryption.

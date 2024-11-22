@@ -1,4 +1,4 @@
-[0] Alias	[1] PASSWORD	[2] ADMIN	[3] ONLINESTATUS
+[0] Alias [1] PASSWORD [2] ADMIN [3] ONLINESTATUS
 admin,admin,True,False
 mist001,mist001,True,False
 peer001,peer001,False,False

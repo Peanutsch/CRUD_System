@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.IO;
 
 namespace CRUD_System.FileHandlers
 {
@@ -34,90 +35,100 @@ namespace CRUD_System.FileHandlers
         /// </remarks>
         public List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> GetLoginData()
         {
-            // Construct the full path to the CSV file
-            string file = Path.Combine(RootPath.GetRootPath(), @"CSV\data_login.csv");
+            FilePaths path = new FilePaths();
+            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = new();
 
-            // Check if the file exists; if not, log an error and return an empty list
-            if (!File.Exists(file))
+            // Lees alle regels van het CSV-bestand
+            var encryptedLines = File.ReadAllLines(path.LoginFilePath);
+            foreach (var line in encryptedLines)
             {
-                Debug.WriteLine($"Error! No such file with path {file}\nRootPath = {RootPath.GetRootPath}");
-                return new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
-            }
+                Console.WriteLine($"Encrypted line: {line}");
 
-            // List to store the login data from the CSV
-            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
-
-            // Read the CSV file line by line
-            using (StreamReader reader = new StreamReader(file))
-            {
-                // Skip the header line
-                string headerLine = reader.ReadLine()!;
-
-                string line;
-                while ((line = reader.ReadLine()!) != null)
+                try
                 {
-                    // Split the line by commas to extract the username, password, and admin status
-                    string[] values = line.Split(',');
+                    // Attempt to decrypt the line
+                    string decryptedLine = AesEncryption.Decrypt(Convert.FromBase64String(line), AesEncryption.EncryptionKey);
+                    Console.WriteLine($"Decrypted line: {decryptedLine}"); // Log the decrypted data to check the format
 
-                    // Ensure the line has exactly 3 elements before proceeding
-                    if (values.Length == 4)
+                    // Parse the decrypted data
+                    var fields = decryptedLine.Split(',');
+                    if (fields.Length == 4)
                     {
-                        string username = values[0].Trim(); // Alias
-                        string password = values[1].Trim(); // Password
-                        bool isAdmin = bool.Parse(values[2].Trim()); // True or False IsAdmin
-                        bool onlineStatus = bool.Parse(values[3].Trim());
+                        string username = fields[0];
+                        string password = fields[1];
+                        bool isAdmin = bool.Parse(fields[2]);
+                        bool onlineStatus = bool.Parse(fields[3]);
 
-                        // Add the extracted data to the loginData list
                         loginData.Add((username, password, isAdmin, onlineStatus));
                     }
                 }
+                catch (Exception ex)
+                {
+                    // Log any exception that occurs during decryption or parsing
+                    Console.WriteLine($"Failed to decrypt line: {line}. Error: {ex.Message}");
+                }
             }
-            // Return the populated list of login data
             return loginData;
         }
 
-        public List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> GetUserData()
+
+        public List<(string Name, string Surname, string Address, string ZipCode, string City, string EmailAddress, string PhoneNumber)> GetUserData()
         {
             // Construct the full path to the CSV file
-            string file = Path.Combine(RootPath.GetRootPath(), @"CSV\data_users.csv");
+            string filePath = Path.Combine(RootPath.GetRootPath(), @"CSV\data_users.csv");
             Debug.WriteLine($"RootPath data_users.csv: {RootPath.GetRootPath()}");
 
             // Check if the file exists; if not, log an error and return an empty list
-            if (!File.Exists(file))
+            if (!File.Exists(filePath))
             {
-                Debug.WriteLine($"Error! No such file with path {file}");
-                return new List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)>();
+                Debug.WriteLine($"Error! No such file with path {filePath}");
+                return new List<(string Name, string Surname, string Address, string ZipCode, string City, string EmailAddress, string PhoneNumber)>();
             }
 
-            // Use EncryptionManager to decrypt the CSV file
-            string decryptedData = EncryptionManager.DecryptCsv(file, AesEncryption.EncryptionKey);
-
-            // Split the decrypted data into lines and parse each line into a tuple
-            List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> users =
-                new List<(string, string, string, string, string, string)>();
-
-            // Split the decrypted data into lines
-            var lines = decryptedData.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
-            // Skip the first two lines (header and first data row)
-            for (int i = 2; i < lines.Length; i++)
+            try
             {
-                var values = lines[i].Split(',');
+                // Decrypt the file using EncryptionManager
+                string decryptedData = EncryptionManager.DecryptCsv(filePath, AesEncryption.EncryptionKey);
 
-                // Assign "None" to any missing or empty value
-                string name = string.IsNullOrWhiteSpace(values[0]) ? string.Empty : values[0].Trim();
-                string surname = string.IsNullOrWhiteSpace(values[1]) ? string.Empty : values[1].Trim();
-                string address = string.IsNullOrWhiteSpace(values[2]) ? string.Empty : values[2].Trim();
-                string zipCode = string.IsNullOrWhiteSpace(values[3]) ? string.Empty : values[3].Trim();
-                string city = string.IsNullOrWhiteSpace(values[4]) ? string.Empty : values[4].Trim();
-                string emailAddress = string.IsNullOrWhiteSpace(values[5]) ? string.Empty : values[5].Trim();
+                // Parse the decrypted content
+                var lines = decryptedData.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
-                // Add the user data as a tuple to the list
-                users.Add((name, surname, address, zipCode, city, emailAddress));
+                // Skip headers if present and parse each line into a tuple
+                var users = new List<(string Name, string Surname, string Address, string ZipCode, string City, string EmailAddress, string PhoneNumber)>();
+
+                for (int i = 2; i < lines.Length; i++) // Adjust index as needed for your file structure
+                {
+                    var values = lines[i].Split(',');
+
+                    // Ensure there are at least 7 values before parsing
+                    if (values.Length >= 7)
+                    {
+                        string name = string.IsNullOrWhiteSpace(values[0]) ? string.Empty : values[0].Trim();
+                        string surname = string.IsNullOrWhiteSpace(values[1]) ? string.Empty : values[1].Trim();
+                        string address = string.IsNullOrWhiteSpace(values[2]) ? string.Empty : values[2].Trim();
+                        string zipCode = string.IsNullOrWhiteSpace(values[3]) ? string.Empty : values[3].Trim();
+                        string city = string.IsNullOrWhiteSpace(values[4]) ? string.Empty : values[4].Trim();
+                        string emailAddress = string.IsNullOrWhiteSpace(values[5]) ? string.Empty : values[5].Trim();
+                        string phoneNumber = string.IsNullOrWhiteSpace(values[6]) ? string.Empty : values[6].Trim();
+                        //string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
+
+                        users.Add((name, surname, address, zipCode, city, emailAddress, phoneNumber));
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Invalid data format in line {i + 1}: {lines[i]}");
+                    }
+                }
+
+                return users;
             }
-
-            return users;
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error reading or decrypting file: {ex.Message}");
+                return new List<(string Name, string Surname, string Address, string ZipCode, string City, string EmailAddress, string PhoneNumber)>();
+            }
         }
+
 
 
 

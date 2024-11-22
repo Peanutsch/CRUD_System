@@ -47,8 +47,8 @@ namespace CRUD_System
             try
             {
                 // data_users.csv
-                encryptionManager.EncryptData(data_users, data_users, encryptionKey);
-                Console.WriteLine("data_users.csv encrypted");
+                //encryptionManager.EncryptData(data_users, data_users, encryptionKey);
+                //Console.WriteLine("data_users.csv encrypted");
 
                 // data_login.csv
                 encryptionManager.EncryptData(data_login, data_login, encryptionKey);
