@@ -11,6 +11,25 @@ namespace CRUD_System.FileHandlers
     internal class ReadFiles
     {
         /// <summary>
+        /// Controleert of een string Base64-gecodeerd is.
+        /// </summary>
+        /// <param name="input">De string die gecontroleerd moet worden.</param>
+        /// <returns>True als de string Base64-gecodeerd is, anders False.</returns>
+        public static bool IsBase64(string input)
+        {
+            // Probeer de string te decoderen
+            try
+            {
+                Convert.FromBase64String(input);
+                return true; // Het is een geldige Base64-string
+            }
+            catch
+            {
+                return false; // Fout betekent dat het geen geldige Base64 is
+            }
+        }
+
+        /// <summary>
         /// Retrieves login data from a CSV file and returns it as a list of tuples
         /// containing the username, password, and admin status.
         /// </summary>
@@ -37,8 +56,17 @@ namespace CRUD_System.FileHandlers
                 return new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
             }
 
-            // Decrypt the file before reading its contents
-            EncryptionManager.DecryptFile(file);
+            /*
+            // Read the first line of the file to check if it seems Base64 encoded
+            string? firstLine = File.ReadLines(file).FirstOrDefault();
+
+            // Check if the first line is Base64 encoded
+            if (firstLine != null && !IsBase64(firstLine))
+            {
+                // Decrypt the file before reading its contents
+                EncryptionManager.DecryptFile(file);
+            }
+            */
 
             // List to store the login data from the CSV
             List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
@@ -68,6 +96,8 @@ namespace CRUD_System.FileHandlers
                     }
                 }
             }
+            // Encrypt data_login.csv
+            //EncryptionManager.EncryptFile(file);
             // Return the populated list of login data
             return loginData;
         }

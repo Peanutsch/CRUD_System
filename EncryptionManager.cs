@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace CRUD_System
             }
 
             File.WriteAllLines(filePath, encryptedLines);
-            Console.WriteLine("Encryption completed for the file: " + filePath);
+            Debug.WriteLine("Encryption completed for the file: " + filePath);
         }
 
         /// <summary>
@@ -51,8 +52,7 @@ namespace CRUD_System
             }
 
             File.WriteAllLines(filePath, decryptedLines);
-            MessageBox.Show("Decryption Completed for " + filePath);
-            Console.WriteLine("Decryption completed for the file: " + filePath);
+            Debug.WriteLine("Decryption completed for the file: " + filePath);
         }
     }
 }

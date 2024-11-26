@@ -20,7 +20,7 @@ namespace CRUD_System
         static void Main() 
         {
             // Encrypt the CSV file
-            EncryptionManager.EncryptFile(filePath.LoginFilePath); // data_login.csv
+            //EncryptionManager.EncryptFile(filePath.LoginFilePath); // data_login.csv
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
 
             // Decrypt the CSV file
