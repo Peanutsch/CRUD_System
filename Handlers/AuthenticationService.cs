@@ -26,13 +26,16 @@ namespace CRUD_System.Handlers
     public class AuthenticationService
     {
         #region PROPERTIES
-        FilePaths path = new FilePaths();
-
         public static string? CurrentUser { get; set; }
 
+        FilePaths path = new FilePaths();
         ReadFiles readFiles = new ReadFiles();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+
+        // Change loginData to property
+        public List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> LoginData { get; private set; }
+
 
         public bool onlineStatus = false;
         #endregion PROPERTIES
@@ -40,7 +43,8 @@ namespace CRUD_System.Handlers
         #region CONSTRUCTOR
         public AuthenticationService()
         {
-
+            // Load login data into the property
+            LoginData = readFiles.GetLoginData();  
         }
         #endregion CONSTRUCTOR
 
@@ -53,11 +57,8 @@ namespace CRUD_System.Handlers
         /// <returns>True if the credentials are valid; otherwise, false.</returns>
         public bool ValidateLogin(string inputUserName, string inputUserPassword)
         {
-            // Get login data from the CSV file
-            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
-
             // Find the user in the list where both username and password match
-            var user = loginData.FirstOrDefault(u =>
+            var user = LoginData.FirstOrDefault(u =>
                                                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
                                                 u.Password == inputUserPassword);
 
@@ -73,11 +74,8 @@ namespace CRUD_System.Handlers
         /// <returns>True if the user is an admin; otherwise, false.</returns>
         public bool IsAdmin(string inputUserName, string inputUserPassword)
         {
-            // Get login data from the CSV file
-            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
-
             // Find the user in the list where both username and password match
-            var user = loginData.FirstOrDefault(u =>
+            var user = LoginData.FirstOrDefault(u =>
                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
                 u.Password == inputUserPassword);
 
@@ -92,10 +90,8 @@ namespace CRUD_System.Handlers
         /// <returns>True if the user is offline; otherwise, false.</returns>
         public bool ValidateOnlineStatus(string inputUserName, string inputUserPassword)
         {
-            //return !UsersOnline.Contains(inputUserName);
-            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
             // Find the user in the list where both username and password match
-            var user = loginData.FirstOrDefault(u =>
+            var user = LoginData.FirstOrDefault(u =>
                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
                 u.Password == inputUserPassword);
 
@@ -213,6 +209,9 @@ namespace CRUD_System.Handlers
                 DisplayUserAlias(usersForm, isAdmin);
                 usersForm.ShowDialog();
             }
+            // Encrypt data_login.csv file after a successful login
+            //string loginFilePath = path.LoginFilePath;
+            EncryptionManager.EncryptFile(path.LoginFilePath); // Directly call the static method
         }
 
         /// <summary>

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
 
 namespace CRUD_System.FileHandlers
 {
@@ -20,7 +19,7 @@ namespace CRUD_System.FileHandlers
         /// - Username (string): The user's username
         /// - Password (string): The user's password
         /// - IsAdmin (bool): A flag indicating whether the user is an admin (true) or not (false)
-        /// - statusOnline (bool): A flag indicating wheter the user is online (true) or not (false)
+        /// - statusOnline (bool): A flag indicating whether the user is online (true) or not (false)
         /// </returns>
         /// <remarks>
         /// The CSV file is expected to have each row in the following format:
@@ -34,9 +33,12 @@ namespace CRUD_System.FileHandlers
             // Check if the file exists; if not, log an error and return an empty list
             if (!File.Exists(file))
             {
-                Debug.WriteLine($"Error! No such file with path {file}\nRootPath = {RootPath.GetRootPath}");
+                Debug.WriteLine($"Error! No such file with path {file}\nRootPath = {RootPath.GetRootPath()}");
                 return new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
             }
+
+            // Decrypt the file before reading its contents
+            EncryptionManager.DecryptFile(file);
 
             // List to store the login data from the CSV
             List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
@@ -53,7 +55,7 @@ namespace CRUD_System.FileHandlers
                     // Split the line by commas to extract the username, password, and admin status
                     string[] values = line.Split(',');
 
-                    // Ensure the line has exactly 3 elements before proceeding
+                    // Ensure the line has exactly 4 elements before proceeding
                     if (values.Length == 4)
                     {
                         string username = values[0].Trim(); // Alias
@@ -70,6 +72,23 @@ namespace CRUD_System.FileHandlers
             return loginData;
         }
 
+        /// <summary>
+        /// Retrieves user data from a CSV file and returns it as a list of tuples
+        /// containing the name, surname, address, zip code, city, and email address.
+        /// </summary>
+        /// <returns>
+        /// A list of tuples where each tuple consists of:
+        /// - Name (string): The user's name
+        /// - Surname (string): The user's surname
+        /// - Address (string): The user's address
+        /// - ZipCode (string): The user's zip code
+        /// - City (string): The user's city
+        /// - EmailAddress (string): The user's email address
+        /// </returns>
+        /// <remarks>
+        /// The CSV file is expected to have each row in the following format:
+        /// Name, Surname, Address, ZipCode, City, EmailAddress
+        /// </remarks>
         public List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> GetUserData()
         {
             // Construct the full path to the CSV file
@@ -82,6 +101,9 @@ namespace CRUD_System.FileHandlers
                 Debug.WriteLine($"Error! No such file with path {file}");
                 return new List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)>();
             }
+
+            // Decrypt the file before reading its contents
+            EncryptionManager.DecryptFile(file);
 
             List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> users =
                 new List<(string, string, string, string, string, string)>();
@@ -109,6 +131,5 @@ namespace CRUD_System.FileHandlers
             }
             return users;
         }
-
     }
 }

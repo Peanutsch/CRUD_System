@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRUD_System
 {
-    internal static class Crypto
+    internal static class AesEncryption
     {
         /*
             Encryption Key:         l8GGfRqI8hEzw00+WP0SMpptSNw/WjgSeF74sbUL1LizDXicc5wi4YsbLDdTyMqH
