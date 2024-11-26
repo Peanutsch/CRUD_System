@@ -10,55 +10,61 @@ namespace CRUD_System
         static FilePaths filePath = new FilePaths();
 
         /// <summary>
-        ///  The main entry point for the application.
+        /// The main entry point for the application.
+        /// This method is responsible for encrypting the CSV file and initializing the application.
         /// </summary>
         [STAThread]
-        static void Main()
-        {
-            //EncryptCSVFiles();
-            //DecryptCSVFiles();
+        static void Main() {
+            // Encrypt the CSV file
+            EncryptCSVFiles();
 
+            // Decrypt the CSV file
+            // DecryptCSVFiles();
 
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            // Initialize the application configuration
             ApplicationConfiguration.Initialize();
-            Application.Run(new LoginForm());
 
+            // Run the LoginForm as the main form of the application
+            Application.Run(new LoginForm());
         }
 
+        /// <summary>
+        /// Encrypts the CSV file content using a fixed encryption key.
+        /// The content is read from the specified file, encrypted, and saved back to the same file.
+        /// </summary>
         static void EncryptCSVFiles() {
-
-            //string string csvFilePath_users = filePath.LoginFilePath;
+            // Get the path for the login CSV file
             string csvFilePath_login = filePath.LoginFilePath;
 
-            // Example: Encrypt and save a CSV file
-            //string csvFilePath = @"path\to\your\data.csv";
+            // Specify the path to save the encrypted CSV file (can be the same or a new path)
             string encryptedFilePath = csvFilePath_login;
 
-            // Step 1: Read the CSV content
+            // Step 1: Read the CSV content as a string
             string csvContent = File.ReadAllText(csvFilePath_login);
 
-            // Step 2: Encrypt the CSV content
+            // Step 2: Encrypt the CSV content using the fixed encryption key
             byte[] encryptedData = Crypto.EncryptWithFixedKey(csvContent);
 
-            // Step 3: Save the encrypted data to a new file
+            // Step 3: Save the encrypted data to a file
             File.WriteAllBytes(encryptedFilePath, encryptedData);
         }
 
+        /// <summary>
+        /// Decrypts an encrypted CSV file and saves the decrypted content back to a file.
+        /// </summary>
         static void DecryptCSVFiles() {
-            // Bestandslocatie van het versleutelde CSV bestand
-            string encryptedFilePath = filePath.LoginFilePath; // Dit verwijst naar het versleutelde bestand
-            string decryptedFilePath = encryptedFilePath;
+            // File path of the encrypted CSV file
+            string encryptedFilePath = filePath.LoginFilePath; // This points to the encrypted file
+            string decryptedFilePath = encryptedFilePath; // Optionally overwrite the encrypted file with the decrypted content
 
-            // Stap 1: Lees de versleutelde data (byte-array)
+            // Step 1: Read the encrypted data (byte array)
             byte[] encryptedFileData = File.ReadAllBytes(encryptedFilePath);
 
-            // Stap 2: Ontsleutel de data met de vaste sleutel (gebruik het wachtwoord of de vaste sleutel)
+            // Step 2: Decrypt the data using the fixed key (either password or the fixed key)
             string decryptedContent = Crypto.DecryptWithFixedKey(encryptedFileData, Crypto.EncryptionKey);
 
-            // Stap 3: Sla de ontsleutelde inhoud op in een nieuw bestand (of gebruik de string verder)
+            // Step 3: Save the decrypted content back to the file (or use it further as needed)
             File.WriteAllText(decryptedFilePath, decryptedContent);
         }
-
     }
 }
