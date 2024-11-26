@@ -69,7 +69,7 @@ namespace CRUD_System.Handlers
         /// Determines if the logged-in user is an admin.
         /// </summary>
         /// <param name="inputUserName">The username of the user.</param>
-        /// <param name="inputUserPSW">The password of the user.</param>
+        /// <param name="inputUserPassword">The password of the user.</param>
         /// <returns>True if the user is an admin; otherwise, false.</returns>
         public bool IsAdmin(string inputUserName, string inputUserPassword)
         {
@@ -253,17 +253,7 @@ namespace CRUD_System.Handlers
             // Set user as offline
             UpdateUserOnlineStatus(aliasToLogOut, false);
             // Force log out user
-            PerformForcedLogOutByAdmin(aliasToLogOut);
-
-            adminControl.listBoxAdmin.Items.Clear();
-
-            // Read lines from data_users.csv and data_login.csv for userIndex
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
-            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, adminControl.txtAlias.Text);
-            // Reload ListBoxAdmin
-            adminInterface.ReloadListBoxAdmin(userIndex);
-
-            //adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
+            this.PerformForcedLogOutByAdmin(aliasToLogOut);
         }
 
         /// <summary>
@@ -286,7 +276,7 @@ namespace CRUD_System.Handlers
         /// Forces a user to log out by an admin, logging the forced logout event
         /// and hiding the user's main form if active.
         /// </summary>
-        /// <param name="userAlias">The alias of the user to be logged out by admin.</param>
+        /// <param name="aliasToLogOut">The alias of the user to be logged out by admin.</param>
         public void PerformForcedLogOutByAdmin(string aliasToLogOut)
         {
             UserMainForm userForm = new UserMainForm();

@@ -187,8 +187,13 @@ namespace CRUD_System
             AuthenticationService authenticationService = new AuthenticationService();
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                MessageBox.Show("Pushing force logout");
                 authenticationService.ForceLogOut(txtAlias.Text);
+                MessageBox.Show($"Pushing force logout account {txtAlias.Text}");
+                // Reload listbox
+                listBoxAdmin.Items.Clear();
+                adminInterface.LoadDetailsListBox();
+                btnForceLogOutUser.Enabled = false;
+                btnForceLogOutUser.Visible = false;
             },
             () => message.MessageInvalidNoUserSelected());
         }

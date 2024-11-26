@@ -18,7 +18,6 @@ namespace CRUD_System
             ApplicationConfiguration.Initialize();
             Application.Run(new LoginForm());
 
-            //_PasswordManager.VerifyPassword();
         }
     }
 }
