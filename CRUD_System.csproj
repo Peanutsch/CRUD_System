@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Cryptography\" />
+    <Compile Remove="Cryptography\**" />
+    <EmbeddedResource Remove="Cryptography\**" />
+    <None Remove="Cryptography\**" />
   </ItemGroup>
 
 </Project>

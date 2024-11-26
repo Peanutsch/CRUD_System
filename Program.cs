@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Intrinsics.Arm;
+using System.Diagnostics;
 using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
 
@@ -8,6 +9,8 @@ namespace CRUD_System
     internal static class Program
     {
         static FilePaths filePath = new FilePaths();
+        // Get the path for the login CSV file
+        //string csvFilePath_login = filePath.LoginFilePath;
 
         /// <summary>
         /// The main entry point for the application.
@@ -16,10 +19,12 @@ namespace CRUD_System
         [STAThread]
         static void Main() {
             // Encrypt the CSV file
-            EncryptCSVFiles();
+            //EncryptCSVFiles(filePath.LoginFilePath); // data_login.csv
+            //EncryptCSVFiles(filePath.UserFilePath); // data_users.csv
 
             // Decrypt the CSV file
-            // DecryptCSVFiles();
+            //DecryptCSVFiles(filePath.LoginFilePath);
+            //DecryptCSVFiles(filePath.UserFilePath);
 
             // Initialize the application configuration
             ApplicationConfiguration.Initialize();
@@ -32,39 +37,67 @@ namespace CRUD_System
         /// Encrypts the CSV file content using a fixed encryption key.
         /// The content is read from the specified file, encrypted, and saved back to the same file.
         /// </summary>
-        static void EncryptCSVFiles() {
-            // Get the path for the login CSV file
-            string csvFilePath_login = filePath.LoginFilePath;
+        static void EncryptCSVFiles(string filePath)
+        {
+            // Read all lines from the CSV file
+            string[] linesLogin = File.ReadAllLines(filePath);
 
-            // Specify the path to save the encrypted CSV file (can be the same or a new path)
-            string encryptedFilePath = csvFilePath_login;
+            // Create a list to store the encrypted lines
+            var encryptedLines = new List<string>();
 
-            // Step 1: Read the CSV content as a string
-            string csvContent = File.ReadAllText(csvFilePath_login);
+            // Iterate through each line in the file
+            foreach (string line in linesLogin)
+            {
+                // Split the line into fields based on commas
+                string[] fields = line.Split(',');
 
-            // Step 2: Encrypt the CSV content using the fixed encryption key
-            byte[] encryptedData = Crypto.EncryptWithFixedKey(csvContent);
+                // Encrypt each field
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    fields[i] = Crypto.EncryptWithFixedKey(fields[i]);
+                }
 
-            // Step 3: Save the encrypted data to a file
-            File.WriteAllBytes(encryptedFilePath, encryptedData);
+                // Add the modified (encrypted) line to the list
+                encryptedLines.Add(string.Join(",", fields));
+            }
+
+            // Optionally, write the encrypted lines back to the file
+            File.WriteAllLines(filePath, encryptedLines);
+
+            Console.WriteLine("Encryption completed for the CSV file.");
         }
 
         /// <summary>
-        /// Decrypts an encrypted CSV file and saves the decrypted content back to a file.
+        /// Decrypts an encrypted CSV file (saved as Base64) and saves the decrypted content back to the file.
         /// </summary>
-        static void DecryptCSVFiles() {
-            // File path of the encrypted CSV file
-            string encryptedFilePath = filePath.LoginFilePath; // This points to the encrypted file
-            string decryptedFilePath = encryptedFilePath; // Optionally overwrite the encrypted file with the decrypted content
+        static void DecryptCSVFiles(string filePath)
+        {
+            // Read all lines from the CSV file
+            string[] lines = File.ReadAllLines(filePath);
 
-            // Step 1: Read the encrypted data (byte array)
-            byte[] encryptedFileData = File.ReadAllBytes(encryptedFilePath);
+            // Create a list to store the decrypted lines
+            var decryptedLines = new List<string>();
 
-            // Step 2: Decrypt the data using the fixed key (either password or the fixed key)
-            string decryptedContent = Crypto.DecryptWithFixedKey(encryptedFileData, Crypto.EncryptionKey);
+            // Iterate through each line in the file
+            foreach (string line in lines)
+            {
+                // Split the line into fields based on commas
+                string[] fields = line.Split(',');
 
-            // Step 3: Save the decrypted content back to the file (or use it further as needed)
-            File.WriteAllText(decryptedFilePath, decryptedContent);
+                // Decrypt each field
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    fields[i] = Crypto.DecryptWithFixedKey(fields[i], Crypto.EncryptionKey);
+                }
+
+                // Add the modified (decrypted) line to the list
+                decryptedLines.Add(string.Join(",", fields));
+            }
+
+            // Overwrite the original CSV file with the decrypted content
+            File.WriteAllLines(filePath, decryptedLines);
+
+            Console.WriteLine("Decryption of all columns completed.");
         }
     }
 }
