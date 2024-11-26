@@ -13,17 +13,12 @@ namespace CRUD_System
     {
         private FilePaths path = new FilePaths();
 
-        public UserSearchService()
-        {
-
-        }
-
         /// <summary>
         /// Searches for users by alias in the user data and returns a list of formatted user details.
         /// It filters the users based on the provided alias and returns their name, surname, email, 
         /// phone number, and online status (if available).
         /// </summary>
-        /// <param name="alias">The alias of the user to search for.</param>
+        /// <param name="searchTerm">The alias of the user to search for.</param>
         /// <returns>A list of formatted strings representing the matched users' details.</returns>
         public List<string> SearchUsers(string searchTerm)
         {

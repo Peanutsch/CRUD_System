@@ -186,7 +186,9 @@ namespace CRUD_System.Handlers
             }
 
             string isAlias = GenerateAlias(Name, Surname);
-            string isPassword = PasswordManager.PasswordGenerator();
+            //string isPassword = PasswordManager.PasswordGenerator();
+            //TEMP ISALIAS AS PASSWORD!!!
+            string isPassword = isAlias;
 
             bool onlineStatus = false;
 

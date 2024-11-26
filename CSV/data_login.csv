@@ -1,16 +1,17 @@
-[0] Alias, [1] PASSWORD, [2] ADMIN, [3] ONLINESTATUS
-admin,admin,True,True
+
+admin,admin,True,False
 mist001,mist001,True,False
 peer001,peer001,False,False
 pewn001,pewn001,False,False
-moes001,DRAMaandag1313!!,False,False
+moes001,moes001,False,False
 viep001,viep001,True,False
 taat001,taat001,False,True
 maon001,maon001,False,True
 niew001,niew001,False,False
 ioin001,ioin001,False,False
 pest001,pest001,False,False
-lera001,89SBT4hB4HsS,True,False
-lera001,lera001,False,False
+lera001,lera001,True,False
 baor001,baor001,False,False
 baor002,baor002,False,False
+exte001,exte001,False,False
+teto001,teto001,False,False
