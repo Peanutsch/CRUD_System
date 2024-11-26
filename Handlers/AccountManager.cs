@@ -31,7 +31,7 @@ namespace CRUD_System.Handlers
         /// </returns>
         public int FindUserIndexByAlias(List<string> userLines, List<string> loginLines, string alias)
         {
-            for (int index = 0; index < userLines.Count; index++)
+            for (int index = 1; index < userLines.Count; index++)
             {
                 var userDetails = userLines[index].Split(',');
                 var loginDetails = loginLines[index].Split(",");
