@@ -29,13 +29,8 @@ namespace CRUD_System.Handlers
         public static string? CurrentUser { get; set; }
 
         FilePaths path = new FilePaths();
-        ReadFiles readFiles = new ReadFiles();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-
-        // Change loginData to property
-        public List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> LoginData { get; private set; }
-
 
         public bool onlineStatus = false;
         #endregion PROPERTIES
@@ -43,8 +38,7 @@ namespace CRUD_System.Handlers
         #region CONSTRUCTOR
         public AuthenticationService()
         {
-            // Load login data into the property
-            LoginData = readFiles.GetLoginData();  
+
         }
         #endregion CONSTRUCTOR
 
@@ -58,7 +52,7 @@ namespace CRUD_System.Handlers
         public bool ValidateLogin(string inputUserName, string inputUserPassword)
         {
             // Find the user in the list where both username and password match
-            var user = LoginData.FirstOrDefault(u =>
+            var user = ReadFiles.LoginData.FirstOrDefault(u =>
                                                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
                                                 u.Password == inputUserPassword);
 
@@ -75,7 +69,7 @@ namespace CRUD_System.Handlers
         public bool IsAdmin(string inputUserName, string inputUserPassword)
         {
             // Find the user in the list where both username and password match
-            var user = LoginData.FirstOrDefault(u =>
+            var user = ReadFiles.LoginData.FirstOrDefault(u =>
                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
                 u.Password == inputUserPassword);
 
@@ -91,11 +85,11 @@ namespace CRUD_System.Handlers
         public bool ValidateOnlineStatus(string inputUserName, string inputUserPassword)
         {
             // Find the user in the list where both username and password match
-            var user = LoginData.FirstOrDefault(u =>
+            var user = ReadFiles.LoginData.FirstOrDefault(u =>
                 u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
                 u.Password == inputUserPassword);
 
-            return user != default && user.onlineStatus;
+            return user != default && user.OnlineStatus;
         }
         #endregion LOGIN VALIDATION
 
@@ -109,7 +103,6 @@ namespace CRUD_System.Handlers
         public void UpdateUserOnlineStatus(string alias, bool onlineStatus)
         {
             AccountManager accountManager = new AccountManager();
-            
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
             // Find user index
@@ -124,8 +117,6 @@ namespace CRUD_System.Handlers
             var loginDetails = loginLines[accountIndex].Split(",");
             var userDetails = userLines[accountIndex].Split(",");
 
-            //loginLines[accountIndex] = $"{loginDetails[0]},{loginDetails[1]},{loginDetails[2]},{onlineStatus}";
-            //userLines[accountIndex] = $"{userDetails[0]},{userDetails[1]},{userDetails[2]},{userDetails[3]},{userDetails[4]},{userDetails[5]},{userDetails[6]},{userDetails[7]},{onlineStatus}";
 
             // Update online status in data_login.csv using string.Join
             loginDetails[3] = onlineStatus.ToString(); // Update only the onlineStatus field
@@ -210,7 +201,6 @@ namespace CRUD_System.Handlers
                 usersForm.ShowDialog();
             }
             // Encrypt data_login.csv file after a successful login
-            //string loginFilePath = path.LoginFilePath;
             EncryptionManager.EncryptFile(path.LoginFilePath); // Directly call the static method
         }
 

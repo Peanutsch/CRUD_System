@@ -1,6 +1,8 @@
+using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CRUD_System
@@ -14,6 +16,7 @@ namespace CRUD_System
     {
         #region PROPERTIES
         AuthenticationService loginHandler = new AuthenticationService();
+        FilePaths path = new FilePaths();
 
         private bool isPasswordVisible = false;
         #endregion PROPERTIES

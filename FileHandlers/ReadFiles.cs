@@ -2,164 +2,161 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRUD_System.FileHandlers
 {
+    /// <summary>
+    /// Handles file reading operations for login and user data, including decrypting encrypted CSV files.
+    /// Provides methods to retrieve login details and user details.
+    /// </summary>
     internal class ReadFiles
     {
+        // Cached list of login data loaded from a CSV file.
+        private static List<(string Username, string Password, bool IsAdmin, bool OnlineStatus)> loginData = new List<(string Username, string Password, bool IsAdmin, bool OnlineStatus)>();
+        private static List<(string Name, string Surname, string Address, string ZipCode, string City, string EmailAddress)>? userDataCache = null;
+
+        private static FilePaths path = new FilePaths();
+
         /// <summary>
-        /// Controleert of een string Base64-gecodeerd is.
+        /// Gets the list of login data. If the data is not yet loaded, it decrypts the file and loads it.
         /// </summary>
-        /// <param name="input">De string die gecontroleerd moet worden.</param>
-        /// <returns>True als de string Base64-gecodeerd is, anders False.</returns>
+        public static List<(string Username, string Password, bool IsAdmin, bool OnlineStatus)> LoginData
+        {
+            get
+            {
+                if (loginData.Count == 0)
+                {
+                    EncryptionManager.DecryptFile(path.LoginFilePath);
+                    loginData = LoadLoginData();
+                }
+                return loginData;
+            }
+        }
+
+        /// <summary>
+        /// Gets the cached user data. If the data is not yet loaded, it reads and processes the file.
+        /// </summary>
+        public static List<(string Name, string Surname, string Address, string ZipCode, string City, string EmailAddress)> UserData
+        {
+            get
+            {
+                if (userDataCache == null)
+                {
+                    EncryptionManager.DecryptFile(path.UserFilePath);
+                    userDataCache = LoadUserData();
+                }
+                return userDataCache;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether a given string is a valid Base64-encoded string.
+        /// </summary>
+        /// <param name="input">The string to validate.</param>
+        /// <returns>True if the string is Base64-encoded; otherwise, False.</returns>
         public static bool IsBase64(string input)
         {
-            // Probeer de string te decoderen
-            try
-            {
-                Convert.FromBase64String(input);
-                return true; // Het is een geldige Base64-string
-            }
-            catch
-            {
-                return false; // Fout betekent dat het geen geldige Base64 is
-            }
+            // Check if the input is null, empty, or whitespace, 
+            // or if its length is not a multiple of 4 (a requirement for Base64 encoding).
+            if (string.IsNullOrWhiteSpace(input) || input.Length % 4 != 0)
+                return false;
+
+            // Use a regular expression to verify that the string matches the Base64 character set
+            // (alphanumeric characters, '+', '/', and optional '=' padding at the end).
+            return System.Text.RegularExpressions.Regex.IsMatch(input, @"^[a-zA-Z0-9\+/]*={0,2}$");
         }
 
+
         /// <summary>
-        /// Retrieves login data from a CSV file and returns it as a list of tuples
-        /// containing the username, password, and admin status.
+        /// Reads login data from a CSV file and returns it as a list of tuples.
         /// </summary>
         /// <returns>
-        /// A list of tuples where each tuple consists of:
-        /// - Username (string): The user's username
-        /// - Password (string): The user's password
-        /// - IsAdmin (bool): A flag indicating whether the user is an admin (true) or not (false)
-        /// - statusOnline (bool): A flag indicating whether the user is online (true) or not (false)
+        /// A list of tuples where each tuple contains:
+        /// - Username: The user's username.
+        /// - Password: The user's password (decoded if Base64-encoded).
+        /// - IsAdmin: Indicates whether the user is an admin (true) or not (false).
+        /// - OnlineStatus: Indicates whether the user is currently online (true) or not (false).
         /// </returns>
-        /// <remarks>
-        /// The CSV file is expected to have each row in the following format:
-        /// Username, Password, IsAdmin, onlineStatus
-        /// </remarks>
-        public List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> GetLoginData()
+        private static List<(string Username, string Password, bool IsAdmin, bool OnlineStatus)> LoadLoginData()
         {
-            // Construct the full path to the CSV file
-            string file = Path.Combine(RootPath.GetRootPath(), @"CSV\data_login.csv");
+            // Read all lines from the CSV file
+            var loginLines = File.ReadAllLines(path.LoginFilePath);
+            var userList = new List<(string Username, string Password, bool IsAdmin, bool OnlineStatus)>();
 
-            // Check if the file exists; if not, log an error and return an empty list
-            if (!File.Exists(file))
+            foreach (var line in loginLines.Skip(1)) // Skip the header line
             {
-                Debug.WriteLine($"Error! No such file with path {file}\nRootPath = {RootPath.GetRootPath()}");
-                return new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
-            }
+                var parts = line.Split(',');
 
-            /*
-            // Read the first line of the file to check if it seems Base64 encoded
-            string? firstLine = File.ReadLines(file).FirstOrDefault();
-
-            // Check if the first line is Base64 encoded
-            if (firstLine != null && !IsBase64(firstLine))
-            {
-                // Decrypt the file before reading its contents
-                EncryptionManager.DecryptFile(file);
-            }
-            */
-
-            // List to store the login data from the CSV
-            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = new List<(string Username, string Password, bool IsAdmin, bool onlineStatus)>();
-
-            // Read the CSV file line by line
-            using (StreamReader reader = new StreamReader(file))
-            {
-                // Skip the header line
-                string headerLine = reader.ReadLine()!;
-
-                string line;
-                while ((line = reader.ReadLine()!) != null)
+                // Check if the password is Base64-encoded
+                string password = parts[1];
+                if (IsBase64(password))
                 {
-                    // Split the line by commas to extract the username, password, and admin status
-                    string[] values = line.Split(',');
-
-                    // Ensure the line has exactly 4 elements before proceeding
-                    if (values.Length == 4)
+                    try
                     {
-                        string username = values[0].Trim(); // Alias
-                        string password = values[1].Trim(); // Password
-                        bool isAdmin = bool.Parse(values[2].Trim()); // True or False IsAdmin
-                        bool onlineStatus = bool.Parse(values[3].Trim());
-
-                        // Add the extracted data to the loginData list
-                        loginData.Add((username, password, isAdmin, onlineStatus));
+                        // Decode the Base64 password
+                        byte[] passwordBytes = Convert.FromBase64String(password);
+                        password = System.Text.Encoding.UTF8.GetString(passwordBytes);
+                    }
+                    catch
+                    {
+                        // Log an error or handle it appropriately
+                        Console.WriteLine($"Failed to decode Base64 password for user {parts[0]}.");
                     }
                 }
+
+                // Parse admin and online status values
+                bool isAdmin = Convert.ToBoolean(parts[2]);
+                bool onlineStatus = Convert.ToBoolean(parts[3]);
+
+                // Add the user to the list
+                userList.Add((parts[0], password, isAdmin, onlineStatus));
             }
-            // Encrypt data_login.csv
-            //EncryptionManager.EncryptFile(file);
-            // Return the populated list of login data
-            return loginData;
+
+            return userList;
         }
+
 
         /// <summary>
-        /// Retrieves user data from a CSV file and returns it as a list of tuples
-        /// containing the name, surname, address, zip code, city, and email address.
+        /// Reads user data from a CSV file, decodes Base64-encoded fields (if any), and loads it into memory.
         /// </summary>
         /// <returns>
-        /// A list of tuples where each tuple consists of:
-        /// - Name (string): The user's name
-        /// - Surname (string): The user's surname
-        /// - Address (string): The user's address
-        /// - ZipCode (string): The user's zip code
-        /// - City (string): The user's city
-        /// - EmailAddress (string): The user's email address
+        /// A list of tuples where each tuple contains:
+        /// - Name: The user's first name.
+        /// - Surname: The user's surname.
+        /// - Address: The user's address.
+        /// - ZipCode: The user's postal code.
+        /// - City: The user's city of residence.
+        /// - EmailAddress: The user's email address.
         /// </returns>
-        /// <remarks>
-        /// The CSV file is expected to have each row in the following format:
-        /// Name, Surname, Address, ZipCode, City, EmailAddress
-        /// </remarks>
-        public List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> GetUserData()
+        private static List<(string Name, string Surname, string Address, string ZipCode, string City, string EmailAddress)> LoadUserData()
         {
-            // Construct the full path to the CSV file
-            string file = Path.Combine(RootPath.GetRootPath(), @"CSV\data_users.csv");
-            Debug.WriteLine($"RootPath data_users.csv: {RootPath.GetRootPath()}");
+            var userLines = File.ReadAllLines(path.UserFilePath);
+            var userList = new List<(string Name, string Surname, string Address, string ZipCode, string City, string EmailAddress)>();
 
-            // Check if the file exists; if not, log an error and return an empty list
-            if (!File.Exists(file))
+            foreach (var line in userLines.Skip(1)) // Skip the header line
             {
-                Debug.WriteLine($"Error! No such file with path {file}");
-                return new List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)>();
+                var parts = line.Split(',');
+
+                // If the input is valid Base64, it decodes the string using UTF-8 encoding. Otherwise, it returns the input as-is without decoding.
+                string DecodeIfBase64(string input) =>
+                    IsBase64(input) // Check if the input string is Base64-encoded
+                        ? System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(input)) // If true, decode the Base64 string and convert it to UTF-8 text
+                        : input;  // If not Base64, return the original input string unchanged
+
+                // Process each field, checking for Base64 encoding
+                string name = string.IsNullOrWhiteSpace(parts[0]) ? "None" : DecodeIfBase64(parts[0].Trim());
+                string surname = string.IsNullOrWhiteSpace(parts[1]) ? "None" : DecodeIfBase64(parts[1].Trim());
+                string address = string.IsNullOrWhiteSpace(parts[2]) ? "None" : DecodeIfBase64(parts[2].Trim());
+                string zipCode = string.IsNullOrWhiteSpace(parts[3]) ? "None" : DecodeIfBase64(parts[3].Trim());
+                string city = string.IsNullOrWhiteSpace(parts[4]) ? "None" : DecodeIfBase64(parts[4].Trim());
+                string emailAddress = string.IsNullOrWhiteSpace(parts[5]) ? "None" : DecodeIfBase64(parts[5].Trim());
+
+                // Add the decoded fields to the user list
+                userList.Add((name, surname, address, zipCode, city, emailAddress));
             }
 
-            // Decrypt the file before reading its contents
-            EncryptionManager.DecryptFile(file);
-
-            List<(string Name, string Surname, string Address, string ZipCode, string City, string Emailadress)> users =
-                new List<(string, string, string, string, string, string)>();
-
-            using (var reader = new StreamReader(file))
-            {
-                string headerLine = reader.ReadLine()!; // Read and ignore the header line
-
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine();
-                    var values = line!.Split(',');
-
-                    // Assign "None" to any missing or empty value
-                    string name = string.IsNullOrWhiteSpace(values[0]) ? "None" : values[0].Trim();
-                    string surname = string.IsNullOrWhiteSpace(values[1]) ? "None" : values[1].Trim();
-                    string address = string.IsNullOrWhiteSpace(values[2]) ? "None" : values[2].Trim();
-                    string zipCode = string.IsNullOrWhiteSpace(values[3]) ? "None" : values[3].Trim();
-                    string city = string.IsNullOrWhiteSpace(values[4]) ? "None" : values[4].Trim();
-                    string emailAddress = string.IsNullOrWhiteSpace(values[5]) ? "None" : values[5].Trim();
-
-                    // Add the user data as a tuple to the list
-                    users.Add((name, surname, address, zipCode, city, emailAddress));
-                }
-            }
-            return users;
+            return userList;
         }
+
     }
 }
