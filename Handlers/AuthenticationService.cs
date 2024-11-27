@@ -110,7 +110,6 @@ namespace CRUD_System.Handlers
 
             if (accountIndex == -1)
             {
-                message.MessageUserNotFound(alias);
                 return;
             }
 
