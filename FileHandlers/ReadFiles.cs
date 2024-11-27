@@ -40,7 +40,7 @@ namespace CRUD_System.FileHandlers
         {
             get
             {
-                if (userDataCache == null)
+                if (userDataCache == null || userDataCache.Count == 0)
                 {
                     EncryptionManager.DecryptFile(path.UserFilePath);
                     userDataCache = LoadUserData();
@@ -48,24 +48,6 @@ namespace CRUD_System.FileHandlers
                 return userDataCache;
             }
         }
-
-        /// <summary>
-        /// Determines whether a given string is a valid Base64-encoded string.
-        /// </summary>
-        /// <param name="input">The string to validate.</param>
-        /// <returns>True if the string is Base64-encoded; otherwise, False.</returns>
-        public static bool IsBase64(string input)
-        {
-            // Check if the input is null, empty, or whitespace, 
-            // or if its length is not a multiple of 4 (a requirement for Base64 encoding).
-            if (string.IsNullOrWhiteSpace(input) || input.Length % 4 != 0)
-                return false;
-
-            // Use a regular expression to verify that the string matches the Base64 character set
-            // (alphanumeric characters, '+', '/', and optional '=' padding at the end).
-            return System.Text.RegularExpressions.Regex.IsMatch(input, @"^[a-zA-Z0-9\+/]*={0,2}$");
-        }
-
 
         /// <summary>
         /// Reads login data from a CSV file and returns it as a list of tuples.
@@ -115,6 +97,22 @@ namespace CRUD_System.FileHandlers
             return userList;
         }
 
+        /// <summary>
+        /// Determines whether a given string is a valid Base64-encoded string.
+        /// </summary>
+        /// <param name="input">The string to validate.</param>
+        /// <returns>True if the string is Base64-encoded; otherwise, False.</returns>
+        public static bool IsBase64(string input)
+        {
+            // Check if the input is null, empty, or whitespace, 
+            // or if its length is not a multiple of 4 (a requirement for Base64 encoding).
+            if (string.IsNullOrWhiteSpace(input) || input.Length % 4 != 0)
+                return false;
+
+            // Use a regular expression to verify that the string matches the Base64 character set
+            // (alphanumeric characters, '+', '/', and optional '=' padding at the end).
+            return System.Text.RegularExpressions.Regex.IsMatch(input, @"^[a-zA-Z0-9\+/]*={0,2}$");
+        }
 
         /// <summary>
         /// Reads user data from a CSV file, decodes Base64-encoded fields (if any), and loads it into memory.

@@ -31,17 +31,16 @@ namespace CRUD_System.Handlers
         /// </returns>
         public int FindUserIndexByAlias(List<string> userLines, List<string> loginLines, string alias)
         {
-            for (int index = 0; index < userLines.Count; index++)
+            for (int index = 1; index < loginLines.Count; index++)
             {
-                var userDetails = userLines[index].Split(',');
                 var loginDetails = loginLines[index].Split(",");
-                //if (userDetails[2].Trim() == alias.Trim() && loginDetails[0].Trim() == alias.Trim())
-                if (loginDetails[0] == alias)
+
+                if (loginDetails[0].Trim() == alias.Trim())
                 {
                     return index;
                 }
             }
-            // Alias not found
+
             message.MessageUserNotFound(alias);
             return -1;
         }
