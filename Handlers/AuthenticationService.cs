@@ -189,18 +189,26 @@ namespace CRUD_System.Handlers
             bool isAdmin = IsAdmin(inputUserName, inputUserPassword);
             if (isAdmin) // Send to admin interface
             {
+                MessageBox.Show("Directing to Admin dashboard");
+
+                // Encrypt data_login.csv file after a successful login
+                EncryptionManager.EncryptFile(path.LoginFilePath); // Encrypt data_login.csv
+
                 AdminMainForm adminForm = new AdminMainForm();
                 DisplayUserAlias(adminForm, isAdmin);
                 adminForm.ShowDialog();
             }
             else // Send to user interface
             {
+                MessageBox.Show("Directing to User dashboard");
+
+                // Encrypt data_login.csv file after a successful login
+                EncryptionManager.EncryptFile(path.LoginFilePath); // Encrypt data_login.csv
+
                 UserMainForm usersForm = new UserMainForm();
                 DisplayUserAlias(usersForm, isAdmin);
                 usersForm.ShowDialog();
             }
-            // Encrypt data_login.csv file after a successful login
-            EncryptionManager.EncryptFile(path.LoginFilePath); // Directly call the static method
         }
 
         /// <summary>
@@ -229,27 +237,18 @@ namespace CRUD_System.Handlers
         #endregion LOGIN
 
         #region LOGOUT
-        public void ForceLogOut(string aliasToLogOut)
-        {
-            AdminMainControl adminControl = new AdminMainControl();
-            AdminInterface adminInterface = new AdminInterface();
-            AccountManager accountManager = new AccountManager();
-
-            // Pass selectedAlias to SetForceLogOutUserBtn
-            adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
-
-            // Set user as offline
-            UpdateUserOnlineStatus(aliasToLogOut, false);
-            // Force log out user
-            this.PerformForcedLogOutByAdmin(aliasToLogOut);
-        }
-
         /// <summary>
         /// Logs out the current user by updating their online status to offline,
         /// logging the logout event, and clearing the current user.
         /// </summary>
         public void PerformLogout()
         {
+            MessageBox.Show("PerformLogOut()");
+
+            // Encrypt data_users.csv and data_login.csv
+            EncryptionManager.DecryptFile(path.UserFilePath);
+            EncryptionManager.DecryptFile(path.LoginFilePath);
+            
             var currentUser = CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
@@ -258,21 +257,54 @@ namespace CRUD_System.Handlers
                 UpdateUserOnlineStatus(currentUser, false);
                 CurrentUser = null;
             }
+            EncryptionManager.EncryptFile(path.UserFilePath);
+            EncryptionManager.EncryptFile(path.LoginFilePath);
         }
 
         /// <summary>
-        /// Forces a user to log out by an admin, logging the forced logout event
-        /// and hiding the user's main form if active.
+        /// Forces a user to log out by an admin, updating their online status,
+        /// triggering logout actions, and logging the forced logout event.
         /// </summary>
-        /// <param name="aliasToLogOut">The alias of the user to be logged out by admin.</param>
+        /// <param name="aliasToLogOut">The alias of the user to be logged out.</param>
+        public void ForceLogOut(string aliasToLogOut)
+        {
+            MessageBox.Show("ForceLogOut()");
+
+            AdminMainControl adminControl = new AdminMainControl();
+            AdminInterface adminInterface = new AdminInterface();
+            AccountManager accountManager = new AccountManager();
+
+            // Pass the selected alias to SetForceLogOutUserBtn in AdminInterface
+            adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
+
+            // Update the user's online status to offline
+            UpdateUserOnlineStatus(aliasToLogOut, false);
+
+            // Perform the forced logout for the user
+            PerformForcedLogOutByAdmin(aliasToLogOut);
+        }
+
+        /// <summary>
+        /// Performs the forced logout action for a user by an admin.
+        /// Logs the forced logout event and hides the user's main form if active.
+        /// </summary>
+        /// <param name="aliasToLogOut">The alias of the user being logged out by the admin.</param>
         public void PerformForcedLogOutByAdmin(string aliasToLogOut)
         {
+            MessageBox.Show("PerformForcedLogOutByAdmin()");
             UserMainForm userForm = new UserMainForm();
             var admin = CurrentUser;
 
             if (!string.IsNullOrEmpty(admin))
             {
+
+                EncryptionManager.EncryptFile(path.UserFilePath);
+                EncryptionManager.EncryptFile(path.LoginFilePath);
+
+                // Log the forced logout event
                 logEvents.ForceUserLogOut(admin, aliasToLogOut);
+
+                // Hide the user's form if active
                 userForm.Hide();
             }
         }

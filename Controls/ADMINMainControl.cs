@@ -55,6 +55,7 @@ namespace CRUD_System
             this.adminInterface = adminInterface ?? new AdminInterface(this);
 
             // Load data_users.csv for display in listbox
+            //EncryptionManager.DecryptFile(path.UserFilePath);
             this.adminInterface.LoadDetailsListBox();
         }
         #endregion CONSTRUCTOR

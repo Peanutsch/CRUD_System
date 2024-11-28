@@ -41,6 +41,10 @@ namespace CRUD_System.Interfaces
         /// </summary>>
         public void LoadDetailsListBox()
         {
+            // data_users.csv is already decrypted in ADMINMainControl Constructor
+            // Decrypt data_users.csv
+            EncryptionManager.DecryptFile(path.UserFilePath);
+
             var lines = File.ReadAllLines(path.UserFilePath);
             adminControl.listBoxAdmin.Items.Clear();
 
@@ -61,6 +65,9 @@ namespace CRUD_System.Interfaces
                 string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
                 adminControl.listBoxAdmin.Items.Add(listItem);
             }
+            
+            // Encrypt data_users.csv
+            EncryptionManager.EncryptFile(path.UserFilePath);
         }
 
         /// <summary>
@@ -103,6 +110,9 @@ namespace CRUD_System.Interfaces
         /// <param name="userIndex">The index of the updated user.</param>
         public void ReloadListBoxAdmin(int userIndex)
         {
+            // Decrypt data_users.csv
+            EncryptionManager.DecryptFile(path.UserFilePath);
+
             if (userIndex >= 0 && userIndex < adminControl.listBoxAdmin.Items.Count)
             {
                 adminControl.Refresh();
@@ -114,6 +124,9 @@ namespace CRUD_System.Interfaces
 
             // Reset editMode to false after saving and reload interface
             InterfaceEditModeAdmin();
+
+            // Encrypt data_users.csv
+            EncryptionManager.EncryptFile(path.UserFilePath);
         }
 
         /// <summary>
@@ -162,7 +175,13 @@ namespace CRUD_System.Interfaces
         /// <param name="selectedAlias">The alias of the selected user to be validated.</param>
         public void HandleSelectedUserStatus(string selectedAlias)
         {
+            MessageBox.Show("HandleSelectedUserStatus()");
+
+            // Decrypt data_login.csv
+            //EncryptionManager.DecryptFile(path.LoginFilePath);
+
             var currentUser = AuthenticationService.CurrentUser;
+            
             // Read the lines from data_login.csv
             var loginLines = File.ReadAllLines(path.LoginFilePath).Skip(2); // Skip the headers
             var loginDetailsList = loginLines.Select(line => line.Split(',')); // Split each line into details
@@ -274,6 +293,11 @@ namespace CRUD_System.Interfaces
         /// <param name="selectedAlias">The alias of the selected user to check online status.</param>
         public void SetForceLogOutUserBtn(string selectedAlias)
         {
+            MessageBox.Show("SetForceLogOutUserBtn()");
+
+            // Decrypt data_users.csv
+            //EncryptionManager.DecryptFile(path.UserFilePath);
+
             bool isOnline = File.ReadLines(path.UserFilePath)
                                 .Skip(2) // Skip header
                                 .Select(line => line.Split(','))

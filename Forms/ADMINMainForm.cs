@@ -41,19 +41,14 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            LogOutButton();
+            // Trigger FormClosing event
+            this.Close();
         }
         #endregion BUTTONS
 
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
             loginHandler.PerformLogout();
-        }
-
-        public void LogOutButton()
-        {
-            loginHandler.PerformLogout();
-            this.Hide();
         }
     }
 }
