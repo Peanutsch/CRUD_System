@@ -18,7 +18,7 @@ namespace CRUD_System
     {
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"CSV\log.csv");
 
-        AuthenticationService loginHandler = new AuthenticationService();
+        AuthenticationService authService = new AuthenticationService();
 
         public AdminMainForm()
         {
@@ -44,11 +44,16 @@ namespace CRUD_System
             // Trigger FormClosing event
             this.Close();
         }
-        #endregion BUTTONS
 
+        /// <summary>
+        /// Handles the form closing event for the MainFormADMIN. 
+        /// This method ensures that the user is logged out, their online status is updated, 
+        /// and the current user session is cleared when the form is being closed.
+        /// </summary>
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
-            loginHandler.PerformLogout();
+            authService.PerformLogout();
         }
+        #endregion BUTTONS
     }
 }

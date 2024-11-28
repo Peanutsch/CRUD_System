@@ -18,10 +18,12 @@ namespace CRUD_System.Interfaces
     public class AdminInterface
     {
         #region PROPERTIES
-
         public bool EditMode { get; set; }
+        private List<string[]> CachedUserData => cache.CachedUserData;
+        private List<string[]> CachedLoginData => cache.CachedLoginData;
 
-        readonly FilePaths path = new FilePaths();
+        //readonly FilePaths path = new FilePaths();
+        readonly DataCache cache = new DataCache();
         private readonly AdminMainControl adminControl;
         #endregion PROPERTIES
 
@@ -29,6 +31,9 @@ namespace CRUD_System.Interfaces
         public AdminInterface(AdminMainControl? adminControl = null)
         {
             this.adminControl = adminControl ?? new AdminMainControl();
+
+            // Initialize cache
+            //LoadCacheData();
         }
         #endregion CONSTRUCTOR
 
@@ -41,33 +46,29 @@ namespace CRUD_System.Interfaces
         /// </summary>>
         public void LoadDetailsListBox()
         {
-            // data_users.csv is already decrypted in ADMINMainControl Constructor
-            // Decrypt data_users.csv
-            EncryptionManager.DecryptFile(path.UserFilePath);
+            cache.LoadDecryptedData();
+            // Check if the cached user data is empty or not loaded
+            if (cache.CachedUserData == null || !cache.CachedUserData.Any())
+            {
+                MessageBox.Show("\nLoadDetailsListBox> CachedUserData is empty or not loaded!"); // Show error if cache is empty
+                return;
+            }
 
-            var lines = File.ReadAllLines(path.UserFilePath);
             adminControl.listBoxAdmin.Items.Clear();
 
-            foreach (var line in lines.Skip(2)) // Skip first 2 lines
+            foreach (var userDetailsArray in CachedUserData.Skip(1)) // Skip header
             {
-                var userDetailsArray = line.Split(',');
+                // Selection of items to display n ListBoxAdmin
                 string name = userDetailsArray[0];
                 string surname = userDetailsArray[1];
                 string alias = userDetailsArray[2];
-                string address = userDetailsArray[3];
-                string zipcode = userDetailsArray[4];
-                string city = userDetailsArray[5];
                 string email = userDetailsArray[6];
                 string phonenumber = userDetailsArray[7];
                 string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
 
-                // Directly format list item
                 string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
                 adminControl.listBoxAdmin.Items.Add(listItem);
             }
-            
-            // Encrypt data_users.csv
-            EncryptionManager.EncryptFile(path.UserFilePath);
         }
 
         /// <summary>
@@ -110,23 +111,46 @@ namespace CRUD_System.Interfaces
         /// <param name="userIndex">The index of the updated user.</param>
         public void ReloadListBoxAdmin(int userIndex)
         {
-            // Decrypt data_users.csv
-            EncryptionManager.DecryptFile(path.UserFilePath);
+            // Refresh the cache
+            cache.LoadDecryptedData();
 
+            // Check if the cached user data is empty or not loaded
+            if (cache.CachedUserData == null || !cache.CachedUserData.Any())
+            {
+                MessageBox.Show("\nReloadListBoxAdmin>\nCachedUserData is empty or not loaded!"); // Show error if cache is empty
+                return;
+            }
+
+            // Refresh only if a valid index is selected
             if (userIndex >= 0 && userIndex < adminControl.listBoxAdmin.Items.Count)
             {
                 adminControl.Refresh();
             }
 
-            // Clear and reload listbox
+            // Clear the ListBox
             adminControl.listBoxAdmin.Items.Clear();
-            LoadDetailsListBox();
 
-            // Reset editMode to false after saving and reload interface
-            InterfaceEditModeAdmin();
+            // Iterate through the cache and add items to the ListBox
+            foreach (var userDetailsArray in cache.CachedUserData.Skip(1)) // Skip headers
+            {
+                if (userDetailsArray.Length >= 8) // Ensure there are enough fields
+                {
+                    string name = userDetailsArray[0];
+                    string surname = userDetailsArray[1];
+                    string alias = userDetailsArray[2];
+                    string email = userDetailsArray[6];
+                    string phonenumber = userDetailsArray[7];
+                    string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
 
-            // Encrypt data_users.csv
-            EncryptionManager.EncryptFile(path.UserFilePath);
+                    // Format and add the item to the ListBox
+                    string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
+                    adminControl.listBoxAdmin.Items.Add(listItem);
+                }
+                else
+                {
+                    Console.WriteLine("Insufficient fields in a user record.");
+                }
+            }
         }
 
         /// <summary>
@@ -135,6 +159,13 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
+            // Check if the cached user data is empty or not loaded
+            if (cache.CachedLoginData == null || !cache.CachedLoginData.Any())
+            {
+                MessageBox.Show("\nListBoxAdmin_SelectedIndexChangedHandler>\nCachedUserData is empty or not loaded!"); // Show error if cache is empty
+                return;
+            }
+
             var currentUser = AuthenticationService.CurrentUser;
 
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
@@ -153,11 +184,10 @@ namespace CRUD_System.Interfaces
                     adminControl.btnForceLogOutUser.Visible = false;
                 }
 
-                // Read user details
-                var userDetailsArray = File.ReadAllLines(path.UserFilePath)
-                                           .Skip(2)
-                                           .Select(line => line.Split(','))
-                                           .FirstOrDefault(details => details[2] == selectedAlias);
+                // Retrieve user details from the cache
+                var userDetailsArray = cache.CachedUserData
+                                       .Skip(1) // Skip header row
+                                       .FirstOrDefault(details => details[2] == selectedAlias);
 
                 if (userDetailsArray != null)
                 {
@@ -175,43 +205,36 @@ namespace CRUD_System.Interfaces
         /// <param name="selectedAlias">The alias of the selected user to be validated.</param>
         public void HandleSelectedUserStatus(string selectedAlias)
         {
-            MessageBox.Show("HandleSelectedUserStatus()");
+            // Check if the cached login data is empty or not loaded
+            if (cache.CachedLoginData == null || !cache.CachedLoginData.Any())
+            {
+                MessageBox.Show("\nHandleSelectedUserStatus>\nCachedLoginData is empty or not loaded!"); // Show error if cache is empty
+                return;
+            }
 
-            // Decrypt data_login.csv
-            //EncryptionManager.DecryptFile(path.LoginFilePath);
+            // Retrieve login details from the cache
+            var loginDetails = cache.CachedLoginData
+                               .FirstOrDefault(details => details[0] == selectedAlias); // Match alias in login data
 
-            var currentUser = AuthenticationService.CurrentUser;
-            
-            // Read the lines from data_login.csv
-            var loginLines = File.ReadAllLines(path.LoginFilePath).Skip(2); // Skip the headers
-            var loginDetailsList = loginLines.Select(line => line.Split(',')); // Split each line into details
-            var loginDetails = loginDetailsList.FirstOrDefault(details => details[0] == selectedAlias); // Find the login details for the selected alias
-
-            // Check if loginDetails is not null
             if (loginDetails != null)
             {
-                // Check if the admin status is true
-                if (loginDetails[2] == "True") // Use '==' for comparison
-                {
-                    // Show the admin label
-                    adminControl.txtAdmin.Visible = true;
-                    adminControl.chkIsAdmin.Checked = true; // checkbox chkAdmin checked
-                }
-                else
-                {
-                    // Hide the admin label if not an admin
-                    adminControl.txtAdmin.Visible = false;
-                    adminControl.chkIsAdmin.Checked = false; // checkbox chkAdmin unchecked
-                }
+                // Update admin-related fields based on login details
+                adminControl.txtAdmin.Visible = loginDetails[2] == "True"; // IsAdmin field
+                adminControl.chkIsAdmin.Checked = loginDetails[2] == "True";
 
-                // Check if the user is online and enable the logout button
-                if (currentUser != selectedAlias)
-                    SetForceLogOutUserBtn(selectedAlias); // Pass selectedAlias to check if the user is online
+                // Enable Force Log Out button if the selected user is not the current user
+                if (AuthenticationService.CurrentUser != selectedAlias)
+                {
+                    // Reload the cache to ensure it's up to date before checking online status
+                    // LoadCacheData();
+
+                    // Update the state of the Force Log Out button based on the selected user's online status
+                    SetForceLogOutUserBtn(selectedAlias);
+                }
             }
             else
             {
-                // Handle the case where loginDetails is null (optional)
-                adminControl.txtAdmin.Visible = false; // Hide the textbox if no details found
+                adminControl.txtAdmin.Visible = false; // Hide admin-related fields if no login details are found
             }
         }
         #endregion LISTBOX ADMIN
@@ -290,24 +313,29 @@ namespace CRUD_System.Interfaces
         /// <summary>
         /// Sets the enabled state of the Force Log Out User button based on the user's online status.
         /// </summary>
-        /// <param name="selectedAlias">The alias of the selected user to check online status.</param>
-        public void SetForceLogOutUserBtn(string selectedAlias)
+        /// <param name="aliasToLogOut">The alias of the selected user to check online status.</param>
+        public void SetForceLogOutUserBtn(string aliasToLogOut)
         {
-            MessageBox.Show("SetForceLogOutUserBtn()");
+            // Check if the cache is empty, and reload data if necessary.
+            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            {
+                Debug.WriteLine("SetForceLogOutUserBtn: Cache is empty, reloading Cache.");
+                cache.LoadDecryptedData();
+            }
 
-            // Decrypt data_users.csv
-            //EncryptionManager.DecryptFile(path.UserFilePath);
+            // Determine if the selected user is online
+            bool isOnline = cache.CachedUserData
+                .Skip(1) // Skip the header row
+                .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == aliasToLogOut) // Match alias
+                .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online based on the 9th column
 
-            bool isOnline = File.ReadLines(path.UserFilePath)
-                                .Skip(2) // Skip header
-                                .Select(line => line.Split(','))
-                                .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == selectedAlias) // Match alias
-                                .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check online status
+            Debug.WriteLine($"Checking online status for {aliasToLogOut}: {isOnline}");
 
-            // Enable and show the button if the user is online and in edit mode
+            // Enable and display the "Force Log Out User" button if the user is online
             adminControl.btnForceLogOutUser.Enabled = isOnline;
             adminControl.btnForceLogOutUser.Visible = isOnline;
         }
+
         #endregion EDITMODE DISPLAY
 
         #region TEXTBOXES ADMIN

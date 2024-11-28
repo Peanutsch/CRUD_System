@@ -40,7 +40,6 @@ namespace CRUD_System.Handlers
                     return index;
                 }
             }
-
             message.MessageUserNotFound(alias);
             return -1;
         }

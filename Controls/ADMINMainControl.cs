@@ -117,18 +117,23 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                userProfileManager.DeleteUser(txtAlias.Text); // Perform delete action only if a user is selected
+                // Deleting user from files
+                userProfileManager.DeleteUser(txtAlias.Text);
 
-                listBoxAdmin.Items.Clear();
-                adminInterface.LoadDetailsListBox();
+                // Remove user from ListBoxAdmin
+                userProfileManager.RemoveUserFromListBoxAdmin(txtAlias.Text);
+                
+                // Empty TextBoxes and reload ListBox
                 adminInterface.EmptyTextBoxesAdmin();
+                adminInterface.LoadDetailsListBox();
 
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
                 adminInterface.InterfaceEditModeAdmin();
             },
-             () => message.MessageInvalidNoUserSelected());
+            () => message.MessageInvalidNoUserSelected()); // Handle no user selected case
         }
+
 
         /// <summary>
         /// Handles the click event to add a new user.
@@ -188,8 +193,9 @@ namespace CRUD_System
             AuthenticationService authenticationService = new AuthenticationService();
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                authenticationService.ForceLogOut(txtAlias.Text);
                 MessageBox.Show($"Pushing force logout account {txtAlias.Text}");
+                authenticationService.ForceLogOut(txtAlias.Text);
+                
                 // Reload listbox
                 listBoxAdmin.Items.Clear();
                 adminInterface.LoadDetailsListBox();

@@ -15,8 +15,8 @@ namespace CRUD_System
     public partial class LoginForm : Form
     {
         #region PROPERTIES
-        AuthenticationService loginHandler = new AuthenticationService();
-        FilePaths path = new FilePaths();
+        AuthenticationService authService = new AuthenticationService();
+        //FilePaths path = new FilePaths();
 
         private bool isPasswordVisible = false;
         #endregion PROPERTIES
@@ -92,7 +92,7 @@ namespace CRUD_System
 
                     this.Hide();
                     // Validate username and password, and display appropriate message
-                    loginHandler.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+                    authService.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
                     this.Close();
                 }
             };
@@ -107,7 +107,7 @@ namespace CRUD_System
         {
             this.Hide();
             // Validate username and password, and display appropriate message
-            loginHandler.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+            authService.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
             this.Close();
         }
 
