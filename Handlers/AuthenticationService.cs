@@ -214,6 +214,7 @@ namespace CRUD_System.Handlers
         /// <param name="inputUserPassword">The validated password.</param>
         private void ProcessSuccessfulLogin(string inputUserName, string inputUserPassword)
         {
+            MessageBox.Show("ProcessSuccessfulLogin");
             CurrentUser = inputUserName.ToLower();
 
             // Online Status = true
