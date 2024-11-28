@@ -11,6 +11,73 @@ namespace CRUD_System.FileHandlers
     /// </summary>
     internal class ReadFiles
     {
+        /*
+        // Use DataCache to access cached data.
+        private static DataCache dataCache = new DataCache();
+
+        /// <summary>
+        /// Gets the list of login data. If the data is not yet loaded, it loads the data from the cache.
+        /// </summary>
+        public static List<(string Username, string Password, bool IsAdmin, bool OnlineStatus)> LoginData
+        {
+            get
+            {
+                if (dataCache.CachedLoginData.Count == 0) // Check if login data is cached.
+                {
+                    // Load the login data from the DataCache (already decrypted and cached)
+                    dataCache.LoadDecryptedData();
+                }
+
+                return dataCache.CachedLoginData
+                    .Select(record => (record[0], record[1], bool.Parse(record[2]), bool.Parse(record[3])))
+                    .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets the cached user data. If the data is not yet loaded, it reads and processes the file.
+        /// </summary>
+        public static List<(string Name, string Surname, string Alias, string Address, string ZipCode, string City, string EmailAddress, string PhoneNumber, string OnlineStatus)> UserData
+        {
+            get
+            {
+                if (dataCache.CachedUserData.Count == 0) // Check if user data is cached.
+                {
+                    // Load the user data from the DataCache (already decrypted and cached)
+                    dataCache.LoadDecryptedData();
+                }
+
+                return dataCache.CachedUserData
+                    .Select(record => (
+                        record[0], // Name
+                        record[1], // Surname
+                        record[2], // Alias
+                        record[3], // Address
+                        record[4], // ZIPCode
+                        record[5], // City
+                        record[6], // Emailaddress
+                        record[7], // Phonenumber
+                        record[8]  // OnlineStatus
+                    ))
+                    .ToList();
+            }
+        }
+        */
+    }
+}
+
+
+
+
+
+
+    /*
+    /// <summary>
+    /// Handles file reading operations for login and user data, including decrypting encrypted CSV files.
+    /// Provides methods to retrieve login details and user details.
+    /// </summary>
+    internal class ReadFiles
+    {
         // Cached list of login data loaded from a CSV file.
         private static List<(string Username, string Password, bool IsAdmin, bool OnlineStatus)> loginData = new List<(string Username, string Password, bool IsAdmin, bool OnlineStatus)>();
         private static List<(string Name, string Surname, string Address, string ZipCode, string City, string EmailAddress)>? userDataCache = null;
@@ -26,7 +93,9 @@ namespace CRUD_System.FileHandlers
             {
                 if (loginData.Count == 0)
                 {
+
                     EncryptionManager.DecryptFile(path.LoginFilePath);
+
                     loginData = LoadLoginData();
                 }
                 return loginData;
@@ -155,6 +224,5 @@ namespace CRUD_System.FileHandlers
 
             return userList;
         }
-
     }
-}
+    */
