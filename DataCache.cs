@@ -93,17 +93,15 @@ public class DataCache
         // Read the decrypted user data file and split each line into fields (CSV format)
         // Skip the header and split by comma, caching all records into CachedUserData
         CachedUserData = File.ReadAllLines(userFilePath)
-            .Skip(1) // Skip the header row in the CSV
-            .Select(line => line.Split(",")) // Split each line into an array of fields
-            .ToList(); // Store all records in CachedUserData
+                             .Select(line => line.Split(",")) // Split each line into an array of fields
+                             .ToList(); // Store all records in CachedUserData
         Debug.WriteLine($"***\nDetails data_users.csv cached in CachedUserData: {CachedUserData.Count} items");
 
         // Read the decrypted login data file and split each line into fields (CSV format)
         // Skip the header and split by comma, caching all records into CachedLoginData
         CachedLoginData = File.ReadAllLines(loginFilePath)
-            .Skip(1) // Skip the header row in the CSV
-            .Select(line => line.Split(",")) // Split each line into an array of fields
-            .ToList(); // Store all records in CachedLoginData
+                              .Select(line => line.Split(",")) // Split each line into an array of fields
+                              .ToList(); // Store all records in CachedLoginData
         Debug.WriteLine($"Details data_login.csv cached in CachedLoginData: {CachedLoginData.Count} items\n***");
 
         // Encrypt the user and login data files again to ensure the data is secured after loading

@@ -24,6 +24,7 @@ namespace CRUD_System.Interfaces
 
         readonly AccountManager repository = new AccountManager();
         readonly ProfileManager profileManager = new ProfileManager();
+        private readonly DataCache cache = new DataCache();
         private readonly UserMainControl userControl;
         #endregion PROPERTIES
 
@@ -36,32 +37,65 @@ namespace CRUD_System.Interfaces
 
         #region LISTBOX USER
         /// <summary>
-        /// Loads user data from data_users.csv and populates the list box with user names.
+        /// Loads the current user's details into the list box using DataCache.
         /// </summary>
         public void LoadDetailsListBoxThisUser()
         {
-            // Read lines from data_users.csv and data_login.csv
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
+            // Ensure that the cache is loaded
+            cache.LoadDecryptedData();
 
+            // Convert cached user and login data arrays into lists of strings, skipping the header row
+            var userLines = cache.CachedUserData
+                                 .Select(arr => string.Join(",", arr))
+                                 .ToList();
+            var loginLines = cache.CachedLoginData
+                                  .Select(arr => string.Join(",", arr))
+                                  .ToList();
+
+            // Retrieve the currently logged-in user
             var currentUser = AuthenticationService.CurrentUser;
 
-            if (!string.IsNullOrEmpty(currentUser))
+            if (string.IsNullOrEmpty(currentUser))
             {
-                
-                var userIndex = repository.FindUserIndexByAlias(userLines, loginLines, currentUser);
-                var userDetailsArray = userLines[userIndex].Split(',');
-
-                string listItem = $"{userDetailsArray[0]} {userDetailsArray[1]} ({userDetailsArray[2]}) | {userDetailsArray[6]} | {userDetailsArray[7]}";
-
-                userControl.listBoxUser.Items.Add(listItem);
-            }
-            else
-            {
-                MessageBox.Show($"No user details found");
+                Debug.WriteLine("No user is currently logged in.");
+                return;
             }
 
-            userControl.listBoxUser.SelectedIndex = 0; // auto select user to fill textboxes
+            // Find the index of the current user in the cached user data (userLines has already skipped the header)
+            var userIndex = repository.FindUserIndexByAlias(userLines, loginLines, currentUser!);
+            if (userIndex < 0)
+            {
+                Debug.WriteLine($"LoadDetailsListBoxThisUser: User with alias '{currentUser}' not found in cache.");
+                return;
+            }
+
+            // Retrieve the user's details from the cache, without skipping any rows in CachedUserData
+            var userDetailsArray = cache.CachedUserData[userIndex];  // No Skip(1) here since we're using the correct index
+            string name = userDetailsArray[0];          // First name
+            string surname = userDetailsArray[1];      // Last name
+            string alias = userDetailsArray[2];        // Alias (username)
+            string email = userDetailsArray[6];        // Email address
+            string phonenumber = userDetailsArray[7];  // Phone number
+            string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty; // Online status
+
+            // Construct the item string to display in the list box
+            string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
+
+            // Clear existing items in the list box and add the current user's details
+            userControl.listBoxUser.Items.Clear();
+            userControl.listBoxUser.Items.Add(listItem);
+
+            // Automatically select the first (and only) item in the list box
+            //userControl.listBoxUser.SelectedIndex = 0;
+
+            // Fill the textboxes with the user's details
+            FillTextboxes(userDetailsArray);
         }
+
+
+
+
+
 
         /// <summary>
         /// Reloads the user interface after saving changes.

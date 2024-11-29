@@ -22,7 +22,6 @@ namespace CRUD_System.Interfaces
         private List<string[]> CachedUserData => cache.CachedUserData;
         private List<string[]> CachedLoginData => cache.CachedLoginData;
 
-        //readonly FilePaths path = new FilePaths();
         readonly DataCache cache = new DataCache();
         private readonly AdminMainControl adminControl;
         #endregion PROPERTIES
@@ -147,6 +146,9 @@ namespace CRUD_System.Interfaces
                     // Format and add the item to the ListBox
                     string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
                     adminControl.listBoxAdmin.Items.Add(listItem);
+
+                    // Empty textboxes
+                    EmptyTextBoxesAdmin();
                 }
                 else
                 {

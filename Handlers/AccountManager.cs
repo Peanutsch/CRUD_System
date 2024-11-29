@@ -45,9 +45,6 @@ namespace CRUD_System.Handlers
                 dataCache.LoadDecryptedData();
             }
 
-            // Cache contents to ensure it contains data
-            //MessageBox.Show($"CachedLoginLines Count: {DataCache.CachedLoginLines.Count}");
-
             // Search through the cached login data for the alias
             for (int index = 0; index < DataCache.CachedLoginLines?.Count; index++)
             {

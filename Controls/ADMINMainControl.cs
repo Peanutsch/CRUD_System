@@ -156,8 +156,6 @@ namespace CRUD_System
             // Reload listbox
             listBoxAdmin.Items.Clear();
             adminInterface.ReloadListBoxAdmin(userIndex);
-            // Empty Textboxes
-            adminInterface.EmptyTextBoxesAdmin();
         }
 
         /// <summary>
