@@ -57,7 +57,7 @@ namespace CRUD_System.Interfaces
 
             adminControl.listBoxAdmin.Items.Clear();
 
-            foreach (var userDetailsArray in CachedUserData.Skip(1)) // Skip header
+            foreach (var userDetailsArray in CachedUserData.Skip(2)) // Skip header
             {
                 // Selection of items to display n ListBoxAdmin
                 string name = userDetailsArray[0];

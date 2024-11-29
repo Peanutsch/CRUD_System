@@ -34,8 +34,6 @@ namespace CRUD_System.Handlers
             // Load cache
             DataCache.LoadCache();
 
-            Debug.WriteLine($"FindUserIndexByAlias> Looking for index for {alias}");
-
             // Check if cache is loaded correctly
             if (DataCache.CachedLoginLines == null || DataCache.CachedLoginLines.Count == 0)
             {
@@ -61,6 +59,7 @@ namespace CRUD_System.Handlers
                 // Compare the decrypted alias with the provided alias
                 if (decryptedAlias == alias.Trim())
                 {
+                    Debug.WriteLine($"FindUserIndexByAlias> Index of {alias}: {index}");
                     return index; // Return the index if found
                 }
             }

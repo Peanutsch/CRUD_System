@@ -86,7 +86,7 @@ namespace CRUD_System.Interfaces
             userControl.listBoxUser.Items.Add(listItem);
 
             // Automatically select the first (and only) item in the list box
-            //userControl.listBoxUser.SelectedIndex = 0;
+            userControl.listBoxUser.SelectedIndex = 0;
 
             // Fill the textboxes with the user's details
             FillTextboxes(userDetailsArray);

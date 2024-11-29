@@ -77,15 +77,6 @@ public class DataCache
     /// </summary>
     public void LoadDecryptedData()
     {
-        // If data has already been loaded, skip reloading and display a message
-        if (isDataLoaded)
-        {
-            /*
-            Debug.WriteLine("Data already loaded, skipping reload.");
-            return; // If data is already loaded, do nothing.
-            */
-        }
-
         // Decrypt user and login data files to prepare them for reading
         EncryptionManager.DecryptFile(userFilePath);
         EncryptionManager.DecryptFile(loginFilePath);
@@ -93,6 +84,7 @@ public class DataCache
         // Read the decrypted user data file and split each line into fields (CSV format)
         // Skip the header and split by comma, caching all records into CachedUserData
         CachedUserData = File.ReadAllLines(userFilePath)
+                             //.Skip(1)
                              .Select(line => line.Split(",")) // Split each line into an array of fields
                              .ToList(); // Store all records in CachedUserData
         Debug.WriteLine($"***\nDetails data_users.csv cached in CachedUserData: {CachedUserData.Count} items");
@@ -100,6 +92,7 @@ public class DataCache
         // Read the decrypted login data file and split each line into fields (CSV format)
         // Skip the header and split by comma, caching all records into CachedLoginData
         CachedLoginData = File.ReadAllLines(loginFilePath)
+                              //.Skip(1)
                               .Select(line => line.Split(",")) // Split each line into an array of fields
                               .ToList(); // Store all records in CachedLoginData
         Debug.WriteLine($"Details data_login.csv cached in CachedLoginData: {CachedLoginData.Count} items\n***");
@@ -129,6 +122,7 @@ public class DataCache
         // Skip Header, ensure the header is ignored.
         File.WriteAllLines(userFilePath, 
                            new[] { "[0] NAME,[1] SURNAME,[2] ALIAS,[3] ADRESS,[4] ZIPCODE,[5] CITY,[6] EMAIL ADRESS,[7] PHONENUMBER,[8] ONLINE STATUS" }
+                           .Skip(1)
                            .Concat(CachedUserData
                            .Select(fields => string.Join(",", fields)
                             )));
@@ -139,6 +133,7 @@ public class DataCache
         // Add the header row explicitly before saving the data.
         File.WriteAllLines(loginFilePath, 
                            new[] { "[0] Alias,[1] PASSWORD,[2] ADMIN,[3] ONLINESTATUS" }
+                           .Skip(1)
                            .Concat(CachedLoginData
                            .Select(fields => string.Join(",", fields)
                             )));
