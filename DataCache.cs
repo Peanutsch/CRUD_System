@@ -65,6 +65,12 @@ public class DataCache
         }
     }
 
+    public static bool IsCacheLoaded()
+    {
+        return CachedUserLines != null && CachedLoginLines != null
+               && CachedUserLines.Count > 0 && CachedLoginLines.Count > 0;
+    }
+
     /// <summary>
     /// Decrypts and loads data into memory if not already loaded.
     /// Ensures that data is loaded only once to avoid unnecessary decryption.

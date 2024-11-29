@@ -145,10 +145,17 @@ namespace CRUD_System
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
             AccountManager accountManager = new AccountManager();
+
+            var currentUser = AuthenticationService.CurrentUser;
+            
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
+            // Find the user index based on the alias
+            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, currentUser!);
+
             interactionHandler.Open_CreateForm(this);
             // Reload listbox
             listBoxAdmin.Items.Clear();
-            adminInterface.LoadDetailsListBox();
+            adminInterface.ReloadListBoxAdmin(userIndex);
             // Empty Textboxes
             adminInterface.EmptyTextBoxesAdmin();
         }

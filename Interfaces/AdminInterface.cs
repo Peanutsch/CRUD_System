@@ -46,7 +46,9 @@ namespace CRUD_System.Interfaces
         /// </summary>>
         public void LoadDetailsListBox()
         {
-            cache.LoadDecryptedData();
+            // Ensure DataCache is loaded
+            DataCache.LoadCache();
+
             // Check if the cached user data is empty or not loaded
             if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {

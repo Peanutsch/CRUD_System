@@ -61,7 +61,7 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        private void btnSaveEdit_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
             profileManager.SaveNewUser(txtName.Text, txtSurname.Text, 
                                        txtAddress.Text, txtZIPCode.Text,

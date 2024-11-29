@@ -349,9 +349,12 @@ namespace CRUD_System.Handlers
 
             // Generate a unique alias and password for the user
             string isAlias = GenerateAlias(Name, Surname);
-            string isPassword = isAlias; // TEMP: Replace with a real password generator
 
-            // Default the new user to offline
+            // TEMP alias as password. Will be replaced with password generator
+            //string isPassword = PasswordManager.PasswordGenerator();
+            string isPassword = isAlias;
+
+            // Default new user to offline
             bool onlineStatus = false;
 
             // Confirm the creation of the new user with the alias
@@ -360,10 +363,10 @@ namespace CRUD_System.Handlers
                 // Save the new user's data to the system (cache and file storage)
                 SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin, onlineStatus);
 
-                // Add the user to the cache and ListBox
+                // Add the user to the cache and ListBoxAdmin
                 string[] userDetails = new string[]
                 {
-                    Name, Surname, isAlias, Address, ZIPCode, City, Email, Phonenumber, onlineStatus.ToString()
+                    Name, Surname, isAlias, Phonenumber, onlineStatus.ToString()
                 };
 
                 // Log the creation of the new user
@@ -406,6 +409,10 @@ namespace CRUD_System.Handlers
 
             EncryptionManager.EncryptFile(path.LoginFilePath);
             Debug.WriteLine("DataCache.SaveUserData> data_login.csv ENCRYPTED");
+
+            // ** Update the DataCache with the latest data **
+            DataCache.LoadCache();
+            Debug.WriteLine("DataCache updated after saving new user.");
         }
 
 
