@@ -16,8 +16,15 @@ public class DataCache
     private readonly string userFilePath = path.UserFilePath;
     private readonly string loginFilePath = path.LoginFilePath;
 
+    // A flag to indicate whether the cache is valid
+    public static bool IsCacheValid { get; set; } = false;
+
     // Flag to check if data has already been loaded
-    private bool isDataLoaded = false; 
+    private bool isDataLoaded = false;
+
+    public static List<string> CachedLoginLines { get; private set; } = new List<string>();
+    public static List<string> CachedUserLines { get; private set; } = new List<string>();
+
 
     /// <summary>
     /// Cached user data, where each array represents a record (line) split into fields.
@@ -41,6 +48,23 @@ public class DataCache
     }
     #endregion CONSTRUCTOR
 
+    public static void InvalidateCache()
+    {
+        IsCacheValid = false;
+    }
+
+    // Method to load cache from files
+    public static void LoadCache()
+    {
+        if (!CachedLoginLines.Any() || !CachedUserLines.Any()) // Check if cache is already loaded
+        {
+            // Load login and user data from the files
+            var (userLines, loginLines) = path.ReadUserAndLoginData();
+            CachedUserLines = userLines;
+            CachedLoginLines = loginLines;
+        }
+    }
+
     /// <summary>
     /// Decrypts and loads data into memory if not already loaded.
     /// Ensures that data is loaded only once to avoid unnecessary decryption.
@@ -50,8 +74,10 @@ public class DataCache
         // If data has already been loaded, skip reloading and display a message
         if (isDataLoaded)
         {
+            /*
             Debug.WriteLine("Data already loaded, skipping reload.");
             return; // If data is already loaded, do nothing.
+            */
         }
 
         // Decrypt user and login data files to prepare them for reading

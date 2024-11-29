@@ -84,6 +84,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
+            /*
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
@@ -106,6 +107,7 @@ namespace CRUD_System
             adminInterface.EditMode = false;
             adminInterface.InterfaceEditModeAdmin();
             adminInterface.ReloadListBoxAdmin(userIndex); // Reload listbox
+            */
         }
 
         /// <summary>
@@ -188,22 +190,44 @@ namespace CRUD_System
             interactionHandler.Open_CreateNewPasswordForm();
         }
 
+        /// <summary>
+        /// Handles the click event to force log out the selected user.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void btnForceLogOutUser_Click(object sender, EventArgs e)
         {
             AuthenticationService authenticationService = new AuthenticationService();
+
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
+
+            MessageBox.Show($"txtAlias: {txtAlias.Text}");
+
+            // Find the user index based on the alias
+            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+
+            // Perform action only if a user is selected
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                MessageBox.Show($"Pushing force logout account {txtAlias.Text}");
+                // If a valid user is found, force logout
                 authenticationService.ForceLogOut(txtAlias.Text);
-                
-                // Reload listbox
+                MessageBox.Show($"User {txtAlias.Text} has been force logged out.");
+
+                // Reload the listbox to reflect changes
                 listBoxAdmin.Items.Clear();
-                adminInterface.LoadDetailsListBox();
+                adminInterface.ReloadListBoxAdmin(userIndex);
+
+                // Disable and hide the logout button after action
                 btnForceLogOutUser.Enabled = false;
                 btnForceLogOutUser.Visible = false;
             },
-            () => message.MessageInvalidNoUserSelected());
+            () =>
+            {
+                // Handle the case where no user is selected
+                message.MessageInvalidNoUserSelected();
+            });
         }
+
 
         /// <summary>
         /// Toggle between editMode and !editMode

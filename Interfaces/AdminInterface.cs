@@ -48,10 +48,10 @@ namespace CRUD_System.Interfaces
         {
             cache.LoadDecryptedData();
             // Check if the cached user data is empty or not loaded
-            if (cache.CachedUserData == null || !cache.CachedUserData.Any())
+            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
-                MessageBox.Show("\nLoadDetailsListBox> CachedUserData is empty or not loaded!"); // Show error if cache is empty
-                return;
+                Debug.WriteLine("LoadDetailsListBox: Cache is empty, reloading Cache.");
+                cache.LoadDecryptedData();
             }
 
             adminControl.listBoxAdmin.Items.Clear();
@@ -115,10 +115,10 @@ namespace CRUD_System.Interfaces
             cache.LoadDecryptedData();
 
             // Check if the cached user data is empty or not loaded
-            if (cache.CachedUserData == null || !cache.CachedUserData.Any())
+            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
-                MessageBox.Show("\nReloadListBoxAdmin>\nCachedUserData is empty or not loaded!"); // Show error if cache is empty
-                return;
+                Debug.WriteLine("ReloadListBoxAdmin: Cache is empty, reloading Cache.");
+                cache.LoadDecryptedData();
             }
 
             // Refresh only if a valid index is selected
