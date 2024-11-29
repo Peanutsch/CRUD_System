@@ -34,7 +34,7 @@ namespace CRUD_System.Repositories
         public void UserLoggedIn(string CurrentUser)
         {
             string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{CurrentUser.ToUpper()},Logged IN";
-            Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{CurrentUser.ToUpper()}] Logged IN");
+            Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{CurrentUser.ToUpper()}] Logged IN\n====");
             path.AppendToLog(newLog);
         }
 

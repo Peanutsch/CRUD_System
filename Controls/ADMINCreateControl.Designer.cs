@@ -152,7 +152,7 @@
             this.btnSaveEdit.TabIndex = 8;
             this.btnSaveEdit.Text = "Save";
             this.btnSaveEdit.UseVisualStyleBackColor = false;
-            this.btnSaveEdit.Click += this.btnSaveEdit_Click;
+            this.btnSaveEdit.Click += this.btnSave_Click;
             // 
             // AdminCreateControl
             // 

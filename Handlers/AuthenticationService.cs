@@ -26,13 +26,12 @@ namespace CRUD_System.Handlers
     public class AuthenticationService
     {
         #region PROPERTIES
-        FilePaths path = new FilePaths();
-
         public static string? CurrentUser { get; set; }
 
-        ReadFiles readFiles = new ReadFiles();
+        FilePaths path = new FilePaths();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        DataCache cache = new DataCache();
 
         public bool onlineStatus = false;
         #endregion PROPERTIES
@@ -46,22 +45,25 @@ namespace CRUD_System.Handlers
 
         #region LOGIN VALIDATION
         /// <summary>
-        /// Validates the provided username and password by checking them against the stored data in the CSV.
+        /// Validates the provided username and password by checking them against the stored login data.
+        /// This method ensures the user exists in the decrypted login data and that their credentials match.
         /// </summary>
         /// <param name="inputUserName">The username entered by the user.</param>
         /// <param name="inputUserPassword">The password entered by the user.</param>
-        /// <returns>True if the credentials are valid; otherwise, false.</returns>
+        /// <returns>
+        /// True if the provided username and password match a record in the login data; otherwise, false.
+        /// </returns>
         public bool ValidateLogin(string inputUserName, string inputUserPassword)
         {
-            // Get login data from the CSV file
-            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
+            // Ensure the cache is loaded and decrypted before performing the validation
+            cache.LoadDecryptedData();
 
-            // Find the user in the list where both username and password match
-            var user = loginData.FirstOrDefault(u =>
-                                                u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
-                                                u.Password == inputUserPassword);
+            // Attempt to find a user in the cached login data that matches the provided username and password
+            var user = cache.CachedLoginData.FirstOrDefault(u =>
+                u[0].Equals(inputUserName, StringComparison.OrdinalIgnoreCase) && // Compare usernames (case-insensitive)
+                u[1] == inputUserPassword); // Compare passwords (case-sensitive)
 
-            // If user is found, credentials are valid
+            // Return true if a matching user is found, otherwise false
             return user != default;
         }
 
@@ -69,20 +71,17 @@ namespace CRUD_System.Handlers
         /// Determines if the logged-in user is an admin.
         /// </summary>
         /// <param name="inputUserName">The username of the user.</param>
-        /// <param name="inputUserPSW">The password of the user.</param>
+        /// <param name="inputUserPassword">The password of the user.</param>
         /// <returns>True if the user is an admin; otherwise, false.</returns>
         public bool IsAdmin(string inputUserName, string inputUserPassword)
         {
-            // Get login data from the CSV file
-            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
-
             // Find the user in the list where both username and password match
-            var user = loginData.FirstOrDefault(u =>
-                u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
-                u.Password == inputUserPassword);
+            var user = cache.CachedLoginData.FirstOrDefault(u =>
+                u[0].Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
+                u[1] == inputUserPassword);
 
             // Return the admin status if the user is found
-            return user != default && user.IsAdmin;
+            return user != default && bool.Parse(user[2]); //user[2];
         }
 
         /// <summary>
@@ -92,56 +91,50 @@ namespace CRUD_System.Handlers
         /// <returns>True if the user is offline; otherwise, false.</returns>
         public bool ValidateOnlineStatus(string inputUserName, string inputUserPassword)
         {
-            //return !UsersOnline.Contains(inputUserName);
-            List<(string Username, string Password, bool IsAdmin, bool onlineStatus)> loginData = readFiles.GetLoginData();
             // Find the user in the list where both username and password match
-            var user = loginData.FirstOrDefault(u =>
-                u.Username.Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
-                u.Password == inputUserPassword);
+            var user = cache.CachedLoginData.FirstOrDefault(u =>
+                u[0].Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
+                u[1] == inputUserPassword);
 
-            return user != default && user.onlineStatus;
+            return user != default && bool.Parse(user[3]);
         }
         #endregion LOGIN VALIDATION
 
         #region LOGIN
         /// <summary>
         /// Updates the online status of a user by alias in both login and user data files.
-        /// If the user is not found, displays an error message.
+        /// If the user is not found, an error message is displayed.
         /// </summary>
         /// <param name="alias">The alias of the user whose online status needs to be updated.</param>
         /// <param name="onlineStatus">The new online status to set for the user (true for online, false for offline).</param>
         public void UpdateUserOnlineStatus(string alias, bool onlineStatus)
         {
-            AccountManager accountManager = new AccountManager();
-            
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
+            Debug.WriteLine($"***\nUpdateUserOnlineStatus> onlineStatus = {onlineStatus}");
 
-            // Find user index
-            int accountIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, alias);
-
-            if (accountIndex == -1)
+            // Check if the cache is empty, and reload data if necessary.
+            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
-                message.MessageUserNotFound(alias);
-                return;
+                Debug.WriteLine("UpdateUserOnlineStatus: Cache is empty, reloading Cache.");
+                cache.LoadDecryptedData();
             }
 
-            var loginDetails = loginLines[accountIndex].Split(",");
-            var userDetails = userLines[accountIndex].Split(",");
+            // Find the user in the cached user data by alias and update their online status.
+            var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias); // Alias field
+            if (user != null)
+            {
+                user[8] = onlineStatus.ToString(); // Update online status
+            }
 
-            //loginLines[accountIndex] = $"{loginDetails[0]},{loginDetails[1]},{loginDetails[2]},{onlineStatus}";
-            //userLines[accountIndex] = $"{userDetails[0]},{userDetails[1]},{userDetails[2]},{userDetails[3]},{userDetails[4]},{userDetails[5]},{userDetails[6]},{userDetails[7]},{onlineStatus}";
+            // Find the user in the cached login data by alias and update their online status.
+            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias field
+            if (login != null)
+            {
+                login[3] = onlineStatus.ToString(); // Update online status
+            }
 
-            // Update online status in data_login.csv using string.Join
-            loginDetails[3] = onlineStatus.ToString(); // Update only the onlineStatus field
-            loginLines[accountIndex] = string.Join(",", loginDetails);
-
-            // Update online status in data_user,csv using string.Join
-            userDetails[8] = onlineStatus.ToString(); // Update only the onlineStatus field
-            userLines[accountIndex] = string.Join(",", userDetails);
-
-            // Update details in data_users.csv and data_login.csv
-            File.WriteAllLines(path.LoginFilePath, loginLines);
-            File.WriteAllLines(path.UserFilePath, userLines);
+            // Save changes to the data files and encrypt them
+            Debug.WriteLine("Saving onlineStatus...\n");
+            cache.SaveAndEncryptData();
         }
 
         /// <summary>
@@ -167,6 +160,8 @@ namespace CRUD_System.Handlers
         /// <returns>True if the user credentials and status are valid; otherwise, false.</returns>
         private bool ValidateUserLogin(string inputUserName, string inputUserPassword)
         {
+            //MessageBox.Show("ValidateUserLogin");
+
             LoginForm loginForm = new LoginForm();
 
             if (!ValidateLogin(inputUserName, inputUserPassword))
@@ -241,31 +236,6 @@ namespace CRUD_System.Handlers
         #endregion LOGIN
 
         #region LOGOUT
-        public void ForceLogOut(string aliasToLogOut)
-        {
-            AdminMainControl adminControl = new AdminMainControl();
-            AdminInterface adminInterface = new AdminInterface();
-            AccountManager accountManager = new AccountManager();
-
-            // Pass selectedAlias to SetForceLogOutUserBtn
-            adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
-
-            // Set user as offline
-            UpdateUserOnlineStatus(aliasToLogOut, false);
-            // Force log out user
-            PerformForcedLogOutByAdmin(aliasToLogOut);
-
-            adminControl.listBoxAdmin.Items.Clear();
-
-            // Read lines from data_users.csv and data_login.csv for userIndex
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
-            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, adminControl.txtAlias.Text);
-            // Reload ListBoxAdmin
-            adminInterface.ReloadListBoxAdmin(userIndex);
-
-            //adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
-        }
-
         /// <summary>
         /// Logs out the current user by updating their online status to offline,
         /// logging the logout event, and clearing the current user.
@@ -276,25 +246,57 @@ namespace CRUD_System.Handlers
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                logEvents.UserLoggedOut(currentUser);
                 UpdateUserOnlineStatus(currentUser, false);
+                logEvents.UserLoggedOut(currentUser);
                 CurrentUser = null;
             }
         }
 
         /// <summary>
-        /// Forces a user to log out by an admin, logging the forced logout event
-        /// and hiding the user's main form if active.
+        /// Forces a user to log out by an admin, updating their online status,
+        /// triggering logout actions, and logging the forced logout event.
         /// </summary>
-        /// <param name="userAlias">The alias of the user to be logged out by admin.</param>
+        /// <param name="aliasToLogOut">The alias of the user to be logged out.</param>
+        public void ForceLogOut(string aliasToLogOut)
+        {
+            AdminInterface adminInterface = new AdminInterface();
+
+            // Pass the selected alias to SetForceLogOutUserBtn in AdminInterface
+            adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
+
+            // Update the user's online status to offline
+            UpdateUserOnlineStatus(aliasToLogOut, false);
+
+            // Perform the forced logout for the user
+            PerformForcedLogOutByAdmin(aliasToLogOut);
+        }
+
+        /// <summary>
+        /// Performs the forced logout action for a user by an admin.
+        /// Logs the forced logout event and hides the user's main form if active.
+        /// </summary>
+        /// <param name="aliasToLogOut">The alias of the user being logged out by the admin.</param>
         public void PerformForcedLogOutByAdmin(string aliasToLogOut)
         {
             UserMainForm userForm = new UserMainForm();
+
+            // Check if the cache is empty, and reload data if necessary.
+            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            {
+                Debug.WriteLine("PerformForcedLogOutByAdmin: Cache is empty, reloading Cache.");
+                cache.LoadDecryptedData();
+            }
+
             var admin = CurrentUser;
 
             if (!string.IsNullOrEmpty(admin))
             {
+                cache.SaveAndEncryptData();
+
+                // Log the forced logout event
                 logEvents.ForceUserLogOut(admin, aliasToLogOut);
+
+                // Hide the user's form if active
                 userForm.Hide();
             }
         }

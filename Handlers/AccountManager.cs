@@ -31,19 +31,49 @@ namespace CRUD_System.Handlers
         /// </returns>
         public int FindUserIndexByAlias(List<string> userLines, List<string> loginLines, string alias)
         {
-            for (int index = 0; index < userLines.Count; index++)
+            // Load cache
+            DataCache.LoadCache();
+
+            Debug.WriteLine($"FindUserIndexByAlias> Looking for index for {alias}");
+
+            // Check if cache is loaded correctly
+            if (DataCache.CachedLoginLines == null || DataCache.CachedLoginLines.Count == 0)
             {
-                var userDetails = userLines[index].Split(',');
-                var loginDetails = loginLines[index].Split(",");
-                if (userDetails[2] == alias && loginDetails[0] == alias)
+                DataCache dataCache = new DataCache();
+                Debug.WriteLine("UpdateUserOnlineStatus: Cache is empty, reloading Cache.");
+                MessageBox.Show("UpdateUserOnlineStatus: Cache is empty, reloading Cache.");
+                dataCache.LoadDecryptedData();
+            }
+
+            // Search through the cached login data for the alias
+            for (int index = 0; index < DataCache.CachedLoginLines?.Count; index++)
+            {
+                var loginDetails = DataCache.CachedLoginLines[index].Split(",");
+
+                // Assuming the first element of loginDetails is the encrypted alias
+                string encryptedAlias = loginDetails[0].Trim();
+
+                // Decrypt the alias using your decryption method
+                string decryptedAlias = AesEncryption.DecryptWithFixedKey(encryptedAlias, AesEncryption.EncryptionKey);
+
+                //MessageBox.Show($"Decrypted Alias: {decryptedAlias}, Comparing with: {alias.Trim()}");
+
+                // Compare the decrypted alias with the provided alias
+                if (decryptedAlias == alias.Trim())
                 {
-                    return index;
+                    return index; // Return the index if found
                 }
             }
-            // Alias not found
+
+            // If not found, show a message
             message.MessageUserNotFound(alias);
-            return -1;
+            return -1; // Return -1 if the alias was not found
         }
+
+
+
+
+
 
         /// <summary>
         /// Generates a unique alias for the user based on the first two letters of the first name

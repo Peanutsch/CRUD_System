@@ -17,7 +17,7 @@ namespace CRUD_System
     {
         readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"CSV\log.csv");
 
-        AuthenticationService loginHandler = new AuthenticationService();
+        AuthenticationService authService = new AuthenticationService();
 
         public UserMainForm()
         {
@@ -39,13 +39,13 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            loginHandler.PerformLogout();
+            authService.PerformLogout();
             this.Hide(); // Hide the MainForm
         }
 
         private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            loginHandler.PerformLogout();
+            authService.PerformLogout();
         }
     }
 }

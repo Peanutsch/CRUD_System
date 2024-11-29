@@ -55,6 +55,7 @@ namespace CRUD_System
             this.adminInterface = adminInterface ?? new AdminInterface(this);
 
             // Load data_users.csv for display in listbox
+            //EncryptionManager.DecryptFile(path.UserFilePath);
             this.adminInterface.LoadDetailsListBox();
         }
         #endregion CONSTRUCTOR
@@ -83,6 +84,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
+            /*
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
@@ -105,6 +107,7 @@ namespace CRUD_System
             adminInterface.EditMode = false;
             adminInterface.InterfaceEditModeAdmin();
             adminInterface.ReloadListBoxAdmin(userIndex); // Reload listbox
+            */
         }
 
         /// <summary>
@@ -116,18 +119,23 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                userProfileManager.DeleteUser(txtAlias.Text); // Perform delete action only if a user is selected
+                // Deleting user from files
+                userProfileManager.DeleteUser(txtAlias.Text);
 
-                listBoxAdmin.Items.Clear();
-                adminInterface.LoadDetailsListBox();
+                // Remove user from ListBoxAdmin
+                userProfileManager.RemoveUserFromListBoxAdmin(txtAlias.Text);
+                
+                // Empty TextBoxes and reload ListBox
                 adminInterface.EmptyTextBoxesAdmin();
+                adminInterface.LoadDetailsListBox();
 
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
                 adminInterface.InterfaceEditModeAdmin();
             },
-             () => message.MessageInvalidNoUserSelected());
+            () => message.MessageInvalidNoUserSelected()); // Handle no user selected case
         }
+
 
         /// <summary>
         /// Handles the click event to add a new user.
@@ -137,12 +145,17 @@ namespace CRUD_System
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
             AccountManager accountManager = new AccountManager();
+
+            var currentUser = AuthenticationService.CurrentUser;
+            
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
+            // Find the user index based on the alias
+            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, currentUser!);
+
             interactionHandler.Open_CreateForm(this);
             // Reload listbox
             listBoxAdmin.Items.Clear();
-            adminInterface.LoadDetailsListBox();
-            // Empty Textboxes
-            adminInterface.EmptyTextBoxesAdmin();
+            adminInterface.ReloadListBoxAdmin(userIndex);
         }
 
         /// <summary>
@@ -182,16 +195,44 @@ namespace CRUD_System
             interactionHandler.Open_CreateNewPasswordForm();
         }
 
+        /// <summary>
+        /// Handles the click event to force log out the selected user.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void btnForceLogOutUser_Click(object sender, EventArgs e)
         {
             AuthenticationService authenticationService = new AuthenticationService();
+
+            (var userLines, var loginLines) = path.ReadUserAndLoginData();
+
+            MessageBox.Show($"txtAlias: {txtAlias.Text}");
+
+            // Find the user index based on the alias
+            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+
+            // Perform action only if a user is selected
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                MessageBox.Show("Pushing force logout");
+                // If a valid user is found, force logout
                 authenticationService.ForceLogOut(txtAlias.Text);
+                MessageBox.Show($"User {txtAlias.Text} has been force logged out.");
+
+                // Reload the listbox to reflect changes
+                listBoxAdmin.Items.Clear();
+                adminInterface.ReloadListBoxAdmin(userIndex);
+
+                // Disable and hide the logout button after action
+                btnForceLogOutUser.Enabled = false;
+                btnForceLogOutUser.Visible = false;
             },
-            () => message.MessageInvalidNoUserSelected());
+            () =>
+            {
+                // Handle the case where no user is selected
+                message.MessageInvalidNoUserSelected();
+            });
         }
+
 
         /// <summary>
         /// Toggle between editMode and !editMode
@@ -237,10 +278,10 @@ namespace CRUD_System
         private void txtAliasToSearch_TextChanged(object sender, EventArgs e)
         {
             // Get the alias input by the user in the search box
-            string alias = txtAliasToSearch.Text;
+            string searchTerm = txtSearch.Text;
 
             // If the alias is empty, load all users into the listbox
-            if (string.IsNullOrEmpty(alias))
+            if (string.IsNullOrEmpty(searchTerm))
             {
                 // Load all user details into the listbox (when no search term is entered)
                 adminInterface.LoadDetailsListBox();
@@ -248,7 +289,7 @@ namespace CRUD_System
             else
             {
                 // If alias is not empty, search for users by the alias prefix
-                var searchResults = new UserSearchService().SearchByAlias(alias);
+                var searchResults = new UserSearchService().SearchUsers(searchTerm);
 
                 // Clear the current items in the listbox to display the search results
                 listBoxAdmin.Items.Clear();
