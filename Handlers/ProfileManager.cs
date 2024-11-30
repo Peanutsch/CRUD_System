@@ -70,6 +70,13 @@ namespace CRUD_System.Handlers
                         user[8] = onlineStatus.ToString(); // Update online status
                     }
 
+                    // Find the user in the cached login data by alias and update their online status.
+                    var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias field
+                    if (login != null)
+                    {
+                        login[2] = isAdmin.ToString(); // Update online status
+                    }
+
                     // Save changes to the data files and encrypt them
                     cache.SaveAndEncryptData();
 

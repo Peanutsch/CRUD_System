@@ -33,7 +33,7 @@ namespace CRUD_System
 
         AdminInterface adminInterface;
         AccountManager accountManager = new AccountManager();
-        ProfileManager userProfileManager = new ProfileManager();
+        ProfileManager profileManager = new ProfileManager();
         FormInteractionHandler interactionHandler = new FormInteractionHandler();
         UserSearchService search = new UserSearchService();
 
@@ -84,30 +84,26 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            /*
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
+
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
 
             var loginDetails = loginLines[loginIndex].Split(",");
 
             // Parse the admin status and online status as bools
-            //bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
+            bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
             bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
-
-            Debug.WriteLine("ADMINMainControl.btnSaveEditUserDetails_Click");
-            Debug.WriteLine($"isAdmin = {isAdmin}");
-            Debug.WriteLine($"omlineStatus = {onlineStatus}");
 
             if (userIndex != -1)
             {
-                userProfileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
+                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
             }
+            editMode = false; // Close editMode
             adminInterface.EditMode = false;
             adminInterface.InterfaceEditModeAdmin();
             adminInterface.ReloadListBoxAdmin(userIndex); // Reload listbox
-            */
         }
 
         /// <summary>
@@ -120,10 +116,10 @@ namespace CRUD_System
             interactionHandler.PerformActionIfUserSelected(() =>
             {
                 // Deleting user from files
-                userProfileManager.DeleteUser(txtAlias.Text);
+                profileManager.DeleteUser(txtAlias.Text);
 
                 // Remove user from ListBoxAdmin
-                userProfileManager.RemoveUserFromListBoxAdmin(txtAlias.Text);
+                profileManager.RemoveUserFromListBoxAdmin(txtAlias.Text);
                 
                 // Empty TextBoxes and reload ListBox
                 adminInterface.EmptyTextBoxesAdmin();
@@ -168,7 +164,7 @@ namespace CRUD_System
             ProfileManager userProfileManager = new ProfileManager();
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                userProfileManager.GenerateNewPassword(txtAlias.Text, chkIsAdmin.Checked);
+                profileManager.GenerateNewPassword(txtAlias.Text, chkIsAdmin.Checked);
             },
              () => message.MessageInvalidNoUserSelected());
         }
