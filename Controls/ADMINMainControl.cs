@@ -224,7 +224,6 @@ namespace CRUD_System
             });
         }
 
-
         /// <summary>
         /// Toggle between editMode and !editMode
         /// </summary>
