@@ -94,10 +94,6 @@ namespace CRUD_System.Interfaces
                 currentPage++;
                 LoadDetailsListBox();
             }
-            else
-            {
-                MessageBox.Show("You are already on the last page.");
-            }
         }
 
         /// <summary>
@@ -109,10 +105,6 @@ namespace CRUD_System.Interfaces
             {
                 currentPage--;
                 LoadDetailsListBox();
-            }
-            else
-            {
-                MessageBox.Show("You are already on the first page.");
             }
         }
 
