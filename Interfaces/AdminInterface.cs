@@ -269,6 +269,7 @@ namespace CRUD_System.Interfaces
             // Adjust other action buttons based on EditMode status
             ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
             ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
+            ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
 
             // Disable ListBox when in edit mode to prevent user changes in selection
             if (adminControl.listBoxAdmin != null)

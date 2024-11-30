@@ -67,11 +67,6 @@ namespace CRUD_System.Handlers
             return -1; // Return -1 if the alias was not found
         }
 
-
-
-
-
-
         /// <summary>
         /// Generates a unique alias for the user based on the first two letters of the first name
         /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
@@ -80,78 +75,88 @@ namespace CRUD_System.Handlers
         /// <returns>A unique alias as a string.</returns>
         public string CreateTXTAlias(string Name, string Surname)
         {
-        // Normalize and remove diacritics from the Name and Surname
-        Name = RemoveDiacritics(Name);
-        Surname = RemoveDiacritics(Surname);
+            // Normalize and remove diacritics from the Name and Surname
+            Name = RemoveDiacritics(Name);
+            Surname = RemoveDiacritics(Surname);
 
-        if (Name.Length < 2)
-        {
-            Name += Name; // Double name
-        }
-        if (Surname.Length < 2)
-        {
-            Surname += Surname; // Double surname
-        }
+            // Ensure Name and Surname have sufficient length
+            if (Name.Length < 2) Name = Name.PadRight(2, Name[0]);
+            if (Surname.Length < 2) Surname = Surname.PadRight(2, Surname[0]);
 
-        string initialAlias = Name.Substring(0, 2).ToLower() + Surname.Substring(Surname.Length - 2).ToLower();
-        int counter = 1;
-        string finalAlias = initialAlias + "001";
+            // Generate the base alias
+            string initialAlias = Name.Substring(0, 2).ToLower() + Surname.Substring(Surname.Length - 2).ToLower();
+            int counter = 1;
 
-        // Check if the alias already exists and increment the number if necessary
-        while (AliasExists(finalAlias))
-        {
-            counter++;
-            string newNumber = counter.ToString("D3"); // Ensures it always has 3 digits
-            finalAlias = initialAlias + newNumber;
-        }
-
-        return finalAlias;
-    }
-
-    /// <summary>
-    /// Removes diacritics from the input string.
-    /// </summary>
-    /// <param name="text">The input string with potential diacritics.</param>
-    /// <returns>A string without diacritics.</returns>
-    private string RemoveDiacritics(string text)
-    {
-        var normalizedString = text.Normalize(NormalizationForm.FormD);
-        var stringBuilder = new StringBuilder();
-
-        foreach (var chars in normalizedString)
-        {
-            var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(chars);
-            if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+            // Loop to generate a unique alias
+            string finalAlias;
+            while (true)
             {
-                stringBuilder.Append(chars);
-            }
-        }
+                string newNumber = counter.ToString("D3"); // Ensures it always has 3 digits
+                finalAlias = initialAlias + newNumber;
 
-        return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
-    }
-
-
-    /// <summary>
-    /// Checks if the given alias already exists in the data_login.csv file.
-    /// </summary>
-    /// <param name="alias">The alias to check for existence.</param>
-    /// <returns>True if the alias exists; otherwise, false.</returns>
-    private bool AliasExists(string alias)
-        {
-            // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines(path.LoginFilePath);
-
-            // Check if the alias already exists
-            foreach (var line in loginLines)
-            {
-                var loginDetails = line.Split(',');
-                if (loginDetails[0] == alias)
+                // Check if alias already exists
+                if (!AliasExists(finalAlias))
                 {
-                    Debug.WriteLine($"Alias {alias} already exist");
-                    return true; // Alias already exists
+                    Debug.WriteLine($"Unique alias generated: {finalAlias}");
+                    break; // Exit the loop if the alias is unique
+                }
+
+                Debug.WriteLine($"Alias {finalAlias} already exists, incrementing counter...");
+                counter++; // Increment counter if alias exists
+            }
+
+            return finalAlias;
+        }
+
+
+
+        /// <summary>
+        /// Removes diacritics from the input string.
+        /// </summary>
+        /// <param name="text">The input string with potential diacritics.</param>
+        /// <returns>A string without diacritics.</returns>
+        private string RemoveDiacritics(string text)
+        {
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var chars in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(chars);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(chars);
                 }
             }
-            return false; // Alias does not exist
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+
+        /// <summary>
+        /// Checks if the given alias already exists in the data_login.csv file.
+        /// </summary>
+        /// <param name="alias">The alias to check for existence.</param>
+        /// <returns>True if the alias exists; otherwise, false.</returns>
+        private bool AliasExists(string alias)
+        {
+            DataCache cache = new DataCache();
+            if (cache.CachedLoginData == null || cache.CachedLoginData.Count == 0)
+            {
+                Debug.WriteLine("AliasExists: Cache is empty, reloading data...");
+                cache.LoadDecryptedData();
+            }
+
+            foreach (var line in cache.CachedLoginData!)
+            {
+                //var loginDetails = line.Split(','); // Ensure splitting is done if data contains multiple fields
+                if (line[0].Trim() == alias)
+                {
+                    Debug.WriteLine($"Alias {alias} already exists.");
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

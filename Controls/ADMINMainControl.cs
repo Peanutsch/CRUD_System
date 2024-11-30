@@ -38,7 +38,7 @@ namespace CRUD_System
         readonly UserSearchService search = new UserSearchService();
 
         bool isAdmin;
-        bool onlineStatus;
+        bool onlineStatus = false;
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
