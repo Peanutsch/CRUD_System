@@ -140,9 +140,14 @@ namespace CRUD_System
             AccountManager accountManager = new AccountManager();
 
             interactionHandler.Open_CreateForm(this);
+
+            // Reload Cache
+            DataCache cache = new DataCache();
+            cache.LoadDecryptedData();
+
             // Reload listbox
             listBoxAdmin.Items.Clear();
-            adminInterface.LoadDetailsListBox();
+            adminInterface.ReloadListBoxAdmin(-1);
         }
 
         /// <summary>

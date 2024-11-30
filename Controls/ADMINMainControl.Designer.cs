@@ -290,9 +290,9 @@
             // lblPageNumber
             // 
             lblPageNumber.AutoSize = true;
-            lblPageNumber.BackColor = SystemColors.ActiveBorder;
+            lblPageNumber.BackColor = Color.White;
             lblPageNumber.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            lblPageNumber.Location = new Point(812, 237);
+            lblPageNumber.Location = new Point(810, 236);
             lblPageNumber.Name = "lblPageNumber";
             lblPageNumber.Size = new Size(118, 18);
             lblPageNumber.TabIndex = 35;
