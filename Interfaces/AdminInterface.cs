@@ -139,15 +139,14 @@ namespace CRUD_System.Interfaces
                     // Format and add the item to the ListBox
                     string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
                     adminControl.listBoxAdmin.Items.Add(listItem);
-
-                    // Empty textboxes
-                    EmptyTextBoxesAdmin();
                 }
                 else
                 {
                     Console.WriteLine("Insufficient fields in a user record.");
                 }
             }
+            // Empty textboxes
+            EmptyTextBoxesAdmin();
         }
 
         /// <summary>

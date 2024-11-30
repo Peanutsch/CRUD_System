@@ -142,8 +142,8 @@ namespace CRUD_System.Handlers
             EncryptionManager.EncryptFile(path.UserFilePath);
             EncryptionManager.EncryptFile(path.LoginFilePath);
 
-            // Reload the list box to reflect the updated data
-            adminInterface.ReloadListBoxAdmin(accountManager.FindUserIndexByAlias(userLines, loginLines, aliasToDelete));
+            // Reload Cache
+            cache.LoadDecryptedData();
         }
 
         /// <summary>
@@ -198,97 +198,6 @@ namespace CRUD_System.Handlers
             // Log the deletion event, including the current user and the user being deleted
             logEvents.LogEventDeleteUser(currentUser, aliasToDelete);
         }
-
-        /// <summary>
-        /// Removes the user with the specified alias from the listBoxAdmin.
-        /// </summary>
-        /// <param name="aliasToDelete">The alias of the user to remove from the list box.</param>
-        public void RemoveUserFromListBoxAdmin(string aliasToDelete)
-        {
-            // Create a new instance of the AdminMainControl to access the listBoxAdmin
-            AdminMainControl adminControl = new AdminMainControl();
-
-            // Iterate through the items in the listBoxAdmin to find the user
-            for (int index = 0; index < adminControl.listBoxAdmin.Items.Count; index++)
-            {
-                // Check if the list item is not null and contains the alias to delete
-                var item = adminControl.listBoxAdmin.Items[index];
-                if (item != null)
-                {
-                    string? itemString = item.ToString();
-                    if (itemString != null && itemString.Contains($"({aliasToDelete})"))
-                    {
-                        // Remove the item (user) from the list box if a match is found
-                        adminControl.listBoxAdmin.Items.RemoveAt(index);
-                        break; // Exit the loop after removing the user
-                    }
-                }
-            }
-        }
-
-        /*
-        public void DeleteUser(string alias)
-        {
-            AdminInterface adminInterface = new AdminInterface();
-
-            var currentUser = AuthenticationService.CurrentUser;
-
-            // Get alias to delete from the selected user
-            string aliasToDelete = alias;
-
-            // Decrypt the files before modifying
-            EncryptionManager.DecryptFile(path.UserFilePath);
-            EncryptionManager.DecryptFile(path.LoginFilePath);
-
-            // Read lines from data_users.csv and data_login.csv
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
-
-            // Find user index
-            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, aliasToDelete);
-
-            // MessageBox to confirm task
-            DialogResult dr = message.MessageBoxConfirmToDELETE(aliasToDelete);
-
-            if (dr != DialogResult.Yes)
-            {
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(currentUser))
-            {
-                // Remove the user from data_users.csv by alias
-                userLines = userLines.Where(
-                                            line =>
-                                            !line.Split(',')[2].Trim().Equals(aliasToDelete,
-                                            StringComparison.OrdinalIgnoreCase)).ToList();
-
-                // Remove the user from data_login.csv using the alias
-                loginLines = loginLines.Where(
-                                                line =>
-                                                !line.Split(',')[0].Trim().Equals(aliasToDelete,
-                                                StringComparison.OrdinalIgnoreCase)).ToList();
-
-                // Delete account from data_users.csv and data_login.csv
-                File.WriteAllLines(path.UserFilePath, userLines);
-                File.WriteAllLines(path.LoginFilePath, loginLines);
-
-                // Log events
-                logEvents.LogEventDeleteUser(currentUser, aliasToDelete);
-                message.MessageDeleteSucces(aliasToDelete); // Show MessageBox Delete Success
-            }
-            else
-            {
-                message.MessageSomethingWentWrong();
-                return;
-            }
-
-            // Re-encrypt the files after modifying them
-            EncryptionManager.EncryptFile(path.UserFilePath);
-            EncryptionManager.EncryptFile(path.LoginFilePath);
-
-            adminInterface.ReloadListBoxAdmin(userIndex);
-        }
-        */
         #endregion DELETE USER
 
         #region GENERATE NEW PASSWORD

@@ -115,15 +115,14 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
+                AdminMainControl adminControl = new AdminMainControl();
+                DataCache cache = new DataCache();
                 // Deleting user from files
                 profileManager.DeleteUser(txtAlias.Text);
-
-                // Remove user from ListBoxAdmin
-                profileManager.RemoveUserFromListBoxAdmin(txtAlias.Text);
                 
                 // Empty TextBoxes and reload ListBox
                 adminInterface.EmptyTextBoxesAdmin();
-                adminInterface.LoadDetailsListBox();
+                adminInterface.ReloadListBoxAdmin(-1);
 
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
@@ -131,7 +130,6 @@ namespace CRUD_System
             },
             () => message.MessageInvalidNoUserSelected()); // Handle no user selected case
         }
-
 
         /// <summary>
         /// Handles the click event to add a new user.
