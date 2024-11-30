@@ -208,34 +208,36 @@ namespace CRUD_System.Handlers
         /// <param name="isAdmin">Indicates if the user has admin privileges.</param>
         public void GenerateNewPassword(string alias, bool isAdmin)
         {
-            var currentUser = AuthenticationService.CurrentUser;
-
-            // Read lines from data_users.csv and data_login.csv
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
-
-            // Find user index
-            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, alias);
-            var loginDetails = loginLines[loginIndex].Split(",");
-
-            DialogResult dr = message.MessageBoxConfirmToGeneratePassword(loginDetails[0]);
-
+            DialogResult dr = message.MessageBoxConfirmToGeneratePassword(alias);
             if (dr != DialogResult.Yes)
             {
                 return;
             }
 
+            // Ensure the cache is loaded and decrypted before performing the validation
+            cache.LoadDecryptedData();
+
+            var currentUser = AuthenticationService.CurrentUser;
+
             if (!string.IsNullOrEmpty(currentUser))
             {
                 // Update password
                 string generatedPassword = PasswordManager.PasswordGenerator();
-                loginLines[loginIndex] = $"{loginDetails[0]},{generatedPassword},{isAdmin}";
-                
-                // Write updated data back to data_login.csv
-                File.WriteAllLines(path.LoginFilePath, loginLines); 
+
+                // Find the user in the cached login data by alias and update their online status.
+                var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias field
+                if (login != null)
+                {
+                    login[1] = generatedPassword; // Update password
+                    Debug.WriteLine($"Generated password for {alias}: {generatedPassword}");
+                }
+
+                // Save changes to the data files and encrypt them
+                cache.SaveAndEncryptData();
 
                 // Log event
-                logEvents.LogEventPasswordGenerated(currentUser, loginDetails[0]);
-                message.MessageChangePasswordSucces(loginDetails[0]);
+                logEvents.LogEventPasswordGenerated(currentUser, alias);
+                message.MessageChangePasswordSucces(alias);
             }
             else
             {
