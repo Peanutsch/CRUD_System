@@ -199,8 +199,6 @@ namespace CRUD_System
 
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
-            MessageBox.Show($"txtAlias: {txtAlias.Text}");
-
             // Find the user index based on the alias
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
 
