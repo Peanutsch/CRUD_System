@@ -115,13 +115,6 @@ namespace CRUD_System.Interfaces
             // Refresh the cache
             cache.LoadDecryptedData();
 
-            // Check if the cached user data is empty or not loaded
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
-            {
-                Debug.WriteLine("ReloadListBoxAdmin: Cache is empty, reloading Cache.");
-                cache.LoadDecryptedData();
-            }
-
             // Refresh only if a valid index is selected
             if (userIndex >= 0 && userIndex < adminControl.listBoxAdmin.Items.Count)
             {
@@ -132,7 +125,7 @@ namespace CRUD_System.Interfaces
             adminControl.listBoxAdmin.Items.Clear();
 
             // Iterate through the cache and add items to the ListBox
-            foreach (var userDetailsArray in cache.CachedUserData.Skip(1)) // Skip headers
+            foreach (var userDetailsArray in cache.CachedUserData.Skip(2)) // Skip headers
             {
                 if (userDetailsArray.Length >= 8) // Ensure there are enough fields
                 {
