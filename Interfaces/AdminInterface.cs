@@ -244,7 +244,7 @@ namespace CRUD_System.Interfaces
             Debug.WriteLine($"EditMode AdminInterface: {EditMode}");
 
             // Toggle Edit and Cancel button text based on EditMode status
-            adminControl.btnEditUserDetails.Text = EditMode ? "Cancel" : "Edit User";
+            adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User";
 
             // Set the background color based on EditMode for visual feedback
             adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;

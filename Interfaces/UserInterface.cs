@@ -92,11 +92,6 @@ namespace CRUD_System.Interfaces
             FillTextboxes(userDetailsArray);
         }
 
-
-
-
-
-
         /// <summary>
         /// Reloads the user interface after saving changes.
         /// </summary>
