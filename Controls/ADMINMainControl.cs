@@ -118,7 +118,7 @@ namespace CRUD_System
                 DataCache cache = new DataCache();
                 // Deleting user from files
                 profileManager.DeleteUser(txtAlias.Text);
-                
+
                 // Empty TextBoxes and reload ListBox
                 adminInterface.EmptyTextBoxesAdmin();
                 adminInterface.ReloadListBoxAdmin(-1);
@@ -139,16 +139,10 @@ namespace CRUD_System
         {
             AccountManager accountManager = new AccountManager();
 
-            var currentUser = AuthenticationService.CurrentUser;
-            
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
-            // Find the user index based on the alias
-            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, currentUser!);
-
             interactionHandler.Open_CreateForm(this);
             // Reload listbox
             listBoxAdmin.Items.Clear();
-            adminInterface.ReloadListBoxAdmin(userIndex);
+            adminInterface.LoadDetailsListBox();
         }
 
         /// <summary>
@@ -255,6 +249,16 @@ namespace CRUD_System
         private void ListBoxAdmin_DrawItem(object sender, DrawItemEventArgs e)
         {
             adminInterface.ListBoxAdmin_DrawItemHandler(sender, e);
+        }
+
+        private void btnPreviousPage_Click(object sender, EventArgs e)
+        {
+            adminInterface.PreviousPage();
+        }
+
+        private void btnNextPage_Click(object sender, EventArgs e)
+        {
+            adminInterface.NextPage();
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 

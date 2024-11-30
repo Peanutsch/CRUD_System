@@ -19,6 +19,10 @@ namespace CRUD_System.Interfaces
     {
         #region PROPERTIES
         public bool EditMode { get; set; }
+
+        private int currentPage = 1; // Track pagenumbers
+        private const int itemsPerPage = 15; // Maximum items per page
+
         private List<string[]> CachedUserData => cache.CachedUserData;
 
         readonly DataCache cache = new DataCache();
@@ -36,8 +40,8 @@ namespace CRUD_System.Interfaces
         /// <summary>
         /// Loads user details from data_users.csv and populates the ListBox with formatted information.
         /// The method reads data from the user file, skips the header and admin details, and processes each user's details.
-        /// It formats the list item to display the user's name, surname, alias, email, phone number, 
-        /// and indicates whether the user is online based on the data in the file.
+        /// It formats the list item to display the user's name, surname, alias, email, phone number, and indicates whether the user is online based on the data in the file.
+        /// Loads a specific page of user details into the ListBox, with a maximum of 15 items per page.
         /// </summary>>
         public void LoadDetailsListBox()
         {
@@ -51,11 +55,19 @@ namespace CRUD_System.Interfaces
                 cache.LoadDecryptedData();
             }
 
+            // Clear the ListBox
             adminControl.listBoxAdmin.Items.Clear();
 
-            foreach (var userDetailsArray in CachedUserData.Skip(2)) // Skip header
+            // Calculate start and end indices for the current page
+            int startIndex = (currentPage - 1) * itemsPerPage;
+            int endIndex = Math.Min(startIndex + itemsPerPage, CachedUserData.Count);
+
+            // Skip header rows and load items for the current page
+            var userDetailsForPage = CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
+
+            foreach (var userDetailsArray in userDetailsForPage)
             {
-                // Selection of items to display n ListBoxAdmin
+                // Selection of items to display in ListBoxAdmin
                 string name = userDetailsArray[0];
                 string surname = userDetailsArray[1];
                 string alias = userDetailsArray[2];
@@ -65,8 +77,52 @@ namespace CRUD_System.Interfaces
 
                 string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
                 adminControl.listBoxAdmin.Items.Add(listItem);
+                
+                UpdatePageLabel();
             }
         }
+
+        #region Listbox Pages
+        /// <summary>
+        /// Navigates to the next page if it exists.
+        /// </summary>
+        public void NextPage()
+        {
+            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage); // Total pages (subtract header rows)
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                LoadDetailsListBox();
+            }
+            else
+            {
+                MessageBox.Show("You are already on the last page.");
+            }
+        }
+
+        /// <summary>
+        /// Navigates to the previous page if it exists.
+        /// </summary>
+        public void PreviousPage()
+        {
+            if (currentPage > 1)
+            {
+                currentPage--;
+                LoadDetailsListBox();
+            }
+            else
+            {
+                MessageBox.Show("You are already on the first page.");
+            }
+        }
+
+        // Update the label with the current page number
+        private void UpdatePageLabel()
+        {
+            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage);
+            adminControl.lblPageNumber.Text = $"Page {currentPage} of {totalPages}";
+        }
+        #endregion Listbox Pages
 
         /// <summary>
         /// Handles the custom drawing of items in the ListBox, allowing for conditional formatting based on the item content.

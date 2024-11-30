@@ -291,10 +291,6 @@ namespace CRUD_System.Handlers
 
                 // Notify the admin that the account creation was successful
                 message.MessageNewAccountSucces(isAlias);
-
-                // ** Reload the ListBox with the updated cache **
-                AdminInterface adminInterface = new AdminInterface();
-                adminInterface.LoadDetailsListBox();
             }
         }
 

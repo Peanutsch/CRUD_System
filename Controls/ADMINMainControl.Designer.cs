@@ -54,12 +54,15 @@
             btnForceLogOutUser = new Button();
             txtSearch = new TextBox();
             lblSearchTxt = new Label();
+            lblPageNumber = new Label();
+            btnNextPage = new Button();
+            btnPreviousPage = new Button();
             SuspendLayout();
             // 
             // txtName
             // 
             txtName.Enabled = false;
-            txtName.Location = new Point(127, 269);
+            txtName.Location = new Point(127, 270);
             txtName.Name = "txtName";
             txtName.PlaceholderText = "Name";
             txtName.Size = new Size(325, 23);
@@ -69,7 +72,7 @@
             // txtEmail
             // 
             txtEmail.Enabled = false;
-            txtEmail.Location = new Point(127, 324);
+            txtEmail.Location = new Point(127, 328);
             txtEmail.Name = "txtEmail";
             txtEmail.PlaceholderText = "E-mail";
             txtEmail.Size = new Size(443, 23);
@@ -79,7 +82,7 @@
             // txtAddress
             // 
             txtAddress.Enabled = false;
-            txtAddress.Location = new Point(127, 296);
+            txtAddress.Location = new Point(127, 299);
             txtAddress.Name = "txtAddress";
             txtAddress.PlaceholderText = "Adress";
             txtAddress.Size = new Size(325, 23);
@@ -89,7 +92,7 @@
             // txtCity
             // 
             txtCity.Enabled = false;
-            txtCity.Location = new Point(576, 297);
+            txtCity.Location = new Point(576, 299);
             txtCity.Name = "txtCity";
             txtCity.PlaceholderText = "City";
             txtCity.Size = new Size(207, 23);
@@ -110,7 +113,7 @@
             // btnCreateUser
             // 
             btnCreateUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnCreateUser.Location = new Point(789, 264);
+            btnCreateUser.Location = new Point(789, 292);
             btnCreateUser.Name = "btnCreateUser";
             btnCreateUser.Size = new Size(150, 30);
             btnCreateUser.TabIndex = 11;
@@ -121,7 +124,7 @@
             // 
             btnSaveEditUserDetails.BackColor = Color.LightGreen;
             btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSaveEditUserDetails.Location = new Point(283, 358);
+            btnSaveEditUserDetails.Location = new Point(282, 357);
             btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
             btnSaveEditUserDetails.Size = new Size(97, 30);
             btnSaveEditUserDetails.TabIndex = 9;
@@ -133,7 +136,7 @@
             // btnDeleteUser
             // 
             btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnDeleteUser.Location = new Point(542, 358);
+            btnDeleteUser.Location = new Point(541, 357);
             btnDeleteUser.Name = "btnDeleteUser";
             btnDeleteUser.Size = new Size(150, 30);
             btnDeleteUser.TabIndex = 9;
@@ -144,7 +147,7 @@
             // txtSurname
             // 
             txtSurname.Enabled = false;
-            txtSurname.Location = new Point(458, 268);
+            txtSurname.Location = new Point(458, 270);
             txtSurname.Name = "txtSurname";
             txtSurname.PlaceholderText = "Surname";
             txtSurname.Size = new Size(325, 23);
@@ -154,7 +157,7 @@
             // txtAlias
             // 
             txtAlias.Enabled = false;
-            txtAlias.Location = new Point(24, 269);
+            txtAlias.Location = new Point(24, 270);
             txtAlias.Name = "txtAlias";
             txtAlias.PlaceholderText = "Alias";
             txtAlias.ReadOnly = true;
@@ -165,7 +168,7 @@
             // txtZIPCode
             // 
             txtZIPCode.Enabled = false;
-            txtZIPCode.Location = new Point(458, 295);
+            txtZIPCode.Location = new Point(458, 299);
             txtZIPCode.Name = "txtZIPCode";
             txtZIPCode.PlaceholderText = "ZIP Code";
             txtZIPCode.Size = new Size(112, 23);
@@ -175,7 +178,7 @@
             // txtPhonenumber
             // 
             txtPhonenumber.Enabled = false;
-            txtPhonenumber.Location = new Point(576, 324);
+            txtPhonenumber.Location = new Point(576, 328);
             txtPhonenumber.Name = "txtPhonenumber";
             txtPhonenumber.PlaceholderText = "Phonenumber";
             txtPhonenumber.Size = new Size(207, 23);
@@ -185,7 +188,7 @@
             // btnGeneratePSW
             // 
             btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnGeneratePSW.Location = new Point(386, 358);
+            btnGeneratePSW.Location = new Point(385, 357);
             btnGeneratePSW.Name = "btnGeneratePSW";
             btnGeneratePSW.Size = new Size(150, 30);
             btnGeneratePSW.TabIndex = 22;
@@ -197,7 +200,7 @@
             // 
             btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
             btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnEditUserDetails.Location = new Point(127, 358);
+            btnEditUserDetails.Location = new Point(126, 357);
             btnEditUserDetails.Name = "btnEditUserDetails";
             btnEditUserDetails.Size = new Size(150, 30);
             btnEditUserDetails.TabIndex = 25;
@@ -210,7 +213,7 @@
             txtAdmin.BackColor = Color.LightGreen;
             txtAdmin.Enabled = false;
             txtAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAdmin.Location = new Point(24, 296);
+            txtAdmin.Location = new Point(24, 299);
             txtAdmin.Multiline = true;
             txtAdmin.Name = "txtAdmin";
             txtAdmin.Size = new Size(97, 23);
@@ -225,7 +228,7 @@
             chkIsAdmin.CheckAlign = ContentAlignment.MiddleRight;
             chkIsAdmin.Enabled = false;
             chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkIsAdmin.Location = new Point(24, 325);
+            chkIsAdmin.Location = new Point(24, 329);
             chkIsAdmin.Name = "chkIsAdmin";
             chkIsAdmin.Size = new Size(97, 22);
             chkIsAdmin.TabIndex = 8;
@@ -252,7 +255,7 @@
             btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
             btnForceLogOutUser.Enabled = false;
             btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnForceLogOutUser.Location = new Point(789, 296);
+            btnForceLogOutUser.Location = new Point(789, 328);
             btnForceLogOutUser.Name = "btnForceLogOutUser";
             btnForceLogOutUser.Size = new Size(150, 30);
             btnForceLogOutUser.TabIndex = 32;
@@ -284,12 +287,50 @@
             lblSearchTxt.Text = "Search:";
             lblSearchTxt.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // lblPageNumber
+            // 
+            lblPageNumber.AutoSize = true;
+            lblPageNumber.BackColor = SystemColors.ActiveBorder;
+            lblPageNumber.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            lblPageNumber.Location = new Point(812, 237);
+            lblPageNumber.Name = "lblPageNumber";
+            lblPageNumber.Size = new Size(118, 18);
+            lblPageNumber.TabIndex = 35;
+            lblPageNumber.Text = "Page 1 of 2";
+            // 
+            // btnNextPage
+            // 
+            btnNextPage.BackColor = SystemColors.ActiveCaption;
+            btnNextPage.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            btnNextPage.Location = new Point(864, 267);
+            btnNextPage.Name = "btnNextPage";
+            btnNextPage.Size = new Size(75, 23);
+            btnNextPage.TabIndex = 36;
+            btnNextPage.Text = "Next Page";
+            btnNextPage.UseVisualStyleBackColor = false;
+            btnNextPage.Click += btnNextPage_Click;
+            // 
+            // btnPreviousPage
+            // 
+            btnPreviousPage.BackColor = SystemColors.ActiveCaption;
+            btnPreviousPage.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            btnPreviousPage.Location = new Point(789, 267);
+            btnPreviousPage.Name = "btnPreviousPage";
+            btnPreviousPage.Size = new Size(75, 23);
+            btnPreviousPage.TabIndex = 37;
+            btnPreviousPage.Text = "Prev Page";
+            btnPreviousPage.UseVisualStyleBackColor = false;
+            btnPreviousPage.Click += btnPreviousPage_Click;
+            // 
             // AdminMainControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(btnPreviousPage);
+            Controls.Add(btnNextPage);
+            Controls.Add(lblPageNumber);
             Controls.Add(lblSearchTxt);
             Controls.Add(txtSearch);
             Controls.Add(btnForceLogOutUser);
@@ -311,7 +352,7 @@
             Controls.Add(btnSaveEditUserDetails);
             Controls.Add(btnDeleteUser);
             Name = "AdminMainControl";
-            Size = new Size(968, 391);
+            Size = new Size(968, 456);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -326,7 +367,10 @@
         public CheckBox chkIsAdmin;
         public Button btnChangePassword;
         public Button btnForceLogOutUser;
-        private TextBox txtSearch;
-        private Label lblSearchTxt;
+        public TextBox txtSearch;
+        public Label lblSearchTxt;
+        public Label lblPageNumber;
+        public Button btnNextPage;
+        public Button btnPreviousPage;
     }
 }
