@@ -10,17 +10,6 @@ namespace CRUD_System
 {
     internal static class AesEncryption
     {
-        /*
-            Encryption Key:         l8GGfRqI8hEzw00+WP0SMpptSNw/WjgSeF74sbUL1LizDXicc5wi4YsbLDdTyMqH
-            Cipher:	                aes-256-cbc
-            Initialization Vector:	c2144d621e8a153a5bcc5bffc2c6cab3
-            Encrypted Data:	        4dcb75a90bf851625a0f9f6e7289f25f6f628be4288ee80f6eed530129110adb
-            Password:	            ZtJeqp!#RB2+rqF%b9kjwXD%+t&KM6pm
-            Encryption Key length:	64
-            Base64:     	        base64:bDhHR2ZScUk4aEV6dzAwK1dQMFNNcHB0U053L1dqZ1NlRjc0c2JVTDFMaXpEWGljYzV3aTRZc2JMRGRUeU1xSA==
-            md5 hash:	            73ae8a2d066063e8f5b400fffc63dcf4
-         */
-
         // The fixed encryption key (32 bytes) for AES encryption.
         public static string EncryptionKey { get; } = "l8GGfRqI8hEzw00+WP0SMpptSNw/WjgSeF74sbUL1LizDXicc5wi4YsbLDdTyMqH";
 
@@ -86,7 +75,6 @@ namespace CRUD_System
                 }
             }
         }
-
 
         /// <summary>
         /// Generates a 256-bit key from the provided password using SHA-256 hashing.

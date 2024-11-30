@@ -20,7 +20,6 @@ namespace CRUD_System.Interfaces
         #region PROPERTIES
         public bool EditMode { get; set; }
         private List<string[]> CachedUserData => cache.CachedUserData;
-        private List<string[]> CachedLoginData => cache.CachedLoginData;
 
         readonly DataCache cache = new DataCache();
         private readonly AdminMainControl adminControl;
@@ -30,9 +29,6 @@ namespace CRUD_System.Interfaces
         public AdminInterface(AdminMainControl? adminControl = null)
         {
             this.adminControl = adminControl ?? new AdminMainControl();
-
-            // Initialize cache
-            //LoadCacheData();
         }
         #endregion CONSTRUCTOR
 
@@ -79,7 +75,6 @@ namespace CRUD_System.Interfaces
         /// </summary>
         /// <param name="sender">The source of the event, expected to be the ListBox control.</param>
         /// <param name="e">The event data that contains drawing parameters, such as the item to be drawn and the graphics context.</param>
-
         public void ListBoxAdmin_DrawItemHandler(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
@@ -221,9 +216,6 @@ namespace CRUD_System.Interfaces
                 // Enable Force Log Out button if the selected user is not the current user
                 if (AuthenticationService.CurrentUser != selectedAlias)
                 {
-                    // Reload the cache to ensure it's up to date before checking online status
-                    // LoadCacheData();
-
                     // Update the state of the Force Log Out button based on the selected user's online status
                     SetForceLogOutUserBtn(selectedAlias);
                 }
@@ -277,7 +269,6 @@ namespace CRUD_System.Interfaces
             // Adjust other action buttons based on EditMode status
             ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
             ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
-            ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
 
             // Disable ListBox when in edit mode to prevent user changes in selection
             if (adminControl.listBoxAdmin != null)
@@ -331,7 +322,6 @@ namespace CRUD_System.Interfaces
             adminControl.btnForceLogOutUser.Enabled = isOnline;
             adminControl.btnForceLogOutUser.Visible = isOnline;
         }
-
         #endregion EDITMODE DISPLAY
 
         #region TEXTBOXES ADMIN

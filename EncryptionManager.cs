@@ -37,12 +37,6 @@ namespace CRUD_System
 
             // Write the encrypted lines back to the same file
             File.WriteAllLines(filePath, encryptedLines);
-
-            // Log the completion of the encryption process
-            //Debug.WriteLine("\nEncryption completed for the file: " + filePath + "\n");
-
-            // Display a message to inform the user that the encryption is complete
-            //MessageBox.Show("Encryption completed for the file: " + filePath);
         }
 
         /// <summary>
@@ -74,10 +68,6 @@ namespace CRUD_System
 
             // Write the decrypted lines back to the same file
             File.WriteAllLines(filePath, decryptedLines);
-
-            // Log the completion of the decryption process
-            //Debug.WriteLine("Decryption completed for the file: " + filePath + "\n");
-            //MessageBox.Show("Decryption completed for the file: " + filePath);
         }
     }
 }

@@ -42,6 +42,19 @@ namespace CRUD_System
             EnterKey();
         }
         #endregion CONSTRUCTOR
+
+        #region Form UI
+        /// <summary>
+        /// Displays the text of the lblPassword label to inform users about the password requirements. 
+        /// It dynamically displays the following criteria based on the specified variables lengthPsw, charToUpper and charIsDigi.
+        /// </summary>
+        private void TxtLabelPassword()
+        {
+            lblPassword.Text = $"Must contain {lengthPsw} or more chars.\n" +
+                               $"Must contain at least {charToUpper} capital letters\n" +
+                               $"Must contain at least {charIsDigi} numbers";
+        }
+
         /// <summary>
         /// Event handler for the form load event. Sets focus to the confirm password input field.
         /// </summary>
@@ -151,7 +164,9 @@ namespace CRUD_System
                 }
             };
         }
+        #endregion Form UI
 
+        #region Process and Save password
         /// <summary>
         /// Validates the new password based on length, uppercase letter, and digit requirements.
         /// If valid, prompts the user to save the password and updates the password in data files.
@@ -202,12 +217,6 @@ namespace CRUD_System
                 }
             }
         }
-
-        private void TxtLabelPassword()
-        {
-            lblPassword.Text = $"Must contain {lengthPsw} or more chars.\n" +
-                               $"Must contain at least {charToUpper} capital letters\n" +
-                               $"Must contain at least {charIsDigi} numbers";
-        }
+        #endregion Process and Save password
     }
 }

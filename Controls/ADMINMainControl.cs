@@ -29,21 +29,23 @@ namespace CRUD_System
     public partial class AdminMainControl : UserControl
     {
         #region PROPERTIES
-        FilePaths path = new FilePaths();
+        readonly FilePaths path = new FilePaths();
 
-        AdminInterface adminInterface;
-        AccountManager accountManager = new AccountManager();
-        ProfileManager profileManager = new ProfileManager();
-        FormInteractionHandler interactionHandler = new FormInteractionHandler();
-        UserSearchService search = new UserSearchService();
+        readonly AdminInterface adminInterface;
+        readonly AccountManager accountManager = new AccountManager();
+        readonly ProfileManager profileManager = new ProfileManager();
+        readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        readonly UserSearchService search = new UserSearchService();
+
+        bool isAdmin;
+        bool onlineStatus;
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
 
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         bool editMode = false;
-        public bool isAdmin = false;
         #endregion PROPERTIES
 
         #region Constructor
@@ -92,12 +94,9 @@ namespace CRUD_System
 
             var loginDetails = loginLines[loginIndex].Split(",");
 
-            // Parse the admin status and online status as bools
-            bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
-            bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
-
             if (userIndex != -1)
             {
+                Debug.WriteLine($"btnSaveEditUserDetails_Click bool isAdmin: {isAdmin}");
                 profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
             }
             editMode = false; // Close editMode
@@ -262,6 +261,7 @@ namespace CRUD_System
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
+        #region TextBox Search
         /// <summary>
         /// Handles the text changed event for the alias search textbox. It dynamically updates the list of users
         /// displayed in the listbox based on the search input. If the input is empty, it loads all users;
@@ -277,7 +277,7 @@ namespace CRUD_System
             // If the alias is empty, load all users into the listbox
             if (string.IsNullOrEmpty(searchTerm))
             {
-                // Load all user details into the listbox (when no search term is entered)
+                // Load all user details into the listbox (when no search term is entered) and empty textboxes
                 adminInterface.LoadDetailsListBox();
                 adminInterface.EmptyTextBoxesAdmin();
             }
@@ -296,42 +296,7 @@ namespace CRUD_System
                 }
             }
         }
+        #endregion TextBox Search
     }
 }
-
-
-/*
-/// <summary>
-/// Handles the text changed event for the alias search textbox. It dynamically updates the list of users
-/// displayed in the listbox based on the search input. If the input is empty, it loads all users;
-/// otherwise, it filters the users based on the provided alias prefix.
-/// </summary>
-/// <param name="sender">The source of the event (typically the text box control that triggered the event).</param>
-/// <param name="e">The event data, which contains information about the text change event.</param>
-private void txtAliasToSearch_TextChanged(object sender, EventArgs e)
-{
-    // Get the alias input by the user in the search box
-    string searchTerm = txtSearch.Text;
-
-    // If the alias is empty, load all users into the listbox
-    if (string.IsNullOrEmpty(searchTerm))
-    {
-        // Load all user details into the listbox (when no search term is entered)
-        adminInterface.LoadDetailsListBox();
-    }
-    else
-    {
-        // If alias is not empty, search for users by the alias prefix
-        var searchResults = new UserSearchService().SearchUsers(searchTerm);
-
-        // Clear the current items in the listbox to display the search results
-        listBoxAdmin.Items.Clear();
-
-        // Add each matched result (user details) to the listbox
-        foreach (var result in searchResults)
-        {
-            listBoxAdmin.Items.Add(result);
-        }
-
-*/
 

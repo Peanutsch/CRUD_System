@@ -16,9 +16,6 @@ public class DataCache
     private readonly string userFilePath = path.UserFilePath;
     private readonly string loginFilePath = path.LoginFilePath;
 
-    // A flag to indicate whether the cache is valid
-    public static bool IsCacheValid { get; set; } = false;
-
     public static List<string> CachedLoginLines { get; private set; } = new List<string>();
     public static List<string> CachedUserLines { get; private set; } = new List<string>();
 
@@ -41,14 +38,9 @@ public class DataCache
     /// </summary>
     public DataCache()
     {
-        //LoadDecryptedData();
+        // 
     }
     #endregion CONSTRUCTOR
-
-    public static void InvalidateCache()
-    {
-        IsCacheValid = false;
-    }
 
     // Method to load cache from files
     public static void LoadCache()
@@ -60,12 +52,6 @@ public class DataCache
             CachedUserLines = userLines;
             CachedLoginLines = loginLines;
         }
-    }
-
-    public static bool IsCacheLoaded()
-    {
-        return CachedUserLines != null && CachedLoginLines != null
-               && CachedUserLines.Count > 0 && CachedLoginLines.Count > 0;
     }
 
     /// <summary>
@@ -113,7 +99,7 @@ public class DataCache
         Debug.WriteLine("DataCache.SaveAndEncryptData> data_login.csv DECRYPTED");
 
         // Save the cached user data to the file, joining fields into CSV lines.
-        // Skip Header, ensure the header is ignored.
+        // Skip Header, ensure the header and Admin user details are ignored.
         File.WriteAllLines(userFilePath, 
                            new[] { "[0] NAME,[1] SURNAME,[2] ALIAS,[3] ADRESS,[4] ZIPCODE,[5] CITY,[6] EMAIL ADRESS,[7] PHONENUMBER,[8] ONLINE STATUS" }
                            .Skip(1)
