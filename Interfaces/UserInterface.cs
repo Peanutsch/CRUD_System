@@ -149,7 +149,7 @@ namespace CRUD_System.Interfaces
         public void InterfaceEditModeUser()
         {
             // Toggle Edit and Cancel button text
-            userControl.btnEditUserDetails.Text = EditMode ? "Cancel" : "Edit User";
+            userControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User";
 
             // Set background color based on EditMode
             userControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;
