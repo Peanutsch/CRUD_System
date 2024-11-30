@@ -267,7 +267,7 @@ namespace CRUD_System
         /// <summary>
         /// Handles the text changed event for the alias search textbox. It dynamically updates the list of users
         /// displayed in the listbox based on the search input. If the input is empty, it loads all users;
-        /// otherwise, it filters the users based on the provided alias prefix.
+        /// otherwise, it filters the users based on the provided prefix.
         /// </summary>
         /// <param name="sender">The source of the event (typically the text box control that triggered the event).</param>
         /// <param name="e">The event data, which contains information about the text change event.</param>
@@ -281,6 +281,7 @@ namespace CRUD_System
             {
                 // Load all user details into the listbox (when no search term is entered)
                 adminInterface.LoadDetailsListBox();
+                adminInterface.EmptyTextBoxesAdmin();
             }
             else
             {
@@ -299,4 +300,40 @@ namespace CRUD_System
         }
     }
 }
+
+
+/*
+/// <summary>
+/// Handles the text changed event for the alias search textbox. It dynamically updates the list of users
+/// displayed in the listbox based on the search input. If the input is empty, it loads all users;
+/// otherwise, it filters the users based on the provided alias prefix.
+/// </summary>
+/// <param name="sender">The source of the event (typically the text box control that triggered the event).</param>
+/// <param name="e">The event data, which contains information about the text change event.</param>
+private void txtAliasToSearch_TextChanged(object sender, EventArgs e)
+{
+    // Get the alias input by the user in the search box
+    string searchTerm = txtSearch.Text;
+
+    // If the alias is empty, load all users into the listbox
+    if (string.IsNullOrEmpty(searchTerm))
+    {
+        // Load all user details into the listbox (when no search term is entered)
+        adminInterface.LoadDetailsListBox();
+    }
+    else
+    {
+        // If alias is not empty, search for users by the alias prefix
+        var searchResults = new UserSearchService().SearchUsers(searchTerm);
+
+        // Clear the current items in the listbox to display the search results
+        listBoxAdmin.Items.Clear();
+
+        // Add each matched result (user details) to the listbox
+        foreach (var result in searchResults)
+        {
+            listBoxAdmin.Items.Add(result);
+        }
+
+*/
 

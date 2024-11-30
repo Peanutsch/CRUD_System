@@ -19,9 +19,6 @@ public class DataCache
     // A flag to indicate whether the cache is valid
     public static bool IsCacheValid { get; set; } = false;
 
-    // Flag to check if data has already been loaded
-    private bool isDataLoaded = false;
-
     public static List<string> CachedLoginLines { get; private set; } = new List<string>();
     public static List<string> CachedUserLines { get; private set; } = new List<string>();
 
@@ -100,9 +97,6 @@ public class DataCache
         // Encrypt the user and login data files again to ensure the data is secured after loading
         EncryptionManager.EncryptFile(userFilePath);
         EncryptionManager.EncryptFile(loginFilePath);
-
-        // Mark that the data has been successfully loaded
-        isDataLoaded = true;
     }
 
 
