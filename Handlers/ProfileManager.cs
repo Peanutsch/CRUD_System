@@ -19,10 +19,11 @@ namespace CRUD_System.Handlers
         #region PROPERTIES
         FilePaths path = new FilePaths();
 
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        AccountManager accountManager = new AccountManager();
-        RepositoryLogEvents logEvents = new RepositoryLogEvents();
-        FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        readonly AccountManager accountManager = new AccountManager();
+        readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
+        readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        readonly DataCache cache = new DataCache();
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -32,43 +33,58 @@ namespace CRUD_System.Handlers
         }
         #endregion CONSTRUCTOR
 
-        #region OPERATIONS
+        #region UPDATE USER DETAILS
         /// <summary>
         /// Updates user details in data_users.csv
         /// Updates isAdmin in data_login.csv
         /// </summary>
         public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin, bool onlineStatus)
         {
-            var loginDetails = loginLines[loginIndex].Split(",");
-            string currentAlias = loginDetails[0];
-            string currentPassword = loginDetails[1];
-            bool currentOnlineStatus = onlineStatus;
-
-            userLines[userIndex] = $"{name},{surname},{alias},{address},{zipCode.ToUpper()},{city},{email},{phoneNumber},{currentOnlineStatus}";
-            loginLines[loginIndex] = $"{currentAlias},{currentPassword},{isAdmin},{onlineStatus}";
-
+            // Confirm to save changes
             DialogResult dr = message.MessageBoxConfirmToSAVEChanges(alias);
             if (dr != DialogResult.Yes)
             {
                 return;
             }
 
+            // Ensure the cache is loaded and decrypted before performing the validation
+            cache.LoadDecryptedData();
+
             var currentUser = AuthenticationService.CurrentUser;
             if (!string.IsNullOrEmpty(currentUser))
             {
-                // Write updated data back to data_users.csv
-                File.WriteAllLines(path.UserFilePath, userLines); 
-                File.WriteAllLines(path.LoginFilePath, loginLines);
+                try
+                {
+                    // Find the user in the cached user data by alias and update their online status.
+                    var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias); // Alias field
+                    if (user != null)
+                    {
+                        user[0] = name;
+                        user[1] = surname;
+                        user[2] = alias;
+                        user[3] = address;
+                        user[4] = zipCode;
+                        user[5] = city;
+                        user[6] = email;
+                        user[7] = phoneNumber;
+                        user[8] = onlineStatus.ToString(); // Update online status
+                    }
 
-                logEvents.LogEventUpdateUserDetails(currentUser, alias);
-                message.MessageUpdateSucces();
-            }
-            else
-            {
-                message.MessageSomethingWentWrong();
-                return;
+                    // Save changes to the data files and encrypt them
+                    cache.SaveAndEncryptData();
+
+                    logEvents.LogEventUpdateUserDetails(currentUser, alias);
+                    message.MessageUpdateSucces();
+                }
+                catch (Exception ex)
+                {
+                    Debug.Write("Error: " + ex.ToString());
+                    message.MessageSomethingWentWrong();
+                    return;
+                }
             }
         }
+        #endregion UPDATE USER DETAILS
 
         #region DELETE USER
         /// <summary>
@@ -96,8 +112,9 @@ namespace CRUD_System.Handlers
                 return;
             }
 
-            // Decrypt files before modifying
-            DecryptFiles();
+            // Decrypt both user and login files before performing any actions on them
+            EncryptionManager.DecryptFile(path.UserFilePath);
+            EncryptionManager.DecryptFile(path.LoginFilePath);
 
             // Read the current data from the files
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
@@ -114,8 +131,9 @@ namespace CRUD_System.Handlers
             // Show a success message after deletion
             message.MessageDeleteSucces(aliasToDelete);
 
-            // Re-encrypt the files after modification
-            ReEncryptFiles();
+            // Re-encrypt the user and login files to ensure data security
+            EncryptionManager.EncryptFile(path.UserFilePath);
+            EncryptionManager.EncryptFile(path.LoginFilePath);
 
             // Reload the list box to reflect the updated data
             adminInterface.ReloadListBoxAdmin(accountManager.FindUserIndexByAlias(userLines, loginLines, aliasToDelete));
@@ -131,16 +149,6 @@ namespace CRUD_System.Handlers
             // Show a confirmation dialog for deletion
             DialogResult dr = message.MessageBoxConfirmToDELETE(alias);
             return dr == DialogResult.Yes;
-        }
-
-        /// <summary>
-        /// Decrypts the data files (data_users.csv and data_login.csv) before any modifications.
-        /// </summary>
-        private void DecryptFiles()
-        {
-            // Decrypt both user and login files before performing any actions on them
-            EncryptionManager.DecryptFile(path.UserFilePath);
-            EncryptionManager.DecryptFile(path.LoginFilePath);
         }
 
         /// <summary>
@@ -182,16 +190,6 @@ namespace CRUD_System.Handlers
         {
             // Log the deletion event, including the current user and the user being deleted
             logEvents.LogEventDeleteUser(currentUser, aliasToDelete);
-        }
-
-        /// <summary>
-        /// Re-encrypts the data files after modifications.
-        /// </summary>
-        private void ReEncryptFiles()
-        {
-            // Re-encrypt the user and login files to ensure data security
-            EncryptionManager.EncryptFile(path.UserFilePath);
-            EncryptionManager.EncryptFile(path.LoginFilePath);
         }
 
         /// <summary>
@@ -286,6 +284,7 @@ namespace CRUD_System.Handlers
         */
         #endregion DELETE USER
 
+        #region GENERATE NEW PASSWORD
         /// <summary>
         /// Generates a new password for a user and logs the event.
         /// </summary>
@@ -328,7 +327,7 @@ namespace CRUD_System.Handlers
                 return;
             }
         }
-        #endregion OPERATIONS
+        #endregion GENERATE NEW PASSWORD
 
         #region SAVE NEW USER
         /// <summary>

@@ -54,8 +54,6 @@ namespace CRUD_System.Handlers
                 // Decrypt the alias using your decryption method
                 string decryptedAlias = AesEncryption.DecryptWithFixedKey(encryptedAlias, AesEncryption.EncryptionKey);
 
-                //MessageBox.Show($"Decrypted Alias: {decryptedAlias}, Comparing with: {alias.Trim()}");
-
                 // Compare the decrypted alias with the provided alias
                 if (decryptedAlias == alias.Trim())
                 {
