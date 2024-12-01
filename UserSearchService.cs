@@ -28,6 +28,7 @@ namespace CRUD_System
 
             // Search for matches in different fields
             var matchedUsers = cache.CachedUserData
+                .Skip(2)
                 .Where(userDetails =>
                 {
                     // Check if the search term matches the alias, name, surname, or email
@@ -35,6 +36,7 @@ namespace CRUD_System
                            (userDetails[0].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Name
                             userDetails[1].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Surname
                             userDetails[2].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Alias
+                            userDetails[5].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // City
                             (userDetails.Length > 6 && userDetails[6].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase)) || // Email
                             (userDetails[7].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase))); // Phonenumber
                 })

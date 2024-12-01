@@ -93,6 +93,7 @@ namespace CRUD_System.Interfaces
             {
                 currentPage++;
                 LoadDetailsListBox();
+                EmptyTextBoxesAdmin();
             }
         }
 
@@ -105,6 +106,7 @@ namespace CRUD_System.Interfaces
             {
                 currentPage--;
                 LoadDetailsListBox();
+                EmptyTextBoxesAdmin();
             }
         }
 
@@ -167,9 +169,32 @@ namespace CRUD_System.Interfaces
             // Clear the ListBox
             adminControl.listBoxAdmin.Items.Clear();
 
-            // Iterate through the cache and add items to the ListBox
-            foreach (var userDetailsArray in cache.CachedUserData.Skip(2)) // Skip headers
+            // Calculate start and end indices for the current page
+            int startIndex = (currentPage - 1) * itemsPerPage;
+            int endIndex = Math.Min(startIndex + itemsPerPage, CachedUserData.Count);
+
+            // Skip header rows and load items for the current page
+            var userDetailsForPage = CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
+
+            foreach (var userDetailsArray in userDetailsForPage)
             {
+                // Selection of items to display in ListBoxAdmin
+                string name = userDetailsArray[0];
+                string surname = userDetailsArray[1];
+                string alias = userDetailsArray[2];
+                string email = userDetailsArray[6];
+                string phonenumber = userDetailsArray[7];
+                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
+
+                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
+                adminControl.listBoxAdmin.Items.Add(listItem);
+
+                UpdatePageLabel();
+
+                /*
+                // Iterate through the cache and add items to the ListBox
+                foreach (var userDetailsArray in cache.CachedUserData.Skip(2)) // Skip headers
+                {
                 if (userDetailsArray.Length >= 8) // Ensure there are enough fields
                 {
                     string name = userDetailsArray[0];
@@ -187,10 +212,11 @@ namespace CRUD_System.Interfaces
                 {
                     Console.WriteLine("Insufficient fields in a user record.");
                 }
+                 */
             }
             // Empty textboxes
             EmptyTextBoxesAdmin();
-        }
+            }
 
         /// <summary>
         /// Handles the event when a user is selected in the ListBox. It fills the details for the selected user in the textboxes,

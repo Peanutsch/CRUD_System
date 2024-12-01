@@ -113,7 +113,7 @@
             // btnCreateUser
             // 
             btnCreateUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnCreateUser.Location = new Point(789, 292);
+            btnCreateUser.Location = new Point(789, 317);
             btnCreateUser.Name = "btnCreateUser";
             btnCreateUser.Size = new Size(150, 30);
             btnCreateUser.TabIndex = 11;
@@ -135,12 +135,14 @@
             // 
             // btnDeleteUser
             // 
+            btnDeleteUser.BackColor = SystemColors.ActiveCaption;
             btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
             btnDeleteUser.Location = new Point(541, 357);
             btnDeleteUser.Name = "btnDeleteUser";
             btnDeleteUser.Size = new Size(150, 30);
             btnDeleteUser.TabIndex = 9;
             btnDeleteUser.Text = "Delete User";
+            btnDeleteUser.UseVisualStyleBackColor = false;
             btnDeleteUser.Visible = false;
             btnDeleteUser.Click += btnDeleteUser_Click;
             // 
@@ -187,12 +189,14 @@
             // 
             // btnGeneratePSW
             // 
+            btnGeneratePSW.BackColor = SystemColors.ActiveCaption;
             btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
             btnGeneratePSW.Location = new Point(385, 357);
             btnGeneratePSW.Name = "btnGeneratePSW";
             btnGeneratePSW.Size = new Size(150, 30);
             btnGeneratePSW.TabIndex = 22;
             btnGeneratePSW.Text = "Gen. Password";
+            btnGeneratePSW.UseVisualStyleBackColor = false;
             btnGeneratePSW.Visible = false;
             btnGeneratePSW.Click += btnGeneratePassword_Click;
             // 
@@ -255,7 +259,7 @@
             btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
             btnForceLogOutUser.Enabled = false;
             btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnForceLogOutUser.Location = new Point(789, 328);
+            btnForceLogOutUser.Location = new Point(789, 353);
             btnForceLogOutUser.Name = "btnForceLogOutUser";
             btnForceLogOutUser.Size = new Size(150, 30);
             btnForceLogOutUser.TabIndex = 32;
@@ -290,9 +294,9 @@
             // lblPageNumber
             // 
             lblPageNumber.AutoSize = true;
-            lblPageNumber.BackColor = Color.White;
+            lblPageNumber.BackColor = SystemColors.ActiveCaption;
             lblPageNumber.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            lblPageNumber.Location = new Point(810, 236);
+            lblPageNumber.Location = new Point(806, 267);
             lblPageNumber.Name = "lblPageNumber";
             lblPageNumber.Size = new Size(118, 18);
             lblPageNumber.TabIndex = 35;
@@ -302,7 +306,7 @@
             // 
             btnNextPage.BackColor = SystemColors.ActiveCaption;
             btnNextPage.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnNextPage.Location = new Point(864, 267);
+            btnNextPage.Location = new Point(864, 288);
             btnNextPage.Name = "btnNextPage";
             btnNextPage.Size = new Size(75, 23);
             btnNextPage.TabIndex = 36;
@@ -314,7 +318,7 @@
             // 
             btnPreviousPage.BackColor = SystemColors.ActiveCaption;
             btnPreviousPage.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnPreviousPage.Location = new Point(789, 267);
+            btnPreviousPage.Location = new Point(789, 288);
             btnPreviousPage.Name = "btnPreviousPage";
             btnPreviousPage.Size = new Size(75, 23);
             btnPreviousPage.TabIndex = 37;

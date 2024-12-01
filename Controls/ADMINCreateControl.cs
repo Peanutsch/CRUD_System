@@ -25,6 +25,8 @@ namespace CRUD_System
         private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
         private readonly ProfileManager profileManager = new ProfileManager();
         private readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        private readonly AdminMainControl adminMainControl = new AdminMainControl();
+        private readonly AdminInterface adminInterface = new AdminInterface();
 
         bool isAdmin = false;
         #endregion PROPERTIES
@@ -43,6 +45,14 @@ namespace CRUD_System
         private void btnCancel_Click(object sender, EventArgs e)
         {
             interactionHandler.Close_CreateForm(this.ParentForm);
+
+            // Reload Cache
+            DataCache cache = new DataCache();
+            cache.LoadDecryptedData();
+
+            // Reload listbox
+            adminMainControl.listBoxAdmin.Items.Clear();
+            adminInterface.ReloadListBoxAdmin(-1);
         }
 
         /// <summary>

@@ -75,6 +75,7 @@ namespace CRUD_System
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
                 adminInterface.InterfaceEditModeAdmin();
+                //adminInterface.LoadDetailsListBox();
             },
              () => message.MessageInvalidNoUserSelected());
         }
