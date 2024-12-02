@@ -38,6 +38,7 @@ namespace CRUD_System
 
         bool isAdmin;
         bool onlineStatus = false;
+        bool isSick = false;
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
@@ -95,7 +96,7 @@ namespace CRUD_System
 
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
+                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
             }
             editMode = false; // Close editMode
             adminInterface.EditMode = false;
@@ -262,6 +263,11 @@ namespace CRUD_System
         {
             adminInterface.NextPage();
         }
+
+        private void chkAbsenceDueIllness_CheckedChanged(object sender, EventArgs e)
+        {
+            isSick = chkAbsenceDueIllness.Checked;
+        }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region TextBox Search
@@ -337,6 +343,8 @@ namespace CRUD_System
             adminInterface.UpdatePageLabel();
         }
         #endregion TextBox Search
+
+
     }
 }
 

@@ -15,9 +15,11 @@ namespace CRUD_System.FileHandlers
         public string UserFilePath { get; private set; }
         public string LoginFilePath { get; private set; }
         public string LogEventFilePath { get; private set; }
+        public string HRFilePath { get; private set; }
+
         #endregion PROPERTIES
 
-        #region PROCESSING
+        #region CONSTRUCTOR
         /// <summary>
         /// Initializes a new instance of the <see cref="FilePaths"/> class.
         /// Sets file paths for user data, login data, and log events based on the root directory.
@@ -29,18 +31,11 @@ namespace CRUD_System.FileHandlers
             UserFilePath = Path.Combine(rootPath, "CSV", "data_users.csv");
             LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
             LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
+            HRFilePath = Path.Combine(rootPath, "CSV", "hr.csv");
         }
+        #endregion CONSTRUCTOR
 
-        /// <summary>
-        /// Reads the content of a specified file and returns it as a list of strings.
-        /// </summary>
-        /// <param name="filePath">The path of the file to read.</param>
-        /// <returns>A list of strings containing each line of the file, or an empty list if the file does not exist.</returns>
-        public List<string> ReadFileContent(string filePath)
-        {
-            return File.Exists(filePath) ? File.ReadAllLines(filePath).ToList() : new List<string>();
-        }
-
+        #region PROCESSING
         /// <summary>
         /// Appends a new log entry to the log events file.
         /// </summary>
@@ -62,6 +57,12 @@ namespace CRUD_System.FileHandlers
             var userLines = File.ReadAllLines(UserFilePath).ToList();
             var loginLines = File.ReadAllLines(LoginFilePath).ToList();
             return (userLines, loginLines);
+        }
+
+        public List<string> ReadHrLines()
+        {
+            var hrLines = File.ReadAllLines(HRFilePath).ToList();
+            return hrLines;
         }
         #endregion PROCESSING
     }

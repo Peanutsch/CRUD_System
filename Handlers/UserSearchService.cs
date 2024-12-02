@@ -40,8 +40,8 @@ namespace CRUD_System.Handlers
                             userDetails[5].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // City
                             userDetails.Length > 6 && userDetails[6].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Email
                             userDetails[7].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Phonenumber
-                            userDetails.Length > 8 && userDetails[8].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase)); // Online status
-                                                                                                                                  // searchterm = bool true or false
+                            userDetails.Length > 8 && userDetails[8].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase)) || // Online status searchterm = bool true or false
+                            userDetails.Length > 9 && userDetails[9].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase); // Absence due Illness
                 })
                 .Select(userDetails =>
                 {

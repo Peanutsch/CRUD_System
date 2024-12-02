@@ -36,7 +36,7 @@ namespace CRUD_System.Handlers
         /// Updates user details in data_users.csv
         /// Updates isAdmin in data_login.csv
         /// </summary>
-        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin, bool onlineStatus)
+        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
             // Confirm to save changes
             DialogResult dr = message.MessageBoxConfirmToSAVEChanges(alias);
@@ -68,7 +68,8 @@ namespace CRUD_System.Handlers
                         user[5] = city;
                         user[6] = email;
                         user[7] = phoneNumber;
-                        user[8] = onlineStatus.ToString(); // Update online status
+                        user[8] = onlineStatus.ToString();
+                        user[9] = isSick.ToString(); // Update online status
                     }
 
                     // Find the user in the cached login data by alias and update isAdmin.
@@ -276,14 +277,15 @@ namespace CRUD_System.Handlers
             string isPassword = PasswordManager.PasswordGenerator();
             Debug.WriteLine($"Created Password: {isPassword}");
 
-            // Default new user to offline
+            // Default values new user
             bool onlineStatus = false;
+            bool isSick = false;
 
             // Confirm the creation of the new user with the alias
             if (ConfirmNewUserCreation(isAlias))
             {
                 // Save the new user's data to the system (cache and file storage)
-                SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin, onlineStatus);
+                SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin, onlineStatus, isSick);
 
                 // Add the user to the cache and ListBoxAdmin
                 string[] userDetails = new string[]
@@ -304,7 +306,7 @@ namespace CRUD_System.Handlers
         /// </summary>
         private void SaveUserData(string alias, string password, string name, string surname,
                                    string address, string zipCode, string city, string email,
-                                   string phoneNumber, bool isAdmin, bool onlineStatus)
+                                   string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
             // Decrypt the user and login files before updating
             EncryptionManager.DecryptFile(path.UserFilePath);
@@ -315,7 +317,7 @@ namespace CRUD_System.Handlers
 
             // Prepare the new data
             string newDataLogin = $"{alias},{password},{isAdmin},{onlineStatus}";
-            string newDataUsers = $"{name},{surname},{alias},{address},{zipCode},{city},{email},{phoneNumber},{onlineStatus}";
+            string newDataUsers = $"{name},{surname},{alias},{address},{zipCode},{city},{email},{phoneNumber},{onlineStatus},{isSick}";
 
             // Append the new data to the files
             File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);

@@ -72,8 +72,9 @@ namespace CRUD_System.Interfaces
                 string email = userDetailsArray[6];
                 string phonenumber = userDetailsArray[7];
                 string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
+                string isSick = userDetailsArray.Length > 9 && userDetailsArray[9] == "True" ? "| [ABSENCE due ILLNESS]" : string.Empty;
 
-                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
+                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline} {isSick}";
                 adminControl.listBoxAdmin.Items.Add(listItem);
                 
                 UpdatePageLabel();
@@ -100,8 +101,26 @@ namespace CRUD_System.Interfaces
 
             e.DrawBackground();
 
-            // Determine the color based on item content
-            Color textColor = listItem.Contains("ONLINE") ? Color.DarkOliveGreen : Color.Black;
+            // Declare the default text color
+            Color textColor = Color.Black;
+
+            // Determine the color based on item content. 
+            if (listItem.Contains("ONLINE") && listItem.Contains("ABSENCE due ILLNESS"))
+            {
+                textColor = Color.Orange;
+            }
+            else if (listItem.Contains("ONLINE"))
+            {
+                textColor = Color.DarkOliveGreen;
+            }
+            else if (listItem.Contains("ABSENCE due ILLNESS"))
+            {
+                textColor = Color.Violet;
+            }
+            else
+            {
+                textColor = Color.Black;
+            }
 
             // Use a fallback font if e.Font is null
             Font font = e.Font ?? SystemFonts.DefaultFont;
@@ -217,12 +236,17 @@ namespace CRUD_System.Interfaces
             // Retrieve login details from the cache
             var loginDetails = cache.CachedLoginData?
                                .FirstOrDefault(details => details[0] == selectedAlias); // Match alias in login data
+            var userDetails = cache.CachedUserData?
+                               .FirstOrDefault(details => details[2] == selectedAlias); // Match alias in user data
 
-            if (loginDetails != null)
+            if (loginDetails != null && userDetails != null)
             {
-                // Update admin-related fields based on login details
-                adminControl.txtAdmin.Visible = loginDetails[2] == "True"; // IsAdmin field
+                // Update checkbox fields based on login- and userdetails
+                adminControl.txtAdmin.Visible = loginDetails[2] == "True"; // IsAdmin
                 adminControl.chkIsAdmin.Checked = loginDetails[2] == "True";
+                adminControl.txtAbsenceIllness.Visible = userDetails[9] == "True"; // isSick
+                adminControl.chkAbsenceDueIllness.Checked = userDetails[9] == "True";
+
 
                 // Enable Force Log Out button if the selected user is not the current user
                 if (AuthenticationService.CurrentUser != selectedAlias)
@@ -234,6 +258,7 @@ namespace CRUD_System.Interfaces
             else
             {
                 adminControl.txtAdmin.Visible = false; // Hide admin-related fields if no login details are found
+                adminControl.txtAbsenceIllness.Visible = false; // Hide isSick-related fields if no user details are found
             }
         }
         #endregion LISTBOX ADMIN
@@ -294,18 +319,19 @@ namespace CRUD_System.Interfaces
             // Adjust visibility and enablement of buttons based on EditMode
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
+            ToggleControlVisibility(adminControl.chkAbsenceDueIllness, EditMode);
 
             // Array of text fields to enable or disable in EditMode for user editing
             var textFields = new[]
             {
                 adminControl.txtName,
                 adminControl.txtSurname,
-                adminControl.txtAdmin,
                 adminControl.txtAddress,
                 adminControl.txtZIPCode,
                 adminControl.txtCity,
                 adminControl.txtEmail,
-                adminControl.txtPhonenumber
+                adminControl.txtPhonenumber,
+                adminControl.txtAdmin
              };
 
             foreach (var field in textFields)
@@ -387,6 +413,9 @@ namespace CRUD_System.Interfaces
             adminControl.txtCity.Text = string.Empty;
             adminControl.txtEmail.Text = string.Empty;
             adminControl.txtPhonenumber.Text = string.Empty;
+
+            adminControl.txtAdmin.Visible = false;
+            adminControl.txtAbsenceIllness.Visible = false;
 
             // Update button states to false
             adminControl.InteractionHandler.UserSelected = false;
