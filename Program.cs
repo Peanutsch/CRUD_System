@@ -19,6 +19,7 @@ namespace CRUD_System
         [STAThread]
         static void Main() 
         {
+            #region Encryption / Decryption
             // Encrypt the CSV file
             //EncryptionManager.EncryptFile(filePath.LoginFilePath); // data_login.csv
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
@@ -26,6 +27,7 @@ namespace CRUD_System
             // Decrypt the CSV file
             //EncryptionManager.DecryptFile(filePath.LoginFilePath); // data_login.csv
             //EncryptionManager.DecryptFile(filePath.UserFilePath); // data_users.csv
+            #endregion Encryption / Decryption
 
             // Initialize the application configuration
             ApplicationConfiguration.Initialize();

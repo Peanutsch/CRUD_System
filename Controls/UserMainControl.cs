@@ -31,7 +31,6 @@ namespace CRUD_System
         AccountManager accountManager = new AccountManager();
         ProfileManager profileManager = new ProfileManager();
         FormInteractionHandler interactionHandler = new FormInteractionHandler();
-
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         // Property to expose the InteractionHandler instance for external access
@@ -45,7 +44,6 @@ namespace CRUD_System
         {
             InitializeComponent();
             this.userInterface = userInterface ?? new UserInterface(this);
-
             this.userInterface.LoadDetailsListBoxThisUser();
         }
         #endregion CONSTRUCTOR
@@ -110,7 +108,6 @@ namespace CRUD_System
 
             return modus;
         }
-        #endregion BUTTONS
 
         public void ListBoxUser_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -121,5 +118,6 @@ namespace CRUD_System
         {
 
         }
+        #endregion BUTTONS
     }
 }

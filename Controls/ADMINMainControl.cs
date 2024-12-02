@@ -35,7 +35,6 @@ namespace CRUD_System
         readonly AccountManager accountManager = new AccountManager();
         readonly ProfileManager profileManager = new ProfileManager();
         readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
-        readonly UserSearchService search = new UserSearchService();
 
         bool isAdmin;
         bool onlineStatus = false;
@@ -75,7 +74,6 @@ namespace CRUD_System
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
                 adminInterface.InterfaceEditModeAdmin();
-                //adminInterface.LoadDetailsListBox();
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -97,7 +95,6 @@ namespace CRUD_System
 
             if (userIndex != -1)
             {
-                Debug.WriteLine($"btnSaveEditUserDetails_Click bool isAdmin: {isAdmin}");
                 profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
             }
             editMode = false; // Close editMode
@@ -161,7 +158,7 @@ namespace CRUD_System
             ProfileManager userProfileManager = new ProfileManager();
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                profileManager.GenerateNewPassword(txtAlias.Text, chkIsAdmin.Checked);
+                profileManager.GeneratePasswordNewUser(txtAlias.Text, chkIsAdmin.Checked);
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -175,7 +172,6 @@ namespace CRUD_System
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             isAdmin = chkIsAdmin.Checked;
-            Debug.WriteLine($"isAdmin updated to: {isAdmin}");
         }
 
         /// <summary>
@@ -207,7 +203,7 @@ namespace CRUD_System
             {
                 // If a valid user is found, force logout
                 authenticationService.ForceLogOut(txtAlias.Text);
-                MessageBox.Show($"User {txtAlias.Text} has been force logged out.");
+                MessageBox.Show($"User {txtAlias.Text} has been forced logged out.");
 
                 // Reload the listbox to reflect changes
                 listBoxAdmin.Items.Clear();

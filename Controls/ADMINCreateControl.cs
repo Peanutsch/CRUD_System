@@ -19,10 +19,7 @@ namespace CRUD_System
     public partial class AdminCreateControl : UserControl
     {
         #region PROPERTIES
-        private readonly AdminMainForm mainFormADMIN = new AdminMainForm();
-        private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         private readonly AccountManager accountManager = new AccountManager();
-        private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
         private readonly ProfileManager profileManager = new ProfileManager();
         private readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
         private readonly AdminMainControl adminMainControl = new AdminMainControl();

@@ -16,20 +16,24 @@ namespace CRUD_System
 {
     public partial class AdminMainForm : Form
     {
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"CSV\log.csv");
-
+        #region PROPERTIES
         AuthenticationService authService = new AuthenticationService();
+        #endregion PROPERTIES
 
+        #region CONSTRUCTOR
         public AdminMainForm()
         {
             InitializeComponent();
         }
+        #endregion CONSTRUCTOR
 
+        #region FOCUS
         private void MainFormAdmin_Load(object sender, EventArgs e)
         {
             // Set focus to the logout button when the form is loaded
             this.ActiveControl = buttonLOGOUT;
         }
+        #endregion FOCUS
 
         #region BUTTONS
         /// <summary>
@@ -49,6 +53,7 @@ namespace CRUD_System
         /// Handles the form closing event for the MainFormADMIN. 
         /// This method ensures that the user is logged out, their online status is updated, 
         /// and the current user session is cleared when the form is being closed.
+        /// Also triggerd by ALT-F4
         /// </summary>
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {

@@ -18,6 +18,7 @@ namespace CRUD_System.Repositories
     /// </summary>
     internal class RepositoryLogEvents
     {
+        #region PROPERTIES
         FilePaths path = new FilePaths();
 
         /// <summary>
@@ -29,6 +30,7 @@ namespace CRUD_System.Repositories
             Date = DateTime.Now.Date,
             Time = DateTime.Now
         };
+        #endregion PROPERTIES
 
         #region AUTHENTICATIONSERVICE
         public void UserLoggedIn(string CurrentUser)

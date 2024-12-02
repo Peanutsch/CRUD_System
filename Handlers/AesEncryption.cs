@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_System
+namespace CRUD_System.Handlers
 {
     internal static class AesEncryption
     {
@@ -81,8 +81,10 @@ namespace CRUD_System
         /// </summary>
         /// <param name="password">The password used to derive the encryption key.</param>
         /// <returns>A 256-bit encryption key derived from the password.</returns>
-        private static byte[] GetKeyFromPassword(string password) {
-            using (var sha256 = SHA256.Create()) {
+        private static byte[] GetKeyFromPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
                 return sha256.ComputeHash(Encoding.UTF8.GetBytes(password)); // Return the hashed key
             }
         }

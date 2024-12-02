@@ -1,16 +1,21 @@
 ﻿using CRUD_System.FileHandlers;
+using Microsoft.Win32;
 using System;
 
 namespace CRUD_System.Handlers
 {
     public class FormInteractionHandler
     {
+        #region PROPERTIES
         public bool UserSelected { get; set; } // Property to store selection state
+        #endregion PROPERTIES
 
+        #region CONSTRUCTOR
         public FormInteractionHandler()
         {
             //
         }
+        #endregion CONSTRUCTOR
 
         #region CREATE FORM
         /// <summary>
@@ -86,6 +91,7 @@ namespace CRUD_System.Handlers
         }
         #endregion CREATE NEW PASSWORD
 
+        #region BUTTON HANDLER
         /// <summary>
         /// Executes a specified action if a user is selected, otherwise executes a fallback action if provided.
         /// </summary>
@@ -102,5 +108,6 @@ namespace CRUD_System.Handlers
                 noUserSelectedAction?.Invoke();
             }
         }
+        #endregion BUTTON HANDLER
     }
 }

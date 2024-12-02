@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
-namespace CRUD_System
+namespace CRUD_System.Handlers
 {
     internal static class EncryptionManager
     {

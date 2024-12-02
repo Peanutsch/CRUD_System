@@ -1,6 +1,5 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
-using CRUD_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,7 +50,6 @@ namespace CRUD_System.Interfaces
             // Check if the cached user data is empty or not loaded
             if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
-                Debug.WriteLine("LoadDetailsListBox: Cache is empty, reloading Cache.");
                 cache.LoadDecryptedData();
             }
 
@@ -190,29 +188,6 @@ namespace CRUD_System.Interfaces
                 adminControl.listBoxAdmin.Items.Add(listItem);
 
                 UpdatePageLabel();
-
-                /*
-                // Iterate through the cache and add items to the ListBox
-                foreach (var userDetailsArray in cache.CachedUserData.Skip(2)) // Skip headers
-                {
-                if (userDetailsArray.Length >= 8) // Ensure there are enough fields
-                {
-                    string name = userDetailsArray[0];
-                    string surname = userDetailsArray[1];
-                    string alias = userDetailsArray[2];
-                    string email = userDetailsArray[6];
-                    string phonenumber = userDetailsArray[7];
-                    string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
-
-                    // Format and add the item to the ListBox
-                    string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
-                    adminControl.listBoxAdmin.Items.Add(listItem);
-                }
-                else
-                {
-                    Console.WriteLine("Insufficient fields in a user record.");
-                }
-                 */
             }
             // Empty textboxes
             EmptyTextBoxesAdmin();
@@ -225,10 +200,9 @@ namespace CRUD_System.Interfaces
         public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
             // Check if the cached user data is empty or not loaded
-            if (cache.CachedLoginData == null || !cache.CachedLoginData.Any())
+            if (cache.CachedLoginData == null || cache.CachedLoginData.Count == 0)
             {
-                MessageBox.Show("\nListBoxAdmin_SelectedIndexChangedHandler>\nCachedUserData is empty or not loaded!"); // Show error if cache is empty
-                return;
+                cache.LoadDecryptedData();
             }
 
             var currentUser = AuthenticationService.CurrentUser;
@@ -270,15 +244,14 @@ namespace CRUD_System.Interfaces
         /// <param name="selectedAlias">The alias of the selected user to be validated.</param>
         public void HandleSelectedUserStatus(string selectedAlias)
         {
-            // Check if the cached login data is empty or not loaded
-            if (cache.CachedLoginData == null || !cache.CachedLoginData.Any())
+            // Check if the cached user data is empty or not loaded
+            if (cache.CachedLoginData == null || cache.CachedLoginData.Count == 0)
             {
-                MessageBox.Show("\nHandleSelectedUserStatus>\nCachedLoginData is empty or not loaded!"); // Show error if cache is empty
-                return;
+                cache.LoadDecryptedData();
             }
 
             // Retrieve login details from the cache
-            var loginDetails = cache.CachedLoginData
+            var loginDetails = cache.CachedLoginData?
                                .FirstOrDefault(details => details[0] == selectedAlias); // Match alias in login data
 
             if (loginDetails != null)
@@ -307,8 +280,6 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void InterfaceEditModeAdmin()
         {
-            Debug.WriteLine($"EditMode AdminInterface: {EditMode}");
-
             // Toggle Edit and Cancel button text based on EditMode status
             adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User";
 
@@ -381,7 +352,6 @@ namespace CRUD_System.Interfaces
             // Check if the cache is empty, and reload data if necessary.
             if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
-                Debug.WriteLine("SetForceLogOutUserBtn: Cache is empty, reloading Cache.");
                 cache.LoadDecryptedData();
             }
 
@@ -390,8 +360,6 @@ namespace CRUD_System.Interfaces
                 .Skip(1) // Skip the header row
                 .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == aliasToLogOut) // Match alias
                 .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online based on the 9th column
-
-            Debug.WriteLine($"Checking online status for {aliasToLogOut}: {isOnline}");
 
             // Enable and display the "Force Log Out User" button if the user is online
             adminControl.btnForceLogOutUser.Enabled = isOnline;

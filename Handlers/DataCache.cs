@@ -1,6 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
-using CRUD_System;
 using System.Diagnostics;
+using CRUD_System.Handlers;
 
 /// <summary>
 /// The DataCache class is responsible for managing in-memory caching of user and login data.
@@ -42,6 +42,7 @@ public class DataCache
     }
     #endregion CONSTRUCTOR
 
+    #region LOAD DATA
     // Method to load cache from files
     public static void LoadCache()
     {
@@ -84,8 +85,9 @@ public class DataCache
         EncryptionManager.EncryptFile(userFilePath);
         EncryptionManager.EncryptFile(loginFilePath);
     }
+    #endregion LOAD DATA
 
-
+    #region SAVE DATA
     /// <summary>
     /// Saves the cached data back to the user and login files and encrypts the files.
     /// Ensures that any changes made to the in-memory cache are persisted securely.
@@ -107,8 +109,6 @@ public class DataCache
                            .Select(fields => string.Join(",", fields)
                             )));
 
-        Debug.WriteLine("\nSaving user details to data_users.csv");
-
         // Save the cached login data to the login file.
         // Add the header row explicitly before saving the data.
         File.WriteAllLines(loginFilePath, 
@@ -118,12 +118,11 @@ public class DataCache
                            .Select(fields => string.Join(",", fields)
                             )));
 
-        Debug.WriteLine("Saving login details to data_login.csv\n");
-
         // Encrypt the user and login data files to secure the contents.
         EncryptionManager.EncryptFile(userFilePath);
         Debug.WriteLine("DataCache.SaveAndEncryptData> data_users.csv ENCRYPTED");
         EncryptionManager.EncryptFile(loginFilePath);
         Debug.WriteLine("DataCache.SaveAndEncryptData> data_login.csv ENCRYPTED\n***");
     }
+    #endregion SAVE DATA
 }

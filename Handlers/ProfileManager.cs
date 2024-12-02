@@ -17,12 +17,10 @@ namespace CRUD_System.Handlers
     internal class ProfileManager
     {
         #region PROPERTIES
-        FilePaths path = new FilePaths();
-
+        readonly FilePaths path = new FilePaths();
         readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         readonly AccountManager accountManager = new AccountManager();
         readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
-        readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
         readonly DataCache cache = new DataCache();
         #endregion PROPERTIES
 
@@ -47,8 +45,11 @@ namespace CRUD_System.Handlers
                 return;
             }
 
-            // Ensure the cache is loaded and decrypted before performing the validation
-            cache.LoadDecryptedData();
+            // Check if the cache is empty, and reload data if necessary.
+            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            {
+                cache.LoadDecryptedData();
+            }
 
             var currentUser = AuthenticationService.CurrentUser;
             if (!string.IsNullOrEmpty(currentUser))
@@ -200,13 +201,13 @@ namespace CRUD_System.Handlers
         }
         #endregion DELETE USER
 
-        #region GENERATE NEW PASSWORD
+        #region GENERATE PASSWORD NEW USER
         /// <summary>
         /// Generates a new password for a user and logs the event.
         /// </summary>
         /// <param name="alias">Alias of the user for whom to generate a password.</param>
         /// <param name="isAdmin">Indicates if the user has admin privileges.</param>
-        public void GenerateNewPassword(string alias, bool isAdmin)
+        public void GeneratePasswordNewUser(string alias, bool isAdmin)
         {
             DialogResult dr = message.MessageBoxConfirmToGeneratePassword(alias);
             if (dr != DialogResult.Yes)
@@ -214,8 +215,11 @@ namespace CRUD_System.Handlers
                 return;
             }
 
-            // Ensure the cache is loaded and decrypted before performing the validation
-            cache.LoadDecryptedData();
+            // Check if the cache is empty, and reload data if necessary.
+            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            {
+                cache.LoadDecryptedData();
+            }
 
             var currentUser = AuthenticationService.CurrentUser;
 
@@ -245,7 +249,7 @@ namespace CRUD_System.Handlers
                 return;
             }
         }
-        #endregion GENERATE NEW PASSWORD
+        #endregion GENERATE PASSWORD NEW USER
 
         #region SAVE NEW USER
         /// <summary>
@@ -266,10 +270,11 @@ namespace CRUD_System.Handlers
 
             // Generate a unique alias and password for the user
             string isAlias = GenerateAlias(Name, Surname);
+            Debug.WriteLine($"New account for Alias: {isAlias}");
 
-            // TEMP alias as password. Will be replaced with password generator
-            //string isPassword = PasswordManager.PasswordGenerator();
-            string isPassword = isAlias;
+            // Generate password
+            string isPassword = PasswordManager.PasswordGenerator();
+            Debug.WriteLine($"Created Password: {isPassword}");
 
             // Default new user to offline
             bool onlineStatus = false;
@@ -303,7 +308,7 @@ namespace CRUD_System.Handlers
         {
             // Decrypt the user and login files before updating
             EncryptionManager.DecryptFile(path.UserFilePath);
-            Debug.WriteLine("DataCache.SaveUserData> data_users.csv DECRYPTED");
+            Debug.WriteLine("***\nDataCache.SaveUserData> data_users.csv DECRYPTED");
 
             EncryptionManager.DecryptFile(path.LoginFilePath);
             Debug.WriteLine("DataCache.SaveUserData> data_login.csv DECRYPTED");
@@ -325,7 +330,7 @@ namespace CRUD_System.Handlers
 
             // ** Update the DataCache with the latest data **
             DataCache.LoadCache();
-            Debug.WriteLine("DataCache updated after saving new user.");
+            Debug.WriteLine("DataCache updated after saving new user.\n***");
         }
 
 

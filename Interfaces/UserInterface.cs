@@ -1,6 +1,5 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
-using CRUD_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +22,6 @@ namespace CRUD_System.Interfaces
         FilePaths path = new FilePaths();
 
         readonly AccountManager repository = new AccountManager();
-        readonly ProfileManager profileManager = new ProfileManager();
         private readonly DataCache cache = new DataCache();
         private readonly UserMainControl userControl;
         #endregion PROPERTIES
@@ -41,8 +39,11 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void LoadDetailsListBoxThisUser()
         {
-            // Ensure that the cache is loaded
-            cache.LoadDecryptedData();
+            // Check if the cache is empty, and reload data if necessary.
+            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            {
+                cache.LoadDecryptedData();
+            }
 
             // Convert cached user and login data arrays into lists of strings, skipping the header row
             var userLines = cache.CachedUserData

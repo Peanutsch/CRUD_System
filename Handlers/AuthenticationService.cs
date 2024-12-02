@@ -55,8 +55,11 @@ namespace CRUD_System.Handlers
         /// </returns>
         public bool ValidateLogin(string inputUserName, string inputUserPassword)
         {
-            // Ensure the cache is loaded and decrypted before performing the validation
-            cache.LoadDecryptedData();
+            // Check if the cache is empty, and reload data if necessary.
+            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            {
+                cache.LoadDecryptedData();
+            }
 
             // Attempt to find a user in the cached login data that matches the provided username and password
             var user = cache.CachedLoginData.FirstOrDefault(u =>
@@ -109,12 +112,9 @@ namespace CRUD_System.Handlers
         /// <param name="onlineStatus">The new online status to set for the user (true for online, false for offline).</param>
         public void UpdateUserOnlineStatus(string alias, bool onlineStatus)
         {
-            Debug.WriteLine($"***\nUpdateUserOnlineStatus> onlineStatus = {onlineStatus}");
-
             // Check if the cache is empty, and reload data if necessary.
             if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
-                Debug.WriteLine("UpdateUserOnlineStatus: Cache is empty, reloading Cache.");
                 cache.LoadDecryptedData();
             }
 
@@ -133,7 +133,6 @@ namespace CRUD_System.Handlers
             }
 
             // Save changes to the data files and encrypt them
-            Debug.WriteLine("Saving onlineStatus...\n");
             cache.SaveAndEncryptData();
         }
 
@@ -160,8 +159,6 @@ namespace CRUD_System.Handlers
         /// <returns>True if the user credentials and status are valid; otherwise, false.</returns>
         private bool ValidateUserLogin(string inputUserName, string inputUserPassword)
         {
-            //MessageBox.Show("ValidateUserLogin");
-
             LoginForm loginForm = new LoginForm();
 
             if (!ValidateLogin(inputUserName, inputUserPassword))
@@ -283,7 +280,6 @@ namespace CRUD_System.Handlers
             // Check if the cache is empty, and reload data if necessary.
             if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
-                Debug.WriteLine("PerformForcedLogOutByAdmin: Cache is empty, reloading Cache.");
                 cache.LoadDecryptedData();
             }
 

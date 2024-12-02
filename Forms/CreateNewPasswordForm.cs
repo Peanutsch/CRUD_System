@@ -19,6 +19,7 @@ namespace CRUD_System
 {
     public partial class CreateNewPasswordForm : Form
     {
+        #region PROPERTIES
         // Password conditions
         public int lengthPsw = 12;
         public int charToUpper = 3;
@@ -28,10 +29,10 @@ namespace CRUD_System
         AdminMainControl adminControl = new AdminMainControl();
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
-
         readonly FilePaths path = new FilePaths();
 
         private bool isPasswordVisible = false;
+        #endregion PROPERTIES
 
         #region CONSTRUCTOR
         public CreateNewPasswordForm()
@@ -174,7 +175,6 @@ namespace CRUD_System
         private void ProcessAndSaveNewPassword()
         {
             var currentUser = AuthenticationService.CurrentUser;
-            Debug.WriteLine($"var currentUser: {currentUser}");
 
             if (!string.IsNullOrEmpty(currentUser))
             {

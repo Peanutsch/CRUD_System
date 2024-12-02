@@ -16,8 +16,6 @@ namespace CRUD_System
     {
         #region PROPERTIES
         AuthenticationService authService = new AuthenticationService();
-        //FilePaths path = new FilePaths();
-
         private bool isPasswordVisible = false;
         #endregion PROPERTIES
 

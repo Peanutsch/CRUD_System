@@ -15,10 +15,11 @@ namespace CRUD_System.Handlers
     /// </summary>
     public class AccountManager
     {
-        FilePaths path = new FilePaths();
-
+        #region PROPERTIES
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        #endregion PROPERTIES
 
+        #region PROCES
         /// <summary>
         /// Finds the index of a user by their alias in both user and login data.
         /// </summary>
@@ -38,8 +39,6 @@ namespace CRUD_System.Handlers
             if (DataCache.CachedLoginLines == null || DataCache.CachedLoginLines.Count == 0)
             {
                 DataCache dataCache = new DataCache();
-                Debug.WriteLine("UpdateUserOnlineStatus: Cache is empty, reloading Cache.");
-                MessageBox.Show("UpdateUserOnlineStatus: Cache is empty, reloading Cache.");
                 dataCache.LoadDecryptedData();
             }
 
@@ -57,7 +56,6 @@ namespace CRUD_System.Handlers
                 // Compare the decrypted alias with the provided alias
                 if (decryptedAlias == alias.Trim())
                 {
-                    Debug.WriteLine($"FindUserIndexByAlias> Index of {alias}: {index}");
                     return index; // Return the index if found
                 }
             }
@@ -101,14 +99,11 @@ namespace CRUD_System.Handlers
                     break; // Exit the loop if the alias is unique
                 }
 
-                Debug.WriteLine($"Alias {finalAlias} already exists, incrementing counter...");
                 counter++; // Increment counter if alias exists
             }
 
             return finalAlias;
         }
-
-
 
         /// <summary>
         /// Removes diacritics from the input string.
@@ -132,7 +127,6 @@ namespace CRUD_System.Handlers
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
-
         /// <summary>
         /// Checks if the given alias already exists in the data_login.csv file.
         /// </summary>
@@ -141,9 +135,9 @@ namespace CRUD_System.Handlers
         private bool AliasExists(string alias)
         {
             DataCache cache = new DataCache();
+            // Check if the cached user data is empty or not loaded
             if (cache.CachedLoginData == null || cache.CachedLoginData.Count == 0)
             {
-                Debug.WriteLine("AliasExists: Cache is empty, reloading data...");
                 cache.LoadDecryptedData();
             }
 
@@ -159,4 +153,5 @@ namespace CRUD_System.Handlers
             return false;
         }
     }
+    #endregion PROCES
 }

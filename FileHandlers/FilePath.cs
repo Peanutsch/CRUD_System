@@ -11,10 +11,13 @@ namespace CRUD_System.FileHandlers
     /// </summary>
     public class FilePaths
     {
+        #region PROPERTIES
         public string UserFilePath { get; private set; }
         public string LoginFilePath { get; private set; }
         public string LogEventFilePath { get; private set; }
+        #endregion PROPERTIES
 
+        #region PROCESSING
         /// <summary>
         /// Initializes a new instance of the <see cref="FilePaths"/> class.
         /// Sets file paths for user data, login data, and log events based on the root directory.
@@ -60,5 +63,6 @@ namespace CRUD_System.FileHandlers
             var loginLines = File.ReadAllLines(LoginFilePath).ToList();
             return (userLines, loginLines);
         }
+        #endregion PROCESSING
     }
 }
