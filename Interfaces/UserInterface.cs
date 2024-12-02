@@ -182,9 +182,27 @@ namespace CRUD_System.Interfaces
             userControl.listBoxUser.Enabled = !EditMode;
         }
 
-        public void cbStatus()
+        public void StatusIndicator(string status)
         {
-            // Items combobox Status
+            switch (status)
+            {
+                case "Online":
+                    userControl.txtStatusIndicator.BackColor = Color.Blue;
+                    break;
+                case "Active":
+                    userControl.txtStatusIndicator.BackColor = Color.Green;
+                    break;
+                case "Away":
+                    userControl.txtStatusIndicator.BackColor = Color.Orange;
+                    break;
+                case "Break":
+                    userControl.txtStatusIndicator.BackColor = Color.Yellow;
+                    break;
+                default:
+                    // Handle an invalid status
+                    userControl.txtStatusIndicator.BackColor = SystemColors.ActiveCaption;
+                    break;
+            }
         }
         #endregion INTERFACE USERS
 

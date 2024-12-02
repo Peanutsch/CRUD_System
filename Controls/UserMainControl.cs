@@ -120,8 +120,19 @@ namespace CRUD_System
 
         private void comboBoxStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Check if SelectedItem is not null before calling ToString
+            if (comboBoxStatus.SelectedItem != null)
+            {
+                string? status = comboBoxStatus.SelectedItem.ToString();
 
+                if (!string.IsNullOrEmpty(status))
+                {
+                    // Pass the selected status to the StatusIndicator method
+                    userInterface.StatusIndicator(status);
+                }
+            }
         }
+
         #endregion BUTTONS
     }
 }

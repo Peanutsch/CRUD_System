@@ -56,6 +56,7 @@ namespace CRUD_System
             this.listBoxUser = new ListBox();
             this.comboBoxStatus = new ComboBox();
             this.btnChangePassword = new Button();
+            this.txtStatusIndicator = new TextBox();
             this.SuspendLayout();
             // 
             // txtName
@@ -215,7 +216,9 @@ namespace CRUD_System
             // 
             this.comboBoxStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.comboBoxStatus.FormattingEnabled = true;
-            this.comboBoxStatus.Location = new Point(786, 26);
+            this.comboBoxStatus.Items.AddRange(new object[] { "Online", "Active", "Away", "Break" });
+            this.comboBoxStatus.SelectedIndex = 0;
+            this.comboBoxStatus.Location = new Point(822, 30);
             this.comboBoxStatus.MaxDropDownItems = 9;
             this.comboBoxStatus.Name = "comboBoxStatus";
             this.comboBoxStatus.Size = new Size(150, 26);
@@ -236,12 +239,21 @@ namespace CRUD_System
             this.btnChangePassword.Visible = false;
             this.btnChangePassword.Click += this.ChangePassword_Click;
             // 
+            // txtStatusIndicator
+            // 
+            this.txtStatusIndicator.BackColor = Color.Blue;
+            this.txtStatusIndicator.Location = new Point(978, 31);
+            this.txtStatusIndicator.Name = "txtStatusIndicator";
+            this.txtStatusIndicator.Size = new Size(16, 23);
+            this.txtStatusIndicator.TabIndex = 30;
+            // 
             // UserMainControl
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
             this.BorderStyle = BorderStyle.FixedSingle;
+            this.Controls.Add(this.txtStatusIndicator);
             this.Controls.Add(this.btnChangePassword);
             this.Controls.Add(this.comboBoxStatus);
             this.Controls.Add(this.btnEditUserDetails);
@@ -271,5 +283,6 @@ namespace CRUD_System
         public ListBox listBoxUser;
         public ComboBox comboBoxStatus;
         public Button btnChangePassword;
+        public TextBox txtStatusIndicator;
     }
 }
