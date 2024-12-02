@@ -97,6 +97,10 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
+                // Close EditMode
+                userInterface.EditMode = false;
+                userInterface.InterfaceEditModeUser();
+                // Open New Password Form
                 interactionHandler.Open_CreateNewPasswordForm();
             });
 
