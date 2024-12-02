@@ -265,7 +265,7 @@ namespace CRUD_System
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region TextBox Search
-        private int searchCurrentPage = 1; // Current page number for the search results, starting at 1
+        public int searchCurrentPage = 1; // Current page number for the search results, starting at 1
         private const int searchItemsPerPage = 15; // Maximum number of items displayed per page during search
         private List<string> currentSearchResults = new(); // Cache to store the current search results for efficient pagination
 
@@ -300,7 +300,6 @@ namespace CRUD_System
             }
         }
 
-
         /// <summary>
         /// Displays a subset of the search results in the ListBox based on the specified page number.
         /// If no results are found, it shows a placeholder message.
@@ -316,7 +315,7 @@ namespace CRUD_System
                 // Clear the ListBox, add a placeholder message, and update the page label
                 listBoxAdmin.Items.Clear();
                 listBoxAdmin.Items.Add("No results found.");
-                UpdatePageLabel(0, 0); // Indicate no pages are available
+                adminInterface.UpdatePageLabel();
                 return;
             }
 
@@ -335,23 +334,8 @@ namespace CRUD_System
             listBoxAdmin.Items.AddRange(currentSearchResults.Skip(startIndex).Take(searchItemsPerPage).ToArray());
 
             // Update the page navigation label to reflect the current page and total pages
-            UpdatePageLabel(searchCurrentPage, totalPages);
+            adminInterface.UpdatePageLabel();
         }
-
-        /// <summary>
-        /// Updates the page navigation label to display the current page and total pages.
-        /// If no pages are available, it shows a placeholder message.
-        /// </summary>
-        /// <param name="currentPage">The current page number (default is 0).</param>
-        /// <param name="totalPages">The total number of pages (default is 0).</param>
-        public void UpdatePageLabel(int currentPage = 0, int totalPages = 0)
-        {
-            // If there are pages available, display the current page and total pages
-            lblPageNumber.Text = totalPages > 0
-                ? $"Page {currentPage} of {totalPages}"
-                : "No pages available"; // Placeholder if no results or pages exist
-        }
-
         #endregion TextBox Search
     }
 }

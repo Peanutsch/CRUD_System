@@ -80,42 +80,6 @@ namespace CRUD_System.Interfaces
             }
         }
 
-        #region Listbox Pages
-        /// <summary>
-        /// Navigates to the next page if it exists.
-        /// </summary>
-        public void NextPage()
-        {
-            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage); // Total pages (subtract header rows)
-            if (currentPage < totalPages)
-            {
-                currentPage++;
-                LoadDetailsListBox();
-                EmptyTextBoxesAdmin();
-            }
-        }
-
-        /// <summary>
-        /// Navigates to the previous page if it exists.
-        /// </summary>
-        public void PreviousPage()
-        {
-            if (currentPage > 1)
-            {
-                currentPage--;
-                LoadDetailsListBox();
-                EmptyTextBoxesAdmin();
-            }
-        }
-
-        // Update the label with the current page number
-        public void UpdatePageLabel()
-        {
-            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage);
-            adminControl.lblPageNumber.Text = $"Page {currentPage} of {totalPages}";
-        }
-        #endregion Listbox Pages
-
         /// <summary>
         /// Handles the custom drawing of items in the ListBox, allowing for conditional formatting based on the item content.
         /// This method modifies the color of the text based on whether the item contains the word "ONLINE" and ensures
@@ -273,6 +237,47 @@ namespace CRUD_System.Interfaces
             }
         }
         #endregion LISTBOX ADMIN
+
+        #region Listbox Pages
+        /// <summary>
+        /// Navigates to the next page if it exists.
+        /// </summary>
+        public void NextPage()
+        {
+            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage); // Total pages (subtract header rows)
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                LoadDetailsListBox();
+                EmptyTextBoxesAdmin();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to the previous page if it exists.
+        /// </summary>
+        public void PreviousPage()
+        {
+            if (currentPage > 1)
+            {
+                currentPage--;
+                LoadDetailsListBox();
+                EmptyTextBoxesAdmin();
+            }
+        }
+
+        /// <summary>
+        /// Updates the page navigation label to display the current page and total pages.
+        /// If no pages are available, it shows a placeholder message.
+        /// </summary>
+        public void UpdatePageLabel()
+        {
+            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage);
+            adminControl.lblPageNumber.Text = totalPages > 0
+                                              ? $"Page {currentPage} of {totalPages}"
+                                              : "No pages available";
+        }
+        #endregion Listbox Pages
 
         #region EDIT MODE DISPLAY ADMIN
         /// <summary>
