@@ -68,18 +68,14 @@ public class DataCache
         // Read the decrypted user data file and split each line into fields (CSV format)
         // Skip the header and split by comma, caching all records into CachedUserData
         CachedUserData = File.ReadAllLines(userFilePath)
-                             //.Skip(1)
                              .Select(line => line.Split(",")) // Split each line into an array of fields
                              .ToList(); // Store all records in CachedUserData
-        Debug.WriteLine($"***\nDetails data_users.csv cached in CachedUserData: {CachedUserData.Count} items");
 
         // Read the decrypted login data file and split each line into fields (CSV format)
         // Skip the header and split by comma, caching all records into CachedLoginData
         CachedLoginData = File.ReadAllLines(loginFilePath)
-                              //.Skip(1)
                               .Select(line => line.Split(",")) // Split each line into an array of fields
                               .ToList(); // Store all records in CachedLoginData
-        Debug.WriteLine($"Details data_login.csv cached in CachedLoginData: {CachedLoginData.Count} items\n***");
 
         // Encrypt the user and login data files again to ensure the data is secured after loading
         EncryptionManager.EncryptFile(userFilePath);
@@ -95,10 +91,8 @@ public class DataCache
     public void SaveAndEncryptData()
     {
         EncryptionManager.DecryptFile(userFilePath);
-        Debug.WriteLine("***\nDataCache.SaveAndEncryptData> data_users.csv DECRYPTED");
 
         EncryptionManager.DecryptFile(loginFilePath);
-        Debug.WriteLine("DataCache.SaveAndEncryptData> data_login.csv DECRYPTED");
 
         // Save the cached user data to the file, joining fields into CSV lines.
         // Skip Header, ensure the header and Admin user details are ignored.
@@ -120,9 +114,7 @@ public class DataCache
 
         // Encrypt the user and login data files to secure the contents.
         EncryptionManager.EncryptFile(userFilePath);
-        Debug.WriteLine("DataCache.SaveAndEncryptData> data_users.csv ENCRYPTED");
         EncryptionManager.EncryptFile(loginFilePath);
-        Debug.WriteLine("DataCache.SaveAndEncryptData> data_login.csv ENCRYPTED\n***");
     }
     #endregion SAVE DATA
 }

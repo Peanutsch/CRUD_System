@@ -265,40 +265,93 @@ namespace CRUD_System
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region TextBox Search
+        private int searchCurrentPage = 1; // Current page number for the search results, starting at 1
+        private const int searchItemsPerPage = 15; // Maximum number of items displayed per page during search
+        private List<string> currentSearchResults = new(); // Cache to store the current search results for efficient pagination
+
+
         /// <summary>
-        /// Handles the text changed event for the alias search textbox. It dynamically updates the list of users
-        /// displayed in the listbox based on the search input. If the input is empty, it loads all users;
-        /// otherwise, it filters the users based on the provided prefix.
+        /// Dynamically updates the user list displayed in the ListBox based on the search term entered.
+        /// If the search term is empty, it resets the list to show all users.
         /// </summary>
-        /// <param name="sender">The source of the event (typically the text box control that triggered the event).</param>
-        /// <param name="e">The event data, which contains information about the text change event.</param>
+        /// <param name="sender">The source of the event (the TextBox).</param>
+        /// <param name="e">The event data for the text change event.</param>
         private void txtAliasToSearch_TextChanged(object sender, EventArgs e)
         {
-            // Get the alias input by the user in the search box
-            string searchTerm = txtSearch.Text;
+            // Get the trimmed search term from the TextBox, handling possible null values
+            string? searchTerm = txtSearch.Text?.Trim();
 
-            // If the alias is empty, load all users into the listbox
             if (string.IsNullOrEmpty(searchTerm))
             {
-                // Load all user details into the listbox (when no search term is entered) and empty textboxes
-                adminInterface.LoadDetailsListBox();
-                adminInterface.EmptyTextBoxesAdmin();
+                // If the search term is empty:
+                // Reset the page number, clear cached results, and reload the full list
+                searchCurrentPage = 1;
+                currentSearchResults.Clear();
+                DisplaySearchResults(searchCurrentPage); // Clear the display and show all users
+                adminInterface.LoadDetailsListBox(); // Load all users into the ListBox
+                adminInterface.EmptyTextBoxesAdmin(); // Clear all input TextBoxes
             }
             else
             {
-                // If alias is not empty, search for users by the alias prefix
-                var searchResults = new UserSearchService().SearchUsers(searchTerm);
-
-                // Clear the current items in the listbox to display the search results
-                listBoxAdmin.Items.Clear();
-
-                // Add each matched result (user details) to the listbox
-                foreach (var result in searchResults)
-                {
-                    listBoxAdmin.Items.Add(result);
-                }
+                // If a search term is provided:
+                // Perform the search and display results starting from the first page
+                currentSearchResults = new UserSearchService().SearchUsers(searchTerm);
+                DisplaySearchResults(1); // Always start at page 1 for new search terms
             }
         }
+
+
+        /// <summary>
+        /// Displays a subset of the search results in the ListBox based on the specified page number.
+        /// If no results are found, it shows a placeholder message.
+        /// </summary>
+        /// <param name="page">The current page to display.</param>
+        private void DisplaySearchResults(int page)
+        {
+            // Check if there are any results in the search cache
+            int totalResults = currentSearchResults.Count;
+            if (totalResults == 0)
+            {
+                // If no results are found:
+                // Clear the ListBox, add a placeholder message, and update the page label
+                listBoxAdmin.Items.Clear();
+                listBoxAdmin.Items.Add("No results found.");
+                UpdatePageLabel(0, 0); // Indicate no pages are available
+                return;
+            }
+
+            // Calculate the total number of pages based on results per page
+            int totalPages = (int)Math.Ceiling(totalResults / (double)searchItemsPerPage);
+
+            // Ensure the current page is within the valid range
+            searchCurrentPage = Math.Clamp(page, 1, totalPages);
+
+            // Calculate the range of results to display for the current page
+            int startIndex = (searchCurrentPage - 1) * searchItemsPerPage;
+            int endIndex = Math.Min(startIndex + searchItemsPerPage, totalResults);
+
+            // Populate the ListBox with results for the current page
+            listBoxAdmin.Items.Clear();
+            listBoxAdmin.Items.AddRange(currentSearchResults.Skip(startIndex).Take(searchItemsPerPage).ToArray());
+
+            // Update the page navigation label to reflect the current page and total pages
+            UpdatePageLabel(searchCurrentPage, totalPages);
+        }
+
+        /// <summary>
+        /// Updates the page navigation label to display the current page and total pages.
+        /// If no pages are available, it shows a placeholder message.
+        /// </summary>
+        /// <param name="currentPage">The current page number (default is 0).</param>
+        /// <param name="totalPages">The total number of pages (default is 0).</param>
+        public void UpdatePageLabel(int currentPage = 0, int totalPages = 0)
+        {
+            // If there are pages available, display the current page and total pages
+            lblPageNumber.Text = totalPages > 0
+                ? $"Page {currentPage} of {totalPages}"
+                : "No pages available"; // Placeholder if no results or pages exist
+        }
+
         #endregion TextBox Search
     }
 }

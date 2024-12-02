@@ -22,7 +22,7 @@ namespace CRUD_System.Interfaces
         private int currentPage = 1; // Track pagenumbers
         private const int itemsPerPage = 15; // Maximum items per page
 
-        private List<string[]> CachedUserData => cache.CachedUserData;
+        public List<string[]> CachedUserData => cache.CachedUserData;
 
         readonly DataCache cache = new DataCache();
         private readonly AdminMainControl adminControl;
@@ -109,7 +109,7 @@ namespace CRUD_System.Interfaces
         }
 
         // Update the label with the current page number
-        private void UpdatePageLabel()
+        public void UpdatePageLabel()
         {
             int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage);
             adminControl.lblPageNumber.Text = $"Page {currentPage} of {totalPages}";

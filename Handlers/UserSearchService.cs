@@ -41,6 +41,7 @@ namespace CRUD_System.Handlers
                             userDetails.Length > 6 && userDetails[6].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Email
                             userDetails[7].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase) || // Phonenumber
                             userDetails.Length > 8 && userDetails[8].StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase)); // Online status
+                                                                                                                                  // searchterm = bool true or false
                 })
                 .Select(userDetails =>
                 {
