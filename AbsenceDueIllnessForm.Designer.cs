@@ -97,6 +97,7 @@
             this.btnApply.TabIndex = 7;
             this.btnApply.Text = "Apply";
             this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += this.btnApply_Click;
             // 
             // txtAlias
             // 
@@ -121,12 +122,12 @@
             this.Controls.Add(this.btnCallInSick);
             this.Controls.Add(this.txtRecovery);
             this.Controls.Add(this.txtDayCallInSick);
-            Load += this.Form_Load;
             this.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.Margin = new Padding(4);
             this.Name = "AbsenceDueIllnessForm";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Absence due Illness";
+            this.Load += this.Form_Load;
             this.ResumeLayout(false);
             this.PerformLayout();
         }
