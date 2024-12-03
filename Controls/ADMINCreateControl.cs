@@ -46,7 +46,6 @@ namespace CRUD_System
             // Reload Cache
             DataCache cache = new DataCache();
             cache.LoadDecryptedData();
-
             // Reload listbox
             adminMainControl.listBoxAdmin.Items.Clear();
             adminInterface.ReloadListBoxAdmin(-1);

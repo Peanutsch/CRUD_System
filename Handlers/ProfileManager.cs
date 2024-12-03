@@ -391,11 +391,21 @@ namespace CRUD_System.Handlers
         {
             // [0] Alias,[2] Day Call In Sick,[3] Day End of Sick Leave
 
-            MessageBox.Show($"ProfileManager.AbsenceDueIllness> User {alias} on Absence due Illness");
+            DialogResult dr = message.MessageConfirmCallInSickNotification(alias);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+            
+            MessageBox.Show($"ProfileManager.AbsenceDueIllness> isSick: {isSick}. User {alias} on Absence due Illness");
 
-            /*
-            DateTime day_start = DateTime.Today;
-            string sickLeaveNotification = $"{alias},{day_start},{string.Empty}";
+
+            DateTime date_sick = DateTime.Today;
+            string isAlias = alias;
+
+
+            //date_sick,date_recovery
+            string sickLeaveNotification = $"{alias},{date_sick},{string.Empty}";
 
             EncryptionManager.DecryptFile(path.HRFilePath);
             Debug.WriteLine("***\nProfileManager.AbsenceDueIllness> hr.csv DECRYPTED");
@@ -408,7 +418,6 @@ namespace CRUD_System.Handlers
 
             // ** Update the DataCache with the latest data **
             DataCache.LoadCache();
-            */
         }
         #endregion ABSENCE DUE ILLNESS
     }

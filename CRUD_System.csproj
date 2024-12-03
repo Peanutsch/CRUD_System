@@ -14,4 +14,8 @@
     <None Remove="Cryptography\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Cis_Notices\" />
+  </ItemGroup>
+
 </Project>

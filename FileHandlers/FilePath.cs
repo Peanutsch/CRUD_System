@@ -2,6 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
+using CRUD_System.Handlers;
 
 namespace CRUD_System.FileHandlers
 {
@@ -17,6 +19,8 @@ namespace CRUD_System.FileHandlers
         public string LogEventFilePath { get; private set; }
         public string HRFilePath { get; private set; }
 
+        public static string rootPath = RootPath.GetRootPath() ?? string.Empty;
+
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -26,12 +30,10 @@ namespace CRUD_System.FileHandlers
         /// </summary>
         public FilePaths()
         {
-            string rootPath = RootPath.GetRootPath() ?? string.Empty;
-
             UserFilePath = Path.Combine(rootPath, "CSV", "data_users.csv");
             LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
             LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
-            HRFilePath = Path.Combine(rootPath, "CSV", "hr.csv");
+            HRFilePath = Path.Combine(rootPath, "Cis_Notices", "{alias}_cis_notices.csv");
         }
         #endregion CONSTRUCTOR
 
@@ -65,5 +67,58 @@ namespace CRUD_System.FileHandlers
             return hrLines;
         }
         #endregion PROCESSING
+
+        /// <summary>
+        /// Searches for the correct CSV file for the user: {alias}_cis_notices.csv.
+        /// If the file doesn't exist, it creates a new one in the "Cis_Notices" directory.
+        /// </summary>
+        /// <param name="alias">The alias of the user.</param>
+        public void SearchCIS_Notice(string alias)
+        {
+            DataCache cache = new DataCache();
+            if (!string.IsNullOrEmpty(alias))
+            {
+                try
+                {
+                    string noticesPath = Path.Combine(rootPath, "Cis_Notices");
+
+                    // Ensure the Cis_Notices directory exists
+                    if (!Directory.Exists(noticesPath))
+                    {
+                        Directory.CreateDirectory(noticesPath);
+                    }
+
+                    string file_cis_notices = Path.Combine(noticesPath, $"{alias}_cis_notices.csv");
+
+                    if (!File.Exists(file_cis_notices))
+                    {
+                        // Create a new file with default headers (or leave empty)
+                        File.WriteAllText(file_cis_notices, "Alias,date_sick,date_recovery\n"); // Example CSV headers
+
+                        // Encrypt file
+                        EncryptionManager.EncryptFile(file_cis_notices);
+                    }
+                    else
+                    {
+                        // Read the file contents (if needed, process the data further)
+                        string[] fileContents = File.ReadAllLines(file_cis_notices);
+                        // Optionally process or log the data
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions gracefully (e.g., log the error or show a user-friendly message)
+                    Debug.WriteLine($"An error occurred: {ex.Message}");
+                    MessageBox.Show($"An error occurred: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Alias cannot be null or empty.");
+                return;
+            }
+        }
+
+
     }
 }

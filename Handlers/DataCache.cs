@@ -10,7 +10,7 @@ public class DataCache
 {
     #region PROPERTIES
     // Instance of FilePaths to get paths to the required files.
-    private static FilePaths path = new FilePaths();
+    private readonly static FilePaths path = new FilePaths();
 
     // File paths for user and login data.
     private readonly string userFilePath = path.UserFilePath;
