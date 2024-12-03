@@ -12,29 +12,34 @@ namespace CRUD_System.Repositories
     internal class RepositoryMessageBoxes
     {
         #region CONFIRM
-        public DialogResult MessageBoxConfirmNewUser(string alias)
+        public DialogResult MessageConfirmNewUser(string alias)
         {
             return MessageBox.Show($"Please confirm to SAVE new account {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToSAVEChanges(string alias)
+        public DialogResult MessageConfirmToSAVEChanges(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToSAVEPassword(string alias)
+        public DialogResult MessageConfirmToSAVEPassword(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the new password for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the new password for {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToGeneratePassword(string alias)
+        public DialogResult MessageConfirmToGeneratePassword(string alias)
         {
-            return MessageBox.Show($"Please confirm to GENERATE a NEW password for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to GENERATE a NEW password for {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToDELETE(string aliasToDelete)
+        public DialogResult MessageConfirmToDELETE(string aliasToDelete)
         {
-            return MessageBox.Show($"Please confirm to DELETE account {aliasToDelete.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to DELETE account {aliasToDelete.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+        }
+
+        public DialogResult MessageConfirmCallInSickNotification(string alias)
+        {
+            return MessageBox.Show($"Please confirm to set user {alias.ToUpper()} on Absence due Illness", "Confirm", MessageBoxButtons.YesNo);
         }
         #endregion CONFIRM
 

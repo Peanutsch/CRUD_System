@@ -26,11 +26,9 @@ namespace CRUD_System
         public int charToUpper = 3;
         public int charIsDigi = 3;
 
-        AccountManager accountManager = new AccountManager();
         AdminMainControl adminControl = new AdminMainControl();
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
-        readonly FilePaths path = new FilePaths();
 
         private bool isPasswordVisible = false;
         #endregion PROPERTIES

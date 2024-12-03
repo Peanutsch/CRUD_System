@@ -91,6 +91,43 @@ namespace CRUD_System.Handlers
         }
         #endregion CREATE NEW PASSWORD
 
+        #region CALL IN SICK
+        public void Open_AbsenceDueIllnessForm(UserControl? parentControl= null)
+        {
+            if (parentControl != null)
+            {
+                parentControl.Hide();
+
+                using (AbsenceDueIllness absenceForm= new AbsenceDueIllness())
+                {
+                    absenceForm.ShowDialog(); // Show ADMINCreateForm as Dialog
+                }
+
+                if (parentControl != null)
+                {
+                    parentControl.Show(); // Restore visibility after closing the form
+                }
+            }
+            else
+            {
+                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Close_AbsenceDueIllness(Form? parentForm = null)
+        {
+            // Check if the parent form is provided and not null
+            if (parentForm != null)
+            {
+                parentForm.Close();
+            }
+            else
+            {
+                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion CALL IN SICK
+
         #region BUTTON HANDLER
         /// <summary>
         /// Executes a specified action if a user is selected, otherwise executes a fallback action if provided.

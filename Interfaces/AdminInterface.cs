@@ -245,8 +245,6 @@ namespace CRUD_System.Interfaces
                 adminControl.txtAdmin.Visible = loginDetails[2] == "True"; // IsAdmin
                 adminControl.chkIsAdmin.Checked = loginDetails[2] == "True";
                 adminControl.txtAbsenceIllness.Visible = userDetails[9] == "True"; // isSick
-                adminControl.chkAbsenceDueIllness.Checked = userDetails[9] == "True";
-
 
                 // Enable Force Log Out button if the selected user is not the current user
                 if (AuthenticationService.CurrentUser != selectedAlias)
@@ -319,7 +317,7 @@ namespace CRUD_System.Interfaces
             // Adjust visibility and enablement of buttons based on EditMode
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
-            ToggleControlVisibility(adminControl.chkAbsenceDueIllness, EditMode);
+            //ToggleControlVisibility(adminControl.chkAbsenceDueIllness, EditMode);
 
             // Array of text fields to enable or disable in EditMode for user editing
             var textFields = new[]

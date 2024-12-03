@@ -39,6 +39,8 @@ namespace CRUD_System
         bool isAdmin;
         bool onlineStatus = false;
         bool isSick = false;
+        private bool previousSickStatus = false;
+
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
@@ -136,8 +138,6 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
-            AccountManager accountManager = new AccountManager();
-
             interactionHandler.Open_CreateForm(this);
 
             // Reload Cache
@@ -156,7 +156,6 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnGeneratePassword_Click(object sender, EventArgs e)
         {
-            ProfileManager userProfileManager = new ProfileManager();
             interactionHandler.PerformActionIfUserSelected(() =>
             {
                 profileManager.GeneratePasswordNewUser(txtAlias.Text, chkIsAdmin.Checked);
@@ -264,9 +263,50 @@ namespace CRUD_System
             adminInterface.NextPage();
         }
 
+        /// <summary>
+        /// Handles the state change of the 'Absence Due to Illness' checkbox.
+        /// If the checkbox changes from checked to unchecked, it performs an action
+        /// to update the illness absence status for the selected user.
+        /// </summary>
+        /// <param name="sender">The source of the event (the CheckBox).</param>
+        /// <param name="e">The event data (checkbox state change).</param>
         private void chkAbsenceDueIllness_CheckedChanged(object sender, EventArgs e)
         {
+            /*
+            // Update the isSick variable to reflect the current state of the checkbox
             isSick = chkAbsenceDueIllness.Checked;
+
+            // Check if the checkbox state changes from checked (true) to unchecked (false)
+            if (!isSick && previousSickStatus)
+            {
+                // Confirm to save changes
+                DialogResult dr = message.MessageConfirmCallInSickNotification(txtAlias.Text);
+                if (dr != DialogResult.Yes)
+                {
+                    return;
+                }
+
+                // Perform an action when the checkbox is unchecked (illness resolved)
+                profileManager.AbsenceDueIllness(isSick, txtAlias.Text);
+            }
+            else
+            {
+                return;
+            }
+
+            // Update the previousSickStatus to store the current state of the checkbox
+            previousSickStatus = isSick;
+            */
+        }
+
+        private void btnCallInSick_Click(object sender, EventArgs e)
+        {
+            interactionHandler.PerformActionIfUserSelected(() =>
+            {
+                interactionHandler.Open_AbsenceDueIllnessForm(this);
+            },
+            () => message.MessageInvalidNoUserSelected());
+
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
@@ -343,8 +383,6 @@ namespace CRUD_System
             adminInterface.UpdatePageLabel();
         }
         #endregion TextBox Search
-
-
     }
 }
 

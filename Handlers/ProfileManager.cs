@@ -39,7 +39,7 @@ namespace CRUD_System.Handlers
         public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
             // Confirm to save changes
-            DialogResult dr = message.MessageBoxConfirmToSAVEChanges(alias);
+            DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
             if (dr != DialogResult.Yes)
             {
                 return;
@@ -156,7 +156,7 @@ namespace CRUD_System.Handlers
         private bool ConfirmDeletion(string alias)
         {
             // Show a confirmation dialog for deletion
-            DialogResult dr = message.MessageBoxConfirmToDELETE(alias);
+            DialogResult dr = message.MessageConfirmToDELETE(alias);
             return dr == DialogResult.Yes;
         }
 
@@ -210,7 +210,7 @@ namespace CRUD_System.Handlers
         /// <param name="isAdmin">Indicates if the user has admin privileges.</param>
         public void GeneratePasswordNewUser(string alias, bool isAdmin)
         {
-            DialogResult dr = message.MessageBoxConfirmToGeneratePassword(alias);
+            DialogResult dr = message.MessageConfirmToGeneratePassword(alias);
             if (dr != DialogResult.Yes)
             {
                 return;
@@ -365,7 +365,7 @@ namespace CRUD_System.Handlers
         /// </summary>
         private bool ConfirmNewUserCreation(string alias)
         {
-            DialogResult dr = message.MessageBoxConfirmNewUser(alias);
+            DialogResult dr = message.MessageConfirmNewUser(alias);
             return dr == DialogResult.Yes;
         }
 
@@ -385,5 +385,31 @@ namespace CRUD_System.Handlers
             }
         }
         #endregion SAVE NEW USER
+
+        #region ABSENCE DUE ILLNESS
+        public void AbsenceDueIllness(bool isSick, string alias)
+        {
+            // [0] Alias,[2] Day Call In Sick,[3] Day End of Sick Leave
+
+            MessageBox.Show($"ProfileManager.AbsenceDueIllness> User {alias} on Absence due Illness");
+
+            /*
+            DateTime day_start = DateTime.Today;
+            string sickLeaveNotification = $"{alias},{day_start},{string.Empty}";
+
+            EncryptionManager.DecryptFile(path.HRFilePath);
+            Debug.WriteLine("***\nProfileManager.AbsenceDueIllness> hr.csv DECRYPTED");
+
+            // Append the new data to the files
+            File.AppendAllText(path.HRFilePath, sickLeaveNotification + Environment.NewLine);
+
+            EncryptionManager.EncryptFile(path.HRFilePath);
+            Debug.WriteLine("nProfileManager.AbsenceDueIllness> hr.csv ENCRYPTED");
+
+            // ** Update the DataCache with the latest data **
+            DataCache.LoadCache();
+            */
+        }
+        #endregion ABSENCE DUE ILLNESS
     }
 }
