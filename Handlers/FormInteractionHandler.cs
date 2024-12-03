@@ -98,18 +98,13 @@ namespace CRUD_System.Handlers
             {
                 parentControl.Hide();
 
-                // Use the existing instance passed as parameter
-                AbsenceDueIllnessForm? absenceForm = parentControl as AbsenceDueIllnessForm;
-
-                if (absenceForm != null)
+                // Open AbsenceDueIllnessForm zonder te proberen het opnieuw te sluiten via Close()
+                using AbsenceDueIllnessForm? absenceForm = parentControl as AbsenceDueIllnessForm;
                 {
-                    absenceForm.ShowDialog(); // Show the existing form as Dialog
+                    absenceForm?.ShowDialog(); // Show the existing form as Dialog
                 }
 
-                if (parentControl != null)
-                {
-                    parentControl.Show(); // Restore visibility after closing the form
-                }
+                parentControl.Show(); // Restore visibility after closing the form
             }
             else
             {
@@ -117,18 +112,6 @@ namespace CRUD_System.Handlers
             }
         }
 
-        public void Close_AbsenceDueIllness(Form? parentForm = null)
-        {
-            // Check if the parent form is provided and not null
-            if (parentForm != null)
-            {
-                parentForm.Close();
-            }
-            else
-            {
-                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         #endregion CALL IN SICK
 
         #region BUTTON HANDLER

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRUD_System.Handlers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,11 +29,6 @@ namespace CRUD_System
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void AbsenceDueIllnessForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            MessageBox.Show("Cancel");
         }
     }
 }

@@ -126,7 +126,6 @@
             this.Margin = new Padding(4);
             this.Name = "AbsenceDueIllnessForm";
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.FormClosing += this.AbsenceDueIllnessForm_FormClosing;
             this.Text = "Absence due Illness";
             this.ResumeLayout(false);
             this.PerformLayout();
