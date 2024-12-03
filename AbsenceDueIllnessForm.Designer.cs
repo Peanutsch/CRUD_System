@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class AbsenceDueIllness
+    partial class AbsenceDueIllnessForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,25 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtAlias = new TextBox();
             this.txtDayCallInSick = new TextBox();
             this.txtRecovery = new TextBox();
             this.btnCallInSick = new Button();
             this.btnRecovery = new Button();
             this.btnCancel = new Button();
             this.btnApply = new Button();
+            this.txtAlias = new TextBox();
             this.SuspendLayout();
-            // 
-            // txtAlias
-            // 
-            this.txtAlias.Enabled = false;
-            this.txtAlias.ForeColor = SystemColors.WindowText;
-            this.txtAlias.Location = new Point(69, 41);
-            this.txtAlias.Name = "txtAlias";
-            this.txtAlias.PlaceholderText = "Alias";
-            this.txtAlias.Size = new Size(100, 26);
-            this.txtAlias.TabIndex = 0;
-            this.txtAlias.TextAlign = HorizontalAlignment.Center;
             // 
             // txtDayCallInSick
             // 
@@ -109,36 +98,47 @@
             this.btnApply.Text = "Apply";
             this.btnApply.UseVisualStyleBackColor = true;
             // 
-            // AbsenceDueIllness
+            // txtAlias
+            // 
+            this.txtAlias.Enabled = false;
+            this.txtAlias.Location = new Point(69, 26);
+            this.txtAlias.Name = "txtAlias";
+            this.txtAlias.PlaceholderText = "Alias";
+            this.txtAlias.Size = new Size(100, 26);
+            this.txtAlias.TabIndex = 8;
+            this.txtAlias.TextAlign = HorizontalAlignment.Center;
+            // 
+            // AbsenceDueIllnessForm
             // 
             this.AutoScaleDimensions = new SizeF(10F, 18F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
             this.ClientSize = new Size(448, 215);
+            this.Controls.Add(this.txtAlias);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnRecovery);
             this.Controls.Add(this.btnCallInSick);
             this.Controls.Add(this.txtRecovery);
             this.Controls.Add(this.txtDayCallInSick);
-            this.Controls.Add(this.txtAlias);
+            Load += this.Form_Load;
             this.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.Margin = new Padding(4);
-            this.Name = "AbsenceDueIllness";
+            this.Name = "AbsenceDueIllnessForm";
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "AbsenceDueIllness";
+            this.FormClosing += this.AbsenceDueIllnessForm_FormClosing;
+            this.Text = "Absence due Illness";
             this.ResumeLayout(false);
             this.PerformLayout();
         }
 
         #endregion
-
-        private TextBox txtAlias;
-        private TextBox txtDayCallInSick;
-        private TextBox txtRecovery;
-        private Button btnCallInSick;
-        private Button btnRecovery;
-        private Button btnCancel;
-        private Button btnApply;
+        public TextBox txtDayCallInSick;
+        public TextBox txtRecovery;
+        public Button btnCallInSick;
+        public Button btnRecovery;
+        public Button btnCancel;
+        public Button btnApply;
+        public TextBox txtAlias;
     }
 }

@@ -92,15 +92,18 @@ namespace CRUD_System.Handlers
         #endregion CREATE NEW PASSWORD
 
         #region CALL IN SICK
-        public void Open_AbsenceDueIllnessForm(UserControl? parentControl= null)
+        public void Open_AbsenceDueIllnessForm(Form? parentControl = null)
         {
             if (parentControl != null)
             {
                 parentControl.Hide();
 
-                using (AbsenceDueIllness absenceForm= new AbsenceDueIllness())
+                // Use the existing instance passed as parameter
+                AbsenceDueIllnessForm? absenceForm = parentControl as AbsenceDueIllnessForm;
+
+                if (absenceForm != null)
                 {
-                    absenceForm.ShowDialog(); // Show ADMINCreateForm as Dialog
+                    absenceForm.ShowDialog(); // Show the existing form as Dialog
                 }
 
                 if (parentControl != null)

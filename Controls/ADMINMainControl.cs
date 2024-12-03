@@ -39,7 +39,7 @@ namespace CRUD_System
         bool isAdmin;
         bool onlineStatus = false;
         bool isSick = false;
-        private bool previousSickStatus = false;
+        //private bool previousSickStatus = false;
 
 
         // Property to expose the InteractionHandler instance for external access
@@ -303,10 +303,28 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                interactionHandler.Open_AbsenceDueIllnessForm(this);
+                // Create an instance of the AbsenceDueIllness form
+                AbsenceDueIllnessForm absence = new AbsenceDueIllnessForm();
+
+                // Pass the form instance to DisplayUserAlias to set the alias
+                DisplayUserAlias(absence);
+
+                // Open the absence form
+                interactionHandler.Open_AbsenceDueIllnessForm(absence); // Pass the existing instance to the method
             },
             () => message.MessageInvalidNoUserSelected());
+        }
 
+        public void DisplayUserAlias(AbsenceDueIllnessForm absence)
+        {
+            if (!string.IsNullOrEmpty(txtAlias.Text))
+            {
+                absence.txtAlias.Text = $"{txtAlias.Text.ToUpper()}";
+            }
+            else
+            {
+                absence.txtAlias.Text = "UNKNOWN";
+            }
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
