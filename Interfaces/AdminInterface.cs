@@ -178,7 +178,7 @@ namespace CRUD_System.Interfaces
 
         /// <summary>
         /// Handles the event when a user is selected in the ListBox. It fills the details for the selected user in the textboxes,
-        /// and disables the Force Log Out button if the selected user is the current admin user.
+        /// and disables the Force log Out button if the selected user is the current admin user.
         /// </summary>
         public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
@@ -222,7 +222,7 @@ namespace CRUD_System.Interfaces
         /// <summary>
         /// Validates the selected user alias and updates the UI accordingly. It checks the login details for the selected alias, 
         /// determines if the user is an admin, and updates the visibility of admin-related fields. 
-        /// It also checks if the user is online and enables/disables the Force Log Out button.
+        /// It also checks if the user is online and enables/disables the Force log Out button.
         /// </summary>
         /// <param name="selectedAlias">The alias of the selected user to be validated.</param>
         public void HandleSelectedUserStatus(string selectedAlias)
@@ -246,10 +246,10 @@ namespace CRUD_System.Interfaces
                 adminControl.chkIsAdmin.Checked = loginDetails[2] == "True";
                 adminControl.txtAbsenceIllness.Visible = userDetails[9] == "True"; // isSick
 
-                // Enable Force Log Out button if the selected user is not the current user
+                // Enable Force log Out button if the selected user is not the current user
                 if (AuthenticationService.CurrentUser != selectedAlias)
                 {
-                    // Update the state of the Force Log Out button based on the selected user's online status
+                    // Update the state of the Force log Out button based on the selected user's online status
                     SetForceLogOutUserBtn(selectedAlias);
                 }
             }
@@ -373,7 +373,7 @@ namespace CRUD_System.Interfaces
         }
 
         /// <summary>
-        /// Sets the enabled state of the Force Log Out User button based on the user's online status.
+        /// Sets the enabled state of the Force log Out User button based on the user's online status.
         /// </summary>
         /// <param name="aliasToLogOut">The alias of the selected user to check online status.</param>
         public void SetForceLogOutUserBtn(string aliasToLogOut)
@@ -390,7 +390,7 @@ namespace CRUD_System.Interfaces
                 .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == aliasToLogOut) // Match alias
                 .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online based on the 9th column
 
-            // Enable and display the "Force Log Out User" button if the user is online
+            // Enable and display the "Force log Out User" button if the user is online
             adminControl.btnForceLogOutUser.Enabled = isOnline;
             adminControl.btnForceLogOutUser.Visible = isOnline;
         }

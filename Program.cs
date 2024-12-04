@@ -17,28 +17,33 @@ namespace CRUD_System
         [STAThread]
         static void Main() 
         {
-            #region Encryption / Decryption
+            #region Encryption
             // Encrypt the CSV file
             //EncryptionManager.EncryptFile(filePath.LoginFilePath); // data_login.csv
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
             //EncryptionManager.EncryptFile(filePath.HRFilePath); // hr.csv
+            //EncryptFile("peer001");
+            //EncryptFile("paer001");
+            #endregion Encryption
 
-
+            #region Decryption
             // Decrypt the CSV file
             //EncryptionManager.DecryptFile(filePath.LoginFilePath); // data_login.csv
             //EncryptionManager.DecryptFile(filePath.UserFilePath); // data_users.csv
             //EncryptionManager.DecryptFile(filePath.HRFilePath);
-            #endregion Encryption / Decryption
+            //DecryptFile("peer001");
+            //DecryptFile("paer001");
+            #endregion Decryption
 
             #region Create/Edit CSV Files
             // Add new column in csv file
             //AddNewColumn(filePath.UserFilePath);
-            
-            // Create CIS Notice CSV Files in map Cis_Notices
+
+            // Create CIS Notice CSV Files in map cis_notices
             //CreateCISNoticeCSV();
-            // Create Log CSV Files in map Logs
+            // Create log CSV Files in map Logs
             //CreateLogCSV();
-            //Create Reports CSV Files in map Reports
+            //Create reports CSV Files in map reports
             //CreateReportCSV();
             #endregion Create/Edit CSV Files
 
@@ -46,7 +51,7 @@ namespace CRUD_System
             ApplicationConfiguration.Initialize();
 
             // Run the LoginForm as the main form of the application
-            //Application.Run(new LoginForm());
+            Application.Run(new LoginForm());
         }
 
         #region ADD NEW COLUMN
@@ -93,7 +98,7 @@ namespace CRUD_System
 
         #region CREATE CSV FILES
         /// <summary>
-        /// Creates a {alias}_cis_notices.csv file in the "Cis_Notices" directory.
+        /// Creates a {alias}_cis_notices.csv file in the "cis_notices" directory.
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
         public static void CreateCISNoticeCSV()
@@ -107,8 +112,7 @@ namespace CRUD_System
 
             Debug.WriteLine($"Items CatchedUserData: {cache.CachedUserData.Count}");
 
-            // Assuming CachedUserData is a collection of string arrays, each representing a row
-            foreach (var user in cache.CachedUserData.Skip(2))
+            foreach (var user in cache.CachedUserData.Skip(2)) // Skip header and Admin
             {
                 string alias = user[2]; // Index 2 is the alias field
 
@@ -118,9 +122,9 @@ namespace CRUD_System
 
                     try
                     {
-                        string noticesPath = Path.Combine(rootPath, "Cis_Notices");
+                        string noticesPath = Path.Combine(rootPath, "cis_notices");
 
-                        // Ensure the Cis_Notices directory exists
+                        // Ensure the cis_notices directory exists
                         if (!Directory.Exists(noticesPath))
                         {
                             Directory.CreateDirectory(noticesPath);
@@ -172,8 +176,7 @@ namespace CRUD_System
 
             Debug.WriteLine($"Items CatchedUserData: {cache.CachedUserData.Count}");
 
-            // Assuming CachedUserData is a collection of string arrays, each representing a row
-            foreach (var user in cache.CachedUserData.Skip(2))
+            foreach (var user in cache.CachedUserData.Skip(2)) // Skip header and Admin
             {
                 string alias = user[2]; // Index 2 is the alias field
 
@@ -185,7 +188,7 @@ namespace CRUD_System
                     {
                         string logPath = Path.Combine(rootPath, "Logs");
 
-                        // Ensure the Cis_Notices directory exists
+                        // Ensure the cis_notices directory exists
                         if (!Directory.Exists(logPath))
                         {
                             Directory.CreateDirectory(logPath);
@@ -237,8 +240,7 @@ namespace CRUD_System
 
             Debug.WriteLine($"Items CatchedUserData: {cache.CachedUserData.Count}");
 
-            // Assuming CachedUserData is a collection of string arrays, each representing a row
-            foreach (var user in cache.CachedUserData.Skip(2))
+            foreach (var user in cache.CachedUserData.Skip(2)) // Skip header and Admin
             {
                 string alias = user[2]; // Index 2 is the alias field
 
@@ -248,9 +250,9 @@ namespace CRUD_System
 
                     try
                     {
-                        string reportsPath = Path.Combine(rootPath, "Reports");
+                        string reportsPath = Path.Combine(rootPath, "reports");
 
-                        // Ensure the Cis_Notices directory exists
+                        // Ensure the cis_notices directory exists
                         if (!Directory.Exists(reportsPath))
                         {
                             Directory.CreateDirectory(reportsPath);
@@ -287,5 +289,29 @@ namespace CRUD_System
             Debug.WriteLine($"Created {counter} csv files...");
         }
         #endregion CREATE CSV FILES
+
+        #region DECRYPT FILE
+        public static void DecryptFile(string alias)
+        {
+            string rootPath = RootPath.GetRootPath();
+            string logPath = Path.Combine(rootPath, "Logs");
+            
+            //string file_logs = Path.Combine(logPath, $"{alias}_logs.csv");
+            EncryptionManager.DecryptFile(Path.Combine(logPath, $"{alias}_logs.csv"));
+        }
+        #endregion DECRYPT FILE
+
+        #region ENCRYPT FILE
+        public static void EncryptFile(string alias)
+        {
+            // Set rootpath
+            string rootPath = RootPath.GetRootPath();
+            // Set map
+            string logPath = Path.Combine(rootPath, "Logs");
+
+            //string file_logs = Path.Combine(logPath, $"{alias}_logs.csv");
+            EncryptionManager.EncryptFile(Path.Combine(logPath, $"{alias}_logs.csv"));
+        }
+        #endregion ENCRYPT FILE
     }
 }

@@ -52,7 +52,7 @@
             buttonLOGOUT.Name = "buttonLOGOUT";
             buttonLOGOUT.Size = new Size(100, 26);
             buttonLOGOUT.TabIndex = 1;
-            buttonLOGOUT.Text = "Log Out";
+            buttonLOGOUT.Text = "log Out";
             buttonLOGOUT.UseVisualStyleBackColor = false;
             buttonLOGOUT.Click += buttonLOGOUT_Click;
             // 

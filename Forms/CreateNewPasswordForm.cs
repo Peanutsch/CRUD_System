@@ -198,7 +198,7 @@ namespace CRUD_System
                         // Save changes to the data files and encrypt them
                         cache.SaveAndEncryptData();
 
-                        // Log event
+                        // log event
                         logEvents.LogEventNewPasswordCreated(currentUser);
                         message.MessageChangePasswordSucces(currentUser);
                     }

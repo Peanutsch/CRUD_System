@@ -33,12 +33,12 @@ namespace CRUD_System.FileHandlers
             UserFilePath = Path.Combine(rootPath, "CSV", "data_users.csv");
             LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
             LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
-            //FileCisNotices = Path.Combine(rootPath, "Cis_Notices", $"{alias}_cis_notices.csv");
+            //FileCisNotices = Path.Combine(rootPath, "cis_notices", $"{alias}_cis_notices.csv");
         }
 
         public void SetAlias(string alias)
         {
-            FileCisNotices = Path.Combine(rootPath, "Cis_Notices", $"{alias}_cis_notices.csv");
+            FileCisNotices = Path.Combine(rootPath, "cis_notices", $"{alias}_cis_notices.csv");
         }
 
         #endregion CONSTRUCTOR
@@ -48,11 +48,15 @@ namespace CRUD_System.FileHandlers
         /// Appends a new log entry to the log events file.
         /// </summary>
         /// <param name="newLog">The log entry to append.</param>
-        public void AppendToLog(string newLog)
+        public void AppendToLog(string logPath, string newLog)
         {
-            if (!string.IsNullOrEmpty(LogEventFilePath))
+            if (!string.IsNullOrEmpty(logPath))
             {
-                File.AppendAllText(LogEventFilePath, newLog + Environment.NewLine);
+                EncryptionManager.DecryptFile(logPath);
+
+                File.AppendAllText(logPath, newLog + Environment.NewLine);
+
+                EncryptionManager.EncryptFile(logPath);
             }
         }
 
@@ -70,7 +74,7 @@ namespace CRUD_System.FileHandlers
 
         /// <summary>
         /// Searches for the correct CSV file for the user: {alias}_cis_notices.csv.
-        /// If the file doesn't exist, it creates a new one in the "Cis_Notices" directory.
+        /// If the file doesn't exist, it creates a new one in the "cis_notices" directory.
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
         public void SearchCIS_Notice(string alias)
@@ -80,9 +84,9 @@ namespace CRUD_System.FileHandlers
             {
                 try
                 {
-                    string noticesPath = Path.Combine(rootPath, "Cis_Notices");
+                    string noticesPath = Path.Combine(rootPath, "cis_notices");
 
-                    // Ensure the Cis_Notices directory exists
+                    // Ensure the cis_notices directory exists
                     if (!Directory.Exists(noticesPath))
                     {
                         Directory.CreateDirectory(noticesPath);

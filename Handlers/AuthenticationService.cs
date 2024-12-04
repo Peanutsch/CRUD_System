@@ -289,7 +289,7 @@ namespace CRUD_System.Handlers
             {
                 cache.SaveAndEncryptData();
 
-                // Log the forced logout event
+                // log the forced logout event
                 logEvents.ForceUserLogOut(admin, aliasToLogOut);
 
                 // Hide the user's form if active

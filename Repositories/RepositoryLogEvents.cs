@@ -32,37 +32,41 @@ namespace CRUD_System.Repositories
         };
         #endregion PROPERTIES
 
+
+
         #region AUTHENTICATIONSERVICE
-        public void UserLoggedIn(string CurrentUser)
+        public void UserLoggedIn(string currentUser)
         {
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{CurrentUser.ToUpper()},Logged IN";
-            Debug.WriteLine($"=====\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{CurrentUser.ToUpper()}] Logged IN\n====");
-            path.AppendToLog(newLog);
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged IN");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged IN";
+            string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            path.AppendToLog(logFile, newLog);
         }
 
         public void UserLoggedOut(string currentUser)
         {
-            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] logged OUT");
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Logged OUT";
-            path.AppendToLog(newLog);
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged OUT");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged OUT";
+            string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            path.AppendToLog(logFile, newLog);
         }
 
         public void ForceUserLogOut(string currentUser, string alias)
         {
-            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Forced [{alias.ToUpper()}] logged OUT");
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Forced [{alias.ToUpper()}] to log OUT)";
-            path.AppendToLog(newLog);
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Forced [{alias.ToUpper()}] to log OUT");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Forced [{alias.ToUpper()}] to log OUT";
+            string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            path.AppendToLog(logFile, newLog);
         }
         #endregion AUTHENTICATIONSERVICE
 
         #region AdminCreateControl
         public void NewAccount(string currentUser, string isAlias)
         {
-            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Created new user [{isAlias.ToUpper()}]");
-            Debug.WriteLine($"User {isAlias} added successfully!");
-
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Created new user [{isAlias.ToUpper()}]";
-            path.AppendToLog(newLog);
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Created new user [{isAlias.ToUpper()}]");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Created new user [{isAlias.ToUpper()}]";
+            string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            path.AppendToLog(logFile, newLog);
         }
         #endregion AdminCreateControl
 
@@ -71,40 +75,44 @@ namespace CRUD_System.Repositories
         {
             if (!string.IsNullOrEmpty(currentUser))
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}] Changed password for [{alias.ToUpper()}]");
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Changed password for user [{alias.ToUpper()}]";
-                path.AppendToLog(newLog);
+                Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]");
+                string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]";
+                string logFile = FindCSVFiles.FindLogCSV(currentUser);
+                path.AppendToLog(logFile, newLog);
             }
             else
             {
-                Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [UNKNOWN] Changed password for [{alias.ToUpper()}]");
-                string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},[UNKNOWN],Changed password for user [{alias.ToUpper()}]";
-                path.AppendToLog(newLog);
+                Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[UNKNOWN USER],Generated new password for [{alias.ToUpper()}]");
+                string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[UNKNOW USER],Generated new password for [{alias.ToUpper()}]";
+                string logFile = FindCSVFiles.FindLogCSV(currentUser);
+                path.AppendToLog(logFile, newLog);
             }
         }
 
         public void LogEventUpdateUserDetails(string currentUser, string alias)
         {
-            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Updated user details for {alias.ToUpper()}");
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Updated user details for {alias.ToUpper()}";
-            path.AppendToLog(newLog);
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Updated user details for [{alias.ToUpper()}]");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Updated user details for [{alias.ToUpper()}]";
+            string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            path.AppendToLog(logFile, newLog);
         }
 
         public void LogEventDeleteUser(string currentUser, string aliasToDelete)
         {
-            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentUser.ToUpper()}]: Deleted user [{aliasToDelete.ToUpper()}]");
-
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentUser.ToUpper()},Deleted user [{aliasToDelete.ToUpper()}]";
-            path.AppendToLog(newLog);
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
+            string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            path.AppendToLog(logFile, newLog);
         }
         #endregion PROFILEMANAGER
 
         #region CREATENEWPASSWORD
         public void LogEventNewPasswordCreated(string currentAlias)
         {
-            Debug.WriteLine($"\n({log.Date.ToShortDateString()} {log.Time.ToShortTimeString()}) [{currentAlias.ToUpper()}]: Changed password");
-            string newLog = $"{log.Date.ToShortDateString()},{log.Time.ToShortTimeString()},{currentAlias.ToUpper()},Changed password";
-            path.AppendToLog(newLog);
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentAlias.ToUpper()}],Changed password");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentAlias.ToUpper()}],Changed password";
+            string logFile = FindCSVFiles.FindLogCSV(currentAlias);
+            path.AppendToLog(logFile, newLog);
         }
         #endregion CREATENEWPASSWORD
     }

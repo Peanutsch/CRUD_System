@@ -134,7 +134,7 @@ namespace CRUD_System.Handlers
             // Write the updated user data back to the files
             WriteUpdatedDataToFile(userLines, loginLines);
 
-            // Log the deletion event
+            // log the deletion event
             LogDeletion(currentUser, aliasToDelete);
 
             // Show a success message after deletion
@@ -197,7 +197,7 @@ namespace CRUD_System.Handlers
         /// <param name="aliasToDelete">The alias of the user being deleted.</param>
         private void LogDeletion(string currentUser, string aliasToDelete)
         {
-            // Log the deletion event, including the current user and the user being deleted
+            // log the deletion event, including the current user and the user being deleted
             logEvents.LogEventDeleteUser(currentUser, aliasToDelete);
         }
         #endregion DELETE USER
@@ -240,7 +240,7 @@ namespace CRUD_System.Handlers
                 // Save changes to the data files and encrypt them
                 cache.SaveAndEncryptData();
 
-                // Log event
+                // log event
                 logEvents.LogEventPasswordGenerated(currentUser, alias);
                 message.MessageChangePasswordSucces(alias);
             }
@@ -293,7 +293,7 @@ namespace CRUD_System.Handlers
                     Name, Surname, isAlias, Phonenumber, onlineStatus.ToString()
                 };
 
-                // Log the creation of the new user
+                // log the creation of the new user
                 LogNewAccountCreation(isAlias);
 
                 // Notify the admin that the account creation was successful
@@ -378,10 +378,53 @@ namespace CRUD_System.Handlers
             if (!string.IsNullOrEmpty(currentUser))
             {
                 logEvents.NewAccount(currentUser, alias);
+
+                // log event in {alias}_log.csv
+                string rootPath = RootPath.GetRootPath();
+
+                string logEvent = $"Created new user [{alias.ToUpper()}]";
+
+                // Create default CSV files line = {string.Empty},{string.Empty},{string.Empty}
+                CreateCSVFiles.CreateCISNoticeCSV(alias);
+                CreateCSVFiles.CreateLogCSV(alias.ToUpper(), currentUser.ToUpper(), logEvent);
+                CreateCSVFiles.CreateReportCSV(alias);
+
+                /*
+                try
+                {
+                    string logsPath = Path.Combine(rootPath, "Logs");
+
+                    // Ensure the cis_notices directory exists
+                    if (!Directory.Exists(logsPath))
+                    {
+                        Directory.CreateDirectory(logsPath);
+                    }
+
+                    string file_logs = Path.Combine(logsPath, $"{alias}_logs.csv");
+
+                    if (!File.Exists(file_logs))
+                    {
+                        // Create a new file with string.Empty as default)
+                        File.WriteAllText(file_logs, $"{DateTime.Today.ToString("dd-MM-yyyy")},{string.Empty},{string.Empty}\n");
+
+                        // Encrypt the file
+                        EncryptionManager.EncryptFile(file_logs);
+
+                        Debug.WriteLine($"Created {alias}_logs.csv");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions gracefully (e.g., log the error or show a user-friendly message)
+                    Debug.WriteLine($"An error occurred for alias {alias}: {ex.Message}");
+                    MessageBox.Show($"An error occurred for alias {alias}: {ex.Message}");
+                }
             }
             else
             {
-                message.MessageSomethingWentWrong();
+                Console.WriteLine("Alias cannot be null or empty.");
+            }
+                */
             }
         }
         #endregion SAVE NEW USER

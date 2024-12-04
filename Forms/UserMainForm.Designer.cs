@@ -52,7 +52,7 @@
             this.buttonLOGOUT.Name = "buttonLOGOUT";
             this.buttonLOGOUT.Size = new Size(100, 26);
             this.buttonLOGOUT.TabIndex = 1;
-            this.buttonLOGOUT.Text = "Log Out";
+            this.buttonLOGOUT.Text = "log Out";
             this.buttonLOGOUT.UseVisualStyleBackColor = false;
             this.buttonLOGOUT.Click += this.buttonLOGOUT_Click;
             // 
