@@ -88,8 +88,8 @@ namespace CRUD_System.Repositories
         
         public void LogEventUpdateUserDetails(string currentUser, string alias)
         {
-            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Updated details [{alias.ToUpper()}]");
-            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Updated details [{alias.ToUpper()}]";
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated details [{alias.ToUpper()}]");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated details [{alias.ToUpper()}]";
             string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
             string userLogFile = FindCSVFiles.FindCSVFile(alias, "logs");
             path.AppendToLog(adminlogFile, newLog);

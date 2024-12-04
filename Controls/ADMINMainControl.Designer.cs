@@ -60,6 +60,7 @@
             txtAbsenceIllness = new TextBox();
             btnCallInSick = new Button();
             listBoxLogs = new ListBox();
+            lblLoggings = new Label();
             SuspendLayout();
             // 
             // txtName
@@ -359,11 +360,21 @@
             // 
             listBoxLogs.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             listBoxLogs.FormattingEnabled = true;
-            listBoxLogs.Location = new Point(962, 140);
+            listBoxLogs.Location = new Point(962, 267);
             listBoxLogs.Name = "listBoxLogs";
             listBoxLogs.Size = new Size(525, 116);
             listBoxLogs.TabIndex = 41;
             listBoxLogs.SelectedIndexChanged += listBoxLogs_SelectedIndexChanged;
+            // 
+            // lblLoggings
+            // 
+            lblLoggings.AutoSize = true;
+            lblLoggings.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            lblLoggings.Location = new Point(962, 249);
+            lblLoggings.Name = "lblLoggings";
+            lblLoggings.Size = new Size(63, 16);
+            lblLoggings.TabIndex = 42;
+            lblLoggings.Text = "Loggings";
             // 
             // AdminMainControl
             // 
@@ -371,6 +382,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(lblLoggings);
             Controls.Add(listBoxLogs);
             Controls.Add(btnCallInSick);
             Controls.Add(txtAbsenceIllness);
@@ -421,5 +433,6 @@
         public TextBox txtAbsenceIllness;
         public Button btnCallInSick;
         public ListBox listBoxLogs;
+        private Label lblLoggings;
     }
 }
