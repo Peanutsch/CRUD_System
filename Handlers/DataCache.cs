@@ -1,6 +1,8 @@
 ﻿using CRUD_System.FileHandlers;
 using System.Diagnostics;
 using CRUD_System.Handlers;
+using CRUD_System;
+using System.Reflection;
 
 /// <summary>
 /// The DataCache class is responsible for managing in-memory caching of user and login data.
@@ -15,6 +17,7 @@ public class DataCache
     // File paths for user and login data.
     private readonly string userFilePath = path.UserFilePath;
     private readonly string loginFilePath = path.LoginFilePath;
+    private readonly string? fileCisNotices = path.FileCisNotices;
 
     public static List<string> CachedLoginLines { get; private set; } = new List<string>();
     public static List<string> CachedUserLines { get; private set; } = new List<string>();
@@ -29,6 +32,12 @@ public class DataCache
     /// Cached login data, where each array represents a record (line) split into fields.
     /// </summary>
     public List<string[]> CachedLoginData { get; private set; } = new List<string[]>();
+
+    /// <summary>
+    /// Cached Call in Sick datawhere each array represents a record (line) split into fields.
+    /// </summary>
+    public List<string[]> CachedCisData { get; private set; } = new List<string[]>();
+
     #endregion PROPERTIES
 
     #region CONSTRUCTOR
@@ -80,6 +89,22 @@ public class DataCache
         // Encrypt the user and login data files again to ensure the data is secured after loading
         EncryptionManager.EncryptFile(userFilePath);
         EncryptionManager.EncryptFile(loginFilePath);
+    }
+
+    public void LoadDecryptedCISData(string alias)
+    {
+        
+        path.SetAlias(alias);
+        path.SearchCIS_Notice(alias);
+
+        // Decrypt {alias}_cis_notif
+        // Read the decrypted login data file and split each line into fields (CSV format)
+        // Skip the header and split by comma, caching all records into CachedLoginData
+        CachedCisData = File.ReadAllLines(fileCisNotices!)
+                              .Select(line => line.Split(",")) // Split each line into an array of fields
+                              .ToList(); // Store all records in CachedCisData
+
+        EncryptionManager.EncryptFile(fileCisNotices!);
     }
     #endregion LOAD DATA
 

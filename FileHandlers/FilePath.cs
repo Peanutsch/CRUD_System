@@ -17,7 +17,7 @@ namespace CRUD_System.FileHandlers
         public string UserFilePath { get; private set; }
         public string LoginFilePath { get; private set; }
         public string LogEventFilePath { get; private set; }
-        public string HRFilePath { get; private set; }
+        public string? FileCisNotices { get; private set; }
 
         public static string rootPath = RootPath.GetRootPath() ?? string.Empty;
 
@@ -29,12 +29,18 @@ namespace CRUD_System.FileHandlers
         /// Sets file paths for user data, login data, and log events based on the root directory.
         /// </summary>
         public FilePaths()
-        {
+        { 
             UserFilePath = Path.Combine(rootPath, "CSV", "data_users.csv");
             LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
             LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
-            HRFilePath = Path.Combine(rootPath, "Cis_Notices", "{alias}_cis_notices.csv");
+            //FileCisNotices = Path.Combine(rootPath, "Cis_Notices", $"{alias}_cis_notices.csv");
         }
+
+        public void SetAlias(string alias)
+        {
+            FileCisNotices = Path.Combine(rootPath, "Cis_Notices", $"{alias}_cis_notices.csv");
+        }
+
         #endregion CONSTRUCTOR
 
         #region PROCESSING
@@ -59,12 +65,6 @@ namespace CRUD_System.FileHandlers
             var userLines = File.ReadAllLines(UserFilePath).ToList();
             var loginLines = File.ReadAllLines(LoginFilePath).ToList();
             return (userLines, loginLines);
-        }
-
-        public List<string> ReadHrLines()
-        {
-            var hrLines = File.ReadAllLines(HRFilePath).ToList();
-            return hrLines;
         }
         #endregion PROCESSING
 
@@ -93,7 +93,7 @@ namespace CRUD_System.FileHandlers
                     if (!File.Exists(file_cis_notices))
                     {
                         // Create a new file with default headers (or leave empty)
-                        File.WriteAllText(file_cis_notices, "Alias,date_sick,date_recovery\n"); // Example CSV headers
+                        File.WriteAllText(file_cis_notices, $"{alias},{string.Empty},{string.Empty}\n");
 
                         // Encrypt file
                         EncryptionManager.EncryptFile(file_cis_notices);

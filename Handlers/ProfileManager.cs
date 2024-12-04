@@ -389,36 +389,56 @@ namespace CRUD_System.Handlers
         #region ABSENCE DUE ILLNESS
         public void AbsenceDueIllness(bool isSick, string alias)
         {
-            // [0] Alias,[2] Day Call In Sick,[3] Day End of Sick Leave
-
+            // Confirm the action
             DialogResult dr = message.MessageConfirmCallInSickNotification(alias);
             if (dr == DialogResult.No)
             {
                 return;
             }
-            
+
+            // Check if the cache is empty and reload if necessary
+            if (cache.CachedCisData.Count == 0)
+            {
+                cache.LoadDecryptedCISData(alias);
+                MessageBox.Show($"CachedCisData: {cache.CachedCisData.Count} items");
+            }
+
             MessageBox.Show($"ProfileManager.AbsenceDueIllness> isSick: {isSick}. User {alias} on Absence due Illness");
 
-
             DateTime date_sick = DateTime.Today;
-            string isAlias = alias;
 
+            // Update the sick leave notification
+            var sickLeaveNotification = cache.CachedCisData.FirstOrDefault(n => n[0] == alias); // Assume alias is at index 0
+            if (sickLeaveNotification != null)
+            {
+                sickLeaveNotification[1] = date_sick.ToString("yyyy-MM-dd"); // Update start date of sick leave
+                sickLeaveNotification[2] = isSick ? "Pending" : "Recovered"; // Update sick leave status
+            }
+            else
+            {
+                // Add a new sick leave entry if not found
+                cache.CachedCisData.Add(new string[] { alias, date_sick.ToString("yyyy-MM-dd"), "Pending" });
+            }
 
-            //date_sick,date_recovery
-            string sickLeaveNotification = $"{alias},{date_sick},{string.Empty}";
-
-            EncryptionManager.DecryptFile(path.HRFilePath);
+            // Decrypt the file for updates
+            EncryptionManager.DecryptFile(path.FileCisNotices!);
             Debug.WriteLine("***\nProfileManager.AbsenceDueIllness> hr.csv DECRYPTED");
 
-            // Append the new data to the files
-            File.AppendAllText(path.HRFilePath, sickLeaveNotification + Environment.NewLine);
+            // Append the updated data to the file
+            foreach (var notification in cache.CachedCisData)
+            {
+                string dataLine = string.Join(",", notification); // Combine array into CSV line
+                File.AppendAllText(path.FileCisNotices!, dataLine + Environment.NewLine);
+            }
 
-            EncryptionManager.EncryptFile(path.HRFilePath);
-            Debug.WriteLine("nProfileManager.AbsenceDueIllness> hr.csv ENCRYPTED");
+            // Encrypt the file after updates
+            EncryptionManager.EncryptFile(path.FileCisNotices!);
+            Debug.WriteLine("ProfileManager.AbsenceDueIllness> hr.csv ENCRYPTED");
 
-            // ** Update the DataCache with the latest data **
+            // Update the cache with the latest data
             DataCache.LoadCache();
         }
+
         #endregion ABSENCE DUE ILLNESS
     }
 }
