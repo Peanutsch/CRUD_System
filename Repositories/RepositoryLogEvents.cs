@@ -29,8 +29,8 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged IN");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged IN";
-            string logFile = FindCSVFiles.FindLogCSV(currentUser);
-            //string logFile = FindCSVFiles.FindCSVFile(currentUser, "Log");
+            //string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            string logFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
             path.AppendToLog(logFile, newLog);
         }
 
@@ -38,7 +38,7 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged OUT");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged OUT";
-            string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            string logFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
             path.AppendToLog(logFile, newLog);
         }
 
@@ -46,7 +46,7 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Forced [{alias.ToUpper()}] to log OUT");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Forced [{alias.ToUpper()}] to log OUT";
-            string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            string logFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
             path.AppendToLog(logFile, newLog);
         }
         #endregion AUTHENTICATIONSERVICE
@@ -56,8 +56,8 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Created new user [{isAlias.ToUpper()}]");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Created new user [{isAlias.ToUpper()}]";
-            string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
-            string userLogFile = FindCSVFiles.FindLogCSV(isAlias);
+            string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
+            string userLogFile = FindCSVFiles.FindCSVFile(isAlias, "logs");
             path.AppendToLog(adminlogFile, newLog);
             path.AppendToLog(userLogFile, newLog);
         }
@@ -70,8 +70,8 @@ namespace CRUD_System.Repositories
             {
                 Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]");
                 string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]";
-                string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
-                string userLogFile = FindCSVFiles.FindLogCSV(alias);
+                string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
+                string userLogFile = FindCSVFiles.FindCSVFile(alias, "logs");
                 path.AppendToLog(adminlogFile, newLog);
                 path.AppendToLog(userLogFile, newLog);
             }
@@ -79,8 +79,8 @@ namespace CRUD_System.Repositories
             {
                 Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[UNKNOWN USER],Generated new password for [{alias.ToUpper()}]");
                 string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[UNKNOW USER],Generated new password for [{alias.ToUpper()}]";
-                string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
-                string userLogFile = FindCSVFiles.FindLogCSV(alias);
+                string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
+                string userLogFile = FindCSVFiles.FindCSVFile(alias, "logs");
                 path.AppendToLog(adminlogFile, newLog);
                 path.AppendToLog(userLogFile, newLog);
             }
@@ -90,8 +90,8 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Updated user details for [{alias.ToUpper()}]");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Updated user details for [{alias.ToUpper()}]";
-            string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
-            string userLogFile = FindCSVFiles.FindLogCSV(alias);
+            string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
+            string userLogFile = FindCSVFiles.FindCSVFile(alias, "logs");
             path.AppendToLog(adminlogFile, newLog);
             path.AppendToLog(userLogFile, newLog);
         }
@@ -100,8 +100,8 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
-            string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
-            string userLogFile = FindCSVFiles.FindLogCSV(aliasToDelete);
+            string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
+            string userLogFile = FindCSVFiles.FindCSVFile(aliasToDelete, "logs");
             path.AppendToLog(adminlogFile, newLog);
             path.AppendToLog(userLogFile, newLog);
         }
@@ -112,7 +112,7 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentAlias.ToUpper()}],Changed password");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentAlias.ToUpper()}],Changed password";
-            string logFile = FindCSVFiles.FindLogCSV(currentAlias);
+            string logFile = FindCSVFiles.FindCSVFile(currentAlias, "logs");
             path.AppendToLog(logFile, newLog);
         }
         #endregion CREATENEWPASSWORD

@@ -11,70 +11,41 @@ namespace CRUD_System
     internal class FindCSVFiles
     {
         /// <summary>
-        /// Searches for a CSV log file for a given alias.
+        /// Searches for a CSV file in the specified directory based on the given alias and directory name.
         /// </summary>
-        /// <param name="alias">The alias of the user.</param>
-        /// <returns>The path to the CSV log file, or an empty string if the file is not found.</returns>
-        public static string FindLogCSV(string alias)
-        {
-            string rootPath = RootPath.GetRootPath();
-            string logsPath = Path.Combine(rootPath, "Logs");
-
-            // Check if the Logs directory exists
-            if (!Directory.Exists(logsPath))
-            {
-                Debug.WriteLine("Logs directory does not exist.");
-                return string.Empty;
-            }
-
-            string file_logs = Path.Combine(logsPath, $"{alias}_logs.csv");
-
-            // Search for the correct file
-            foreach (var file in Directory.GetFiles(logsPath, "*.csv"))
-            {
-                if (file.Equals(file_logs, StringComparison.OrdinalIgnoreCase))
-                {
-                    Debug.WriteLine($"File found: {file_logs}");
-                    return file_logs;
-                }
-            }
-
-            // File not found
-            Debug.WriteLine($"No such file in Logs\\{alias}_logs.csv");
-            return string.Empty;
-        }
-
+        /// <param name="alias">The alias of the user for which the file is being searched.</param>
+        /// <param name="map">The name of the directory where the file is expected to be located (e.g., "Logs").</param>
+        /// <returns>The full path to the CSV file if found, otherwise an empty string.</returns>
         public static string FindCSVFile(string alias, string map)
         {
+            // Get the root directory path
             string rootPath = RootPath.GetRootPath();
             string filePath = Path.Combine(rootPath, $"{map}");
 
-            // Check if the Logs directory exists
+            // Check if the target directory exists
             if (!Directory.Exists(filePath))
             {
                 Debug.WriteLine($"{map} directory does not exist.");
                 return string.Empty;
             }
 
+            // Construct the expected file path based on alias and directory name
             string isFile = Path.Combine(filePath, $"{alias}_{map}.csv");
 
-            // Search for the correct file
+            // Search for the file in the directory
             foreach (var file in Directory.GetFiles(filePath, "*.csv"))
             {
+                // Compare the current file with the expected file path
                 if (file.Equals(isFile, StringComparison.OrdinalIgnoreCase))
                 {
                     Debug.WriteLine($"File found: {isFile}");
-                    return isFile;
+                    return isFile; // Return the path of the found file
                 }
             }
 
-            Debug.WriteLine($"No such file in Logs\\{alias}_logs.csv");
-            return string.Empty;
-        }
-
-        public static void FindCisFiles()
-        {
-            ///
+            // File not found
+            Debug.WriteLine($"No such file in {map}\\{alias}_{map}.csv");
+            return string.Empty; // Return an empty string if file does not exist
         }
     }
 }
