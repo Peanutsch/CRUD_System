@@ -68,7 +68,6 @@ namespace CRUD_System
                 }
             }
 
-            // File not found
             Debug.WriteLine($"No such file in Logs\\{alias}_logs.csv");
             return string.Empty;
         }
