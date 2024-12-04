@@ -360,7 +360,7 @@
             // 
             listBoxLogs.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             listBoxLogs.FormattingEnabled = true;
-            listBoxLogs.Location = new Point(962, 267);
+            listBoxLogs.Location = new Point(962, 35);
             listBoxLogs.Name = "listBoxLogs";
             listBoxLogs.Size = new Size(525, 116);
             listBoxLogs.TabIndex = 41;
@@ -370,7 +370,7 @@
             // 
             lblLoggings.AutoSize = true;
             lblLoggings.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            lblLoggings.Location = new Point(962, 249);
+            lblLoggings.Location = new Point(962, 17);
             lblLoggings.Name = "lblLoggings";
             lblLoggings.Size = new Size(63, 16);
             lblLoggings.TabIndex = 42;

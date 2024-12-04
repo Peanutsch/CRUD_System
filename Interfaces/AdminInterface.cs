@@ -385,69 +385,6 @@ namespace CRUD_System.Interfaces
                 adminControl.listBoxLogs.Items.Add(entry);
             }
         }
-
-
-        /*
-        public void LoadListBoxLogs(string alias)
-        {
-            // Clear listBoxLogs
-            adminControl.listBoxLogs.Items.Clear();
-
-            // Find the log file path
-            string logFile = FindCSVFiles.FindCSVFile(alias, "logs");
-
-            // If log file is found
-            if (File.Exists(logFile))
-            {
-                // Decrypt the log file if necessary
-                EncryptionManager.DecryptFile(logFile);
-
-                // Read all lines from the log file
-                var lines = File.ReadAllLines(logFile);
-
-                // Parse the lines into a list of log items with DateTime for sorting
-                var logEntries = new List<Tuple<DateTime, string>>();
-
-                foreach (var line in lines)
-                {
-                    // Split the line by a delimiter (e.g., comma or tab)
-                    var parts = line.Split(',');
-
-                    if (parts.Length >= 4)
-                    {
-                        string date = parts[0];
-                        string time = parts[1];
-                        string aliasInLog = parts[2]; // Renamed variable to avoid conflict
-                        string logEvent = parts[3];
-
-                        // Combine date and time to create a DateTime object
-                        if (DateTime.TryParse($"{date} {time}", out DateTime logDateTime))
-                        {
-                            // Add the log entry along with its DateTime to the list
-                            logEntries.Add(new Tuple<DateTime, string>(logDateTime, $"{date} {time} {aliasInLog} {logEvent}"));
-                        }
-                    }
-                }
-
-                // Sort the log entries by DateTime in descending order (newest first)
-                var sortedEntries = logEntries.OrderByDescending(entry => entry.Item1).ToList();
-
-                // Add each sorted log entry to the listBoxLogs
-                foreach (var entry in sortedEntries)
-                {
-                    adminControl.listBoxLogs.Items.Add(entry.Item2);
-                }
-
-                // Optionally re-encrypt the log file after reading (if required)
-                EncryptionManager.EncryptFile(logFile);
-            }
-            else
-            {
-                // Handle the case where the file doesn't exist
-                MessageBox.Show("Log file not found.");
-            }
-        }
-        */
         #endregion LISTBOX LOGS
 
         #region Listbox Pages
