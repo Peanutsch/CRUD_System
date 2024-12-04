@@ -270,41 +270,59 @@ namespace CRUD_System.Interfaces
             // Clear listBoxLogs
             adminControl.listBoxLogs.Items.Clear();
 
-            // Fill listBoxLogs with content of {alias}_logs.csv
+            // Find the log file path
             string logFile = FindCSVFiles.FindCSVFile(alias, "logs");
-            foreach (var line in logFile.Trim().Split(","))
+
+            // If log file is found
+            if (File.Exists(logFile))
             {
-                adminControl.listBoxLogs.Items.Add(line);
+                // Decrypt the log file if necessary
+                EncryptionManager.DecryptFile(logFile);
+
+                // Read all lines from the log file
+                var lines = File.ReadAllLines(logFile);
+
+                // Parse the lines into a list of log items with DateTime for sorting
+                var logEntries = new List<Tuple<DateTime, string>>();
+
+                foreach (var line in lines)
+                {
+                    // Split the line by a delimiter (e.g., comma or tab)
+                    var parts = line.Split(',');
+
+                    if (parts.Length >= 4)
+                    {
+                        string date = parts[0];
+                        string time = parts[1];
+                        string aliasInLog = parts[2]; // Renamed variable to avoid conflict
+                        string logEvent = parts[3];
+
+                        // Combine date and time to create a DateTime object
+                        if (DateTime.TryParse($"{date} {time}", out DateTime logDateTime))
+                        {
+                            // Add the log entry along with its DateTime to the list
+                            logEntries.Add(new Tuple<DateTime, string>(logDateTime, $"{date} {time} {aliasInLog} {logEvent}"));
+                        }
+                    }
+                }
+
+                // Sort the log entries by DateTime in descending order (newest first)
+                var sortedEntries = logEntries.OrderByDescending(entry => entry.Item1).ToList();
+
+                // Add each sorted log entry to the listBoxLogs
+                foreach (var entry in sortedEntries)
+                {
+                    adminControl.listBoxLogs.Items.Add(entry.Item2);
+                }
+
+                // Optionally re-encrypt the log file after reading (if required)
+                EncryptionManager.EncryptFile(logFile);
             }
-
-            /*
-            // Clear the ListBox
-            adminControl.listBoxAdmin.Items.Clear();
-
-            // Calculate start and end indices for the current page
-            int startIndex = (currentPage - 1) * itemsPerPage;
-            int endIndex = Math.Min(startIndex + itemsPerPage, CachedUserData.Count);
-
-            // Skip header rows and load items for the current page
-            var userDetailsForPage = CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
-
-            foreach (var userDetailsArray in userDetailsForPage)
+            else
             {
-                // Selection of items to display in ListBoxAdmin
-                string name = userDetailsArray[0];
-                string surname = userDetailsArray[1];
-                string alias = userDetailsArray[2];
-                string email = userDetailsArray[6];
-                string phonenumber = userDetailsArray[7];
-                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
-                string isSick = userDetailsArray.Length > 9 && userDetailsArray[9] == "True" ? "| [ABSENCE due ILLNESS]" : string.Empty;
-
-                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline} {isSick}";
-                adminControl.listBoxAdmin.Items.Add(listItem);
-
-                UpdatePageLabel();
+                // Handle the case where the file doesn't exist
+                MessageBox.Show("Log file not found.");
             }
-            */
         }
         #endregion LISTBOX LOGS
 

@@ -357,11 +357,11 @@
             // 
             // listBoxLogs
             // 
+            listBoxLogs.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             listBoxLogs.FormattingEnabled = true;
-            listBoxLogs.ItemHeight = 15;
             listBoxLogs.Location = new Point(962, 140);
             listBoxLogs.Name = "listBoxLogs";
-            listBoxLogs.Size = new Size(396, 124);
+            listBoxLogs.Size = new Size(525, 116);
             listBoxLogs.TabIndex = 41;
             listBoxLogs.SelectedIndexChanged += listBoxLogs_SelectedIndexChanged;
             // 
@@ -398,7 +398,7 @@
             Controls.Add(btnSaveEditUserDetails);
             Controls.Add(btnDeleteUser);
             Name = "AdminMainControl";
-            Size = new Size(1375, 450);
+            Size = new Size(1566, 450);
             ResumeLayout(false);
             PerformLayout();
         }
