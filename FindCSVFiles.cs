@@ -47,19 +47,19 @@ namespace CRUD_System
         public static string FindCSVFile(string alias, string map)
         {
             string rootPath = RootPath.GetRootPath();
-            string logsPath = Path.Combine(rootPath, $"{map}");
+            string filePath = Path.Combine(rootPath, $"{map}");
 
             // Check if the Logs directory exists
-            if (!Directory.Exists(logsPath))
+            if (!Directory.Exists(filePath))
             {
-                Debug.WriteLine("Logs directory does not exist.");
+                Debug.WriteLine($"{map} directory does not exist.");
                 return string.Empty;
             }
 
-            string isFile = Path.Combine(logsPath, $"{alias}_{map}.csv");
+            string isFile = Path.Combine(filePath, $"{alias}_{map}.csv");
 
             // Search for the correct file
-            foreach (var file in Directory.GetFiles(logsPath, "*.csv"))
+            foreach (var file in Directory.GetFiles(filePath, "*.csv"))
             {
                 if (file.Equals(isFile, StringComparison.OrdinalIgnoreCase))
                 {

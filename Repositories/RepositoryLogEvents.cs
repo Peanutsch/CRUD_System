@@ -19,17 +19,7 @@ namespace CRUD_System.Repositories
     internal class RepositoryLogEvents
     {
         #region PROPERTIES
-        FilePaths path = new FilePaths();
-
-        /// <summary>
-        /// Stores the current date and time for logging purposes.
-        /// Initializes with the current date and time when the instance is created.
-        /// </summary>
-        private readonly LogDateTime log = new LogDateTime
-        {
-            Date = DateTime.Now.Date,
-            Time = DateTime.Now
-        };
+        private readonly FilePaths path = new FilePaths();
         #endregion PROPERTIES
 
 
@@ -40,6 +30,7 @@ namespace CRUD_System.Repositories
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged IN");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],logged IN";
             string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            //string logFile = FindCSVFiles.FindCSVFile(currentUser, "Log");
             path.AppendToLog(logFile, newLog);
         }
 
@@ -65,8 +56,10 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Created new user [{isAlias.ToUpper()}]");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Created new user [{isAlias.ToUpper()}]";
-            string logFile = FindCSVFiles.FindLogCSV(currentUser);
-            path.AppendToLog(logFile, newLog);
+            string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
+            string userLogFile = FindCSVFiles.FindLogCSV(isAlias);
+            path.AppendToLog(adminlogFile, newLog);
+            path.AppendToLog(userLogFile, newLog);
         }
         #endregion AdminCreateControl
 
@@ -77,32 +70,40 @@ namespace CRUD_System.Repositories
             {
                 Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]");
                 string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]";
-                string logFile = FindCSVFiles.FindLogCSV(currentUser);
-                path.AppendToLog(logFile, newLog);
+                string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
+                string userLogFile = FindCSVFiles.FindLogCSV(alias);
+                path.AppendToLog(adminlogFile, newLog);
+                path.AppendToLog(userLogFile, newLog);
             }
             else
             {
                 Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[UNKNOWN USER],Generated new password for [{alias.ToUpper()}]");
                 string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[UNKNOW USER],Generated new password for [{alias.ToUpper()}]";
-                string logFile = FindCSVFiles.FindLogCSV(currentUser);
-                path.AppendToLog(logFile, newLog);
+                string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
+                string userLogFile = FindCSVFiles.FindLogCSV(alias);
+                path.AppendToLog(adminlogFile, newLog);
+                path.AppendToLog(userLogFile, newLog);
             }
         }
-
+        
         public void LogEventUpdateUserDetails(string currentUser, string alias)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Updated user details for [{alias.ToUpper()}]");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Updated user details for [{alias.ToUpper()}]";
-            string logFile = FindCSVFiles.FindLogCSV(currentUser);
-            path.AppendToLog(logFile, newLog);
+            string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
+            string userLogFile = FindCSVFiles.FindLogCSV(alias);
+            path.AppendToLog(adminlogFile, newLog);
+            path.AppendToLog(userLogFile, newLog);
         }
 
         public void LogEventDeleteUser(string currentUser, string aliasToDelete)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
-            string logFile = FindCSVFiles.FindLogCSV(currentUser);
-            path.AppendToLog(logFile, newLog);
+            string adminlogFile = FindCSVFiles.FindLogCSV(currentUser);
+            string userLogFile = FindCSVFiles.FindLogCSV(aliasToDelete);
+            path.AppendToLog(adminlogFile, newLog);
+            path.AppendToLog(userLogFile, newLog);
         }
         #endregion PROFILEMANAGER
 
