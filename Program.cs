@@ -46,7 +46,7 @@ namespace CRUD_System
             ApplicationConfiguration.Initialize();
 
             // Run the LoginForm as the main form of the application
-            Application.Run(new LoginForm());
+            //Application.Run(new LoginForm());
         }
 
         #region ADD NEW COLUMN
@@ -131,7 +131,7 @@ namespace CRUD_System
                         if (!File.Exists(file_cis_notices))
                         {
                             // Create a new file with default headers (or leave empty)
-                            File.WriteAllText(file_cis_notices, $"{alias},{string.Empty},{string.Empty}\n");
+                            File.WriteAllText(file_cis_notices, $"{string.Empty},{string.Empty},{string.Empty}\n");
 
                             // Encrypt the file
                             EncryptionManager.EncryptFile(file_cis_notices);
@@ -196,7 +196,7 @@ namespace CRUD_System
                         if (!File.Exists(file_logs))
                         {
                             // Create a new file with default headers (or leave empty)
-                            File.WriteAllText(file_logs, $"{alias},{string.Empty},{string.Empty}\n");
+                            File.WriteAllText(file_logs, $"{string.Empty},{string.Empty},{string.Empty}\n");
 
                             // Encrypt the file
                             EncryptionManager.EncryptFile(file_logs);
