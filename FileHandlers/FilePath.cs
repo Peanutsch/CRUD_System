@@ -48,15 +48,15 @@ namespace CRUD_System.FileHandlers
         /// Appends a new log entry to the log events file.
         /// </summary>
         /// <param name="newLog">The log entry to append.</param>
-        public void AppendToLog(string logPath, string newLog)
+        public void AppendToLog(string logFile, string newLog)
         {
-            if (!string.IsNullOrEmpty(logPath))
+            if (!string.IsNullOrEmpty(logFile))
             {
-                EncryptionManager.DecryptFile(logPath);
+                EncryptionManager.DecryptFile(logFile);
 
-                File.AppendAllText(logPath, newLog + Environment.NewLine);
+                File.AppendAllText(logFile, newLog + Environment.NewLine);
 
-                EncryptionManager.EncryptFile(logPath);
+                EncryptionManager.EncryptFile(logFile);
             }
         }
 

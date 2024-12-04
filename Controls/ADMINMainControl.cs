@@ -242,6 +242,11 @@ namespace CRUD_System
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }
 
+        private void listBoxLogs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 
+        }
+
         /// <summary>
         /// Handles the drawing of items in the ListBox. This method delegates the actual drawing 
         /// process to the <see cref="ListBoxAdmin_DrawItemHandler"/> method in the AdminInterface.
@@ -401,6 +406,7 @@ namespace CRUD_System
             adminInterface.UpdatePageLabel();
         }
         #endregion TextBox Search
+
     }
 }
 

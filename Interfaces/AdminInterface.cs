@@ -246,6 +246,9 @@ namespace CRUD_System.Interfaces
                 adminControl.chkIsAdmin.Checked = loginDetails[2] == "True";
                 adminControl.txtAbsenceIllness.Visible = userDetails[9] == "True"; // isSick
 
+                // Load listBoxLogs with data form corresponding {alias}_logs.csv
+                LoadListBoxLogs(selectedAlias);
+
                 // Enable Force log Out button if the selected user is not the current user
                 if (AuthenticationService.CurrentUser != selectedAlias)
                 {
@@ -260,6 +263,50 @@ namespace CRUD_System.Interfaces
             }
         }
         #endregion LISTBOX ADMIN
+
+        #region LISTBOX LOGS
+        public void LoadListBoxLogs(string alias)
+        {
+            // Clear listBoxLogs
+            adminControl.listBoxLogs.Items.Clear();
+
+            // Fill listBoxLogs with content of {alias}_logs.csv
+            string logFile = FindCSVFiles.FindCSVFile(alias, "logs");
+            foreach (var line in logFile.Trim().Split(","))
+            {
+                adminControl.listBoxLogs.Items.Add(line);
+            }
+
+            /*
+            // Clear the ListBox
+            adminControl.listBoxAdmin.Items.Clear();
+
+            // Calculate start and end indices for the current page
+            int startIndex = (currentPage - 1) * itemsPerPage;
+            int endIndex = Math.Min(startIndex + itemsPerPage, CachedUserData.Count);
+
+            // Skip header rows and load items for the current page
+            var userDetailsForPage = CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
+
+            foreach (var userDetailsArray in userDetailsForPage)
+            {
+                // Selection of items to display in ListBoxAdmin
+                string name = userDetailsArray[0];
+                string surname = userDetailsArray[1];
+                string alias = userDetailsArray[2];
+                string email = userDetailsArray[6];
+                string phonenumber = userDetailsArray[7];
+                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
+                string isSick = userDetailsArray.Length > 9 && userDetailsArray[9] == "True" ? "| [ABSENCE due ILLNESS]" : string.Empty;
+
+                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline} {isSick}";
+                adminControl.listBoxAdmin.Items.Add(listItem);
+
+                UpdatePageLabel();
+            }
+            */
+        }
+        #endregion LISTBOX LOGS
 
         #region Listbox Pages
         /// <summary>

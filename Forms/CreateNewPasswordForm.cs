@@ -26,7 +26,6 @@ namespace CRUD_System
         public int charToUpper = 3;
         public int charIsDigi = 3;
 
-        AdminMainControl adminControl = new AdminMainControl();
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
 

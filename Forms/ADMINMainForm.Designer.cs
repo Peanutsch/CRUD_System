@@ -72,7 +72,7 @@
             UserControl.BorderStyle = BorderStyle.FixedSingle;
             UserControl.Location = new Point(18, 86);
             UserControl.Name = "adminManagementControl";
-            UserControl.Size = new Size(1208, 400);
+            UserControl.Size = new Size(1375, 450);
             UserControl.TabIndex = 4;
             // 
             // MainFormADMIN
@@ -80,7 +80,7 @@
             AutoScaleDimensions = new SizeF(10F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(1260, 512);
+            ClientSize = new Size(1400, 550);
             Controls.Add(labelAlias);
             Controls.Add(buttonLOGOUT);
             Controls.Add(textBoxUserName);
