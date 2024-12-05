@@ -47,7 +47,9 @@ namespace CRUD_System.Repositories
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Forced [{alias.ToUpper()}] log OUT");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm")},[{currentUser.ToUpper()}],Forced [{alias.ToUpper()}] log OUT";
             string logFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
+            string userLogFile = FindCSVFiles.FindCSVFile(alias, "logs");
             path.AppendToLog(logFile, newLog);
+            path.AppendToLog(userLogFile, newLog);
         }
         #endregion AUTHENTICATIONSERVICE
 
