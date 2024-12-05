@@ -1,5 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using CRUD_System.Interfaces;
 using Microsoft.VisualBasic.Logging;
 using System;
 using System.Collections.Generic;
@@ -27,11 +28,21 @@ namespace CRUD_System.Repositories
         #region AUTHENTICATIONSERVICE
         public void UserLoggedIn(string currentUser)
         {
-            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN");
-            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
-            //string logFile = FindCSVFiles.FindLogCSV(currentUser);
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN\n==========");
+            string userLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
+            string adminLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
             string logFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
-            path.AppendToLog(logFile, newLog);
+            
+            if (AuthenticationService.CurrentUserRole)
+            {
+                AdminMainControl adminControl = new AdminMainControl();
+                path.AppendToLog(logFile, adminLog);
+            }
+            else
+            {
+                UserMainControl userControl = new UserMainControl();
+                path.AppendToLog(logFile, userLog);
+            }
         }
 
         public void UserLoggedOut(string currentUser)

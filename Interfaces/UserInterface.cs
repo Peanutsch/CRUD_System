@@ -262,6 +262,12 @@ namespace CRUD_System.Interfaces
             foreach (var entry in sortedEntries)
             {
                 userControl.listBoxLogs.Items.Add(entry);
+
+                // Check if the current entry contains "logged IN"
+                if (entry.Contains("logged IN"))
+                {
+                    userControl.listBoxLogs.Items.Add("======="); // Extra line in listBoxLogs as divider
+                }
             }
         }
         #endregion LISTBOX LOGS

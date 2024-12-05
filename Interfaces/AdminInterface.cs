@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace CRUD_System.Interfaces
@@ -383,6 +384,12 @@ namespace CRUD_System.Interfaces
             foreach (var entry in sortedEntries)
             {
                 adminControl.listBoxLogs.Items.Add(entry);
+
+                // Check if the current entry contains "logged IN"
+                if (entry.Contains("logged IN"))
+                {
+                    adminControl.listBoxLogs.Items.Add("======="); // Extra line in listBoxLogs as divider
+                }
             }
         }
         #endregion LISTBOX LOGS

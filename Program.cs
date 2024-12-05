@@ -23,7 +23,7 @@ namespace CRUD_System
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
             //EncryptionManager.EncryptFile(filePath.HRFilePath); // hr.csv
             //EncryptFile("mist001");
-            //EncryptFile("paer001");
+            //EncryptFile("peer001");
             #endregion Encryption
 
             #region Decryption
