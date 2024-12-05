@@ -136,5 +136,10 @@ namespace CRUD_System
         }
 
         #endregion BUTTONS
+
+        private void listBoxLogs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //
+        }
     }
 }

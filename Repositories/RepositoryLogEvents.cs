@@ -94,7 +94,12 @@ namespace CRUD_System.Repositories
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated details [{alias.ToUpper()}]";
             string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logs");
             string userLogFile = FindCSVFiles.FindCSVFile(alias, "logs");
-            path.AppendToLog(adminlogFile, newLog);
+
+            if (AuthenticationService.CurrentUserRole)
+            {
+                Debug.WriteLine("CurrentUserRole: true");
+                path.AppendToLog(adminlogFile, newLog);
+            }
             path.AppendToLog(userLogFile, newLog);
         }
 

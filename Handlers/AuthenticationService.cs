@@ -27,6 +27,7 @@ namespace CRUD_System.Handlers
     {
         #region PROPERTIES
         public static string? CurrentUser { get; set; }
+        public static bool CurrentUserRole { get; set; }
 
         FilePaths path = new FilePaths();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
@@ -195,6 +196,7 @@ namespace CRUD_System.Handlers
             bool isAdmin = IsAdmin(inputUserName, inputUserPassword);
             if (isAdmin) // Send to admin interface
             {
+                CurrentUserRole = isAdmin;
                 AdminMainForm adminForm = new AdminMainForm();
                 DisplayUserAlias(adminForm, isAdmin);
                 adminForm.ShowDialog();
