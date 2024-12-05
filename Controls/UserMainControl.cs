@@ -74,7 +74,10 @@ namespace CRUD_System
             {
                 profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
             }
-            editMode = false; // Close editMode
+
+            AdminInterface adminInterface = new AdminInterface();
+            adminInterface.EditMode = false;
+            userInterface.InterfaceEditModeUser();
             userInterface.ReloadListBoxUser(userIndex); // Reload interface
         }
 
@@ -136,10 +139,5 @@ namespace CRUD_System
         }
 
         #endregion BUTTONS
-
-        private void listBoxLogs_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //
-        }
     }
 }

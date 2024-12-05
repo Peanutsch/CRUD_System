@@ -253,7 +253,6 @@ namespace CRUD_System
             this.listBoxLogs.Name = "listBoxLogs";
             this.listBoxLogs.Size = new Size(360, 116);
             this.listBoxLogs.TabIndex = 31;
-            this.listBoxLogs.SelectedIndexChanged += this.listBoxLogs_SelectedIndexChanged;
             // 
             // UserMainControl
             // 

@@ -91,6 +91,8 @@ namespace CRUD_System.Interfaces
 
             // Fill the textboxes with the user's details
             FillTextboxes(userDetailsArray);
+
+            LoadListBoxLogs(alias);
         }
 
         /// <summary>
@@ -272,6 +274,7 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void InterfaceEditModeUser()
         {
+            // Reload cache data
             cache.LoadDecryptedData();
 
             // Toggle Edit and Cancel button text
