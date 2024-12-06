@@ -247,6 +247,8 @@ namespace CRUD_System
             // 
         }
 
+
+
         /// <summary>
         /// Handles the drawing of items in the ListBox. This method delegates the actual drawing 
         /// process to the <see cref="ListBoxAdmin_DrawItemHandler"/> method in the AdminInterface.
@@ -407,6 +409,26 @@ namespace CRUD_System
         }
         #endregion TextBox Search
 
+        private void listViewFiles_DoubleClick(object sender, EventArgs e)
+        {
+            ListViewFiles listViewFiles = new ListViewFiles(this);
+
+            // Pass an action that defines what should happen when a file is double-clicked
+            listViewFiles.HandleDoubleClick(filePath =>
+            {
+                // Example action: Open the file or display its path
+                MessageBox.Show($"File double-clicked: {filePath}");
+                // Optionally, open the file
+                try
+                {
+                    Process.Start(filePath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Could not open file: {ex.Message}");
+                }
+            });
+        }
     }
 }
 

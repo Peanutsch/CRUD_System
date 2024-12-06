@@ -13,25 +13,25 @@ namespace CRUD_System
         /// <summary>
         /// Searches for a CSV file in the specified directory based on the given alias and directory name.
         /// </summary>
-        /// <param name="alias">The alias of the user for which the file is being searched.</param>
+        /// <param name="directory">The alias of the user for which the file is being searched.</param>
         /// <param name="map">The name of the directory where the file is expected to be located (e.g., "Logs").</param>
         /// <returns>The full path to the CSV file if found, otherwise an empty string.</returns>
-        public static string FindCSVFile(string alias, string map)
+        public static string FindCSVFile(string alias, string directory)
         {
             // Get the root directory path
             string rootPath = RootPath.GetRootPath();
-            string filePath = Path.Combine(rootPath, $"{map}", Timers.CurrentYear.ToString(), alias);
+            string filePath = Path.Combine(rootPath, $"{directory}", Timers.CurrentYear.ToString(), alias);
 
             // Check if the target directory exists
             if (!Directory.Exists(filePath))
             {
-                Debug.WriteLine($"{map} directory does not exist.");
-                MessageBox.Show($"{map} directory does not exist.");
+                Debug.WriteLine($"{directory} directory does not exist.");
+                MessageBox.Show($"{directory} directory does not exist.");
                 return string.Empty;
             }
 
             // Construct the expected file path based on alias and directory name
-            string isFile = Path.Combine(filePath, $"{alias}_{map}.csv");
+            string isFile = Path.Combine(filePath, $"{alias}_{directory}.csv");
 
             // Search for the file in the directory
             foreach (var file in Directory.GetFiles(filePath, "*.csv"))
@@ -44,9 +44,27 @@ namespace CRUD_System
             }
 
             // File not found
-            Debug.WriteLine($"No such file in {map}\\{alias}\\{alias}_{map}.csv");
-            MessageBox.Show($"No such file in {map}\\{alias}\\{alias}_{map}.csv");
+            Debug.WriteLine($"No such file in {isFile}");
+            MessageBox.Show($"No such file in {isFile}");
             return string.Empty; // Return an empty string if file does not exist
+        }
+
+        public static string FindReportFile(string alias, string directory)
+        {
+            // Get the root directory path
+            string rootPath = RootPath.GetRootPath();
+            string filePath = Path.Combine(rootPath, directory, Timers.CurrentYear.ToString(), alias);
+
+            // Check if the target directory exists
+            if (!Directory.Exists(filePath))
+            {
+                Debug.WriteLine($"{directory} directory does not exist.");
+                MessageBox.Show($"{directory} directory does not exist.");
+                return string.Empty;
+            }
+
+            // Return the directory path (not the full file path)
+            return filePath;
         }
 
         /*

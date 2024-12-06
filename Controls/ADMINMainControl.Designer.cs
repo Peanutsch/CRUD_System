@@ -410,10 +410,10 @@
             // 
             txtCurrentDateNotes.Enabled = false;
             txtCurrentDateNotes.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtCurrentDateNotes.Location = new Point(179, 36);
+            txtCurrentDateNotes.Location = new Point(151, 38);
             txtCurrentDateNotes.Multiline = true;
             txtCurrentDateNotes.Name = "txtCurrentDateNotes";
-            txtCurrentDateNotes.Size = new Size(170, 23);
+            txtCurrentDateNotes.Size = new Size(140, 23);
             txtCurrentDateNotes.TabIndex = 45;
             txtCurrentDateNotes.TextAlign = HorizontalAlignment.Center;
             // 
@@ -426,18 +426,18 @@
             panelNotes.Controls.Add(comboBoxSubjectNotes);
             panelNotes.Controls.Add(txtAliasNotes);
             panelNotes.Controls.Add(txtCurrentDateNotes);
-            panelNotes.Location = new Point(1135, 157);
+            panelNotes.Location = new Point(1189, 157);
             panelNotes.Name = "panelNotes";
-            panelNotes.Size = new Size(357, 290);
+            panelNotes.Size = new Size(303, 290);
             panelNotes.TabIndex = 46;
             // 
             // buttonSaveNote
             // 
             buttonSaveNote.BackColor = SystemColors.ActiveCaption;
             buttonSaveNote.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            buttonSaveNote.Location = new Point(179, 262);
+            buttonSaveNote.Location = new Point(151, 262);
             buttonSaveNote.Name = "buttonSaveNote";
-            buttonSaveNote.Size = new Size(170, 23);
+            buttonSaveNote.Size = new Size(140, 23);
             buttonSaveNote.TabIndex = 49;
             buttonSaveNote.Text = "Save Note";
             buttonSaveNote.UseVisualStyleBackColor = false;
@@ -448,7 +448,7 @@
             buttonEmptyNote.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonEmptyNote.Location = new Point(3, 262);
             buttonEmptyNote.Name = "buttonEmptyNote";
-            buttonEmptyNote.Size = new Size(170, 23);
+            buttonEmptyNote.Size = new Size(140, 23);
             buttonEmptyNote.TabIndex = 48;
             buttonEmptyNote.Text = "Empty Note";
             buttonEmptyNote.UseVisualStyleBackColor = false;
@@ -459,7 +459,7 @@
             richTextBoxNotefield.Location = new Point(3, 65);
             richTextBoxNotefield.Name = "richTextBoxNotefield";
             richTextBoxNotefield.ScrollBars = RichTextBoxScrollBars.Vertical;
-            richTextBoxNotefield.Size = new Size(346, 191);
+            richTextBoxNotefield.Size = new Size(288, 191);
             richTextBoxNotefield.TabIndex = 47;
             richTextBoxNotefield.Text = "Your Notes here!";
             // 
@@ -468,18 +468,18 @@
             comboBoxSubjectNotes.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             comboBoxSubjectNotes.FormattingEnabled = true;
             comboBoxSubjectNotes.Items.AddRange(new object[] { "Subject 1", "Subject 2", "Subject 3", "Subject 4" });
-            comboBoxSubjectNotes.Location = new Point(3, 35);
+            comboBoxSubjectNotes.Location = new Point(0, 32);
             comboBoxSubjectNotes.Name = "comboBoxSubjectNotes";
-            comboBoxSubjectNotes.Size = new Size(170, 24);
+            comboBoxSubjectNotes.Size = new Size(140, 24);
             comboBoxSubjectNotes.TabIndex = 46;
             comboBoxSubjectNotes.Text = "Subject:";
             // 
             // listViewFiles
             // 
             listViewFiles.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            listViewFiles.Location = new Point(960, 186);
+            listViewFiles.Location = new Point(965, 160);
             listViewFiles.Name = "listViewFiles";
-            listViewFiles.Size = new Size(169, 227);
+            listViewFiles.Size = new Size(221, 253);
             listViewFiles.TabIndex = 47;
             listViewFiles.UseCompatibleStateImageBehavior = false;
             listViewFiles.View = View.Details;
@@ -488,7 +488,7 @@
             // 
             lvlListViewFiles.AutoSize = true;
             lvlListViewFiles.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lvlListViewFiles.Location = new Point(964, 161);
+            lvlListViewFiles.Location = new Point(1000, 421);
             lvlListViewFiles.Name = "lvlListViewFiles";
             lvlListViewFiles.Size = new Size(138, 18);
             lvlListViewFiles.TabIndex = 48;
@@ -564,7 +564,7 @@
         public Button buttonSaveNote;
         public Button buttonEmptyNote;
         public RichTextBox richTextBoxNotefield;
-        private ListView listViewFiles;
-        private Label lvlListViewFiles;
+        public ListView listViewFiles;
+        public Label lvlListViewFiles;
     }
 }
