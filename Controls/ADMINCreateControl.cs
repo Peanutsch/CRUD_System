@@ -69,10 +69,10 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            profileManager.SaveNewUser(txtName.Text, txtSurname.Text, 
-                                       txtAddress.Text, txtZIPCode.Text,
-                                       txtCity.Text, txtEmail.Text,
-                                       txtPhonenumber.Text, isAdmin);
+            profileManager.SaveNewUser(txtName.Text.Trim(), txtSurname.Text.Trim(), 
+                                       txtAddress.Text.Trim(), txtZIPCode.Text.Trim(),
+                                       txtCity.Text.Trim(), txtEmail.Text.Trim(),
+                                       txtPhonenumber.Text.Trim(), isAdmin);
 
             // Close CreateFormADMIN, return to MainFormADMIN
             interactionHandler.Close_CreateForm(this.ParentForm);
@@ -89,10 +89,10 @@ namespace CRUD_System
         private void TxtAlias_TextChanged(object sender, EventArgs e)
         {
             // Check if both txtName and txtSurname have at least 2 characters
-            if (txtName.Text.Length >= 1 && txtSurname.Text.Length >= 1)
+            if (txtName.Text.Trim().Length >= 1 && txtSurname.Text.Trim().Length >= 1)
             {
                 // Generate and display the alias
-                string displayAlias = accountManager.CreateTXTAlias(txtName.Text, txtSurname.Text);
+                string displayAlias = accountManager.CreateTXTAlias(txtName.Text.Trim(), txtSurname.Text.Trim());
                 txtAlias.Text = displayAlias;
             }
             else

@@ -312,10 +312,7 @@ namespace CRUD_System.Handlers
         {
             // Decrypt the user and login files before updating
             EncryptionManager.DecryptFile(path.UserFilePath);
-            Debug.WriteLine("***\nDataCache.SaveUserData> data_users.csv DECRYPTED");
-
             EncryptionManager.DecryptFile(path.LoginFilePath);
-            Debug.WriteLine("DataCache.SaveUserData> data_login.csv DECRYPTED");
 
             // Prepare the new data
             string newDataLogin = $"{alias},{password},{isAdmin},{onlineStatus}";
@@ -327,14 +324,10 @@ namespace CRUD_System.Handlers
 
             // Encrypt the user and login files again to secure the data
             EncryptionManager.EncryptFile(path.UserFilePath);
-            Debug.WriteLine("DataCache.SaveUserData> data_users.csv ENCRYPTED");
-
             EncryptionManager.EncryptFile(path.LoginFilePath);
-            Debug.WriteLine("DataCache.SaveUserData> data_login.csv ENCRYPTED");
 
             // ** Update the DataCache with the latest data **
             DataCache.LoadCache();
-            Debug.WriteLine("DataCache updated after saving new user.\n***");
         }
 
 
@@ -426,7 +419,6 @@ namespace CRUD_System.Handlers
 
             // Decrypt the file for updates
             EncryptionManager.DecryptFile(path.FileCisNotices!);
-            Debug.WriteLine("***\nProfileManager.AbsenceDueIllness> hr.csv DECRYPTED");
 
             // Append the updated data to the file
             foreach (var notification in cache.CachedCisData)
@@ -437,7 +429,6 @@ namespace CRUD_System.Handlers
 
             // Encrypt the file after updates
             EncryptionManager.EncryptFile(path.FileCisNotices!);
-            Debug.WriteLine("ProfileManager.AbsenceDueIllness> hr.csv ENCRYPTED");
 
             // Update the cache with the latest data
             DataCache.LoadCache();

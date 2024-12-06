@@ -61,7 +61,6 @@
             btnCallInSick = new Button();
             listBoxLogs = new ListBox();
             lblLoggings = new Label();
-            richTextBoxVOORIKHEBNOGGEENIDEE = new RichTextBox();
             txtAliasNotes = new TextBox();
             txtCurrentDateNotes = new TextBox();
             panelNotes = new Panel();
@@ -69,6 +68,8 @@
             buttonEmptyNote = new Button();
             richTextBoxNotefield = new RichTextBox();
             comboBoxSubjectNotes = new ComboBox();
+            listViewFiles = new ListView();
+            lvlListViewFiles = new Label();
             panelNotes.SuspendLayout();
             SuspendLayout();
             // 
@@ -119,7 +120,7 @@
             // listBoxAdmin
             // 
             listBoxAdmin.DrawMode = DrawMode.OwnerDrawFixed;
-            listBoxAdmin.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            listBoxAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             listBoxAdmin.ItemHeight = 15;
             listBoxAdmin.Location = new Point(24, 35);
             listBoxAdmin.Name = "listBoxAdmin";
@@ -393,15 +394,6 @@
             lblLoggings.TabIndex = 42;
             lblLoggings.Text = "Loggings";
             // 
-            // richTextBoxVOORIKHEBNOGGEENIDEE
-            // 
-            richTextBoxVOORIKHEBNOGGEENIDEE.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            richTextBoxVOORIKHEBNOGGEENIDEE.Location = new Point(962, 157);
-            richTextBoxVOORIKHEBNOGGEENIDEE.Name = "richTextBoxVOORIKHEBNOGGEENIDEE";
-            richTextBoxVOORIKHEBNOGGEENIDEE.Size = new Size(167, 290);
-            richTextBoxVOORIKHEBNOGGEENIDEE.TabIndex = 43;
-            richTextBoxVOORIKHEBNOGGEENIDEE.Text = "richTextBoxVOORIKHEBNOGGEENIDEE";
-            // 
             // txtAliasNotes
             // 
             txtAliasNotes.Enabled = false;
@@ -475,11 +467,32 @@
             // 
             comboBoxSubjectNotes.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             comboBoxSubjectNotes.FormattingEnabled = true;
+            comboBoxSubjectNotes.Items.AddRange(new object[] { "Subject 1", "Subject 2", "Subject 3", "Subject 4" });
             comboBoxSubjectNotes.Location = new Point(3, 35);
             comboBoxSubjectNotes.Name = "comboBoxSubjectNotes";
             comboBoxSubjectNotes.Size = new Size(170, 24);
             comboBoxSubjectNotes.TabIndex = 46;
             comboBoxSubjectNotes.Text = "Subject:";
+            // 
+            // listViewFiles
+            // 
+            listViewFiles.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            listViewFiles.Location = new Point(960, 186);
+            listViewFiles.Name = "listViewFiles";
+            listViewFiles.Size = new Size(169, 227);
+            listViewFiles.TabIndex = 47;
+            listViewFiles.UseCompatibleStateImageBehavior = false;
+            listViewFiles.View = View.Details;
+            // 
+            // lvlListViewFiles
+            // 
+            lvlListViewFiles.AutoSize = true;
+            lvlListViewFiles.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lvlListViewFiles.Location = new Point(964, 161);
+            lvlListViewFiles.Name = "lvlListViewFiles";
+            lvlListViewFiles.Size = new Size(138, 18);
+            lvlListViewFiles.TabIndex = 48;
+            lvlListViewFiles.Text = "ListViewFiles";
             // 
             // AdminMainControl
             // 
@@ -487,8 +500,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(lvlListViewFiles);
+            Controls.Add(listViewFiles);
             Controls.Add(panelNotes);
-            Controls.Add(richTextBoxVOORIKHEBNOGGEENIDEE);
             Controls.Add(lblLoggings);
             Controls.Add(listBoxLogs);
             Controls.Add(btnCallInSick);
@@ -543,7 +557,6 @@
         public Button btnCallInSick;
         public ListBox listBoxLogs;
         public Label lblLoggings;
-        public RichTextBox richTextBoxVOORIKHEBNOGGEENIDEE;
         public TextBox txtAliasNotes;
         public TextBox txtCurrentDateNotes;
         public Panel panelNotes;
@@ -551,5 +564,7 @@
         public Button buttonSaveNote;
         public Button buttonEmptyNote;
         public RichTextBox richTextBoxNotefield;
+        private ListView listViewFiles;
+        private Label lvlListViewFiles;
     }
 }

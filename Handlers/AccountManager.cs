@@ -68,18 +68,22 @@ namespace CRUD_System.Handlers
         /// <summary>
         /// Generates a unique alias for the user based on the first two letters of the first name
         /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
-        /// Diacritics in letters like é, è, and ô are removed for the alias.
+        /// Diacritics and unwanted characters are removed for the alias.
         /// </summary>
         /// <returns>A unique alias as a string.</returns>
         public string CreateTXTAlias(string Name, string Surname)
         {
-            // Normalize and remove diacritics from the Name and Surname
-            Name = RemoveDiacritics(Name);
-            Surname = RemoveDiacritics(Surname);
+            // Normalize and clean the Name and Surname
+            Name = CleanText(Name);
+            Surname = CleanText(Surname);
 
-            // Ensure Name and Surname have sufficient length
-            if (Name.Length < 2) Name = Name.PadRight(2, Name[0]);
-            if (Surname.Length < 2) Surname = Surname.PadRight(2, Surname[0]);
+            // Extract only letters
+            Name = new string(Name.Where(char.IsLetter).ToArray());
+            Surname = new string(Surname.Where(char.IsLetter).ToArray());
+
+            // Ensure Name and Surname have enough letters
+            if (Name.Length < 2) Name = Name.PadRight(2, 'x'); // Fallback to 'x' if insufficient letters
+            if (Surname.Length < 2) Surname = Surname.PadRight(2, 'y'); // Fallback to 'y' if insufficient letters
 
             // Generate the base alias
             string initialAlias = Name.Substring(0, 2).ToLower() + Surname.Substring(Surname.Length - 2).ToLower();
@@ -105,20 +109,28 @@ namespace CRUD_System.Handlers
             return finalAlias;
         }
 
+
         /// <summary>
-        /// Removes diacritics from the input string.
+        /// Removes diacritics, punctuation, and unwanted characters from the input string.
         /// </summary>
-        /// <param name="text">The input string with potential diacritics.</param>
-        /// <returns>A string without diacritics.</returns>
-        private string RemoveDiacritics(string text)
+        /// <param name="text">The input string with potential diacritics, punctuation, and unwanted characters.</param>
+        /// <returns>A string without diacritics, punctuation, and unwanted characters.</returns>
+        private string CleanText(string text)
         {
+            if (string.IsNullOrEmpty(text)) return string.Empty;
+
             var normalizedString = text.Normalize(NormalizationForm.FormD);
             var stringBuilder = new StringBuilder();
 
             foreach (var chars in normalizedString)
             {
                 var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(chars);
-                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+
+                // Retain only letters, numbers, and spaces (or any other desired categories)
+                if (unicodeCategory == UnicodeCategory.LowercaseLetter ||
+                    unicodeCategory == UnicodeCategory.UppercaseLetter ||
+                    unicodeCategory == UnicodeCategory.DecimalDigitNumber ||
+                    unicodeCategory == UnicodeCategory.SpaceSeparator)
                 {
                     stringBuilder.Append(chars);
                 }
@@ -126,6 +138,7 @@ namespace CRUD_System.Handlers
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
+
 
         /// <summary>
         /// Checks if the given alias already exists in the data_login.csv file.

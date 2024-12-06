@@ -527,6 +527,7 @@ namespace CRUD_System.Interfaces
                 .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online based on the 9th column
 
             // Display the "Force log Out User" button if the user is online
+            adminControl.btnForceLogOutUser.Enabled = isOnline;
             adminControl.btnForceLogOutUser.Visible = isOnline;
         }
         #endregion EDITMODE DISPLAY
