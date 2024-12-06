@@ -33,9 +33,9 @@ namespace CRUD_System.Repositories
         public void UserLoggedIn(string currentUser)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN\n==========");
-            string userLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
-            string adminLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
             string logFile = FindCSVFiles.FindCSVFile(currentUser, "logevents");
+            path.AppendToLog(logFile, newLog);
         }
 
         /// <summary>
@@ -130,15 +130,6 @@ namespace CRUD_System.Repositories
                 path.AppendToLog(adminlogFile, newLog);
             }
             path.AppendToLog(userLogFile, newLog);
-
-            if (AuthenticationService.CurrentUserRole) 
-            {
-                path.AppendToLog(adminlogFile, newLog);
-            }
-            else
-            {
-                path.AppendToLog(userLogFile, newLog);
-            }
         }
 
         /// <summary>

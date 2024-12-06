@@ -219,7 +219,7 @@ namespace CRUD_System
             comboBoxStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             comboBoxStatus.FormattingEnabled = true;
             comboBoxStatus.Items.AddRange(new object[] { "Online", "Active", "Away", "Break" });
-            comboBoxStatus.Location = new Point(969, 20);
+            comboBoxStatus.Location = new Point(1134, 16);
             comboBoxStatus.MaxDropDownItems = 9;
             comboBoxStatus.Name = "comboBoxStatus";
             comboBoxStatus.Size = new Size(83, 26);
@@ -243,7 +243,7 @@ namespace CRUD_System
             // txtStatusIndicator
             // 
             txtStatusIndicator.BackColor = Color.Blue;
-            txtStatusIndicator.Location = new Point(1058, 20);
+            txtStatusIndicator.Location = new Point(1223, 16);
             txtStatusIndicator.Multiline = true;
             txtStatusIndicator.Name = "txtStatusIndicator";
             txtStatusIndicator.Size = new Size(16, 26);
@@ -254,7 +254,7 @@ namespace CRUD_System
             listBoxLogs.FormattingEnabled = true;
             listBoxLogs.Location = new Point(714, 72);
             listBoxLogs.Name = "listBoxLogs";
-            listBoxLogs.Size = new Size(360, 116);
+            listBoxLogs.Size = new Size(525, 116);
             listBoxLogs.TabIndex = 31;
             // 
             // lblLoggings
@@ -291,7 +291,7 @@ namespace CRUD_System
             Controls.Add(btnSaveEditUserDetails);
             Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             Name = "UserMainControl";
-            Size = new Size(1116, 429);
+            Size = new Size(1278, 429);
             ResumeLayout(false);
             PerformLayout();
         }
