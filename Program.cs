@@ -40,13 +40,13 @@ namespace CRUD_System
             //AddNewColumn(filePath.UserFilePath);
 
             // Create CIS Notice CSV Files in map cis_notices
-            //CreateCISNoticeCSV(alias);
+            //CreateCISNoticeCSV();
 
             // Create log CSV Files in map Logs
-            //CreateLogCSV(alias);
+            //CreateLogCSV();
 
             //Create reports CSV Files in map reports
-            //CreateReportCSV(alias);
+            //CreateReportCSV();
             #endregion Create/Edit CSV Files
 
             // Initialize the application configuration
@@ -62,9 +62,7 @@ namespace CRUD_System
         /// </summary>
         static void AddNewColumn(string filePath)
         {
-            // Input and output file paths
-            //string inputFile = filePath;
-            //string outputFile = filePath;
+            // Do not forget to Decrypt and Encrypt file!!!!!
 
             // New column name and its default value for each row
             string newColumnName = "[9] Absence due Illness";
@@ -100,13 +98,14 @@ namespace CRUD_System
 
         #region CREATE CSV FILES
         /// <summary>
-        /// Creates a {alias}_cis_notices.csv file in the "cis_notices" directory.
+        /// Creates "cis_notices\{alias}\{alias}_cis_notices.csv" directory.
+        /// Using aliases from data_users.csv
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
         public static void CreateCISNoticeCSV()
         {
             DataCache cache = new DataCache();
-
+            
             // Load all data to cache
             cache.LoadDecryptedData();
 
@@ -124,7 +123,7 @@ namespace CRUD_System
 
                     try
                     {
-                        string noticesPath = Path.Combine(rootPath, "cis_notices");
+                        string noticesPath = Path.Combine(rootPath, "cis_notices", alias);
 
                         // Ensure the cis_notices directory exists
                         if (!Directory.Exists(noticesPath))
@@ -137,7 +136,8 @@ namespace CRUD_System
                         if (!File.Exists(file_cis_notices))
                         {
                             // Create a new file with default headers (or leave empty)
-                            File.WriteAllText(file_cis_notices, $"{string.Empty},{string.Empty},{string.Empty}\n");
+                            File.WriteAllText(file_cis_notices, $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," +
+                                                                $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}" + Environment.NewLine);
 
                             // Encrypt the file
                             EncryptionManager.EncryptFile(file_cis_notices);
@@ -160,11 +160,12 @@ namespace CRUD_System
                 }
             }
 
-            Debug.WriteLine($"Created {counter} csv files...");
+            Debug.WriteLine($"Created {counter} cis_notices csv files...");
         }
 
         /// <summary>
-        /// Creates a {alias}_logs.csv file in the "Logs" directory.
+        /// Creates "logs\{alias}\{alias}_logs.csv".
+        /// Using aliases from data_users.csv
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
         public static void CreateLogCSV()
@@ -188,7 +189,7 @@ namespace CRUD_System
 
                     try
                     {
-                        string logPath = Path.Combine(rootPath, "Logs");
+                        string logPath = Path.Combine(rootPath, "logs", alias);
 
                         // Ensure the cis_notices directory exists
                         if (!Directory.Exists(logPath))
@@ -201,7 +202,8 @@ namespace CRUD_System
                         if (!File.Exists(file_logs))
                         {
                             // Create a new file with default headers (or leave empty)
-                            File.WriteAllText(file_logs, $"{string.Empty},{string.Empty},{string.Empty}\n");
+                            File.WriteAllText(file_logs, $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," +
+                                                         $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}" + Environment.NewLine);
 
                             // Encrypt the file
                             EncryptionManager.EncryptFile(file_logs);
@@ -224,11 +226,12 @@ namespace CRUD_System
                 }
             }
 
-            Debug.WriteLine($"Created {counter} csv files...");
+            Debug.WriteLine($"Created {counter} logs csv files...");
         }
 
         /// <summary>
-        /// Creates a {alias}_logs.csv file in the "Logs" directory.
+        /// Creates "reports\{alias}\{alias}_logs.csv" directory.
+        /// Using aliases from data_users.csv
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
         public static void CreateReportCSV()
@@ -252,7 +255,7 @@ namespace CRUD_System
 
                     try
                     {
-                        string reportsPath = Path.Combine(rootPath, "reports");
+                        string reportsPath = Path.Combine(rootPath, "reports", alias);
 
                         // Ensure the cis_notices directory exists
                         if (!Directory.Exists(reportsPath))
@@ -265,7 +268,8 @@ namespace CRUD_System
                         if (!File.Exists(file_report))
                         {
                             // Create a new file with default headers (or leave empty)
-                            File.WriteAllText(file_report, $"{string.Empty},{string.Empty},{string.Empty}\n");
+                            File.WriteAllText(file_report, $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," +
+                                                           $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," + Environment.NewLine);
 
                             // Encrypt the file
                             EncryptionManager.EncryptFile(file_report);
@@ -288,7 +292,7 @@ namespace CRUD_System
                 }
             }
 
-            Debug.WriteLine($"Created {counter} csv files...");
+            Debug.WriteLine($"Created {counter} report csv files...");
         }
         #endregion CREATE CSV FILES
 

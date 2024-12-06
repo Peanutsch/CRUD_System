@@ -38,7 +38,7 @@ namespace CRUD_System.FileHandlers
 
         public void SetAlias(string alias)
         {
-            FileCisNotices = Path.Combine(rootPath, "cis_notices", $"{alias}_cis_notices.csv");
+            FileCisNotices = Path.Combine(rootPath, "cis_notices", alias, $"{alias}_cis_notices.csv");
         }
 
         #endregion CONSTRUCTOR
@@ -84,7 +84,7 @@ namespace CRUD_System.FileHandlers
             {
                 try
                 {
-                    string noticesPath = Path.Combine(rootPath, "cis_notices");
+                    string noticesPath = Path.Combine(rootPath, "cis_notices", alias);
 
                     // Ensure the cis_notices directory exists
                     if (!Directory.Exists(noticesPath))

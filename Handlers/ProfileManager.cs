@@ -379,8 +379,8 @@ namespace CRUD_System.Handlers
             {
                 // Create default CSV files line = {string.Empty},{string.Empty},{string.Empty}
                 CreateCSVFiles.CreateCISNoticeCSV(alias);
-                CreateCSVFiles.CreateReportCSV(alias);
-                CreateCSVFiles.CreateLogCSV(alias.ToUpper()); //, currentUser.ToUpper(), logEvent);
+                CreateCSVFiles.CreateReportsCSV(alias);
+                CreateCSVFiles.CreateLogCSV(alias); //, currentUser.ToUpper(), logEvent);
 
                 // log event in {alias}_log.csv
                 logEvents.NewAccount(currentUser, alias);
@@ -388,6 +388,7 @@ namespace CRUD_System.Handlers
         }
         #endregion SAVE NEW USER
 
+        /*
         #region ABSENCE DUE ILLNESS
         public void AbsenceDueIllness(bool isSick, string alias)
         {
@@ -442,5 +443,6 @@ namespace CRUD_System.Handlers
         }
 
         #endregion ABSENCE DUE ILLNESS
+        */
     }
 }
