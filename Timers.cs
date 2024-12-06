@@ -5,11 +5,12 @@ namespace CRUD_System
     public class Timers
     {
         // Instance properties to hold the times
-        public TimeSpan TimeOnlineStart { get; private set; }
-        public TimeSpan TimeActiveStart { get; private set; }
-        public TimeSpan TimeAwayStart { get; private set; }
-        public TimeSpan TimeBreakStart { get; private set; }
-        public TimeSpan CurrentTime { get; private set; }
+        public static TimeSpan TimeOnlineStart { get; private set; }
+        public static TimeSpan TimeActiveStart { get; private set; }
+        public static TimeSpan TimeAwayStart { get; private set; }
+        public static TimeSpan TimeBreakStart { get; private set; }
+        public static TimeSpan CurrentTime { get; private set; }
+        public static int CurrentYear { get; private set; } = DateTime.Now.Year;
 
         // Constructor to initialize the times
         public Timers()
@@ -19,16 +20,18 @@ namespace CRUD_System
             TimeAwayStart = DateTime.Now.TimeOfDay;
             TimeBreakStart = DateTime.Now.TimeOfDay;
             CurrentTime = DateTime.Now.TimeOfDay;
+            CurrentYear = DateTime.Now.Year;
         }
 
         // Static method to set times (if needed)
         public static void SetTimes()
         {
-            TimeSpan timeOnlineStart = DateTime.Now.TimeOfDay;
-            TimeSpan timeActiveStart = DateTime.Now.TimeOfDay;
-            TimeSpan timeAwayStart = DateTime.Now.TimeOfDay;
-            TimeSpan timeBreakStart = DateTime.Now.TimeOfDay;
-            TimeSpan currentTime = DateTime.Now.TimeOfDay;
+            TimeOnlineStart = DateTime.Now.TimeOfDay;
+            TimeActiveStart = DateTime.Now.TimeOfDay;
+            TimeAwayStart = DateTime.Now.TimeOfDay;
+            TimeBreakStart = DateTime.Now.TimeOfDay;
+            CurrentTime = DateTime.Now.TimeOfDay;
+            CurrentYear = DateTime.Now.Year;
 
             // Optionally, you can do something with these times here
         }

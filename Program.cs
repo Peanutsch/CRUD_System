@@ -98,7 +98,7 @@ namespace CRUD_System
 
         #region CREATE CSV FILES
         /// <summary>
-        /// Creates "cis_notices\{alias}\{alias}_cis_notices.csv" directory.
+        /// Creates "cis_notices\currentYear\{alias}\{alias}_cis_notices.csv" directory.
         /// Using aliases from data_users.csv
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
@@ -123,7 +123,7 @@ namespace CRUD_System
 
                     try
                     {
-                        string noticesPath = Path.Combine(rootPath, "cis_notices", alias);
+                        string noticesPath = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString(), alias);
 
                         // Ensure the cis_notices directory exists
                         if (!Directory.Exists(noticesPath))
@@ -164,7 +164,7 @@ namespace CRUD_System
         }
 
         /// <summary>
-        /// Creates "logs\{alias}\{alias}_logs.csv".
+        /// Creates "logs\currentYear\{alias}\{alias}_logs.csv".
         /// Using aliases from data_users.csv
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
@@ -189,7 +189,7 @@ namespace CRUD_System
 
                     try
                     {
-                        string logPath = Path.Combine(rootPath, "logs", alias);
+                        string logPath = Path.Combine(rootPath, "logevents", Timers.CurrentYear.ToString(), alias);
 
                         // Ensure the cis_notices directory exists
                         if (!Directory.Exists(logPath))
@@ -197,7 +197,7 @@ namespace CRUD_System
                             Directory.CreateDirectory(logPath);
                         }
 
-                        string file_logs = Path.Combine(logPath, $"{alias}_logs.csv");
+                        string file_logs = Path.Combine(logPath, $"{alias}_logevents.csv");
 
                         if (!File.Exists(file_logs))
                         {
@@ -208,7 +208,7 @@ namespace CRUD_System
                             // Encrypt the file
                             EncryptionManager.EncryptFile(file_logs);
 
-                            Debug.WriteLine($"Created {alias}_cis_notices.csv");
+                            Debug.WriteLine($"Created {alias}_logevents.csv");
 
                             counter++;
                         }
@@ -226,11 +226,11 @@ namespace CRUD_System
                 }
             }
 
-            Debug.WriteLine($"Created {counter} logs csv files...");
+            Debug.WriteLine($"Created {counter} logevents csv files...");
         }
 
         /// <summary>
-        /// Creates "reports\{alias}\{alias}_logs.csv" directory.
+        /// Creates "reports\currentYear\{alias}\{alias}_logs.csv" directory.
         /// Using aliases from data_users.csv
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
@@ -255,7 +255,7 @@ namespace CRUD_System
 
                     try
                     {
-                        string reportsPath = Path.Combine(rootPath, "reports", alias);
+                        string reportsPath = Path.Combine(rootPath, "reports", Timers.CurrentYear.ToString(), alias);
 
                         // Ensure the cis_notices directory exists
                         if (!Directory.Exists(reportsPath))
