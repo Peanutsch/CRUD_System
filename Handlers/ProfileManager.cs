@@ -377,54 +377,13 @@ namespace CRUD_System.Handlers
             var currentUser = AuthenticationService.CurrentUser;
             if (!string.IsNullOrEmpty(currentUser))
             {
-                logEvents.NewAccount(currentUser, alias);
-
-                // log event in {alias}_log.csv
-                string rootPath = RootPath.GetRootPath();
-
-                string logEvent = $"Created new user [{alias.ToUpper()}]";
-
                 // Create default CSV files line = {string.Empty},{string.Empty},{string.Empty}
                 CreateCSVFiles.CreateCISNoticeCSV(alias);
-                CreateCSVFiles.CreateLogCSV(alias.ToUpper(), currentUser.ToUpper(), logEvent);
                 CreateCSVFiles.CreateReportCSV(alias);
+                CreateCSVFiles.CreateLogCSV(alias.ToUpper()); //, currentUser.ToUpper(), logEvent);
 
-                /*
-                try
-                {
-                    string logsPath = Path.Combine(rootPath, "Logs");
-
-                    // Ensure the cis_notices directory exists
-                    if (!Directory.Exists(logsPath))
-                    {
-                        Directory.CreateDirectory(logsPath);
-                    }
-
-                    string file_logs = Path.Combine(logsPath, $"{alias}_logs.csv");
-
-                    if (!File.Exists(file_logs))
-                    {
-                        // Create a new file with string.Empty as default)
-                        File.WriteAllText(file_logs, $"{DateTime.Today.ToString("dd-MM-yyyy")},{string.Empty},{string.Empty}\n");
-
-                        // Encrypt the file
-                        EncryptionManager.EncryptFile(file_logs);
-
-                        Debug.WriteLine($"Created {alias}_logs.csv");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Handle exceptions gracefully (e.g., log the error or show a user-friendly message)
-                    Debug.WriteLine($"An error occurred for alias {alias}: {ex.Message}");
-                    MessageBox.Show($"An error occurred for alias {alias}: {ex.Message}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Alias cannot be null or empty.");
-            }
-                */
+                // log event in {alias}_log.csv
+                logEvents.NewAccount(currentUser, alias);
             }
         }
         #endregion SAVE NEW USER

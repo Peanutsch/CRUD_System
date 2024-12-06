@@ -26,6 +26,7 @@ namespace CRUD_System
             if (!Directory.Exists(filePath))
             {
                 Debug.WriteLine($"{map} directory does not exist.");
+                MessageBox.Show($"{map} directory does not exist.");
                 return string.Empty;
             }
 
@@ -38,13 +39,14 @@ namespace CRUD_System
                 // Compare the current file with the expected file path
                 if (file.Equals(isFile, StringComparison.OrdinalIgnoreCase))
                 {
-                    Debug.WriteLine($"File found: {isFile}");
+                    Debug.WriteLine($"[FindCSVFile] file found: {isFile}");
                     return isFile; // Return the path of the found file
                 }
             }
 
             // File not found
             Debug.WriteLine($"No such file in {map}\\{alias}_{map}.csv");
+            MessageBox.Show($"No such file in {map}\\{alias}_{map}.csv");
             return string.Empty; // Return an empty string if file does not exist
         }
     }

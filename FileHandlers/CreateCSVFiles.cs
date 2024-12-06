@@ -46,7 +46,6 @@ namespace CRUD_System.FileHandlers
                 }
                 catch (Exception ex)
                 {
-                    // Handle exceptions gracefully (e.g., log the error or show a user-friendly message)
                     Debug.WriteLine($"An error occurred for alias {alias}: {ex.Message}");
                     MessageBox.Show($"An error occurred for alias {alias}: {ex.Message}");
                 }
@@ -62,7 +61,7 @@ namespace CRUD_System.FileHandlers
         /// Creates line {date},{},{}
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
-        public static void CreateLogCSV(string alias, string currentUser, string logEvent)
+        public static void CreateLogCSV(string alias) //, string currentUser, string logEvent)
         {
             if (!string.IsNullOrEmpty(alias))
             {
@@ -82,8 +81,8 @@ namespace CRUD_System.FileHandlers
 
                     if (!File.Exists(file_logs))
                     {
-                        // Create a new file with string.Empty as default)
-                        File.WriteAllText(file_logs, $"{DateTime.Today.ToString("dd-MM-yyyy")},{currentUser},{logEvent}" + Environment.NewLine);
+                        // Create a new file with string.Empty as default
+                        File.WriteAllText(file_logs, $"{string.Empty},{string.Empty},{string.Empty},{string.Empty}" + Environment.NewLine);
 
                         // Encrypt the file
                         EncryptionManager.EncryptFile(file_logs);

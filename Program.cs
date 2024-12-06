@@ -40,11 +40,13 @@ namespace CRUD_System
             //AddNewColumn(filePath.UserFilePath);
 
             // Create CIS Notice CSV Files in map cis_notices
-            //CreateCISNoticeCSV();
+            //CreateCISNoticeCSV(alias);
+
             // Create log CSV Files in map Logs
-            //CreateLogCSV();
+            //CreateLogCSV(alias);
+
             //Create reports CSV Files in map reports
-            //CreateReportCSV();
+            //CreateReportCSV(alias);
             #endregion Create/Edit CSV Files
 
             // Initialize the application configuration
