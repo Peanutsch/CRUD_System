@@ -41,6 +41,15 @@ namespace CRUD_System.Repositories
         {
             return MessageBox.Show($"Please confirm to set user {alias.ToUpper()} on Absence due Illness", "Confirm", MessageBoxButtons.YesNo);
         }
+
+        public DialogResult MessageConfirmForceLogOutUser(string alias)
+        {
+            return MessageBox.Show($"Please confirm to logout user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+        }
+        public DialogResult MessageConfirmSaveNote(string alias)
+        {
+            return MessageBox.Show($"Please confirm to save this note for user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+        }
         #endregion CONFIRM
 
         #region SUCCES

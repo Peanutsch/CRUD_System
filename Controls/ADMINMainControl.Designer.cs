@@ -63,7 +63,7 @@
             lblLoggings = new Label();
             richTextBoxVOORIKHEBNOGGEENIDEE = new RichTextBox();
             txtAliasNotes = new TextBox();
-            txtDateNotes = new TextBox();
+            txtCurrentDateNotes = new TextBox();
             panelNotes = new Panel();
             buttonSaveNote = new Button();
             buttonEmptyNote = new Button();
@@ -414,16 +414,16 @@
             txtAliasNotes.TabIndex = 44;
             txtAliasNotes.TextAlign = HorizontalAlignment.Center;
             // 
-            // txtDateNotes
+            // txtCurrentDateNotes
             // 
-            txtDateNotes.Enabled = false;
-            txtDateNotes.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtDateNotes.Location = new Point(179, 36);
-            txtDateNotes.Multiline = true;
-            txtDateNotes.Name = "txtDateNotes";
-            txtDateNotes.Size = new Size(170, 23);
-            txtDateNotes.TabIndex = 45;
-            txtDateNotes.TextAlign = HorizontalAlignment.Center;
+            txtCurrentDateNotes.Enabled = false;
+            txtCurrentDateNotes.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtCurrentDateNotes.Location = new Point(179, 36);
+            txtCurrentDateNotes.Multiline = true;
+            txtCurrentDateNotes.Name = "txtCurrentDateNotes";
+            txtCurrentDateNotes.Size = new Size(170, 23);
+            txtCurrentDateNotes.TabIndex = 45;
+            txtCurrentDateNotes.TextAlign = HorizontalAlignment.Center;
             // 
             // panelNotes
             // 
@@ -433,7 +433,7 @@
             panelNotes.Controls.Add(richTextBoxNotefield);
             panelNotes.Controls.Add(comboBoxSubjectNotes);
             panelNotes.Controls.Add(txtAliasNotes);
-            panelNotes.Controls.Add(txtDateNotes);
+            panelNotes.Controls.Add(txtCurrentDateNotes);
             panelNotes.Location = new Point(1135, 157);
             panelNotes.Name = "panelNotes";
             panelNotes.Size = new Size(357, 290);
@@ -545,7 +545,7 @@
         public Label lblLoggings;
         public RichTextBox richTextBoxVOORIKHEBNOGGEENIDEE;
         public TextBox txtAliasNotes;
-        public TextBox txtDateNotes;
+        public TextBox txtCurrentDateNotes;
         public Panel panelNotes;
         public ComboBox comboBoxSubjectNotes;
         public Button buttonSaveNote;

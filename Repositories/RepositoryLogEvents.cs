@@ -23,8 +23,6 @@ namespace CRUD_System.Repositories
         private readonly FilePaths path = new FilePaths();
         #endregion PROPERTIES
 
-
-
         #region AUTHENTICATIONSERVICE
         /// <summary>
         /// Logs the event when a user logs in.
@@ -66,7 +64,7 @@ namespace CRUD_System.Repositories
         }
         #endregion AUTHENTICATIONSERVICE
 
-        #region AdminCreateControl
+        #region ADMINCREATECONTROL
         /// <summary>
         /// Logs the event when a new user account is created.
         /// </summary>
@@ -81,7 +79,7 @@ namespace CRUD_System.Repositories
             path.AppendToLog(adminlogFile, newLog);
             path.AppendToLog(userLogFile, newLog);
         }
-        #endregion AdminCreateControl
+        #endregion ADMINCREATECONTROL
 
         #region PROFILEMANAGER
         /// <summary>
@@ -148,7 +146,7 @@ namespace CRUD_System.Repositories
         }
         #endregion PROFILEMANAGER
 
-        #region CREATENEWPASSWORD
+        #region CREATE NEW PASSWORD
         /// <summary>
         /// Logs the event when a new password is created for a user.
         /// </summary>
@@ -160,7 +158,22 @@ namespace CRUD_System.Repositories
             string logFile = FindCSVFiles.FindCSVFile(currentAlias, "logevents");
             path.AppendToLog(logFile, newLog);
         }
-        #endregion CREATENEWPASSWORD
+        #endregion CREATE NEW PASSWORD
 
+        #region SAVE NOTE
+        public void LogEventSaveNote(string currentUser, string alias)
+        {
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created note for user [{alias.ToUpper()}]");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created note for user [{alias.ToUpper()}]";
+            string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logevents");
+            string userLogFile = FindCSVFiles.FindCSVFile(alias, "logevents");
+
+            if (AuthenticationService.CurrentUserRole && currentUser != alias) // Log the event in admin and user files
+            {
+                path.AppendToLog(adminlogFile, newLog);
+            }
+            path.AppendToLog(userLogFile, newLog);
+        }
+        #endregion SAVE NOTE
     }
 }
