@@ -258,8 +258,14 @@ namespace CRUD_System.Handlers
         /// <param name="aliasToLogOut">The alias of the user to be logged out.</param>
         public void ForceLogOut(string aliasToLogOut)
         {
-            AdminInterface adminInterface = new AdminInterface();
+            // Show a confirmation dialog for deletion
+            DialogResult dr = message.MessageConfirmForceLogOutUser(aliasToLogOut);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
 
+            AdminInterface adminInterface = new AdminInterface();
             // Pass the selected alias to SetForceLogOutUserBtn in AdminInterface
             adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
 

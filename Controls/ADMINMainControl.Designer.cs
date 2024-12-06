@@ -61,66 +61,79 @@
             btnCallInSick = new Button();
             listBoxLogs = new ListBox();
             lblLoggings = new Label();
+            richTextBoxVOORIKHEBNOGGEENIDEE = new RichTextBox();
+            txtAliasNotes = new TextBox();
+            txtDateNotes = new TextBox();
+            panelNotes = new Panel();
+            buttonSaveNote = new Button();
+            buttonEmptyNote = new Button();
+            richTextBoxNotefield = new RichTextBox();
+            comboBoxSubjectNotes = new ComboBox();
+            panelNotes.SuspendLayout();
             SuspendLayout();
             // 
             // txtName
             // 
             txtName.Enabled = false;
+            txtName.Font = new Font("Courier New", 12F, FontStyle.Bold);
             txtName.Location = new Point(127, 270);
             txtName.Name = "txtName";
             txtName.PlaceholderText = "Name";
-            txtName.Size = new Size(325, 23);
+            txtName.Size = new Size(325, 26);
             txtName.TabIndex = 1;
             txtName.TextAlign = HorizontalAlignment.Center;
             // 
             // txtEmail
             // 
             txtEmail.Enabled = false;
+            txtEmail.Font = new Font("Courier New", 12F, FontStyle.Bold);
             txtEmail.Location = new Point(127, 328);
             txtEmail.Name = "txtEmail";
             txtEmail.PlaceholderText = "E-mail";
-            txtEmail.Size = new Size(443, 23);
+            txtEmail.Size = new Size(443, 26);
             txtEmail.TabIndex = 6;
             txtEmail.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAddress
             // 
             txtAddress.Enabled = false;
+            txtAddress.Font = new Font("Courier New", 12F, FontStyle.Bold);
             txtAddress.Location = new Point(127, 299);
             txtAddress.Name = "txtAddress";
             txtAddress.PlaceholderText = "Adress";
-            txtAddress.Size = new Size(325, 23);
+            txtAddress.Size = new Size(325, 26);
             txtAddress.TabIndex = 3;
             txtAddress.TextAlign = HorizontalAlignment.Center;
             // 
             // txtCity
             // 
             txtCity.Enabled = false;
+            txtCity.Font = new Font("Courier New", 12F, FontStyle.Bold);
             txtCity.Location = new Point(576, 299);
             txtCity.Name = "txtCity";
             txtCity.PlaceholderText = "City";
-            txtCity.Size = new Size(218, 23);
+            txtCity.Size = new Size(218, 26);
             txtCity.TabIndex = 5;
             txtCity.TextAlign = HorizontalAlignment.Center;
             // 
             // listBoxAdmin
             // 
             listBoxAdmin.DrawMode = DrawMode.OwnerDrawFixed;
+            listBoxAdmin.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             listBoxAdmin.ItemHeight = 15;
             listBoxAdmin.Location = new Point(24, 35);
             listBoxAdmin.Name = "listBoxAdmin";
             listBoxAdmin.Size = new Size(932, 229);
             listBoxAdmin.TabIndex = 0;
             listBoxAdmin.DrawItem += ListBoxAdmin_DrawItem;
-            //listBoxAdmin.DrawItem += ListBoxAdmin_DrawItemHandler; ;
             listBoxAdmin.SelectedIndexChanged += ListBoxAdmin_SelectedIndexChanged;
             // 
             // btnCreateUser
             // 
             btnCreateUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnCreateUser.Location = new Point(623, 2);
+            btnCreateUser.Location = new Point(635, 3);
             btnCreateUser.Name = "btnCreateUser";
-            btnCreateUser.Size = new Size(150, 30);
+            btnCreateUser.Size = new Size(138, 30);
             btnCreateUser.TabIndex = 11;
             btnCreateUser.Text = "Create User";
             btnCreateUser.Click += btnCreateUser_Click;
@@ -154,41 +167,45 @@
             // txtSurname
             // 
             txtSurname.Enabled = false;
+            txtSurname.Font = new Font("Courier New", 12F, FontStyle.Bold);
             txtSurname.Location = new Point(458, 270);
             txtSurname.Name = "txtSurname";
             txtSurname.PlaceholderText = "Surname";
-            txtSurname.Size = new Size(336, 23);
+            txtSurname.Size = new Size(336, 26);
             txtSurname.TabIndex = 2;
             txtSurname.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAlias
             // 
             txtAlias.Enabled = false;
+            txtAlias.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtAlias.Location = new Point(24, 270);
             txtAlias.Name = "txtAlias";
             txtAlias.PlaceholderText = "Alias";
             txtAlias.ReadOnly = true;
-            txtAlias.Size = new Size(97, 23);
+            txtAlias.Size = new Size(97, 26);
             txtAlias.TabIndex = 20;
             txtAlias.TextAlign = HorizontalAlignment.Center;
             // 
             // txtZIPCode
             // 
             txtZIPCode.Enabled = false;
+            txtZIPCode.Font = new Font("Courier New", 12F, FontStyle.Bold);
             txtZIPCode.Location = new Point(458, 299);
             txtZIPCode.Name = "txtZIPCode";
             txtZIPCode.PlaceholderText = "ZIP Code";
-            txtZIPCode.Size = new Size(112, 23);
+            txtZIPCode.Size = new Size(112, 26);
             txtZIPCode.TabIndex = 4;
             txtZIPCode.TextAlign = HorizontalAlignment.Center;
             // 
             // txtPhonenumber
             // 
             txtPhonenumber.Enabled = false;
+            txtPhonenumber.Font = new Font("Courier New", 12F, FontStyle.Bold);
             txtPhonenumber.Location = new Point(576, 328);
             txtPhonenumber.Name = "txtPhonenumber";
             txtPhonenumber.PlaceholderText = "Phonenumber";
-            txtPhonenumber.Size = new Size(218, 23);
+            txtPhonenumber.Size = new Size(218, 26);
             txtPhonenumber.TabIndex = 7;
             txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
@@ -262,9 +279,8 @@
             // btnForceLogOutUser
             // 
             btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
-            btnForceLogOutUser.Enabled = false;
             btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnForceLogOutUser.Location = new Point(806, 354);
+            btnForceLogOutUser.Location = new Point(806, 357);
             btnForceLogOutUser.Name = "btnForceLogOutUser";
             btnForceLogOutUser.Size = new Size(150, 30);
             btnForceLogOutUser.TabIndex = 32;
@@ -341,7 +357,7 @@
             txtAbsenceIllness.Name = "txtAbsenceIllness";
             txtAbsenceIllness.Size = new Size(97, 23);
             txtAbsenceIllness.TabIndex = 38;
-            txtAbsenceIllness.Text = "Ab.Ill";
+            txtAbsenceIllness.Text = "Ab.ill";
             txtAbsenceIllness.TextAlign = HorizontalAlignment.Center;
             txtAbsenceIllness.Visible = false;
             // 
@@ -363,7 +379,7 @@
             listBoxLogs.FormattingEnabled = true;
             listBoxLogs.Location = new Point(962, 35);
             listBoxLogs.Name = "listBoxLogs";
-            listBoxLogs.Size = new Size(525, 116);
+            listBoxLogs.Size = new Size(530, 116);
             listBoxLogs.TabIndex = 41;
             listBoxLogs.SelectedIndexChanged += listBoxLogs_SelectedIndexChanged;
             // 
@@ -377,12 +393,102 @@
             lblLoggings.TabIndex = 42;
             lblLoggings.Text = "Loggings";
             // 
+            // richTextBoxVOORIKHEBNOGGEENIDEE
+            // 
+            richTextBoxVOORIKHEBNOGGEENIDEE.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            richTextBoxVOORIKHEBNOGGEENIDEE.Location = new Point(962, 157);
+            richTextBoxVOORIKHEBNOGGEENIDEE.Name = "richTextBoxVOORIKHEBNOGGEENIDEE";
+            richTextBoxVOORIKHEBNOGGEENIDEE.Size = new Size(167, 290);
+            richTextBoxVOORIKHEBNOGGEENIDEE.TabIndex = 43;
+            richTextBoxVOORIKHEBNOGGEENIDEE.Text = "richTextBoxVOORIKHEBNOGGEENIDEE";
+            // 
+            // txtAliasNotes
+            // 
+            txtAliasNotes.Enabled = false;
+            txtAliasNotes.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtAliasNotes.Location = new Point(3, 3);
+            txtAliasNotes.Name = "txtAliasNotes";
+            txtAliasNotes.PlaceholderText = "Alias";
+            txtAliasNotes.ReadOnly = true;
+            txtAliasNotes.Size = new Size(97, 26);
+            txtAliasNotes.TabIndex = 44;
+            txtAliasNotes.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtDateNotes
+            // 
+            txtDateNotes.Enabled = false;
+            txtDateNotes.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtDateNotes.Location = new Point(179, 36);
+            txtDateNotes.Multiline = true;
+            txtDateNotes.Name = "txtDateNotes";
+            txtDateNotes.Size = new Size(170, 23);
+            txtDateNotes.TabIndex = 45;
+            txtDateNotes.TextAlign = HorizontalAlignment.Center;
+            // 
+            // panelNotes
+            // 
+            panelNotes.BackColor = SystemColors.GradientActiveCaption;
+            panelNotes.Controls.Add(buttonSaveNote);
+            panelNotes.Controls.Add(buttonEmptyNote);
+            panelNotes.Controls.Add(richTextBoxNotefield);
+            panelNotes.Controls.Add(comboBoxSubjectNotes);
+            panelNotes.Controls.Add(txtAliasNotes);
+            panelNotes.Controls.Add(txtDateNotes);
+            panelNotes.Location = new Point(1135, 157);
+            panelNotes.Name = "panelNotes";
+            panelNotes.Size = new Size(357, 290);
+            panelNotes.TabIndex = 46;
+            // 
+            // buttonSaveNote
+            // 
+            buttonSaveNote.BackColor = SystemColors.ActiveCaption;
+            buttonSaveNote.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonSaveNote.Location = new Point(179, 262);
+            buttonSaveNote.Name = "buttonSaveNote";
+            buttonSaveNote.Size = new Size(170, 23);
+            buttonSaveNote.TabIndex = 49;
+            buttonSaveNote.Text = "Save Note";
+            buttonSaveNote.UseVisualStyleBackColor = false;
+            // 
+            // buttonEmptyNote
+            // 
+            buttonEmptyNote.BackColor = SystemColors.ActiveCaption;
+            buttonEmptyNote.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonEmptyNote.Location = new Point(3, 262);
+            buttonEmptyNote.Name = "buttonEmptyNote";
+            buttonEmptyNote.Size = new Size(170, 23);
+            buttonEmptyNote.TabIndex = 48;
+            buttonEmptyNote.Text = "Empty Note";
+            buttonEmptyNote.UseVisualStyleBackColor = false;
+            // 
+            // richTextBoxNotefield
+            // 
+            richTextBoxNotefield.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            richTextBoxNotefield.Location = new Point(3, 65);
+            richTextBoxNotefield.Name = "richTextBoxNotefield";
+            richTextBoxNotefield.ScrollBars = RichTextBoxScrollBars.Vertical;
+            richTextBoxNotefield.Size = new Size(346, 191);
+            richTextBoxNotefield.TabIndex = 47;
+            richTextBoxNotefield.Text = "Your Notes here!";
+            // 
+            // comboBoxSubjectNotes
+            // 
+            comboBoxSubjectNotes.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            comboBoxSubjectNotes.FormattingEnabled = true;
+            comboBoxSubjectNotes.Location = new Point(3, 35);
+            comboBoxSubjectNotes.Name = "comboBoxSubjectNotes";
+            comboBoxSubjectNotes.Size = new Size(170, 24);
+            comboBoxSubjectNotes.TabIndex = 46;
+            comboBoxSubjectNotes.Text = "Subject:";
+            // 
             // AdminMainControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(panelNotes);
+            Controls.Add(richTextBoxVOORIKHEBNOGGEENIDEE);
             Controls.Add(lblLoggings);
             Controls.Add(listBoxLogs);
             Controls.Add(btnCallInSick);
@@ -412,6 +518,8 @@
             Controls.Add(btnDeleteUser);
             Name = "AdminMainControl";
             Size = new Size(1566, 450);
+            panelNotes.ResumeLayout(false);
+            panelNotes.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -434,6 +542,14 @@
         public TextBox txtAbsenceIllness;
         public Button btnCallInSick;
         public ListBox listBoxLogs;
-        private Label lblLoggings;
+        public Label lblLoggings;
+        public RichTextBox richTextBoxVOORIKHEBNOGGEENIDEE;
+        public TextBox txtAliasNotes;
+        public TextBox txtDateNotes;
+        public Panel panelNotes;
+        public ComboBox comboBoxSubjectNotes;
+        public Button buttonSaveNote;
+        public Button buttonEmptyNote;
+        public RichTextBox richTextBoxNotefield;
     }
 }

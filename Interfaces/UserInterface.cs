@@ -80,7 +80,7 @@ namespace CRUD_System.Interfaces
             string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty; // Online status
 
             // Construct the item string to display in the list box
-            string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
+            string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber}"; //{isOnline}";
 
             // Clear existing items in the list box and add the current user's details
             userControl.listBoxUser.Items.Clear();
@@ -92,6 +92,7 @@ namespace CRUD_System.Interfaces
             // Fill the textboxes with the user's details
             FillTextboxes(userDetailsArray);
 
+            // Pass alias and run to LoadListBoxLogs
             LoadListBoxLogs(alias);
         }
 
@@ -340,7 +341,7 @@ namespace CRUD_System.Interfaces
         }
         #endregion INTERFACE USERS
 
-        #region TEXTBOXES
+        #region TEXTBOXES DETAILS
         /// <summary>
         /// Populates the user interface text fields with details from the specified user details array.
         /// Initializes a UserDetails object from the array and assigns values to the respective text fields.
@@ -357,6 +358,6 @@ namespace CRUD_System.Interfaces
             userControl.txtEmail.Text = userDetailsArray[6];
             userControl.txtPhonenumber.Text = userDetailsArray[7];
         }
-        #endregion TEXTBOXES
+        #endregion TEXTBOXES DETAILS
     }
 }

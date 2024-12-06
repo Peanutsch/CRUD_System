@@ -526,8 +526,7 @@ namespace CRUD_System.Interfaces
                 .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == aliasToLogOut) // Match alias
                 .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online based on the 9th column
 
-            // Enable and display the "Force log Out User" button if the user is online
-            adminControl.btnForceLogOutUser.Enabled = isOnline;
+            // Display the "Force log Out User" button if the user is online
             adminControl.btnForceLogOutUser.Visible = isOnline;
         }
         #endregion EDITMODE DISPLAY
@@ -570,7 +569,22 @@ namespace CRUD_System.Interfaces
             adminControl.txtCity.Text = userDetailsArray[5];
             adminControl.txtEmail.Text = userDetailsArray[6];
             adminControl.txtPhonenumber.Text = userDetailsArray[7];
+
+            // Populate text fields in Notes
+            string currentDate = Timers.CurrentDate.ToShortDateString();
+            string currentTime = Timers.CurrentTime.ToString(@"hh\:mm\:ss");
+
+            adminControl.txtAliasNotes.Text = adminControl.txtAlias.Text;
+            adminControl.txtDateNotes.Text = $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}";
         }
         #endregion TEXTBOXES ADMIN
+
+        #region TEXTBOXES NOTES
+        public void TextBoxesNotes()
+        {
+            
+
+        }
+        #endregion TEXTBOXES NOTES
     }
 }
