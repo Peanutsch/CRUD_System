@@ -26,25 +26,22 @@ namespace CRUD_System.Repositories
 
 
         #region AUTHENTICATIONSERVICE
+        /// <summary>
+        /// Logs the event when a user logs in.
+        /// </summary>
+        /// <param name="currentUser">The username of the user who logged in.</param>
         public void UserLoggedIn(string currentUser)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN\n==========");
             string userLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
             string adminLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
             string logFile = FindCSVFiles.FindCSVFile(currentUser, "logevents");
-            
-            if (AuthenticationService.CurrentUserRole)
-            {
-                AdminMainControl adminControl = new AdminMainControl();
-                path.AppendToLog(logFile, adminLog);
-            }
-            else
-            {
-                UserMainControl userControl = new UserMainControl();
-                path.AppendToLog(logFile, userLog);
-            }
         }
 
+        /// <summary>
+        /// Logs the event when a user logs out.
+        /// </summary>
+        /// <param name="currentUser">The username of the user who logged out.</param>
         public void UserLoggedOut(string currentUser)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged OUT");
@@ -53,6 +50,11 @@ namespace CRUD_System.Repositories
             path.AppendToLog(logFile, newLog);
         }
 
+        /// <summary>
+        /// Logs the event when a user is forced to log out by another user.
+        /// </summary>
+        /// <param name="currentUser">The username of the user who forced the log out.</param>
+        /// <param name="alias">The alias of the user who was forced to log out.</param>
         public void ForceUserLogOut(string currentUser, string alias)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Forced [{alias.ToUpper()}] log OUT");
@@ -65,6 +67,11 @@ namespace CRUD_System.Repositories
         #endregion AUTHENTICATIONSERVICE
 
         #region AdminCreateControl
+        /// <summary>
+        /// Logs the event when a new user account is created.
+        /// </summary>
+        /// <param name="currentUser">The username of the user who created the new account.</param>
+        /// <param name="isAlias">The alias of the user who was created.</param>
         public void NewAccount(string currentUser, string isAlias)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created user [{isAlias.ToUpper()}]");
@@ -77,12 +84,17 @@ namespace CRUD_System.Repositories
         #endregion AdminCreateControl
 
         #region PROFILEMANAGER
+        /// <summary>
+        /// Logs the event when a password is generated for a user.
+        /// </summary>
+        /// <param name="currentUser">The username of the user generating the password.</param>
+        /// <param name="alias">The alias of the user for whom the password was generated.</param>
         public void LogEventPasswordGenerated(string currentUser, string alias)
         {
             if (!string.IsNullOrEmpty(currentUser))
             {
-                Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Generated password for [{alias.ToUpper()}]");
-                string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Generated password for [{alias.ToUpper()}]";
+                Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]");
+                string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]";
                 string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logevents");
                 string userLogFile = FindCSVFiles.FindCSVFile(alias, "logevents");
                 path.AppendToLog(adminlogFile, newLog);
@@ -98,7 +110,14 @@ namespace CRUD_System.Repositories
                 path.AppendToLog(userLogFile, newLog);
             }
         }
-        
+
+        /// <summary>
+        /// Logs the event when a user's details are updated.
+        /// When update is done by Admin, log events admin and user.
+        /// Ignore when Admin edits own details: only log as user
+        /// </summary>
+        /// <param name="currentUser">The username of the user performing the update.</param>
+        /// <param name="alias">The alias of the user whose details were updated.</param>
         public void LogEventUpdateUserDetails(string currentUser, string alias)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated details [{alias.ToUpper()}]");
@@ -106,14 +125,27 @@ namespace CRUD_System.Repositories
             string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logevents");
             string userLogFile = FindCSVFiles.FindCSVFile(alias, "logevents");
 
-            if (AuthenticationService.CurrentUserRole)
+            if (AuthenticationService.CurrentUserRole && currentUser != alias) // Log the event in admin and user files
             {
-                Debug.WriteLine($"CurrentUserRole: {AuthenticationService.CurrentUserRole}");
                 path.AppendToLog(adminlogFile, newLog);
             }
             path.AppendToLog(userLogFile, newLog);
+
+            if (AuthenticationService.CurrentUserRole) 
+            {
+                path.AppendToLog(adminlogFile, newLog);
+            }
+            else
+            {
+                path.AppendToLog(userLogFile, newLog);
+            }
         }
 
+        /// <summary>
+        /// Logs the event when a user is deleted.
+        /// </summary>
+        /// <param name="currentUser">The username of the user performing the deletion.</param>
+        /// <param name="aliasToDelete">The alias of the user who is being deleted.</param>
         public void LogEventDeleteUser(string currentUser, string aliasToDelete)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]");
@@ -126,13 +158,18 @@ namespace CRUD_System.Repositories
         #endregion PROFILEMANAGER
 
         #region CREATENEWPASSWORD
+        /// <summary>
+        /// Logs the event when a new password is created for a user.
+        /// </summary>
+        /// <param name="currentAlias">The alias of the user whose password was changed.</param>
         public void LogEventNewPasswordCreated(string currentAlias)
         {
-            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentAlias.ToUpper()}],Changed password");
-            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentAlias.ToUpper()}],Changed password";
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentAlias.ToUpper()}],Changed own password");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentAlias.ToUpper()}],Changed own password";
             string logFile = FindCSVFiles.FindCSVFile(currentAlias, "logevents");
             path.AppendToLog(logFile, newLog);
         }
         #endregion CREATENEWPASSWORD
+
     }
 }

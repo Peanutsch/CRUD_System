@@ -253,7 +253,7 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event, typically the ListBox control.</param>
         /// <param name="e">The event data that contains the drawing information for the item.</param>
-        private void ListBoxAdmin_DrawItem(object sender, DrawItemEventArgs e)
+        public void ListBoxAdmin_DrawItem(object sender, DrawItemEventArgs e)
         {
             adminInterface.ListBoxAdmin_DrawItemHandler(sender, e);
         }

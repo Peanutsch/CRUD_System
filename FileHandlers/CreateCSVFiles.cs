@@ -10,10 +10,8 @@ namespace CRUD_System.FileHandlers
 {
     internal class CreateCSVFiles
     {
-        string currentYear = Timers.CurrentYear.ToString();
-
         /// <summary>
-        /// Creates a {alias}_cis_notices.csv file in the "cis_notices" directory.
+        /// Creates /cis_notices/current year/{alias}_cis_notices.csv.
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
         public static void CreateCISNoticeCSV(string alias)
@@ -26,7 +24,7 @@ namespace CRUD_System.FileHandlers
                 {
                     string noticesPath = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString(), alias);
 
-                    // Zorg ervoor dat de alias-map in cis_notices bestaat
+                    // Ensure the alias folder exists within the cis_notices directory
                     if (!Directory.Exists(noticesPath))
                     {
                         Directory.CreateDirectory(noticesPath);
@@ -36,10 +34,11 @@ namespace CRUD_System.FileHandlers
 
                     if (!File.Exists(fileCisNotices))
                     {
-                        // Maak een nieuwe leeg bestand aan
-                        File.WriteAllText(fileCisNotices, $"{string.Empty},{string.Empty},{string.Empty}" + Environment.NewLine);
+                        // Create a new empty file
+                        File.WriteAllText(fileCisNotices, $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," +
+                                                          $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," + Environment.NewLine);
 
-                        // Versleutel het bestand
+                        // Encrypt the file
                         EncryptionManager.EncryptFile(fileCisNotices);
 
                         Debug.WriteLine($"Created {fileCisNotices}");
@@ -58,8 +57,7 @@ namespace CRUD_System.FileHandlers
         }
 
         /// <summary>
-        /// Creates a {alias}_logs.csv file in the "Logs" directory.
-        /// Creates line {date},{},{}
+        /// Creates /logEvents/current year/{alias}_logs.csv.
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
         public static void CreateLogCSV(string alias)
@@ -72,7 +70,7 @@ namespace CRUD_System.FileHandlers
                 {
                     string logsPath = Path.Combine(rootPath, "logevents", Timers.CurrentYear.ToString(), alias);
 
-                    // Zorg ervoor dat de alias-map in logs bestaat
+                    // Ensure the alias folder exists within the logevents directory
                     if (!Directory.Exists(logsPath))
                     {
                         Directory.CreateDirectory(logsPath);
@@ -82,10 +80,11 @@ namespace CRUD_System.FileHandlers
 
                     if (!File.Exists(fileLogs))
                     {
-                        // Maak een nieuwe leeg bestand aan
-                        File.WriteAllText(fileLogs, $"{string.Empty},{string.Empty},{string.Empty},{string.Empty}" + Environment.NewLine);
+                        // Create a new empty file with a basic format
+                        File.WriteAllText(fileLogs, $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," +
+                                                    $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," + Environment.NewLine);
 
-                        // Versleutel het bestand
+                        // Encrypt the file
                         EncryptionManager.EncryptFile(fileLogs);
 
                         Debug.WriteLine($"Created {fileLogs}");
@@ -104,7 +103,7 @@ namespace CRUD_System.FileHandlers
         }
 
         /// <summary>
-        /// Creates a {alias}_reports.csv file in the "Logs" directory.
+        /// Creates /reports/current year/{alias}_reports.csv.
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
         public static void CreateReportsCSV(string alias)
@@ -115,25 +114,25 @@ namespace CRUD_System.FileHandlers
 
                 try
                 {
-                    // Bouw het pad naar de "reports" map en de submap voor de alias
+                    // Build the path to the "reports" directory and the alias subdirectory
                     string reportsPath = Path.Combine(rootPath, "reports", Timers.CurrentYear.ToString(), alias);
 
-                    // Zorg ervoor dat de alias-map in reports bestaat
+                    // Ensure the alias folder exists within the reports directory
                     if (!Directory.Exists(reportsPath))
                     {
                         Directory.CreateDirectory(reportsPath);
                     }
 
-                    // Bepaal het volledige pad voor het rapportbestand
+                    // Determine the full path for the report file
                     string fileReports = Path.Combine(reportsPath, $"{alias}_reports.csv");
 
                     if (!File.Exists(fileReports))
                     {
-                        // Maak een nieuwe leeg bestand aan
+                        // Create a new empty file with a detailed format
                         File.WriteAllText(fileReports, $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," +
                                                        $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," + Environment.NewLine);
 
-                        // Versleutel het bestand
+                        // Encrypt the file
                         EncryptionManager.EncryptFile(fileReports);
 
                         Debug.WriteLine($"Created {fileReports}");
@@ -141,7 +140,7 @@ namespace CRUD_System.FileHandlers
                 }
                 catch (Exception ex)
                 {
-                    // Handel fouten af en geef debug- en gebruikersvriendelijke berichten
+                    // Handle errors and provide both debug and user-friendly messages
                     Debug.WriteLine($"An error occurred for alias {alias}: {ex.Message}");
                     MessageBox.Show($"An error occurred for alias {alias}: {ex.Message}");
                 }

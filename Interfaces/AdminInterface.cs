@@ -175,7 +175,10 @@ namespace CRUD_System.Interfaces
             }
             // Empty textboxes
             EmptyTextBoxesAdmin();
-            }
+
+            // Refresh the ListBox to trigger the DrawItem event
+            adminControl.listBoxAdmin.Refresh();
+        }
 
         /// <summary>
         /// Handles the event when a user is selected in the ListBox. It fills the details for the selected user in the textboxes,

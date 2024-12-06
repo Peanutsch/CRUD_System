@@ -112,6 +112,7 @@
             listBoxAdmin.Size = new Size(932, 229);
             listBoxAdmin.TabIndex = 0;
             listBoxAdmin.DrawItem += ListBoxAdmin_DrawItem;
+            //listBoxAdmin.DrawItem += ListBoxAdmin_DrawItemHandler; ;
             listBoxAdmin.SelectedIndexChanged += ListBoxAdmin_SelectedIndexChanged;
             // 
             // btnCreateUser

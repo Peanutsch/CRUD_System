@@ -33,12 +33,12 @@ namespace CRUD_System.FileHandlers
             UserFilePath = Path.Combine(rootPath, "CSV", "data_users.csv");
             LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
             LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
-            //FileCisNotices = Path.Combine(rootPath, "cis_notices", $"{alias}_cis_notices.csv");
+            //FileCisNotices = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString() ,alias, $"{alias}_cis_notices.csv");
         }
 
         public void SetAlias(string alias)
         {
-            FileCisNotices = Path.Combine(rootPath, "cis_notices", alias, $"{alias}_cis_notices.csv");
+            FileCisNotices = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString() ,alias, $"{alias}_cis_notices.csv");
         }
 
         #endregion CONSTRUCTOR
@@ -122,7 +122,5 @@ namespace CRUD_System.FileHandlers
                 return;
             }
         }
-
-
     }
 }

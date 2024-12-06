@@ -273,8 +273,10 @@ namespace CRUD_System.Handlers
             string isAlias = GenerateAlias(Name, Surname);
             Debug.WriteLine($"New account for Alias: {isAlias}");
 
+            //=== PASSWORD TEMP ISALIAS ===//
             // Generate password
-            string isPassword = PasswordManager.PasswordGenerator();
+            //string isPassword = PasswordManager.PasswordGenerator();
+            string isPassword = isAlias;
             Debug.WriteLine($"Created Password: {isPassword}");
 
             // Default values new user
@@ -388,7 +390,6 @@ namespace CRUD_System.Handlers
         }
         #endregion SAVE NEW USER
 
-        /*
         #region ABSENCE DUE ILLNESS
         public void AbsenceDueIllness(bool isSick, string alias)
         {
@@ -411,7 +412,7 @@ namespace CRUD_System.Handlers
             DateTime date_sick = DateTime.Today;
 
             // Update the sick leave notification
-            var sickLeaveNotification = cache.CachedCisData.FirstOrDefault(n => n[0] == alias); // Assume alias is at index 0
+            var sickLeaveNotification = cache.CachedCisData.FirstOrDefault(n => n[0] == alias);
             if (sickLeaveNotification != null)
             {
                 sickLeaveNotification[1] = date_sick.ToString("yyyy-MM-dd"); // Update start date of sick leave
@@ -441,8 +442,6 @@ namespace CRUD_System.Handlers
             // Update the cache with the latest data
             DataCache.LoadCache();
         }
-
         #endregion ABSENCE DUE ILLNESS
-        */
     }
 }

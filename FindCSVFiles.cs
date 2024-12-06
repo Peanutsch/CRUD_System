@@ -39,7 +39,6 @@ namespace CRUD_System
                 // Compare the current file with the expected file path
                 if (file.Equals(isFile, StringComparison.OrdinalIgnoreCase))
                 {
-                    Debug.WriteLine($"[FindCSVFile] file found: {isFile}");
                     return isFile; // Return the path of the found file
                 }
             }
