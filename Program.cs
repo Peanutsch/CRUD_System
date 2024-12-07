@@ -17,23 +17,25 @@ namespace CRUD_System
         [STAThread]
         static void Main() 
         {
+            #region Decryption
+            // Decrypt the CSV file
+            //EncryptionManager.DecryptFile(filePath.LoginFilePath); // data_login.csv
+            //EncryptionManager.DecryptFile(filePath.UserFilePath); // data_users.csv
+            //EncryptionManager.DecryptFile(filePath.HRFilePath);
+            //DecryptSingleCSVFile("peer001", "report"); //--------------> Do not forget to check if DirectoryName is correct in method. Current setup: peer001
+            //DecryptSingleCSVFile("paer001", "log");
+            #endregion Decryption
+
             #region Encryption
             // Encrypt the CSV file
             //EncryptionManager.EncryptFile(filePath.LoginFilePath); // data_login.csv
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
             //EncryptionManager.EncryptFile(filePath.HRFilePath); // hr.csv
-            //EncryptFile("mist001");
-            //EncryptFile("peer001");
-            #endregion Encryption
+            //EncryptionManager.EncryptFile(filePath.ReportFilePath); // {alias}_report.csv
 
-            #region Decryption
-            // Decrypt the CSV file
-            ////EncryptionManager.DecryptFile(filePath.LoginFilePath); // data_login.csv
-            //EncryptionManager.DecryptFile(filePath.UserFilePath); // data_users.csv
-            //EncryptionManager.DecryptFile(filePath.HRFilePath);
-            //DecryptFile("peer001");
-            //DecryptFile("paer001");
-            #endregion Decryption
+            //DecryptSingleCSVFile("mist001", "logEvents");
+            //DecryptSingleCSVFile("peer001", "logEvents");
+            #endregion Encryption
 
             #region Create/Edit CSV Files
             // Add new column in csv file
@@ -50,7 +52,7 @@ namespace CRUD_System
             #endregion Create/Edit CSV Files
 
             // Initialize the application configuration
-            ApplicationConfiguration.Initialize();
+            //ApplicationConfiguration.Initialize();
 
             // Run the LoginForm as the main form of the application
             Application.Run(new LoginForm());
@@ -297,13 +299,13 @@ namespace CRUD_System
         #endregion CREATE CSV FILES
 
         #region DECRYPT FILE
-        public static void DecryptFile(string alias)
+        public static void DecryptSingleCSVFile(string alias, string directoryName)
         {
             string rootPath = RootPath.GetRootPath();
-            string logPath = Path.Combine(rootPath, "Logs");
+            string logPath = Path.Combine(rootPath, directoryName);
             
             //string file_logs = Path.Combine(logPath, $"{alias}_logs.csv");
-            EncryptionManager.DecryptFile(Path.Combine(logPath, $"{alias}_logs.csv"));
+            EncryptionManager.DecryptFile(Path.Combine(logPath, "2024", alias, $"{alias}_report.csv"));
         }
         #endregion DECRYPT FILE
 

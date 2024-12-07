@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CRUD_System.FileHandlers;
+using CRUD_System.Handlers;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -12,9 +14,11 @@ namespace CRUD_System
     /// </summary>
     internal class ListViewFiles
     {
+        #region PROPERTIES
         private readonly AdminMainControl adminControl;
-        //private readonly System.Windows.Forms.ListView listView;
+        #endregion PROPERTIES
 
+        #region CONSTRUCTOR
         /// <summary>
         /// Initializes a new instance of the ListViewFiles class and sets up the ListView.
         /// </summary>
@@ -23,7 +27,9 @@ namespace CRUD_System
         {
             this.adminControl = adminControl ?? new AdminMainControl();
         }
+        #endregion CONSTRUCTOR
 
+        #region PROCESS
         /// <summary>
         /// Loads files from a specified directory into the ListView.
         /// </summary>
@@ -31,12 +37,6 @@ namespace CRUD_System
         public void LoadFilesIntoListView(string directoryPath, string selectedAlias)
         {
             adminControl.listViewFiles.Visible = true;
-
-            if (!string.IsNullOrEmpty(selectedAlias))
-            {
-                Debug.WriteLine($"ListViewFiles Selected Alias: {selectedAlias}");
-                string reportDirectory = FindCSVFiles.FindReportFile(selectedAlias, "report");
-            }
 
             // Check if the specified directory exists
             if (Directory.Exists(directoryPath) && !string.IsNullOrEmpty(directoryPath))
@@ -51,12 +51,13 @@ namespace CRUD_System
                     {
                         FileInfo fileInfo = new FileInfo(file);
                         Debug.WriteLine($"ListViewFiles Adding File: {fileInfo.Name}");
-                        //Debug.WriteLine($"ListViewFiles File Name: {fileInfo.Name}, Size: {fileInfo.Length}, Creation Time: {fileInfo.CreationTime}");
 
-                        // Create a ListViewItem for each file
+                        // Create a ListViewItem for each file, using Name and Date
                         ListViewItem item = new ListViewItem(fileInfo.Name);
-                        item.SubItems.Add(fileInfo.Length.ToString() + " bytes");
-                        item.SubItems.Add(fileInfo.CreationTime.ToString());
+                        item.SubItems.Add(fileInfo.CreationTime.ToString("dd/MM/yyyy"));
+
+                        // Set the Tag property to the full file path
+                        item.Tag = fileInfo.FullName;
 
                         // Add the item to the ListView
                         adminControl.listViewFiles.Items.Add(item);
@@ -67,6 +68,7 @@ namespace CRUD_System
                 }
                 else
                 {
+                    Debug.WriteLine("No CSV files found in the specified directory.", "Info");
                     MessageBox.Show("No CSV files found in the specified directory.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
@@ -74,11 +76,11 @@ namespace CRUD_System
             else
             {
                 // Show an error message if the directory does not exist
+                Debug.WriteLine("The specified directory does not exist.", "Error");
                 MessageBox.Show("The specified directory does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }
-
 
         /// <summary>
         /// Registers the event handler for the ListView's double-click event.
@@ -90,6 +92,8 @@ namespace CRUD_System
             {
                 // Check if any item is selected and if the Tag property is not null
                 var selectedItem = adminControl.listViewFiles.SelectedItems.Cast<ListViewItem>().FirstOrDefault();
+                Debug.WriteLine($"ListViewFiles HandleDoubleClick selectedItem: {selectedItem}");
+
                 if (selectedItem?.Tag is string filePath && !string.IsNullOrEmpty(filePath))
                 {
                     // Invoke the action if filePath is valid
@@ -98,9 +102,11 @@ namespace CRUD_System
                 else
                 {
                     // Handle invalid Tag or empty filePath
-                    MessageBox.Show("The selected file does not have a valid path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Debug.WriteLine("ListViewFiles HandleDoubleClick: The selected file does not have a valid path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             };
         }
+        #endregion PROCESS
     }
 }

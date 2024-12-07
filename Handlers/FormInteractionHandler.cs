@@ -63,6 +63,34 @@ namespace CRUD_System.Handlers
                 MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Opens the ShowReportForm as a dialog while temporarily hiding the specified parent control. 
+        /// The parent control will be restored and made visible again once the ShowReportForm is closed.
+        /// </summary>
+        /// <param name="parentControl">
+        /// The parent control (e.g., a UserControl or Form) to hide while the ShowReportForm is displayed. 
+        /// If null, an error message will be shown indicating that the parent control is invalid.
+        /// </param>
+        public void Open_ShowReportForm(UserControl? parentControl = null)
+        {
+            // Check if parentControl is valid
+            if (parentControl != null)
+            {
+                parentControl.Hide();
+
+                using (ShowReportForm showReport = new ShowReportForm())
+                {
+                    showReport.ShowDialog(); // Show ShowReportForm as Dialog
+                }
+
+                parentControl.Show(); // Restore visibility after closing the form
+            }
+            else
+            {
+                MessageBox.Show("Parent control is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion CREATE FORM
 
         #region CREATE NEW PASSWORD

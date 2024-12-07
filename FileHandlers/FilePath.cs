@@ -18,6 +18,7 @@ namespace CRUD_System.FileHandlers
         public string LoginFilePath { get; private set; }
         public string LogEventFilePath { get; private set; }
         public string? FileCisNotices { get; private set; }
+        public string? ReportFilePath { get; private set; }
 
         public static string rootPath = RootPath.GetRootPath() ?? string.Empty;
 
@@ -34,6 +35,7 @@ namespace CRUD_System.FileHandlers
             LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
             LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
             //FileCisNotices = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString() ,alias, $"{alias}_cis_notices.csv");
+            ReportFilePath = Path.Combine(rootPath, "report", "2024", "peer001", "peer001_report.csv");
         }
 
         public void SetAlias(string alias)

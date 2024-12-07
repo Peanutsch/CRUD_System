@@ -62,12 +62,12 @@
             listBoxLogs = new ListBox();
             lblLoggings = new Label();
             txtAliasNotes = new TextBox();
-            txtCurrentDateNotes = new TextBox();
+            txtCurrentDateReport = new TextBox();
             panelNotes = new Panel();
-            buttonSaveNote = new Button();
-            buttonEmptyNote = new Button();
-            richTextBoxNotefield = new RichTextBox();
-            comboBoxSubjectNotes = new ComboBox();
+            buttonSaveReport = new Button();
+            buttonEmptyReport = new Button();
+            rtxNewReport = new RichTextBox();
+            comboBoxSubjectReport = new ComboBox();
             listViewFiles = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
@@ -408,73 +408,73 @@
             txtAliasNotes.TabIndex = 44;
             txtAliasNotes.TextAlign = HorizontalAlignment.Center;
             // 
-            // txtCurrentDateNotes
+            // txtCurrentDateReport
             // 
-            txtCurrentDateNotes.Enabled = false;
-            txtCurrentDateNotes.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtCurrentDateNotes.Location = new Point(151, 38);
-            txtCurrentDateNotes.Multiline = true;
-            txtCurrentDateNotes.Name = "txtCurrentDateNotes";
-            txtCurrentDateNotes.Size = new Size(140, 23);
-            txtCurrentDateNotes.TabIndex = 45;
-            txtCurrentDateNotes.TextAlign = HorizontalAlignment.Center;
+            txtCurrentDateReport.Enabled = false;
+            txtCurrentDateReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtCurrentDateReport.Location = new Point(151, 38);
+            txtCurrentDateReport.Multiline = true;
+            txtCurrentDateReport.Name = "txtCurrentDateReport";
+            txtCurrentDateReport.Size = new Size(140, 23);
+            txtCurrentDateReport.TabIndex = 45;
+            txtCurrentDateReport.TextAlign = HorizontalAlignment.Center;
             // 
             // panelNotes
             // 
             panelNotes.BackColor = SystemColors.GradientActiveCaption;
-            panelNotes.Controls.Add(buttonSaveNote);
-            panelNotes.Controls.Add(buttonEmptyNote);
-            panelNotes.Controls.Add(richTextBoxNotefield);
-            panelNotes.Controls.Add(comboBoxSubjectNotes);
+            panelNotes.Controls.Add(buttonSaveReport);
+            panelNotes.Controls.Add(buttonEmptyReport);
+            panelNotes.Controls.Add(rtxNewReport);
+            panelNotes.Controls.Add(comboBoxSubjectReport);
             panelNotes.Controls.Add(txtAliasNotes);
-            panelNotes.Controls.Add(txtCurrentDateNotes);
+            panelNotes.Controls.Add(txtCurrentDateReport);
             panelNotes.Location = new Point(1189, 35);
             panelNotes.Name = "panelNotes";
             panelNotes.Size = new Size(301, 412);
             panelNotes.TabIndex = 46;
             // 
-            // buttonSaveNote
+            // buttonSaveReport
             // 
-            buttonSaveNote.BackColor = SystemColors.ActiveCaption;
-            buttonSaveNote.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            buttonSaveNote.Location = new Point(151, 381);
-            buttonSaveNote.Name = "buttonSaveNote";
-            buttonSaveNote.Size = new Size(140, 23);
-            buttonSaveNote.TabIndex = 49;
-            buttonSaveNote.Text = "Save Note";
-            buttonSaveNote.UseVisualStyleBackColor = false;
+            buttonSaveReport.BackColor = SystemColors.ActiveCaption;
+            buttonSaveReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonSaveReport.Location = new Point(151, 381);
+            buttonSaveReport.Name = "buttonSaveReport";
+            buttonSaveReport.Size = new Size(140, 23);
+            buttonSaveReport.TabIndex = 49;
+            buttonSaveReport.Text = "Save Report";
+            buttonSaveReport.UseVisualStyleBackColor = false;
             // 
-            // buttonEmptyNote
+            // buttonEmptyReport
             // 
-            buttonEmptyNote.BackColor = SystemColors.ActiveCaption;
-            buttonEmptyNote.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            buttonEmptyNote.Location = new Point(5, 381);
-            buttonEmptyNote.Name = "buttonEmptyNote";
-            buttonEmptyNote.Size = new Size(140, 23);
-            buttonEmptyNote.TabIndex = 48;
-            buttonEmptyNote.Text = "Empty Note";
-            buttonEmptyNote.UseVisualStyleBackColor = false;
+            buttonEmptyReport.BackColor = SystemColors.ActiveCaption;
+            buttonEmptyReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonEmptyReport.Location = new Point(5, 381);
+            buttonEmptyReport.Name = "buttonEmptyReport";
+            buttonEmptyReport.Size = new Size(140, 23);
+            buttonEmptyReport.TabIndex = 48;
+            buttonEmptyReport.Text = "Empty Report";
+            buttonEmptyReport.UseVisualStyleBackColor = false;
             // 
-            // richTextBoxNotefield
+            // rtxNewReport
             // 
-            richTextBoxNotefield.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            richTextBoxNotefield.Location = new Point(5, 65);
-            richTextBoxNotefield.Name = "richTextBoxNotefield";
-            richTextBoxNotefield.ScrollBars = RichTextBoxScrollBars.Vertical;
-            richTextBoxNotefield.Size = new Size(288, 313);
-            richTextBoxNotefield.TabIndex = 47;
-            richTextBoxNotefield.Text = "Your Notes here!";
+            rtxNewReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            rtxNewReport.Location = new Point(5, 65);
+            rtxNewReport.Name = "rtxNewReport";
+            rtxNewReport.ScrollBars = RichTextBoxScrollBars.Vertical;
+            rtxNewReport.Size = new Size(288, 313);
+            rtxNewReport.TabIndex = 47;
+            rtxNewReport.Text = "Your Report here!";
             // 
-            // comboBoxSubjectNotes
+            // comboBoxSubjectReport
             // 
-            comboBoxSubjectNotes.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            comboBoxSubjectNotes.FormattingEnabled = true;
-            comboBoxSubjectNotes.Items.AddRange(new object[] { "Subject 1", "Subject 2", "Subject 3", "Subject 4" });
-            comboBoxSubjectNotes.Location = new Point(5, 38);
-            comboBoxSubjectNotes.Name = "comboBoxSubjectNotes";
-            comboBoxSubjectNotes.Size = new Size(140, 24);
-            comboBoxSubjectNotes.TabIndex = 46;
-            comboBoxSubjectNotes.Text = "Subject:";
+            comboBoxSubjectReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            comboBoxSubjectReport.FormattingEnabled = true;
+            comboBoxSubjectReport.Items.AddRange(new object[] { "Subject 1", "Subject 2", "Subject 3", "Subject 4" });
+            comboBoxSubjectReport.Location = new Point(5, 38);
+            comboBoxSubjectReport.Name = "comboBoxSubjectReport";
+            comboBoxSubjectReport.Size = new Size(140, 24);
+            comboBoxSubjectReport.TabIndex = 46;
+            comboBoxSubjectReport.Text = "Subject:";
             // 
             // listViewFiles
             // 
@@ -573,12 +573,12 @@
         public ListBox listBoxLogs;
         public Label lblLoggings;
         public TextBox txtAliasNotes;
-        public TextBox txtCurrentDateNotes;
+        public TextBox txtCurrentDateReport;
         public Panel panelNotes;
-        public ComboBox comboBoxSubjectNotes;
-        public Button buttonSaveNote;
-        public Button buttonEmptyNote;
-        public RichTextBox richTextBoxNotefield;
+        public ComboBox comboBoxSubjectReport;
+        public Button buttonSaveReport;
+        public Button buttonEmptyReport;
+        public RichTextBox rtxNewReport;
         public ListView listViewFiles;
         public Label lblListViewFiles;
         private ColumnHeader columnHeader1;
