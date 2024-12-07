@@ -28,7 +28,7 @@ namespace CRUD_System
 
             #region Decryption
             // Decrypt the CSV file
-            //EncryptionManager.DecryptFile(filePath.LoginFilePath); // data_login.csv
+            ////EncryptionManager.DecryptFile(filePath.LoginFilePath); // data_login.csv
             //EncryptionManager.DecryptFile(filePath.UserFilePath); // data_users.csv
             //EncryptionManager.DecryptFile(filePath.HRFilePath);
             //DecryptFile("peer001");

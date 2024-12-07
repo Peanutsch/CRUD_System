@@ -74,6 +74,7 @@
             UserControl.Name = "adminManagementControl";
             UserControl.Size = new Size(1500, 450);
             UserControl.TabIndex = 4;
+            UserControl.Load += adminControl.UserControl_Load;
             // 
             // MainFormADMIN
             //
@@ -103,5 +104,7 @@
         public Button buttonLOGOUT;
         public Label labelAlias;
         public AdminMainControl UserControl;
+
+        
     }
 }

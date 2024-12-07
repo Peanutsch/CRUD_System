@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CRUD_System
 {
@@ -11,78 +12,70 @@ namespace CRUD_System
     /// </summary>
     internal class ListViewFiles
     {
-        private readonly AdminMainControl adminControl = new AdminMainControl();
-        private readonly ListView listView;
+        private readonly AdminMainControl adminControl;
+        //private readonly System.Windows.Forms.ListView listView;
 
         /// <summary>
         /// Initializes a new instance of the ListViewFiles class and sets up the ListView.
         /// </summary>
         /// <param name="adminControl">The AdminMainControl containing the ListView.</param>
-        public ListViewFiles(AdminMainControl adminControl)
+        public ListViewFiles(AdminMainControl? adminControl = null)
         {
-            this.listView = adminControl.listViewFiles;
-            ConfigureListView();
-        }
-
-        /// <summary>
-        /// Configures the ListView with the desired view and columns.
-        /// </summary>
-        private void ConfigureListView()
-        {
-            // Add columns for Name, Size, and Date
-            listView.Columns.Add("Name", 300);
-            listView.Columns.Add("Size", 200);
-            listView.Columns.Add("Date", 200);
-
-            // Adjust column width to fit content and header size
-            listView.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-            listView.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-            listView.Columns[2].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-
-            // Ensure header width adjusts properly
-            listView.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
-            listView.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
-            listView.Columns[2].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
+            this.adminControl = adminControl ?? new AdminMainControl();
         }
 
         /// <summary>
         /// Loads files from a specified directory into the ListView.
         /// </summary>
         /// <param name="directoryPath">The directory path to load the files from.</param>
-        public void LoadFilesIntoListView(string directoryPath, string alias)
+        public void LoadFilesIntoListView(string directoryPath, string selectedAlias)
         {
-            // Check if the specified directory exists
-            if (Directory.Exists(directoryPath))
+            adminControl.listViewFiles.Visible = true;
+
+            if (!string.IsNullOrEmpty(selectedAlias))
             {
-                // Clear the ListView before adding new items
-                adminControl.listViewFiles.Items.Clear();
+                Debug.WriteLine($"ListViewFiles Selected Alias: {selectedAlias}");
+                string reportDirectory = FindCSVFiles.FindReportFile(selectedAlias, "report");
+            }
 
-                // Retrieve the single file path using FindCSVFiles
-                string file = FindCSVFiles.FindCSVFile(alias, "report");
+            // Check if the specified directory exists
+            if (Directory.Exists(directoryPath) && !string.IsNullOrEmpty(directoryPath))
+            {
+                // Retrieve all CSV files in the directory
+                string[] csvFiles = Directory.GetFiles(directoryPath, "*.csv");
 
-                // Check if a valid file was returned
-                if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                // Check if any CSV files are found
+                if (csvFiles.Length > 0)
                 {
-                    FileInfo fileInfo = new FileInfo(file);
+                    foreach (string file in csvFiles)
+                    {
+                        FileInfo fileInfo = new FileInfo(file);
+                        Debug.WriteLine($"ListViewFiles Adding File: {fileInfo.Name}");
+                        //Debug.WriteLine($"ListViewFiles File Name: {fileInfo.Name}, Size: {fileInfo.Length}, Creation Time: {fileInfo.CreationTime}");
 
-                    // Create a ListViewItem for the file
-                    ListViewItem item = new ListViewItem(fileInfo.Name);
-                    item.SubItems.Add(fileInfo.Length.ToString() + " bytes");
-                    item.SubItems.Add(fileInfo.CreationTime.ToString());
-                    item.Tag = file; // Store the full file path in the Tag property
+                        // Create a ListViewItem for each file
+                        ListViewItem item = new ListViewItem(fileInfo.Name);
+                        item.SubItems.Add(fileInfo.Length.ToString() + " bytes");
+                        item.SubItems.Add(fileInfo.CreationTime.ToString());
 
-                    // Add the item to the ListView
-                    adminControl.listViewFiles.Items.Add(item);
+                        // Add the item to the ListView
+                        adminControl.listViewFiles.Items.Add(item);
+                    }
+
+                    // Force a refresh of the ListView to ensure it's displaying correctly
+                    adminControl.listViewFiles.Refresh();
                 }
                 else
                 {
-                    MessageBox.Show("No file found for the specified alias.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No CSV files found in the specified directory.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
             }
             else
             {
                 // Show an error message if the directory does not exist
                 MessageBox.Show("The specified directory does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
         }
 
@@ -93,10 +86,10 @@ namespace CRUD_System
         /// <param name="onFileOpen">The action to perform when a file is double-clicked (e.g., open the file).</param>
         public void HandleDoubleClick(Action<string> onFileOpen)
         {
-            listView.DoubleClick += (sender, e) =>
+            adminControl.listViewFiles.DoubleClick += (sender, e) =>
             {
                 // Check if any item is selected and if the Tag property is not null
-                var selectedItem = listView.SelectedItems.Cast<ListViewItem>().FirstOrDefault();
+                var selectedItem = adminControl.listViewFiles.SelectedItems.Cast<ListViewItem>().FirstOrDefault();
                 if (selectedItem?.Tag is string filePath && !string.IsNullOrEmpty(filePath))
                 {
                     // Invoke the action if filePath is valid

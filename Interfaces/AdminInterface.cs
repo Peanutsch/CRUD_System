@@ -219,24 +219,18 @@ namespace CRUD_System.Interfaces
                 {
                     FillTextboxesAdmin(userDetailsArray);
                 }
-
-                // Check if any item is selected in the ListBox
-                if (adminControl.listBoxAdmin.SelectedItems.Count > 0)
-                {
-                    FindReportFile();
-                }
-
+                FindReportFile(selectedAlias);
                 HandleSelectedUserStatus(selectedAlias);
             }
         }
 
-        public void FindReportFile()
+        public void FindReportFile(string selectedAlias)
         {
-            ListViewFiles listViewFiles = new ListViewFiles(adminControl);
-
-            string reportDirectory = FindCSVFiles.FindReportFile(adminControl.txtAlias.Text, "report");
-
-            listViewFiles.LoadFilesIntoListView(reportDirectory, adminControl.txtAlias.Text);
+            ListViewFiles listView = new ListViewFiles(adminControl);
+            ReportForm reportForm = new ReportForm();
+            string reportDirectory = FindCSVFiles.FindReportFile(selectedAlias, "report");
+            listView.LoadFilesIntoListView(reportDirectory, selectedAlias);
+            reportForm.LoadFilesIntoListView(reportDirectory, selectedAlias);
         }
 
         /// <summary>

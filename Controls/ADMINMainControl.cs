@@ -35,17 +35,18 @@ namespace CRUD_System
         readonly AccountManager accountManager = new AccountManager();
         readonly ProfileManager profileManager = new ProfileManager();
         readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         bool isAdmin;
-        bool onlineStatus = false;
-        bool isSick = false;
+        readonly bool onlineStatus = false;
+        readonly bool isSick = false;
         //private bool previousSickStatus = false;
 
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
 
-        readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+
 
         bool editMode = false;
         #endregion PROPERTIES
@@ -63,6 +64,16 @@ namespace CRUD_System
             this.adminInterface.LoadDetailsListBox();
         }
         #endregion CONSTRUCTOR
+
+        public void UserControl_Load(object sender, EventArgs e)
+        {
+            //ListViewFiles listViewFiles = new ListViewFiles(this);
+            AdminMainControl adminControl = new AdminMainControl();
+            string selectedAlias = adminControl.txtAlias.Text;
+            string directoryPath = FindCSVFiles.FindReportFile(selectedAlias, "report");
+            //listViewFiles.LoadFilesIntoListView(directoryPath, selectedAlias);
+            //listViewFiles.LoadFilesIntoListView(directoryPath, selectedAlias);
+        }
 
         #region BUTTONS SoC (Seperate of Concerns)
         /// <summary>
@@ -239,6 +250,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
+            listViewFiles.Items.Clear();
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }
 
@@ -409,7 +421,7 @@ namespace CRUD_System
         }
         #endregion TextBox Search
 
-        private void listViewFiles_DoubleClick(object sender, EventArgs e)
+        public void listViewFiles_DoubleClick(object sender, EventArgs e)
         {
             ListViewFiles listViewFiles = new ListViewFiles(this);
 
@@ -428,6 +440,25 @@ namespace CRUD_System
                     MessageBox.Show($"Could not open file: {ex.Message}");
                 }
             });
+        }
+
+        public void btnFormReport_Click(object sender, EventArgs e)
+        {
+            ReportForm reportForm = new ReportForm();
+            this.Hide();
+
+            //ReportFormParams();
+            reportForm.ShowDialog();
+
+            this.Show();
+        }
+
+        public void ReportFormParams()
+        {
+            ReportForm reportForm = new ReportForm();
+            string selectedAlias = txtAlias.Text;
+            string reportPath = FindCSVFiles.FindReportFile(selectedAlias, "report");
+            reportForm.LoadFilesIntoListView(reportPath, selectedAlias);
         }
     }
 }

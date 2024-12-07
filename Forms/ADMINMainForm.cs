@@ -18,12 +18,16 @@ namespace CRUD_System
     {
         #region PROPERTIES
         AuthenticationService authService = new AuthenticationService();
+        private readonly AdminMainControl adminControl = new AdminMainControl();
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
         public AdminMainForm()
         {
             InitializeComponent();
+
+            // Roep de methode aan om de bestanden te laden in de ListView
+            //LoadFilesIntoListView(reportDirectory, alias!);
         }
         #endregion CONSTRUCTOR
 
