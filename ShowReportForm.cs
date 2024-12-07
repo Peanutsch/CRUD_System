@@ -42,10 +42,7 @@ namespace CRUD_System
                     txtSubject.Text = reportData[2];         // Subject
                     rtxtDisplayReport.Text = reportData[3];  // Report text
 
-                    Debug.WriteLine($"txtDate.Text: {txtDate.Text}");
-                    Debug.WriteLine($"txtCreatedBy.Text: {txtCreatedBy.Text}");
-                    Debug.WriteLine($"txtSubject.Text: {txtSubject.Text}");
-                    Debug.WriteLine($"rtxtDisplayReport.Text: {rtxtDisplayReport.Text}");
+                    //this.Refresh();
                 }
                 else
                 {

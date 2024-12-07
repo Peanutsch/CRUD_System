@@ -459,12 +459,8 @@ namespace CRUD_System
                 // Read the content of the decrypted file
                 string reportContent = File.ReadAllText(filePath);
 
-                ShowReportForm showReportForm = new ShowReportForm();
-                showReportForm.LoadReport(reportContent);
-
                 // Open the ShowReportForm via FormInteractionHandler
-                //FormInteractionHandler interactionHandler = new FormInteractionHandler();
-                interactionHandler.Open_ShowReportForm(this); // Pass the current UserControl (e.g., parentControl)
+                interactionHandler.Open_ShowReportForm(reportContent, this); // Pass the current UserControl (e.g., parentControl)
 
                 // After viewing, re-encrypt the file
                 try

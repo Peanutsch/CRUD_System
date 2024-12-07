@@ -72,7 +72,7 @@ namespace CRUD_System.Handlers
         /// The parent control (e.g., a UserControl or Form) to hide while the ShowReportForm is displayed. 
         /// If null, an error message will be shown indicating that the parent control is invalid.
         /// </param>
-        public void Open_ShowReportForm(UserControl? parentControl = null)
+        public void Open_ShowReportForm(string reportContent, UserControl? parentControl = null)
         {
             // Check if parentControl is valid
             if (parentControl != null)
@@ -81,6 +81,7 @@ namespace CRUD_System.Handlers
 
                 using (ShowReportForm showReport = new ShowReportForm())
                 {
+                    showReport.LoadReport(reportContent); // Load the report content before showing the form
                     showReport.ShowDialog(); // Show ShowReportForm as Dialog
                 }
 

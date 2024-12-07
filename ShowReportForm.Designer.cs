@@ -28,11 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            /*
             rtxtDisplayReport = new RichTextBox();
             txtDate = new TextBox();
             txtSubject = new TextBox();
             txtCreatedBy = new TextBox();
+            */
             btnCloseForm = new Button();
+
+            this.txtDate = new System.Windows.Forms.TextBox();
+            this.txtCreatedBy = new System.Windows.Forms.TextBox();
+            this.txtSubject = new System.Windows.Forms.TextBox();
+            this.rtxtDisplayReport = new System.Windows.Forms.RichTextBox();
+
             SuspendLayout();
             // 
             // rtxtDisplayReport
