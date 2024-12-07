@@ -227,10 +227,8 @@ namespace CRUD_System.Interfaces
         public void FindReportFile(string selectedAlias)
         {
             ListViewFiles listView = new ListViewFiles(adminControl);
-            ReportForm reportForm = new ReportForm();
             string reportDirectory = FindCSVFiles.FindReportFile(selectedAlias, "report");
             listView.LoadFilesIntoListView(reportDirectory, selectedAlias);
-            reportForm.LoadFilesIntoListView(reportDirectory, selectedAlias);
         }
 
         /// <summary>

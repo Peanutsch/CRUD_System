@@ -441,25 +441,6 @@ namespace CRUD_System
                 }
             });
         }
-
-        public void btnFormReport_Click(object sender, EventArgs e)
-        {
-            ReportForm reportForm = new ReportForm();
-            this.Hide();
-
-            //ReportFormParams();
-            reportForm.ShowDialog();
-
-            this.Show();
-        }
-
-        public void ReportFormParams()
-        {
-            ReportForm reportForm = new ReportForm();
-            string selectedAlias = txtAlias.Text;
-            string reportPath = FindCSVFiles.FindReportFile(selectedAlias, "report");
-            reportForm.LoadFilesIntoListView(reportPath, selectedAlias);
-        }
     }
 }
 

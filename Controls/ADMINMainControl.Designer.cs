@@ -72,7 +72,6 @@
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             lblListViewFiles = new Label();
-            btnFormReport = new Button();
             panelNotes.SuspendLayout();
             SuspendLayout();
             // 
@@ -510,25 +509,12 @@
             lblListViewFiles.TabIndex = 48;
             lblListViewFiles.Text = "ListViewFiles";
             // 
-            // btnFormReport
-            // 
-            btnFormReport.BackColor = SystemColors.ActiveCaption;
-            btnFormReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnFormReport.Location = new Point(203, 267);
-            btnFormReport.Name = "btnFormReport";
-            btnFormReport.Size = new Size(117, 23);
-            btnFormReport.TabIndex = 49;
-            btnFormReport.Text = "FormReport";
-            btnFormReport.UseVisualStyleBackColor = false;
-            btnFormReport.Click += btnFormReport_Click;
-            // 
             // AdminMainControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
-            Controls.Add(btnFormReport);
             Controls.Add(lblListViewFiles);
             Controls.Add(listViewFiles);
             Controls.Add(panelNotes);
@@ -595,7 +581,6 @@
         public RichTextBox richTextBoxNotefield;
         public ListView listViewFiles;
         public Label lblListViewFiles;
-        private Button btnFormReport;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
     }
