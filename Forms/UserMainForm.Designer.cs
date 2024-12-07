@@ -47,7 +47,7 @@
             // buttonLOGOUT
             // 
             this.buttonLOGOUT.BackColor = SystemColors.ActiveCaption;
-            this.buttonLOGOUT.FlatStyle = FlatStyle.Popup;
+            this.buttonLOGOUT.FlatStyle = FlatStyle.Standard;
             this.buttonLOGOUT.Location = new Point(198, 11);
             this.buttonLOGOUT.Name = "buttonLOGOUT";
             this.buttonLOGOUT.Size = new Size(100, 26);

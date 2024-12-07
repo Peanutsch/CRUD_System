@@ -34,13 +34,15 @@ namespace CRUD_System
                 string[] reportData = reportContent.Split(',');
 
                 // Ensure that the data contains enough elements to assign to the controls
-                if (reportData.Length >= 4)
+                if (reportData.Length >= 5)
                 {
                     // Assign the split data to the appropriate fields
-                    txtDate.Text = reportData[0];            // Date
-                    txtCreatedBy.Text = reportData[1];        // Creator
-                    txtSubject.Text = reportData[2];         // Subject
-                    rtxtDisplayReport.Text = reportData[3];  // Report text
+                    txtDate.Text = reportData[0];           // Date
+                    txtAliasCreator.Text = reportData[1];   // Creator
+                    txtSelectedAlias.Text = reportData[2];  // Selected Alias
+                    txtSubject.Text = reportData[3];        // Subject
+                    rtxtDisplayReport.Text = reportData[4]; // Report text
+                    
 
                     //this.Refresh();
                 }

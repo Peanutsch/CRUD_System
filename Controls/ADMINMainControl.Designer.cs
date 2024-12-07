@@ -71,7 +71,6 @@
             listViewFiles = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
-            lblListViewFiles = new Label();
             panelNotes.SuspendLayout();
             SuspendLayout();
             // 
@@ -79,7 +78,7 @@
             // 
             txtName.Enabled = false;
             txtName.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            txtName.Location = new Point(118, 313);
+            txtName.Location = new Point(127, 313);
             txtName.Name = "txtName";
             txtName.PlaceholderText = "Name";
             txtName.Size = new Size(325, 26);
@@ -90,7 +89,7 @@
             // 
             txtEmail.Enabled = false;
             txtEmail.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            txtEmail.Location = new Point(118, 377);
+            txtEmail.Location = new Point(127, 377);
             txtEmail.Name = "txtEmail";
             txtEmail.PlaceholderText = "E-mail";
             txtEmail.Size = new Size(443, 26);
@@ -101,7 +100,7 @@
             // 
             txtAddress.Enabled = false;
             txtAddress.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            txtAddress.Location = new Point(118, 345);
+            txtAddress.Location = new Point(127, 345);
             txtAddress.Name = "txtAddress";
             txtAddress.PlaceholderText = "Adress";
             txtAddress.Size = new Size(325, 26);
@@ -112,7 +111,7 @@
             // 
             txtCity.Enabled = false;
             txtCity.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            txtCity.Location = new Point(567, 345);
+            txtCity.Location = new Point(576, 345);
             txtCity.Name = "txtCity";
             txtCity.PlaceholderText = "City";
             txtCity.Size = new Size(218, 26);
@@ -145,7 +144,7 @@
             // 
             btnSaveEditUserDetails.BackColor = Color.LightGreen;
             btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSaveEditUserDetails.Location = new Point(262, 409);
+            btnSaveEditUserDetails.Location = new Point(271, 409);
             btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
             btnSaveEditUserDetails.Size = new Size(72, 30);
             btnSaveEditUserDetails.TabIndex = 9;
@@ -171,7 +170,7 @@
             // 
             txtSurname.Enabled = false;
             txtSurname.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            txtSurname.Location = new Point(449, 313);
+            txtSurname.Location = new Point(458, 313);
             txtSurname.Name = "txtSurname";
             txtSurname.PlaceholderText = "Surname";
             txtSurname.Size = new Size(336, 26);
@@ -194,7 +193,7 @@
             // 
             txtZIPCode.Enabled = false;
             txtZIPCode.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            txtZIPCode.Location = new Point(449, 345);
+            txtZIPCode.Location = new Point(458, 345);
             txtZIPCode.Name = "txtZIPCode";
             txtZIPCode.PlaceholderText = "ZIP Code";
             txtZIPCode.Size = new Size(112, 26);
@@ -205,7 +204,7 @@
             // 
             txtPhonenumber.Enabled = false;
             txtPhonenumber.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            txtPhonenumber.Location = new Point(567, 377);
+            txtPhonenumber.Location = new Point(576, 377);
             txtPhonenumber.Name = "txtPhonenumber";
             txtPhonenumber.PlaceholderText = "Phonenumber";
             txtPhonenumber.Size = new Size(218, 26);
@@ -216,7 +215,7 @@
             // 
             btnGeneratePSW.BackColor = SystemColors.ActiveCaption;
             btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnGeneratePSW.Location = new Point(340, 409);
+            btnGeneratePSW.Location = new Point(349, 409);
             btnGeneratePSW.Name = "btnGeneratePSW";
             btnGeneratePSW.Size = new Size(146, 30);
             btnGeneratePSW.TabIndex = 22;
@@ -229,7 +228,7 @@
             // 
             btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
             btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnEditUserDetails.Location = new Point(118, 409);
+            btnEditUserDetails.Location = new Point(127, 409);
             btnEditUserDetails.Name = "btnEditUserDetails";
             btnEditUserDetails.Size = new Size(138, 30);
             btnEditUserDetails.TabIndex = 25;
@@ -257,7 +256,7 @@
             chkIsAdmin.CheckAlign = ContentAlignment.MiddleRight;
             chkIsAdmin.Enabled = false;
             chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkIsAdmin.Location = new Point(24, 362);
+            chkIsAdmin.Location = new Point(24, 379);
             chkIsAdmin.Name = "chkIsAdmin";
             chkIsAdmin.Size = new Size(97, 22);
             chkIsAdmin.TabIndex = 8;
@@ -283,7 +282,7 @@
             // 
             btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
             btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnForceLogOutUser.Location = new Point(326, 266);
+            btnForceLogOutUser.Location = new Point(482, 277);
             btnForceLogOutUser.Name = "btnForceLogOutUser";
             btnForceLogOutUser.Size = new Size(150, 30);
             btnForceLogOutUser.TabIndex = 32;
@@ -319,10 +318,10 @@
             // 
             lblPageNumber.AutoSize = true;
             lblPageNumber.BackColor = SystemColors.ActiveCaption;
-            lblPageNumber.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            lblPageNumber.Location = new Point(676, 9);
+            lblPageNumber.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            lblPageNumber.Location = new Point(673, 266);
             lblPageNumber.Name = "lblPageNumber";
-            lblPageNumber.Size = new Size(118, 18);
+            lblPageNumber.Size = new Size(84, 16);
             lblPageNumber.TabIndex = 35;
             lblPageNumber.Text = "Page 1 of 2";
             // 
@@ -330,7 +329,7 @@
             // 
             btnNextPage.BackColor = SystemColors.ActiveCaption;
             btnNextPage.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnNextPage.Location = new Point(719, 267);
+            btnNextPage.Location = new Point(719, 281);
             btnNextPage.Name = "btnNextPage";
             btnNextPage.Size = new Size(75, 23);
             btnNextPage.TabIndex = 36;
@@ -342,7 +341,7 @@
             // 
             btnPreviousPage.BackColor = SystemColors.ActiveCaption;
             btnPreviousPage.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnPreviousPage.Location = new Point(638, 267);
+            btnPreviousPage.Location = new Point(638, 281);
             btnPreviousPage.Name = "btnPreviousPage";
             btnPreviousPage.Size = new Size(75, 23);
             btnPreviousPage.TabIndex = 37;
@@ -368,9 +367,9 @@
             // 
             btnCallInSick.BackColor = SystemColors.ActiveCaption;
             btnCallInSick.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCallInSick.Location = new Point(482, 267);
+            btnCallInSick.Location = new Point(657, 409);
             btnCallInSick.Name = "btnCallInSick";
-            btnCallInSick.Size = new Size(150, 30);
+            btnCallInSick.Size = new Size(137, 30);
             btnCallInSick.TabIndex = 40;
             btnCallInSick.Text = "Call in Sick";
             btnCallInSick.UseVisualStyleBackColor = false;
@@ -443,6 +442,7 @@
             buttonSaveReport.TabIndex = 49;
             buttonSaveReport.Text = "Save Report";
             buttonSaveReport.UseVisualStyleBackColor = false;
+            buttonSaveReport.Click += buttonSaveReport_Click;
             // 
             // buttonEmptyReport
             // 
@@ -454,6 +454,7 @@
             buttonEmptyReport.TabIndex = 48;
             buttonEmptyReport.Text = "Empty Report";
             buttonEmptyReport.UseVisualStyleBackColor = false;
+            buttonEmptyReport.Click += buttonEmptyReport_Click;
             // 
             // rtxNewReport
             // 
@@ -463,7 +464,7 @@
             rtxNewReport.ScrollBars = RichTextBoxScrollBars.Vertical;
             rtxNewReport.Size = new Size(288, 313);
             rtxNewReport.TabIndex = 47;
-            rtxNewReport.Text = "Your Report here!";
+            //rtxNewReport.Text = "Your Report here!";
             // 
             // comboBoxSubjectReport
             // 
@@ -499,23 +500,12 @@
             columnHeader2.Text = "Date";
             columnHeader2.Width = 133;
             // 
-            // lblListViewFiles
-            // 
-            lblListViewFiles.AutoSize = true;
-            lblListViewFiles.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblListViewFiles.Location = new Point(1000, 421);
-            lblListViewFiles.Name = "lblListViewFiles";
-            lblListViewFiles.Size = new Size(138, 18);
-            lblListViewFiles.TabIndex = 48;
-            lblListViewFiles.Text = "ListViewFiles";
-            // 
             // AdminMainControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
-            Controls.Add(lblListViewFiles);
             Controls.Add(listViewFiles);
             Controls.Add(panelNotes);
             Controls.Add(lblLoggings);
@@ -580,7 +570,6 @@
         public Button buttonEmptyReport;
         public RichTextBox rtxNewReport;
         public ListView listViewFiles;
-        public Label lblListViewFiles;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
     }

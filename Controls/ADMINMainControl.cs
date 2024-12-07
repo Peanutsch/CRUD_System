@@ -345,6 +345,105 @@ namespace CRUD_System
                 absence.txtAlias.Text = "UNKNOWN";
             }
         }
+
+        /// <summary>
+        /// Handles the double-click event for the ListView displaying files.
+        /// </summary>
+        /// <param name="sender">The source of the event (typically the ListView).</param>
+        /// <param name="e">The event arguments.</param>
+        public void listViewFiles_DoubleClick(object sender, EventArgs e)
+        {
+            ListViewFiles listViewFiles = new ListViewFiles(this);
+
+            listViewFiles.HandleDoubleClick(filePath =>
+            {
+                // Log the file path
+                Debug.WriteLine($"File double-clicked: {filePath}");
+
+                // Perform decryption of the selected file
+                try
+                {
+                    if (File.Exists(filePath))
+                    {
+                        EncryptionManager.DecryptFile(filePath);  // Decrypt the specific file
+                    }
+                    else
+                    {
+                        Debug.WriteLine("The selected file does not exist.");
+                        MessageBox.Show("The selected file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error decrypting file: {ex.Message}");
+                    MessageBox.Show($"Error decrypting file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Read the content of the decrypted file
+                string reportContent = File.ReadAllText(filePath);
+                string selectedAlias = txtAlias.Text;
+                // Open the ShowReportForm via FormInteractionHandler
+
+                interactionHandler.Open_ShowReportForm(this, reportContent, selectedAlias); // Pass the current UserControl (e.g., parentControl)
+
+                // After viewing, re-encrypt the file
+                try
+                {
+                    EncryptionManager.EncryptFile(filePath); // Encrypt the file again after viewing
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error re-encrypting file: {ex.Message}");
+                    MessageBox.Show($"Error re-encrypting file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            });
+        }
+
+        private void buttonEmptyReport_Click(object sender, EventArgs e)
+        {
+            string selectedAlias = txtAlias.Text;
+            string newReportText = rtxNewReport.Text;
+
+            if (!string.IsNullOrEmpty(newReportText) && !string.IsNullOrEmpty(selectedAlias))
+            {
+                // Clean up rtxNewReport
+                rtxNewReport.Text = string.Empty;
+            }
+            else 
+            {
+                Debug.WriteLine("No text!");
+                MessageBox.Show("No text!");
+                return;
+            }
+        }
+
+        private void buttonSaveReport_Click(object sender, EventArgs e)
+        {
+            var currentUser = AuthenticationService.CurrentUser;
+            string selectedAlias = txtAlias.Text;
+            string newReportText = rtxNewReport.Text;
+
+            if (!string.IsNullOrEmpty(newReportText) && !string.IsNullOrEmpty(selectedAlias))
+            {
+
+                DialogResult dr = message.MessageConfirmSaveNote(selectedAlias);
+                if (dr == DialogResult.No)
+                {
+                    return;
+                }
+
+                // Create report file: {alias}_report.csv, format {Date},{aliasCreater},{aliasUser},{subject},{Report}
+                CreateCSVFiles.CreateReportsCSV(selectedAlias, DateTime.Now.ToString("dd-MM-yyyy"), currentUser!, selectedAlias, newReportText);
+            }
+            else
+            {
+                Debug.WriteLine("No text!");
+                MessageBox.Show("No text!");
+                return;
+            }
+        }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region TextBox Search
@@ -420,61 +519,5 @@ namespace CRUD_System
             adminInterface.UpdatePageLabel();
         }
         #endregion TextBox Search
-
-        /// <summary>
-        /// Handles the double-click event for the ListView displaying files.
-        /// </summary>
-        /// <param name="sender">The source of the event (typically the ListView).</param>
-        /// <param name="e">The event arguments.</param>
-        public void listViewFiles_DoubleClick(object sender, EventArgs e)
-        {
-            ListViewFiles listViewFiles = new ListViewFiles(this);
-
-            listViewFiles.HandleDoubleClick(filePath =>
-            {
-                // Log the file path
-                Debug.WriteLine($"File double-clicked: {filePath}");
-
-                // Perform decryption of the selected file
-                try
-                {
-                    if (File.Exists(filePath))
-                    {
-                        EncryptionManager.DecryptFile(filePath);  // Decrypt the specific file
-                    }
-                    else
-                    {
-                        Debug.WriteLine("The selected file does not exist.");
-                        MessageBox.Show("The selected file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error decrypting file: {ex.Message}");
-                    MessageBox.Show($"Error decrypting file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // Read the content of the decrypted file
-                string reportContent = File.ReadAllText(filePath);
-
-                // Open the ShowReportForm via FormInteractionHandler
-                interactionHandler.Open_ShowReportForm(reportContent, this); // Pass the current UserControl (e.g., parentControl)
-
-                // After viewing, re-encrypt the file
-                try
-                {
-                    EncryptionManager.EncryptFile(filePath); // Encrypt the file again after viewing
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error re-encrypting file: {ex.Message}");
-                    MessageBox.Show($"Error re-encrypting file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            });
-        }
-
     }
 }
-

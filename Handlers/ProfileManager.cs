@@ -374,7 +374,6 @@ namespace CRUD_System.Handlers
             {
                 // Create default CSV files line = {string.Empty},{string.Empty},{string.Empty}
                 CreateCSVFiles.CreateCISNoticeCSV(alias);
-                CreateCSVFiles.CreateReportsCSV(alias);
                 CreateCSVFiles.CreateLogCSV(alias); //, currentUser.ToUpper(), logEvent);
 
                 // log event in {alias}_log.csv

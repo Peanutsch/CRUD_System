@@ -88,7 +88,7 @@ namespace CRUD_System
         /// <param name="onFileOpen">The action to perform when a file is double-clicked (e.g., open the file).</param>
         public void HandleDoubleClick(Action<string> onFileOpen)
         {
-            adminControl.listViewFiles.DoubleClick += (sender, e) =>
+            adminControl.listViewFiles.DoubleClick += (sender, e) => // Subscribe DoubleClick event
             {
                 // Check if any item is selected and if the Tag property is not null
                 var selectedItem = adminControl.listViewFiles.SelectedItems.Cast<ListViewItem>().FirstOrDefault();

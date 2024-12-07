@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CRUD_System.FileHandlers
 {
@@ -106,16 +107,16 @@ namespace CRUD_System.FileHandlers
         /// Creates /reports/current year/{alias}_reports.csv.
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
-        public static void CreateReportsCSV(string alias)
+        public static void CreateReportsCSV(string date, string aliasCreator, string selectedAlias, string subject, string report)
         {
-            if (!string.IsNullOrEmpty(alias))
+            if (!string.IsNullOrEmpty(selectedAlias))
             {
                 string rootPath = RootPath.GetRootPath();
 
                 try
                 {
                     // Build the path to the "reports" directory and the alias subdirectory
-                    string reportsPath = Path.Combine(rootPath, "reports", Timers.CurrentYear.ToString(), alias);
+                    string reportsPath = Path.Combine(rootPath, "reports", Timers.CurrentYear.ToString(), selectedAlias);
 
                     // Ensure the alias folder exists within the reports directory
                     if (!Directory.Exists(reportsPath))
@@ -124,13 +125,13 @@ namespace CRUD_System.FileHandlers
                     }
 
                     // Determine the full path for the report file
-                    string fileReports = Path.Combine(reportsPath, $"{alias}_reports.csv");
+                    string fileReports = Path.Combine(reportsPath, $"{selectedAlias}_{date}_reports.csv");
 
                     if (!File.Exists(fileReports))
                     {
-                        // Create a new empty file with a detailed format
-                        File.WriteAllText(fileReports, $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," +
-                                                       $"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," + Environment.NewLine);
+                        // Create a new empty file with a detailed format {Date},{aliasCreater},{aliasUser},{subject},{Report}
+                        File.WriteAllText(fileReports, $"{date},{aliasCreator},{selectedAlias},{subject},{report}" + Environment.NewLine); // ;," +
+                                                       //$"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," + Environment.NewLine);
 
                         // Encrypt the file
                         EncryptionManager.EncryptFile(fileReports);
@@ -141,8 +142,8 @@ namespace CRUD_System.FileHandlers
                 catch (Exception ex)
                 {
                     // Handle errors and provide both debug and user-friendly messages
-                    Debug.WriteLine($"An error occurred for alias {alias}: {ex.Message}");
-                    MessageBox.Show($"An error occurred for alias {alias}: {ex.Message}");
+                    Debug.WriteLine($"An error occurred for alias {selectedAlias}: {ex.Message}");
+                    MessageBox.Show($"An error occurred for alias {selectedAlias}: {ex.Message}");
                 }
             }
             else

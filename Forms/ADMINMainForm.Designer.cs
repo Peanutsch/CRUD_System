@@ -47,7 +47,7 @@
             // buttonLOGOUT
             // 
             buttonLOGOUT.BackColor = SystemColors.ActiveCaption;
-            buttonLOGOUT.FlatStyle = FlatStyle.Popup;
+            buttonLOGOUT.FlatStyle = FlatStyle.Standard;
             buttonLOGOUT.Location = new Point(188, 11);
             buttonLOGOUT.Name = "buttonLOGOUT";
             buttonLOGOUT.Size = new Size(100, 26);
