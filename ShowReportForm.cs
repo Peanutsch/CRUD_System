@@ -28,7 +28,7 @@ namespace CRUD_System
             if (!string.IsNullOrEmpty(reportContent))
             {
                 // Debugging output to verify the content being loaded
-                Debug.WriteLine($"ShowReportForm reportContent: {reportContent}");
+                //Debug.WriteLine($"ShowReportForm reportContent: {reportContent}");
 
                 // Split the content of the report based on commas (considering that content can be inside quotes)
                 string[] reportData = reportContent.Split(new[] { ',' }, 5); // Split into 4 parts maximum

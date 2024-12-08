@@ -357,9 +357,6 @@ namespace CRUD_System
 
             listViewFiles.HandleDoubleClick(filePath =>
             {
-                // Log the file path
-                Debug.WriteLine($"File double-clicked: {filePath}");
-
                 // Perform decryption of the selected file
                 try
                 {
@@ -423,87 +420,7 @@ namespace CRUD_System
         {
             ReportManager reportManager = new ReportManager(this);
             reportManager.ButtonSaveReport_ClickHandler();
-            
-            /*
-            var currentUser = AuthenticationService.CurrentUser;
-            string selectedAlias = txtAlias.Text;
-            string newReportText = $"\"{rtxNewReport.Text}\"";
-            string subject = comboBoxSubjectReport.Text;
-            string dateFile = DateTime.Now.ToString("ddMMyyyy-HHmmss");
-            
-            if (!string.IsNullOrEmpty(newReportText) && !string.IsNullOrEmpty(selectedAlias) && comboBoxSubjectReport.Text != "Subject:")
-            {
-
-                DialogResult dr = message.MessageConfirmSaveNote(selectedAlias);
-                if (dr == DialogResult.No)
-                {
-                    return;
-                }
-
-                // Create report file: {alias}_report.csv, format {Date},{aliasCreator},{aliasUser},{subject},{Report}
-                // DateTime.Now.ToString()
-                CreateCSVFiles.CreateReportsCSV(dateFile, currentUser!, selectedAlias, subject, newReportText);
-
-                // Refresh ListViewFiles to show the new file
-                RefreshListViewFiles();
-            }
-            else
-            {
-                Debug.WriteLine("Not Valid!");
-                MessageBox.Show("Not Valid");
-                return;
-            }
-
-            // Clean up rtxNewReport
-            rtxNewReport.Text = string.Empty;
-            */
         }
-
-        /*
-        public void RefreshListViewFiles()
-        {
-            ReportManager reportManager = new ReportManager(this);
-            reportManager.RefreshListViewFiles();
-
-            // Clear existing items
-            listViewFiles.Items.Clear();
-
-            // Reload files from the directory
-            string reportDirectory = FindCSVFiles.FindReportFile(txtAlias.Text, "report");
-
-            if (Directory.Exists(reportDirectory))
-            {
-                string[] reportFiles = Directory.GetFiles(reportDirectory, "*.csv");
-
-                // Create an array of FileInfo objects for sorting
-                FileInfo[] fileInfos = reportFiles.Select(file => new FileInfo(file)).ToArray();
-
-                // Sort the files by CreationTime in descending order (newest first)
-                Array.Sort(fileInfos, (f1, f2) => f2.CreationTime.CompareTo(f1.CreationTime));
-
-                // Use the sorted fileInfos array to populate the ListView
-                foreach (var fileInfo in fileInfos)
-                {
-                    // Create a ListViewItem for each file, using Name and Date
-                    ListViewItem item = new ListViewItem(fileInfo.Name);
-                    item.SubItems.Add(fileInfo.CreationTime.ToString("dd/MM/yyyy"));
-
-                    // Add the full file path to the Tag property
-                    item.Tag = fileInfo.FullName;
-
-                    // Add the item to the ListView
-                    listViewFiles.Items.Add(item);
-                }
-
-                // Ensure the ListView refreshes visually
-                listViewFiles.Refresh();
-            }
-            else
-            {
-                Debug.WriteLine($"Directory not found: {reportDirectory}");
-            }
-        }
-        */
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region TextBox Search

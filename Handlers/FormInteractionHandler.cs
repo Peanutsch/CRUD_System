@@ -116,7 +116,7 @@ namespace CRUD_System.Handlers
                 showReportForm.FormClosed += (s, e) => parentControl.Show();
             }
 
-            parentControl.Hide();
+            //parentControl.Hide();
             showReportForm.LoadReport(reportContent);
             showReportForm.Show();
         }
