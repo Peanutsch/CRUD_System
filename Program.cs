@@ -306,7 +306,7 @@ namespace CRUD_System
             string logPath = Path.Combine(rootPath, directoryName);
             
             //string file_logs = Path.Combine(logPath, $"{alias}_logs.csv");
-            EncryptionManager.DecryptFile(Path.Combine(logPath, "2024", alias, $"{alias}_report.csv"));
+            EncryptionManager.DecryptFile(Path.Combine(logPath, "2024", alias, $"{alias}_{directoryName}.csv"));
         }
         #endregion DECRYPT FILE
 

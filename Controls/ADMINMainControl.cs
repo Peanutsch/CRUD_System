@@ -421,6 +421,10 @@ namespace CRUD_System
 
         private void buttonSaveReport_Click(object sender, EventArgs e)
         {
+            ReportManager reportManager = new ReportManager(this);
+            reportManager.ButtonSaveReport_ClickHandler();
+            
+            /*
             var currentUser = AuthenticationService.CurrentUser;
             string selectedAlias = txtAlias.Text;
             string newReportText = $"\"{rtxNewReport.Text}\"";
@@ -452,10 +456,15 @@ namespace CRUD_System
 
             // Clean up rtxNewReport
             rtxNewReport.Text = string.Empty;
+            */
         }
 
+        /*
         public void RefreshListViewFiles()
         {
+            ReportManager reportManager = new ReportManager(this);
+            reportManager.RefreshListViewFiles();
+
             // Clear existing items
             listViewFiles.Items.Clear();
 
@@ -494,7 +503,7 @@ namespace CRUD_System
                 Debug.WriteLine($"Directory not found: {reportDirectory}");
             }
         }
-
+        */
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region TextBox Search

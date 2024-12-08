@@ -13,6 +13,7 @@ namespace CRUD_System.FileHandlers
 {
     internal class CreateCSVFiles
     {
+        #region CIS
         /// <summary>
         /// Creates /cis_notices/current year/{alias}_cis_notices.csv.
         /// </summary>
@@ -55,10 +56,12 @@ namespace CRUD_System.FileHandlers
             }
             else
             {
-                Console.WriteLine("Alias cannot be null or empty.");
+                Debug.WriteLine("Alias cannot be null or empty.");
             }
         }
+        #endregion CIS
 
+        #region LOGEVENTS
         /// <summary>
         /// Creates /logEvents/current year/{alias}_logs.csv.
         /// </summary>
@@ -104,7 +107,9 @@ namespace CRUD_System.FileHandlers
                 Console.WriteLine("Alias cannot be null or empty.");
             }
         }
+        #endregion LOGEVENTS
 
+        #region REPORTS
         /// <summary>
         /// Creates /reports/current year/{alias}_reports.csv.
         /// </summary>
@@ -157,5 +162,6 @@ namespace CRUD_System.FileHandlers
                 Console.WriteLine("Alias cannot be null or empty.");
             }
         }
+        #endregion REPORTS
     }
 }

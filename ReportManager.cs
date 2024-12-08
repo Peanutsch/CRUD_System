@@ -13,86 +13,114 @@ namespace CRUD_System
 {
     internal class ReportManager
     {
-        private readonly AdminMainControl adminControl = new AdminMainControl();
         private readonly ListView listView = new ListView();
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        private readonly ReportManager reportManager = new ReportManager();
 
+        #region CONSTRUCTOR
+        private readonly AdminMainControl? adminControl;
 
+        public ReportManager(AdminMainControl? adminControl = null)
+        {
+            this.adminControl = adminControl ?? new AdminMainControl();
+        }
+        #endregion CONSTRUCTOR
+        /// <summary>
+        /// Handles the logic for saving a report. Validates input, confirms the action with the user, 
+        /// creates a new report CSV file, and refreshes the ListView to display the new report.
+        /// </summary>
         public void ButtonSaveReport_ClickHandler()
         {
+            // Get the current logged-in user
             var currentUser = AuthenticationService.CurrentUser;
-            string selectedAlias = adminControl.txtAlias.Text;
+            // Retrieve the alias of the user to whom the report is related
+            string selectedAlias = adminControl!.txtAlias.Text;
+            // Retrieve the report text, enclosed in quotes
             string newReportText = $"\"{adminControl.rtxNewReport.Text}\"";
+            // Retrieve the selected subject from the dropdown
             string subject = adminControl.comboBoxSubjectReport.Text;
+            // Generate a unique timestamp for the report file
             string dateFile = DateTime.Now.ToString("ddMMyyyy-HHmmss");
 
-            if (!string.IsNullOrEmpty(newReportText) && !string.IsNullOrEmpty(selectedAlias) && adminControl.comboBoxSubjectReport.Text != "Subject:")
+            // Validate the input fields
+            if (!string.IsNullOrEmpty(newReportText) &&
+                !string.IsNullOrEmpty(selectedAlias) &&
+                adminControl.comboBoxSubjectReport.Text != "Subject:")
             {
-
+                // Confirm the save action with the user
                 DialogResult dr = message.MessageConfirmSaveNote(selectedAlias);
                 if (dr == DialogResult.No)
                 {
-                    return;
+                    return; // Exit if the user cancels the action
                 }
 
-                // Create report file: {alias}_report.csv, format {Date},{aliasCreator},{aliasUser},{subject},{Report}
-                // DateTime.Now.ToString()
+                // Create the report file in the format: {Date},{CreatorAlias},{UserAlias},{Subject},{Report}
                 CreateCSVFiles.CreateReportsCSV(dateFile, currentUser!, selectedAlias, subject, newReportText);
 
-                // Refresh ListViewFiles to show the new file
+                // Refresh the ListView to show the new report
                 RefreshListViewFiles();
             }
             else
             {
-                Debug.WriteLine("Not Valid!");
-                MessageBox.Show("Not Valid");
+                // Log and display a message if validation fails
+                Debug.WriteLine("Not Valid! Missing conditions...");
+                MessageBox.Show("Not Valid! Missing conditions...");
                 return;
             }
 
-            // Clean up rtxNewReport
+            // Clear the report text box after saving
             adminControl.rtxNewReport.Text = string.Empty;
         }
 
+        /// <summary>
+        /// Refreshes the ListView in the UI to display the latest report files.
+        /// Clears the current items, fetches the report files from the directory, 
+        /// sorts them by creation time, and updates the ListView with the file details.
+        /// </summary>
         public void RefreshListViewFiles()
         {
-            // Clear existing items
+            // Ensure the AdminMainControl instance is available
+            if (adminControl == null) return;
+
+            // Reference the ListView in the UI
+            var listView = adminControl.listViewFiles;
             listView.Items.Clear();
 
-            // Reload files from the directory
+            // Find the directory containing the report files for the given alias
             string reportDirectory = FindCSVFiles.FindReportFile(adminControl.txtAlias.Text, "report");
 
+            // Check if the directory exists
             if (Directory.Exists(reportDirectory))
             {
+                // Get all report files in the directory
                 string[] reportFiles = Directory.GetFiles(reportDirectory, "*.csv");
-
-                // Create an array of FileInfo objects for sorting
+                // Convert file paths to FileInfo objects for sorting and details
                 FileInfo[] fileInfos = reportFiles.Select(file => new FileInfo(file)).ToArray();
 
-                // Sort the files by CreationTime in descending order (newest first)
+                // Sort files by creation time in descending order (newest first)
                 Array.Sort(fileInfos, (f1, f2) => f2.CreationTime.CompareTo(f1.CreationTime));
 
-                // Use the sorted fileInfos array to populate the ListView
+                // Add each file to the ListView
                 foreach (var fileInfo in fileInfos)
                 {
-                    // Create a ListViewItem for each file, using Name and Date
+                    // Create a ListViewItem with the file name
                     ListViewItem item = new ListViewItem(fileInfo.Name);
+                    // Add the creation date as a sub-item
                     item.SubItems.Add(fileInfo.CreationTime.ToString("dd/MM/yyyy"));
-
-                    // Add the full file path to the Tag property
+                    // Store the full file path in the Tag property
                     item.Tag = fileInfo.FullName;
 
                     // Add the item to the ListView
                     listView.Items.Add(item);
                 }
-
-                // Ensure the ListView refreshes visually
-                listView.Refresh();
             }
             else
             {
+                // Log if the directory is not found
                 Debug.WriteLine($"Directory not found: {reportDirectory}");
             }
+
+            // Ensure the ListView visually updates
+            listView.Refresh();
         }
     }
 }
