@@ -99,7 +99,6 @@ namespace CRUD_System.Handlers
                 // Check if alias already exists
                 if (!AliasExists(finalAlias))
                 {
-                    Debug.WriteLine($"Unique alias generated: {finalAlias}");
                     break; // Exit the loop if the alias is unique
                 }
 

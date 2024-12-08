@@ -1,5 +1,4 @@
 ﻿using CRUD_System.FileHandlers;
-using CRUD_System.Handlers;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace CRUD_System
+namespace CRUD_System.Handlers
 {
     /// <summary>
     /// A class that handles the configuration and population of a ListView with file details.

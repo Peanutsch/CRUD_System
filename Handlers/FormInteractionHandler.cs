@@ -94,12 +94,11 @@ namespace CRUD_System.Handlers
         #endregion CREATE NEW PASSWORD
 
         #region SHOW REPORT FORM
-        /// <summary>
-        /// Opens the ShowReportForm as a dialog while temporarily hiding the specified parent control. 
-        /// The parent control will be restored and made visible again once the ShowReportForm is closed.
+        /// <summary> 
+        /// Opens the ShowReportForm as a dialog without hiding the parent control.
         /// </summary>
         /// <param name="parentControl">
-        /// The parent control (e.g., a UserControl or Form) to hide while the ShowReportForm is displayed. 
+        /// The parent control (e.g., a UserControl or Form) to pass along to the ShowReportForm. 
         /// If null, an error message will be shown indicating that the parent control is invalid.
         /// </param>
         public void Open_ShowReportForm(UserControl? parentControl = null, string reportContent = "", string selectedAlias = "")
@@ -116,6 +115,7 @@ namespace CRUD_System.Handlers
                 showReportForm.FormClosed += (s, e) => parentControl.Show();
             }
 
+            // Load the report content into the ShowReportForm
             //parentControl.Hide();
             showReportForm.LoadReport(reportContent);
             showReportForm.Show();

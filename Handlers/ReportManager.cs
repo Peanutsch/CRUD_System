@@ -1,5 +1,4 @@
 ﻿using CRUD_System.FileHandlers;
-using CRUD_System.Handlers;
 using CRUD_System.Repositories;
 using System;
 using System.Collections.Generic;
@@ -9,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CRUD_System
+namespace CRUD_System.Handlers
 {
     internal class ReportManager
     {
-        private readonly ListView listView = new ListView();
+        //private readonly ListView listView = new ListView();
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         #region CONSTRUCTOR

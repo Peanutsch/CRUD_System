@@ -421,6 +421,77 @@ namespace CRUD_System
             ReportManager reportManager = new ReportManager(this);
             reportManager.ButtonSaveReport_ClickHandler();
         }
+
+        /// <summary>
+        /// Handles the KeyPress event for the txtPhonenumber textbox.
+        /// Allows only numeric digits, the '+' and '-' characters, and the Backspace key.
+        /// Suppresses any other key inputs to ensure only valid phone number characters are entered.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the TxtPhonenumber textbox.</param>
+        /// <param name="e">The KeyPressEventArgs containing the event data.</param>
+        public void TxtPhonenumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow only digits, the '+' and '-' characters, and Backspace
+            if (!char.IsDigit(e.KeyChar)        // Check if the key is a digit (0-9)
+                && e.KeyChar != '+'             // Allow the '+' character
+                && e.KeyChar != '-'             // Allow the '-' character
+                && e.KeyChar != (char)8)        // Allow Backspace (ASCII code 8)
+            {
+                e.Handled = true; // Prevent the key from being processed further
+            }
+        }
+
+        /// <summary>
+        /// Handles the KeyDown event for the txtName textbox.
+        /// Allows only letters, Backspace, arrow keys, and Ctrl/Shift key combinations.
+        /// Suppresses any other key inputs to prevent invalid characters from being entered.
+        /// </summary>
+        public void TxtName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!char.IsLetter((char)e.KeyCode)
+                && e.KeyCode != Keys.Back
+                && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right
+                && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
+                && !e.Control && !e.Shift)
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        /// <summary>
+        /// Handles the KeyDown event for the txtSurname textbox.
+        /// Allows only letters, Backspace, arrow keys, and Ctrl/Shift key combinations.
+        /// Suppresses any other key inputs to prevent invalid characters from being entered.
+        /// </summary>
+        public void TxtSurname_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!char.IsLetter((char)e.KeyCode)
+                && e.KeyCode != Keys.Back
+                && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right
+                && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
+                && !e.Control && !e.Shift)
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        /// <summary>
+        /// Handles the KeyDown event for the txtCity textbox.
+        /// Allows only letters, Backspace, arrow keys, and Ctrl/Shift key combinations.
+        /// Suppresses any other key inputs to prevent invalid characters from being entered.
+        /// </summary>
+        public void TxtCity_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!char.IsLetter((char)e.KeyCode)
+                && e.KeyCode != Keys.Back
+                && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right
+                && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
+                && !e.Control && !e.Shift)
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region TextBox Search

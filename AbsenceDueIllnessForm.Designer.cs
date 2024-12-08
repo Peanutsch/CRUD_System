@@ -28,108 +28,133 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtDayCallInSick = new TextBox();
-            this.txtRecovery = new TextBox();
-            this.btnCallInSick = new Button();
-            this.btnRecovery = new Button();
-            this.btnCancel = new Button();
-            this.btnApply = new Button();
-            this.txtAlias = new TextBox();
-            this.SuspendLayout();
+            txtDayCallInSick = new TextBox();
+            txtRecovery = new TextBox();
+            btnCallInSick = new Button();
+            btnRecovery = new Button();
+            btnCancel = new Button();
+            btnApply = new Button();
+            txtAlias = new TextBox();
+            txtTotalDays = new TextBox();
+            comboBoxProcent = new ComboBox();
+            SuspendLayout();
             // 
             // txtDayCallInSick
             // 
-            this.txtDayCallInSick.Enabled = false;
-            this.txtDayCallInSick.ForeColor = SystemColors.WindowText;
-            this.txtDayCallInSick.Location = new Point(69, 121);
-            this.txtDayCallInSick.Name = "txtDayCallInSick";
-            this.txtDayCallInSick.PlaceholderText = "DD-MM-YYYY";
-            this.txtDayCallInSick.Size = new Size(141, 26);
-            this.txtDayCallInSick.TabIndex = 1;
-            this.txtDayCallInSick.TextAlign = HorizontalAlignment.Center;
+            txtDayCallInSick.Enabled = false;
+            txtDayCallInSick.ForeColor = SystemColors.WindowText;
+            txtDayCallInSick.Location = new Point(69, 119);
+            txtDayCallInSick.Name = "txtDayCallInSick";
+            txtDayCallInSick.PlaceholderText = "Day 1";
+            txtDayCallInSick.Size = new Size(141, 26);
+            txtDayCallInSick.TabIndex = 1;
+            txtDayCallInSick.TextAlign = HorizontalAlignment.Center;
             // 
             // txtRecovery
             // 
-            this.txtRecovery.Enabled = false;
-            this.txtRecovery.ForeColor = SystemColors.WindowText;
-            this.txtRecovery.Location = new Point(232, 119);
-            this.txtRecovery.Name = "txtRecovery";
-            this.txtRecovery.PlaceholderText = "DD-MM-YYYY";
-            this.txtRecovery.Size = new Size(141, 26);
-            this.txtRecovery.TabIndex = 2;
-            this.txtRecovery.TextAlign = HorizontalAlignment.Center;
+            txtRecovery.Enabled = false;
+            txtRecovery.ForeColor = SystemColors.WindowText;
+            txtRecovery.Location = new Point(232, 119);
+            txtRecovery.Name = "txtRecovery";
+            txtRecovery.PlaceholderText = "Recovered";
+            txtRecovery.Size = new Size(141, 26);
+            txtRecovery.TabIndex = 2;
+            txtRecovery.TextAlign = HorizontalAlignment.Center;
             // 
             // btnCallInSick
             // 
-            this.btnCallInSick.BackColor = SystemColors.ActiveCaption;
-            this.btnCallInSick.Location = new Point(69, 83);
-            this.btnCallInSick.Name = "btnCallInSick";
-            this.btnCallInSick.Size = new Size(141, 30);
-            this.btnCallInSick.TabIndex = 4;
-            this.btnCallInSick.Text = "Call in Sick";
-            this.btnCallInSick.UseVisualStyleBackColor = false;
+            btnCallInSick.BackColor = SystemColors.ActiveCaption;
+            btnCallInSick.Location = new Point(69, 83);
+            btnCallInSick.Name = "btnCallInSick";
+            btnCallInSick.Size = new Size(141, 30);
+            btnCallInSick.TabIndex = 4;
+            btnCallInSick.Text = "Call in Sick";
+            btnCallInSick.UseVisualStyleBackColor = false;
             // 
             // btnRecovery
             // 
-            this.btnRecovery.BackColor = SystemColors.ActiveCaption;
-            this.btnRecovery.Location = new Point(232, 83);
-            this.btnRecovery.Name = "btnRecovery";
-            this.btnRecovery.Size = new Size(141, 30);
-            this.btnRecovery.TabIndex = 5;
-            this.btnRecovery.Text = "Recovery";
-            this.btnRecovery.UseVisualStyleBackColor = false;
+            btnRecovery.BackColor = SystemColors.ActiveCaption;
+            btnRecovery.Location = new Point(232, 83);
+            btnRecovery.Name = "btnRecovery";
+            btnRecovery.Size = new Size(141, 30);
+            btnRecovery.TabIndex = 5;
+            btnRecovery.Text = "Recovery";
+            btnRecovery.UseVisualStyleBackColor = false;
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new Point(232, 153);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new Size(81, 30);
-            this.btnCancel.TabIndex = 6;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += this.btnCancel_Click;
+            btnCancel.Location = new Point(232, 153);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(81, 30);
+            btnCancel.TabIndex = 6;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnApply
             // 
-            this.btnApply.Location = new Point(129, 153);
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new Size(81, 30);
-            this.btnApply.TabIndex = 7;
-            this.btnApply.Text = "Apply";
-            this.btnApply.UseVisualStyleBackColor = true;
-            this.btnApply.Click += this.btnApply_Click;
+            btnApply.Location = new Point(129, 153);
+            btnApply.Name = "btnApply";
+            btnApply.Size = new Size(81, 30);
+            btnApply.TabIndex = 7;
+            btnApply.Text = "Apply";
+            btnApply.UseVisualStyleBackColor = true;
+            btnApply.Click += btnApply_Click;
             // 
             // txtAlias
             // 
-            this.txtAlias.Enabled = false;
-            this.txtAlias.Location = new Point(69, 26);
-            this.txtAlias.Name = "txtAlias";
-            this.txtAlias.PlaceholderText = "Alias";
-            this.txtAlias.Size = new Size(100, 26);
-            this.txtAlias.TabIndex = 8;
-            this.txtAlias.TextAlign = HorizontalAlignment.Center;
+            txtAlias.Enabled = false;
+            txtAlias.Location = new Point(69, 26);
+            txtAlias.Name = "txtAlias";
+            txtAlias.PlaceholderText = "Alias";
+            txtAlias.Size = new Size(100, 26);
+            txtAlias.TabIndex = 8;
+            txtAlias.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtTotalDays
+            // 
+            txtTotalDays.Enabled = false;
+            txtTotalDays.ForeColor = SystemColors.WindowText;
+            txtTotalDays.Location = new Point(541, 119);
+            txtTotalDays.Name = "txtTotalDays";
+            txtTotalDays.PlaceholderText = "TotalDays";
+            txtTotalDays.Size = new Size(141, 26);
+            txtTotalDays.TabIndex = 9;
+            txtTotalDays.TextAlign = HorizontalAlignment.Center;
+            // 
+            // comboBoxProcent
+            // 
+            comboBoxProcent.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            comboBoxProcent.FormattingEnabled = true;
+            comboBoxProcent.Items.AddRange(new object[] { "100%", "75%", "50%", "25%", "0% Recovered" });
+            comboBoxProcent.Location = new Point(379, 119);
+            comboBoxProcent.Name = "comboBoxProcent";
+            comboBoxProcent.Size = new Size(137, 26);
+            comboBoxProcent.TabIndex = 10;
             // 
             // AbsenceDueIllnessForm
             // 
-            this.AutoScaleDimensions = new SizeF(10F, 18F);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.BackColor = SystemColors.ActiveCaption;
-            this.ClientSize = new Size(448, 215);
-            this.Controls.Add(this.txtAlias);
-            this.Controls.Add(this.btnApply);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnRecovery);
-            this.Controls.Add(this.btnCallInSick);
-            this.Controls.Add(this.txtRecovery);
-            this.Controls.Add(this.txtDayCallInSick);
-            this.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.Margin = new Padding(4);
-            this.Name = "AbsenceDueIllnessForm";
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "Absence due Illness";
-            this.Load += this.Form_Load;
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(10F, 18F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveCaption;
+            ClientSize = new Size(824, 461);
+            Controls.Add(comboBoxProcent);
+            Controls.Add(txtTotalDays);
+            Controls.Add(txtAlias);
+            Controls.Add(btnApply);
+            Controls.Add(btnCancel);
+            Controls.Add(btnRecovery);
+            Controls.Add(btnCallInSick);
+            Controls.Add(txtRecovery);
+            Controls.Add(txtDayCallInSick);
+            Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            Margin = new Padding(4);
+            Name = "AbsenceDueIllnessForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Absence due Illness";
+            Load += Form_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -140,5 +165,7 @@
         public Button btnCancel;
         public Button btnApply;
         public TextBox txtAlias;
+        public TextBox txtTotalDays;
+        private ComboBox comboBoxProcent;
     }
 }
