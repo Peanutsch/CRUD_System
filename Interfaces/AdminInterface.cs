@@ -174,7 +174,7 @@ namespace CRUD_System.Interfaces
                 UpdatePageLabel();
             }
             // Empty textboxes
-            EmptyTextBoxesAdmin();
+            //EmptyTextBoxesAdmin();
 
             // Refresh the ListBox to trigger the DrawItem event
             adminControl.listBoxAdmin.Refresh();
@@ -416,7 +416,7 @@ namespace CRUD_System.Interfaces
             {
                 currentPage++;
                 LoadDetailsListBox();
-                EmptyTextBoxesAdmin();
+                //EmptyTextBoxesAdmin();
             }
         }
 
@@ -429,7 +429,7 @@ namespace CRUD_System.Interfaces
             {
                 currentPage--;
                 LoadDetailsListBox();
-                EmptyTextBoxesAdmin();
+                //EmptyTextBoxesAdmin();
             }
         }
 
@@ -587,13 +587,5 @@ namespace CRUD_System.Interfaces
             adminControl.txtCurrentDateReport.Text = $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}";
         }
         #endregion TEXTBOXES ADMIN
-
-        #region TEXTBOXES NOTES
-        public void TextBoxesNotes()
-        {
-            
-
-        }
-        #endregion TEXTBOXES NOTES
     }
 }

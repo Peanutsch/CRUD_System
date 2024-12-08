@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using System.Runtime.Intrinsics.Arm;
 using System.Diagnostics;
 using CRUD_System.FileHandlers;
@@ -52,7 +53,7 @@ namespace CRUD_System
             #endregion Create/Edit CSV Files
 
             // Initialize the application configuration
-            //ApplicationConfiguration.Initialize();
+            ApplicationConfiguration.Initialize();
 
             // Run the LoginForm as the main form of the application
             Application.Run(new LoginForm());

@@ -42,11 +42,6 @@ namespace CRUD_System
                     txtSelectedAlias.Text = reportData[2];  // Selected Alias
                     txtSubject.Text = reportData[3];        // Subject
                     rtxtDisplayReport.Text = reportData[4].Trim('"'); // Report text
-
-                    Debug.WriteLine($"txtDate.Text: {txtDate.Text}");
-                    Debug.WriteLine($"txtCreatedBy.Text: {txtAliasCreator.Text}");
-                    Debug.WriteLine($"txtSubject.Text: {txtSubject.Text}");
-                    Debug.WriteLine($"rtxtDisplayReport.Text: {rtxtDisplayReport.Text}");
                 }
                 else
                 {

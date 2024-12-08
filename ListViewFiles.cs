@@ -55,8 +55,6 @@ namespace CRUD_System
 
                     foreach (FileInfo fileInfo in fileInfos)
                     {
-                        Debug.WriteLine($"ListViewFiles Adding File: {fileInfo.Name}");
-
                         // Create a ListViewItem for each file, using Name and Date
                         ListViewItem item = new ListViewItem(fileInfo.Name);
                         item.SubItems.Add(fileInfo.CreationTime.ToString("dd/MM/yyyy"));
@@ -95,7 +93,7 @@ namespace CRUD_System
             {
                 // Check if any item is selected and if the Tag property is not null
                 var selectedItem = adminControl.listViewFiles.SelectedItems.Cast<ListViewItem>().FirstOrDefault();
-                Debug.WriteLine($"ListViewFiles HandleDoubleClick selectedItem: {selectedItem}");
+                //Debug.WriteLine($"ListViewFiles HandleDoubleClick selectedItem: {selectedItem}");
 
                 if (selectedItem?.Tag is string filePath && !string.IsNullOrEmpty(filePath))
                 {
