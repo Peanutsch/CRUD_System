@@ -423,9 +423,11 @@ namespace CRUD_System
         {
             var currentUser = AuthenticationService.CurrentUser;
             string selectedAlias = txtAlias.Text;
-            string newReportText = rtxNewReport.Text;
-
-            if (!string.IsNullOrEmpty(newReportText) && !string.IsNullOrEmpty(selectedAlias))
+            string newReportText = $"\"{rtxNewReport.Text}\"";
+            string subject = comboBoxSubjectReport.Text;
+            string dateFile = DateTime.Now.ToString("ddMMyyyy-HHmmss");
+            
+            if (!string.IsNullOrEmpty(newReportText) && !string.IsNullOrEmpty(selectedAlias) && comboBoxSubjectReport.Text != "Subject:")
             {
 
                 DialogResult dr = message.MessageConfirmSaveNote(selectedAlias);
@@ -434,15 +436,41 @@ namespace CRUD_System
                     return;
                 }
 
-                // Create report file: {alias}_report.csv, format {Date},{aliasCreater},{aliasUser},{subject},{Report}
-                CreateCSVFiles.CreateReportsCSV(selectedAlias, DateTime.Now.ToString("dd-MM-yyyy"), currentUser!, selectedAlias, newReportText);
+                // Create report file: {alias}_report.csv, format {Date},{aliasCreator},{aliasUser},{subject},{Report}
+                // DateTime.Now.ToString()
+                CreateCSVFiles.CreateReportsCSV(dateFile, currentUser!, selectedAlias, subject, newReportText);
+
+                // Refresh ListViewFiles to show the new file
+                RefreshListViewFiles();
             }
             else
             {
-                Debug.WriteLine("No text!");
-                MessageBox.Show("No text!");
+                Debug.WriteLine("Not Valid!");
+                MessageBox.Show("Not Valid");
                 return;
             }
+
+            // Clean up rtxNewReport
+            rtxNewReport.Text = string.Empty;
+        }
+
+        public void RefreshListViewFiles()
+        {
+            // Clear existing items
+            listViewFiles.Items.Clear();
+
+            // Reload files from the directory
+            string reportDirectory = FindCSVFiles.FindReportFile(txtAlias.Text, "report");
+            string[] reportFiles = Directory.GetFiles(reportDirectory, "*.csv");
+
+            foreach (var file in reportFiles)
+            {
+                // Add each file to the ListView
+                ListViewItem item = new ListViewItem(Path.GetFileName(file));
+                listViewFiles.Items.Add(item);
+            }
+
+            listViewFiles.Refresh();
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 

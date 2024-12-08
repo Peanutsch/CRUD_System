@@ -1,10 +1,12 @@
 ﻿using CRUD_System.Handlers;
+using CRUD_System.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CRUD_System.FileHandlers
@@ -107,7 +109,7 @@ namespace CRUD_System.FileHandlers
         /// Creates /reports/current year/{alias}_reports.csv.
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
-        public static void CreateReportsCSV(string date, string aliasCreator, string selectedAlias, string subject, string report)
+        public static void CreateReportsCSV(string dateFile, string aliasCreator, string selectedAlias, string subject, string report)
         {
             if (!string.IsNullOrEmpty(selectedAlias))
             {
@@ -116,7 +118,7 @@ namespace CRUD_System.FileHandlers
                 try
                 {
                     // Build the path to the "reports" directory and the alias subdirectory
-                    string reportsPath = Path.Combine(rootPath, "reports", Timers.CurrentYear.ToString(), selectedAlias);
+                    string reportsPath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias);
 
                     // Ensure the alias folder exists within the reports directory
                     if (!Directory.Exists(reportsPath))
@@ -125,18 +127,22 @@ namespace CRUD_System.FileHandlers
                     }
 
                     // Determine the full path for the report file
-                    string fileReports = Path.Combine(reportsPath, $"{selectedAlias}_{date}_reports.csv");
+                    string fileReports = Path.Combine(reportsPath, $"{selectedAlias}_{dateFile}_report.csv");
 
                     if (!File.Exists(fileReports))
                     {
+                        string currentDate = DateTime.Now.ToString();
+
                         // Create a new empty file with a detailed format {Date},{aliasCreater},{aliasUser},{subject},{Report}
-                        File.WriteAllText(fileReports, $"{date},{aliasCreator},{selectedAlias},{subject},{report}" + Environment.NewLine); // ;," +
-                                                       //$"{string.Empty},{string.Empty},{string.Empty},{string.Empty},{string.Empty}," + Environment.NewLine);
+                        File.WriteAllText(fileReports, $"{currentDate},{aliasCreator},{selectedAlias},{subject},{report}");
 
                         // Encrypt the file
                         EncryptionManager.EncryptFile(fileReports);
 
                         Debug.WriteLine($"Created {fileReports}");
+
+                        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+                        message.MessageReportSaved(DateTime.Now.ToString("ddMMyyyy-HHmmss"), selectedAlias);
                     }
                 }
                 catch (Exception ex)

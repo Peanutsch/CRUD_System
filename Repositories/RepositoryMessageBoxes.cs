@@ -72,6 +72,12 @@ namespace CRUD_System.Repositories
         {
             return MessageBox.Show($"New account {alias} created succesfully!");
         }
+
+        public DialogResult MessageReportSaved(string selectedAlias, string date)
+        {
+            return MessageBox.Show($"Report saved as {selectedAlias}_{date}_report.csv");
+        }
+
         #endregion SUCCES
 
         #region INVALID

@@ -86,11 +86,13 @@
             // 
             // rtxtDisplayReport
             // 
-            rtxtDisplayReport.Enabled = false;
+            //rtxtDisplayReport.Enabled = false;
+            rtxtDisplayReport.ReadOnly = true;
             rtxtDisplayReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rtxtDisplayReport.Location = new Point(19, 91);
             rtxtDisplayReport.Margin = new Padding(4);
             rtxtDisplayReport.Name = "rtxtDisplayReport";
+            rtxtDisplayReport.ScrollBars = RichTextBoxScrollBars.Vertical;
             rtxtDisplayReport.Size = new Size(508, 406);
             rtxtDisplayReport.TabIndex = 0;
             rtxtDisplayReport.Text = "";

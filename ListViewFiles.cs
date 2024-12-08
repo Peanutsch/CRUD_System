@@ -34,7 +34,7 @@ namespace CRUD_System
         /// Loads files from a specified directory into the ListView.
         /// </summary>
         /// <param name="directoryPath">The directory path to load the files from.</param>
-        public void LoadFilesIntoListView(string directoryPath, string selectedAlias)
+        public void LoadFilesIntoListView(string directoryPath)
         {
             adminControl.listViewFiles.Visible = true;
 
@@ -47,9 +47,14 @@ namespace CRUD_System
                 // Check if any CSV files are found
                 if (csvFiles.Length > 0)
                 {
-                    foreach (string file in csvFiles)
+                    // Create an array of FileInfo objects for sorting
+                    FileInfo[] fileInfos = csvFiles.Select(file => new FileInfo(file)).ToArray();
+
+                    // Sort the files by CreationTime in descending order (newest first)
+                    Array.Sort(fileInfos, (f1, f2) => f2.CreationTime.CompareTo(f1.CreationTime));
+
+                    foreach (FileInfo fileInfo in fileInfos)
                     {
-                        FileInfo fileInfo = new FileInfo(file);
                         Debug.WriteLine($"ListViewFiles Adding File: {fileInfo.Name}");
 
                         // Create a ListViewItem for each file, using Name and Date
@@ -68,19 +73,17 @@ namespace CRUD_System
                 }
                 else
                 {
-                    Debug.WriteLine("No CSV files found in the specified directory.", "Info");
-                    MessageBox.Show("No CSV files found in the specified directory.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // No error message: directory and file will be made when report file created
                     return;
                 }
             }
             else
             {
-                // Show an error message if the directory does not exist
-                Debug.WriteLine("The specified directory does not exist.", "Error");
-                MessageBox.Show("The specified directory does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // No error message: directory and file will be made when report file created
                 return;
             }
         }
+
 
         /// <summary>
         /// Registers the event handler for the ListView's double-click event.

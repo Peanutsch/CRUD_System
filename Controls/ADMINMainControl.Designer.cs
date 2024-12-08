@@ -470,7 +470,7 @@
             // 
             comboBoxSubjectReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             comboBoxSubjectReport.FormattingEnabled = true;
-            comboBoxSubjectReport.Items.AddRange(new object[] { "Subject 1", "Subject 2", "Subject 3", "Subject 4" });
+            comboBoxSubjectReport.Items.AddRange(new object[] { "Report", "Memo", "Evaluation", "Other" });
             comboBoxSubjectReport.Location = new Point(5, 38);
             comboBoxSubjectReport.Name = "comboBoxSubjectReport";
             comboBoxSubjectReport.Size = new Size(140, 24);

@@ -27,24 +27,26 @@ namespace CRUD_System
         {
             if (!string.IsNullOrEmpty(reportContent))
             {
-
+                // Debugging output to verify the content being loaded
                 Debug.WriteLine($"ShowReportForm reportContent: {reportContent}");
 
-                // Split the content of the report based on commas
-                string[] reportData = reportContent.Split(',');
+                // Split the content of the report based on commas (considering that content can be inside quotes)
+                string[] reportData = reportContent.Split(new[] { ',' }, 5); // Split into 4 parts maximum
 
                 // Ensure that the data contains enough elements to assign to the controls
-                if (reportData.Length >= 5)
+                if (reportData.Length == 5)
                 {
                     // Assign the split data to the appropriate fields
-                    txtDate.Text = reportData[0];           // Date
-                    txtAliasCreator.Text = reportData[1];   // Creator
+                    txtDate.Text = reportData[0]; // Date
+                    txtAliasCreator.Text = reportData[1];   // Creator Alias
                     txtSelectedAlias.Text = reportData[2];  // Selected Alias
                     txtSubject.Text = reportData[3];        // Subject
-                    rtxtDisplayReport.Text = reportData[4]; // Report text
-                    
+                    rtxtDisplayReport.Text = reportData[4].Trim('"'); // Report text
 
-                    //this.Refresh();
+                    Debug.WriteLine($"txtDate.Text: {txtDate.Text}");
+                    Debug.WriteLine($"txtCreatedBy.Text: {txtAliasCreator.Text}");
+                    Debug.WriteLine($"txtSubject.Text: {txtSubject.Text}");
+                    Debug.WriteLine($"rtxtDisplayReport.Text: {rtxtDisplayReport.Text}");
                 }
                 else
                 {
@@ -60,6 +62,7 @@ namespace CRUD_System
                 MessageBox.Show("The report content is empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         public void btnCloseForm_Click(object sender, EventArgs e)
         {
