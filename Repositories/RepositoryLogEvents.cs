@@ -49,7 +49,7 @@ namespace CRUD_System.Repositories
         }
 
         /// <summary>
-        /// Logs the event when a user is forced to log out by another user.
+        /// Logs the event when a user is forced to log out by an admin.
         /// </summary>
         /// <param name="currentUser">The username of the user who forced the log out.</param>
         /// <param name="alias">The alias of the user who was forced to log out.</param>

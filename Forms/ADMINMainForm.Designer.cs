@@ -70,9 +70,9 @@
             // UserControl
             // 
             UserControl.BorderStyle = BorderStyle.FixedSingle;
-            UserControl.Location = new Point(18, 86);
+            UserControl.Location = new Point(18, 55);
             UserControl.Name = "adminManagementControl";
-            UserControl.Size = new Size(1500, 450);
+            UserControl.Size = new Size(1500, 460);
             UserControl.TabIndex = 4;
             UserControl.Load += adminControl.UserControl_Load;
             // 

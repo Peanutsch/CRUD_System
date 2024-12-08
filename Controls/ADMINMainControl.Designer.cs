@@ -61,18 +61,16 @@
             btnCallInSick = new Button();
             listBoxLogs = new ListBox();
             lblLoggings = new Label();
-            txtAliasNotes = new TextBox();
-            txtCurrentDateReport = new TextBox();
-            panelNotes = new Panel();
-            buttonSaveReport = new Button();
-            buttonEmptyReport = new Button();
-            rtxNewReport = new RichTextBox();
-            comboBoxSubjectReport = new ComboBox();
             listViewFiles = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             lblReports = new Label();
-            panelNotes.SuspendLayout();
+            txtCurrentDateReport = new TextBox();
+            txtAliasNotes = new TextBox();
+            comboBoxSubjectReport = new ComboBox();
+            rtxNewReport = new RichTextBox();
+            buttonEmptyReport = new Button();
+            buttonSaveReport = new Button();
             SuspendLayout();
             // 
             // txtName
@@ -401,88 +399,6 @@
             lblLoggings.TabIndex = 42;
             lblLoggings.Text = "Loggings";
             // 
-            // txtAliasNotes
-            // 
-            txtAliasNotes.Enabled = false;
-            txtAliasNotes.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAliasNotes.Location = new Point(5, 6);
-            txtAliasNotes.Name = "txtAliasNotes";
-            txtAliasNotes.PlaceholderText = "Alias";
-            txtAliasNotes.ReadOnly = true;
-            txtAliasNotes.Size = new Size(97, 26);
-            txtAliasNotes.TabIndex = 44;
-            txtAliasNotes.TextAlign = HorizontalAlignment.Center;
-            // 
-            // txtCurrentDateReport
-            // 
-            txtCurrentDateReport.Enabled = false;
-            txtCurrentDateReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtCurrentDateReport.Location = new Point(151, 38);
-            txtCurrentDateReport.Multiline = true;
-            txtCurrentDateReport.Name = "txtCurrentDateReport";
-            txtCurrentDateReport.Size = new Size(140, 23);
-            txtCurrentDateReport.TabIndex = 45;
-            txtCurrentDateReport.TextAlign = HorizontalAlignment.Center;
-            // 
-            // panelNotes
-            // 
-            panelNotes.BackColor = SystemColors.GradientActiveCaption;
-            panelNotes.Controls.Add(buttonSaveReport);
-            panelNotes.Controls.Add(buttonEmptyReport);
-            panelNotes.Controls.Add(rtxNewReport);
-            panelNotes.Controls.Add(comboBoxSubjectReport);
-            panelNotes.Controls.Add(txtAliasNotes);
-            panelNotes.Controls.Add(txtCurrentDateReport);
-            panelNotes.Location = new Point(1189, 35);
-            panelNotes.Name = "panelNotes";
-            panelNotes.Size = new Size(301, 412);
-            panelNotes.TabIndex = 46;
-            // 
-            // buttonSaveReport
-            // 
-            buttonSaveReport.BackColor = SystemColors.ActiveCaption;
-            buttonSaveReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            buttonSaveReport.Location = new Point(151, 381);
-            buttonSaveReport.Name = "buttonSaveReport";
-            buttonSaveReport.Size = new Size(140, 23);
-            buttonSaveReport.TabIndex = 49;
-            buttonSaveReport.Text = "Save Report";
-            buttonSaveReport.UseVisualStyleBackColor = false;
-            buttonSaveReport.Click += buttonSaveReport_Click;
-            // 
-            // buttonEmptyReport
-            // 
-            buttonEmptyReport.BackColor = SystemColors.ActiveCaption;
-            buttonEmptyReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            buttonEmptyReport.Location = new Point(5, 381);
-            buttonEmptyReport.Name = "buttonEmptyReport";
-            buttonEmptyReport.Size = new Size(140, 23);
-            buttonEmptyReport.TabIndex = 48;
-            buttonEmptyReport.Text = "Empty Report";
-            buttonEmptyReport.UseVisualStyleBackColor = false;
-            buttonEmptyReport.Click += buttonEmptyReport_Click;
-            // 
-            // rtxNewReport
-            // 
-            rtxNewReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            rtxNewReport.Location = new Point(5, 65);
-            rtxNewReport.Name = "rtxNewReport";
-            rtxNewReport.ScrollBars = RichTextBoxScrollBars.Vertical;
-            rtxNewReport.Size = new Size(288, 313);
-            rtxNewReport.TabIndex = 47;
-            rtxNewReport.Text = "";
-            // 
-            // comboBoxSubjectReport
-            // 
-            comboBoxSubjectReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            comboBoxSubjectReport.FormattingEnabled = true;
-            comboBoxSubjectReport.Items.AddRange(new object[] { "Report", "Memo", "Evaluation", "Other" });
-            comboBoxSubjectReport.Location = new Point(5, 38);
-            comboBoxSubjectReport.Name = "comboBoxSubjectReport";
-            comboBoxSubjectReport.Size = new Size(140, 24);
-            comboBoxSubjectReport.TabIndex = 46;
-            comboBoxSubjectReport.Text = "Subject:";
-            // 
             // listViewFiles
             // 
             listViewFiles.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2 });
@@ -516,16 +432,89 @@
             lblReports.TabIndex = 48;
             lblReports.Text = "Reports";
             // 
+            // txtCurrentDateReport
+            // 
+            txtCurrentDateReport.Enabled = false;
+            txtCurrentDateReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtCurrentDateReport.Location = new Point(1337, 71);
+            txtCurrentDateReport.Multiline = true;
+            txtCurrentDateReport.Name = "txtCurrentDateReport";
+            txtCurrentDateReport.Size = new Size(140, 23);
+            txtCurrentDateReport.TabIndex = 45;
+            txtCurrentDateReport.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtAliasNotes
+            // 
+            txtAliasNotes.Enabled = false;
+            txtAliasNotes.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtAliasNotes.Location = new Point(1189, 38);
+            txtAliasNotes.Name = "txtAliasNotes";
+            txtAliasNotes.PlaceholderText = "Alias";
+            txtAliasNotes.ReadOnly = true;
+            txtAliasNotes.Size = new Size(97, 26);
+            txtAliasNotes.TabIndex = 44;
+            txtAliasNotes.TextAlign = HorizontalAlignment.Center;
+            // 
+            // comboBoxSubjectReport
+            // 
+            comboBoxSubjectReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            comboBoxSubjectReport.FormattingEnabled = true;
+            comboBoxSubjectReport.Items.AddRange(new object[] { "Report", "Memo", "Evaluation", "Other" });
+            comboBoxSubjectReport.Location = new Point(1189, 70);
+            comboBoxSubjectReport.Name = "comboBoxSubjectReport";
+            comboBoxSubjectReport.Size = new Size(140, 24);
+            comboBoxSubjectReport.TabIndex = 46;
+            comboBoxSubjectReport.Text = "Subject:";
+            // 
+            // rtxNewReport
+            // 
+            rtxNewReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            rtxNewReport.Location = new Point(1189, 100);
+            rtxNewReport.Name = "rtxNewReport";
+            rtxNewReport.ScrollBars = RichTextBoxScrollBars.Vertical;
+            rtxNewReport.Size = new Size(288, 313);
+            rtxNewReport.TabIndex = 47;
+            rtxNewReport.Text = "";
+            // 
+            // buttonEmptyReport
+            // 
+            buttonEmptyReport.BackColor = SystemColors.ActiveCaption;
+            buttonEmptyReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonEmptyReport.Location = new Point(1189, 419);
+            buttonEmptyReport.Name = "buttonEmptyReport";
+            buttonEmptyReport.Size = new Size(140, 23);
+            buttonEmptyReport.TabIndex = 48;
+            buttonEmptyReport.Text = "Empty Report";
+            buttonEmptyReport.UseVisualStyleBackColor = false;
+            buttonEmptyReport.Click += buttonEmptyReport_Click;
+            // 
+            // buttonSaveReport
+            // 
+            buttonSaveReport.BackColor = SystemColors.ActiveCaption;
+            buttonSaveReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonSaveReport.Location = new Point(1337, 419);
+            buttonSaveReport.Name = "buttonSaveReport";
+            buttonSaveReport.Size = new Size(140, 23);
+            buttonSaveReport.TabIndex = 49;
+            buttonSaveReport.Text = "Save Report";
+            buttonSaveReport.UseVisualStyleBackColor = false;
+            buttonSaveReport.Click += buttonSaveReport_Click;
+            // 
             // AdminMainControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(rtxNewReport);
+            Controls.Add(buttonSaveReport);
+            Controls.Add(txtCurrentDateReport);
+            Controls.Add(comboBoxSubjectReport);
             Controls.Add(lblReports);
+            Controls.Add(buttonEmptyReport);
             Controls.Add(listViewFiles);
-            Controls.Add(panelNotes);
             Controls.Add(lblLoggings);
+            Controls.Add(txtAliasNotes);
             Controls.Add(listBoxLogs);
             Controls.Add(btnCallInSick);
             Controls.Add(txtAbsenceIllness);
@@ -554,8 +543,6 @@
             Controls.Add(btnDeleteUser);
             Name = "AdminMainControl";
             Size = new Size(1566, 450);
-            panelNotes.ResumeLayout(false);
-            panelNotes.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -579,16 +566,15 @@
         public Button btnCallInSick;
         public ListBox listBoxLogs;
         public Label lblLoggings;
-        public TextBox txtAliasNotes;
-        public TextBox txtCurrentDateReport;
-        public Panel panelNotes;
-        public ComboBox comboBoxSubjectReport;
-        public Button buttonSaveReport;
-        public Button buttonEmptyReport;
-        public RichTextBox rtxNewReport;
         public ListView listViewFiles;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         public Label lblReports;
+        public TextBox txtCurrentDateReport;
+        public TextBox txtAliasNotes;
+        public ComboBox comboBoxSubjectReport;
+        public RichTextBox rtxNewReport;
+        public Button buttonEmptyReport;
+        public Button buttonSaveReport;
     }
 }
