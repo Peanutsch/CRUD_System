@@ -133,7 +133,7 @@
             // btnCreateUser
             // 
             btnCreateUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnCreateUser.Location = new Point(348, 3);
+            btnCreateUser.Location = new Point(458, 2);
             btnCreateUser.Name = "btnCreateUser";
             btnCreateUser.Size = new Size(138, 30);
             btnCreateUser.TabIndex = 11;
@@ -146,7 +146,7 @@
             btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSaveEditUserDetails.Location = new Point(271, 409);
             btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
-            btnSaveEditUserDetails.Size = new Size(72, 30);
+            btnSaveEditUserDetails.Size = new Size(106, 30);
             btnSaveEditUserDetails.TabIndex = 9;
             btnSaveEditUserDetails.Text = "Save Edit";
             btnSaveEditUserDetails.UseVisualStyleBackColor = false;
@@ -157,7 +157,7 @@
             // 
             btnDeleteUser.BackColor = SystemColors.ActiveCaption;
             btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnDeleteUser.Location = new Point(501, 409);
+            btnDeleteUser.Location = new Point(535, 409);
             btnDeleteUser.Name = "btnDeleteUser";
             btnDeleteUser.Size = new Size(150, 30);
             btnDeleteUser.TabIndex = 9;
@@ -215,7 +215,7 @@
             // 
             btnGeneratePSW.BackColor = SystemColors.ActiveCaption;
             btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnGeneratePSW.Location = new Point(349, 409);
+            btnGeneratePSW.Location = new Point(383, 409);
             btnGeneratePSW.Name = "btnGeneratePSW";
             btnGeneratePSW.Size = new Size(146, 30);
             btnGeneratePSW.TabIndex = 22;
@@ -294,7 +294,7 @@
             // txtSearch
             // 
             txtSearch.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtSearch.Location = new Point(577, 6);
+            txtSearch.Location = new Point(701, 6);
             txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "SEARCH";
             txtSearch.Size = new Size(93, 26);
@@ -307,7 +307,7 @@
             lblSearchTxt.AutoSize = true;
             lblSearchTxt.BackColor = SystemColors.ActiveCaption;
             lblSearchTxt.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSearchTxt.Location = new Point(493, 9);
+            lblSearchTxt.Location = new Point(607, 9);
             lblSearchTxt.Name = "lblSearchTxt";
             lblSearchTxt.Size = new Size(78, 18);
             lblSearchTxt.TabIndex = 34;
@@ -333,7 +333,7 @@
             btnNextPage.Name = "btnNextPage";
             btnNextPage.Size = new Size(75, 23);
             btnNextPage.TabIndex = 36;
-            btnNextPage.Text = "Next Page";
+            btnNextPage.Text = "Next";
             btnNextPage.UseVisualStyleBackColor = false;
             btnNextPage.Click += btnNextPage_Click;
             // 
@@ -345,7 +345,7 @@
             btnPreviousPage.Name = "btnPreviousPage";
             btnPreviousPage.Size = new Size(75, 23);
             btnPreviousPage.TabIndex = 37;
-            btnPreviousPage.Text = "Prev Page";
+            btnPreviousPage.Text = "Prev";
             btnPreviousPage.UseVisualStyleBackColor = false;
             btnPreviousPage.Click += btnPreviousPage_Click;
             // 
@@ -367,9 +367,9 @@
             // 
             btnCallInSick.BackColor = SystemColors.ActiveCaption;
             btnCallInSick.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCallInSick.Location = new Point(657, 409);
+            btnCallInSick.Location = new Point(316, 2);
             btnCallInSick.Name = "btnCallInSick";
-            btnCallInSick.Size = new Size(137, 30);
+            btnCallInSick.Size = new Size(136, 30);
             btnCallInSick.TabIndex = 40;
             btnCallInSick.Text = "Call in Sick";
             btnCallInSick.UseVisualStyleBackColor = false;
@@ -379,6 +379,7 @@
             // 
             listBoxLogs.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             listBoxLogs.FormattingEnabled = true;
+            listBoxLogs.HorizontalScrollbar = true;
             listBoxLogs.Location = new Point(800, 35);
             listBoxLogs.Name = "listBoxLogs";
             listBoxLogs.Size = new Size(383, 116);
@@ -389,7 +390,7 @@
             // 
             lblLoggings.AutoSize = true;
             lblLoggings.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            lblLoggings.Location = new Point(962, 17);
+            lblLoggings.Location = new Point(800, 17);
             lblLoggings.Name = "lblLoggings";
             lblLoggings.Size = new Size(63, 16);
             lblLoggings.TabIndex = 42;
@@ -464,7 +465,7 @@
             rtxNewReport.ScrollBars = RichTextBoxScrollBars.Vertical;
             rtxNewReport.Size = new Size(288, 313);
             rtxNewReport.TabIndex = 47;
-            //rtxNewReport.Text = "Your Report here!";
+            rtxNewReport.Text = "";
             // 
             // comboBoxSubjectReport
             // 
@@ -480,7 +481,7 @@
             // listViewFiles
             // 
             listViewFiles.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2 });
-            listViewFiles.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            listViewFiles.Font = new Font("Courier New", 9F, FontStyle.Bold);
             listViewFiles.FullRowSelect = true;
             listViewFiles.Location = new Point(800, 160);
             listViewFiles.Name = "listViewFiles";

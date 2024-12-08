@@ -96,6 +96,7 @@
             rtxtDisplayReport.Size = new Size(508, 406);
             rtxtDisplayReport.TabIndex = 0;
             rtxtDisplayReport.Text = "";
+            rtxtDisplayReport.SelectionAlignment = HorizontalAlignment.Center;
             // 
             // txtSelectedAlias
             // 
