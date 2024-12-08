@@ -436,7 +436,7 @@
             // 
             txtCurrentDateReport.Enabled = false;
             txtCurrentDateReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtCurrentDateReport.Location = new Point(1337, 71);
+            txtCurrentDateReport.Location = new Point(1335, 67);
             txtCurrentDateReport.Multiline = true;
             txtCurrentDateReport.Name = "txtCurrentDateReport";
             txtCurrentDateReport.Size = new Size(140, 23);
@@ -447,7 +447,7 @@
             // 
             txtAliasNotes.Enabled = false;
             txtAliasNotes.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAliasNotes.Location = new Point(1189, 38);
+            txtAliasNotes.Location = new Point(1189, 35);
             txtAliasNotes.Name = "txtAliasNotes";
             txtAliasNotes.PlaceholderText = "Alias";
             txtAliasNotes.ReadOnly = true;
@@ -460,7 +460,7 @@
             comboBoxSubjectReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             comboBoxSubjectReport.FormattingEnabled = true;
             comboBoxSubjectReport.Items.AddRange(new object[] { "Report", "Memo", "Evaluation", "Other" });
-            comboBoxSubjectReport.Location = new Point(1189, 70);
+            comboBoxSubjectReport.Location = new Point(1189, 67);
             comboBoxSubjectReport.Name = "comboBoxSubjectReport";
             comboBoxSubjectReport.Size = new Size(140, 24);
             comboBoxSubjectReport.TabIndex = 46;
@@ -469,10 +469,10 @@
             // rtxNewReport
             // 
             rtxNewReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            rtxNewReport.Location = new Point(1189, 100);
+            rtxNewReport.Location = new Point(1189, 97);
             rtxNewReport.Name = "rtxNewReport";
             rtxNewReport.ScrollBars = RichTextBoxScrollBars.Vertical;
-            rtxNewReport.Size = new Size(288, 313);
+            rtxNewReport.Size = new Size(288, 316);
             rtxNewReport.TabIndex = 47;
             rtxNewReport.Text = "";
             // 
