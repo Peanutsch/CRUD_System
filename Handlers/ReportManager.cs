@@ -30,7 +30,7 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void btnSaveReport()
         {
-            if (string.IsNullOrEmpty(adminControl!.comboBoxSubjectReport.Text) && string.IsNullOrEmpty(adminControl.rtxReport.Text))
+            if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && !string.IsNullOrEmpty(adminControl.rtxReport.Text))
             {
                 // Get the current logged-in user
                 var currentUser = AuthenticationService.CurrentUser;
@@ -66,6 +66,7 @@ namespace CRUD_System.Handlers
                 AdminInterface adminInterface = new AdminInterface();
                 adminInterface.IsReport = false;
                 Debug.WriteLine($"btnSaveReport IsReport: {adminInterface.IsReport}");
+                adminControl.rtxReport.Clear();
                 adminInterface.TextBoxesReportConfig();
         }
 
@@ -81,6 +82,7 @@ namespace CRUD_System.Handlers
 
             // Reference the ListView in the UI
             var listView = adminControl.listViewFiles;
+            
             listView.Items.Clear();
 
             // Find the directory containing the report files for the given alias
@@ -155,13 +157,13 @@ namespace CRUD_System.Handlers
                 // Parse the report content
                 string reportCreator = reportContentSplit[1];               // Creator Alias
                 string reportSubject = reportContentSplit[3];               // Subject
-                string reportTextReport = reportContentSplit[4].Trim('"');  // Report text, remove extra quotes
+                string reportTextReport = reportContentSplit[4].Trim();     // // Full text, including commas
                 string reportDate = isFileNameSplit[1].Replace("-", " ");   // Format date part of the filename (if applicable)
 
                 // Update the admin control fields with parsed data
                 adminControl.txtCreator.Text = reportCreator; // Creator
                 adminControl.txtSubject.Text = reportSubject; // Subject
-                adminControl.rtxReport.Text = reportTextReport;
+                adminControl.rtxReport.Text = $"\"{reportTextReport}\"".Replace("\"", "").Trim();
                 // Format numbers as DD-MM-YYYY and clean up text
                 adminControl.txtDateReport.Text = Regex.Replace(reportDate
                                                   .Replace("\"", ""),

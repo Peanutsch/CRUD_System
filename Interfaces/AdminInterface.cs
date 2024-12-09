@@ -311,7 +311,9 @@ namespace CRUD_System.Interfaces
             else
             {
                 // Show a message if no log file is found
-                MessageBox.Show("Log file not found.");
+                //MessageBox.Show("Log file not found.");
+                Debug.WriteLine("Log file not found.");
+                return;
             }
         }
 

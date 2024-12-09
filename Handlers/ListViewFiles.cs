@@ -116,32 +116,6 @@ namespace CRUD_System.Handlers
             }
             return string.Empty;
         }
-
-        /*
-        /// <summary>
-        /// Registers the event handler for the ListView's double-click event.
-        /// </summary>
-        /// <param name="onFileOpen">The action to perform when a file is double-clicked (e.g., open the file).</param>
-        public void HandleDoubleClick(Action<string> onFileOpen)
-        {
-            adminControl.listViewFiles.DoubleClick += (sender, e) => // Subscribe DoubleClick event
-            {
-                // Check if any item is selected and if the Tag property is not null
-                var selectedItem = adminControl.listViewFiles.SelectedItems.Cast<ListViewItem>().FirstOrDefault();
-                if (selectedItem?.Tag is string filePath && !string.IsNullOrEmpty(filePath))
-                {
-                    // Invoke the action if filePath is valid
-                    onFileOpen?.Invoke(filePath);
-                }
-                else
-                {
-                    // Handle invalid Tag or empty filePath
-                    Debug.WriteLine("ListViewFiles HandleDoubleClick: The selected file does not have a valid path.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            };
-        }
-        */
         #endregion PROCESS
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using CRUD_System.Handlers;
+using System.Linq.Expressions;
 
 namespace CRUD_System.FileHandlers
 {
@@ -47,20 +48,81 @@ namespace CRUD_System.FileHandlers
 
         #region PROCESSING
         /// <summary>
-        /// Appends a new log entry to the log events file.
+        /// Ensures the log events file for the selected alias exists, creating it if necessary.
         /// </summary>
-        /// <param name="newLog">The log entry to append.</param>
-        public void AppendToLog(string logFile, string newLog)
+        /// <param name="selectedAlias">The alias for which the log events file should be created.</param>
+        public void CreateLogEventCSV(string selectedAlias)
         {
-            if (!string.IsNullOrEmpty(logFile))
+            try
             {
-                EncryptionManager.DecryptFile(logFile);
+                string logPath = Path.Combine(rootPath, "logevents", Timers.CurrentYear.ToString(), selectedAlias);
 
-                File.AppendAllText(logFile, newLog + Environment.NewLine);
+                // Ensure the logevents directory exists
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
 
-                EncryptionManager.EncryptFile(logFile);
+                string fileLogs = Path.Combine(logPath, $"{selectedAlias}_logevents.csv");
+
+                // Create the log file with default headers if it doesn't exist
+                if (!File.Exists(fileLogs))
+                {
+                    File.WriteAllText(fileLogs, "Date,Event,Details,User" + Environment.NewLine);
+                    EncryptionManager.EncryptFile(fileLogs);
+
+                    Debug.WriteLine($"Created {selectedAlias}_logevents.csv");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions gracefully
+                Debug.WriteLine($"An error occurred while creating the log file for alias {selectedAlias}: {ex.Message}");
+                //MessageBox.Show($"An error occurred while creating the log file for alias {selectedAlias}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Appends a new log entry to the log events file for the selected alias.
+        /// If the file does not exist, it is created first.
+        /// </summary>
+        /// <param name="selectedAlias">The alias for which the log entry is being added.</param>
+        /// <param name="newLog">The log entry to append.</param>
+        public void AppendToLog(string selectedAlias, string newLog)
+        {
+            try
+            {
+                string logPath = Path.Combine(rootPath, "logevents", Timers.CurrentYear.ToString(), selectedAlias);
+
+                // Ensure the logevents directory exists
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+
+                string fileLogs = Path.Combine(logPath, $"{selectedAlias}_logevents.csv");
+
+                // Create the log file if it doesn't exist
+                if (!File.Exists(fileLogs))
+                {
+                    CreateLogEventCSV(selectedAlias);
+                }
+
+                // Decrypt the file, append the new log, and re-encrypt
+                EncryptionManager.DecryptFile(fileLogs);
+                File.AppendAllText(fileLogs, newLog + Environment.NewLine);
+                EncryptionManager.EncryptFile(fileLogs);
+
+                Debug.WriteLine($"Appended log for {selectedAlias}: {newLog}");
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions gracefully
+                Debug.WriteLine($"An error occurred while appending to the log file for alias {selectedAlias}: {ex.Message}");
+                //MessageBox.Show($"An error occurred while appending to the log file for alias {selectedAlias}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         /// <summary>
         /// Returns path userLines and loginLines
