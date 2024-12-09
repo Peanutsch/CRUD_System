@@ -117,7 +117,7 @@ namespace CRUD_System.Handlers
 
             // Load the report content into the ShowReportForm
             //parentControl.Hide();
-            showReportForm.LoadReport(reportContent);
+            //showReportForm.LoadReport(reportContent);
             showReportForm.Show();
         }
         #endregion SHOW REPORT FORM

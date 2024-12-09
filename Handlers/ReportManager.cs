@@ -1,10 +1,12 @@
 ﻿using CRUD_System.FileHandlers;
+using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,39 +14,35 @@ namespace CRUD_System.Handlers
 {
     internal class ReportManager
     {
-        //private readonly ListView listView = new ListView();
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         #region CONSTRUCTOR
         private readonly AdminMainControl? adminControl;
 
-        public ReportManager(AdminMainControl? adminControl = null)
+        public ReportManager(AdminMainControl control)
         {
-            this.adminControl = adminControl ?? new AdminMainControl();
+            adminControl = control;
         }
         #endregion CONSTRUCTOR
         /// <summary>
         /// Handles the logic for saving a report. Validates input, confirms the action with the user, 
         /// creates a new report CSV file, and refreshes the ListView to display the new report.
         /// </summary>
-        public void ButtonSaveReport_ClickHandler()
+        public void btnSaveReport()
         {
-            // Get the current logged-in user
-            var currentUser = AuthenticationService.CurrentUser;
-            // Retrieve the alias of the user to whom the report is related
-            string selectedAlias = adminControl!.txtAlias.Text;
-            // Retrieve the report text, enclosed in quotes
-            string newReportText = $"\"{adminControl.rtxReport.Text}\"";
-            // Retrieve the selected subject from the dropdown
-            string subject = adminControl.comboBoxSubjectReport.Text;
-            // Generate a unique timestamp for the report file
-            string dateFile = DateTime.Now.ToString("ddMMyyyy-HHmmss");
-
-            // Validate the input fields
-            if (!string.IsNullOrEmpty(newReportText) &&
-                !string.IsNullOrEmpty(selectedAlias) &&
-                adminControl.comboBoxSubjectReport.Text != "Subject:")
+            if (string.IsNullOrEmpty(adminControl!.comboBoxSubjectReport.Text) && string.IsNullOrEmpty(adminControl.rtxReport.Text))
             {
+                // Get the current logged-in user
+                var currentUser = AuthenticationService.CurrentUser;
+                // Retrieve the alias of the user to whom the report is related
+                string selectedAlias = adminControl!.txtAlias.Text;
+                // Retrieve the report text, enclosed in quotes
+                string newReportText = $"\"{adminControl.rtxReport.Text}\"";
+                // Retrieve the selected subject from the dropdown
+                string subject = adminControl.comboBoxSubjectReport.Text;
+                // Generate a unique timestamp for the report file
+                string dateFile = DateTime.Now.ToString("ddMMyyyy-HHmmss");
+
                 // Confirm the save action with the user
                 DialogResult dr = message.MessageConfirmSaveNote(selectedAlias);
                 if (dr == DialogResult.No)
@@ -65,9 +63,10 @@ namespace CRUD_System.Handlers
                 MessageBox.Show("Not Valid! Missing conditions...");
                 return;
             }
-
-            // Clear the report text box after saving
-            adminControl.rtxReport.Text = string.Empty;
+                AdminInterface adminInterface = new AdminInterface();
+                adminInterface.IsReport = false;
+                Debug.WriteLine($"btnSaveReport IsReport: {adminInterface.IsReport}");
+                adminInterface.TextBoxesReportConfig();
         }
 
         /// <summary>
@@ -122,69 +121,80 @@ namespace CRUD_System.Handlers
             listView.Refresh();
         }
 
-        public void DisplayReport(string fileName, string alias)
+        /// <summary>
+        /// Displays the report for a selected user by reading and decrypting the report file, 
+        /// parsing its content, and updating the adminControl fields accordingly.
+        /// </summary>
+        /// <param name="selectedUserString">The selected user string, typically from a list box or list view.</param>
+        /// <param name="selectedAlias">The alias of the selected user, used to locate the report file.</param>
+        public void ReportDisplay(string selectedUserString, string selectedAlias)
         {
-            Debug.WriteLine($"DisplayReport: {fileName}");
+            // Get the root path and construct the file path for the report
             string rootPath = RootPath.GetRootPath();
-            string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), alias, fileName);
+            string isFileName = $"{selectedUserString}_report.csv";
+            string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias, isFileName);
 
-            var reportContent = File.ReadAllText(filePath);
-            var reportContentSplit = reportContent.Split(",");
+            // Check if the adminControl is null to prevent NullReferenceException
+            if (adminControl == null)
+            {
+                Debug.WriteLine("adminControl is null!");
+                return;
+            }
 
-            // Ensure that the data contains enough elements to assign to the controls
+            // Decrypt the report file to make it readable
+            EncryptionManager.DecryptFile(filePath);
+
+            // Read the report file content
+            string reportContent = File.ReadAllText(filePath);
+            string[] reportContentSplit = reportContent.Split(","); // Split content by comma to extract fields
+            string[] isFileNameSplit = isFileName.Split("_"); // Split filename to extract parts like date if needed
+
+            // Ensure the report content has at least the expected number of elements
             if (reportContentSplit.Length >= 5)
             {
-                // Assign the split data to the appropriate fields
-                adminControl!.txtDateReport.Text = reportContentSplit[0]; // Date
-                adminControl.txtAliasNotes.Text = reportContentSplit[1];   // Creator Alias
-                //adminControl.txtSelectedAlias.Text = reportContentSplit[2];  // Selected Alias
-                adminControl.txtSubject.Text = reportContentSplit[3];        // Subject
-                adminControl.rtxReport.Text = reportContentSplit[4].Trim('"'); // Report text
+                // Parse the report content
+                string reportCreator = reportContentSplit[1];               // Creator Alias
+                string reportSubject = reportContentSplit[3];               // Subject
+                string reportTextReport = reportContentSplit[4].Trim('"');  // Report text, remove extra quotes
+                string reportDate = isFileNameSplit[1].Replace("-", " ");   // Format date part of the filename (if applicable)
+
+                // Update the admin control fields with parsed data
+                adminControl.txtCreator.Text = reportCreator; // Creator
+                adminControl.txtSubject.Text = reportSubject; // Subject
+                adminControl.rtxReport.Text = reportTextReport;
+                // Format numbers as DD-MM-YYYY and clean up text
+                adminControl.txtDateReport.Text = Regex.Replace(reportDate
+                                                  .Replace("\"", ""),
+                                                  @"(\d{2})(\d{2})(\d{4})", "$1-$2-$3")
+                                                  .Trim();
             }
             else
             {
-                // Show an error message if the data does not match the expected format
+                // Show an error message if the report content is not in the expected format
                 Debug.WriteLine("The report does not match the expected format.");
                 MessageBox.Show("The report does not match the expected format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            // Re-encrypt the report file after processing to maintain security
+            EncryptionManager.EncryptFile(filePath);
         }
 
-        /*
         /// <summary>
-        /// Loads the report content into the form controls from the provided report content string.
+        /// Parses a date string and returns it in "dd-MM-yyyy" format.
         /// </summary>
-        /// <param name="reportContent">The content of the report as a comma-separated string.</param>
-        public void LoadReport(string reportContent)
+        /// <param name="dateString">The date string to parse.</param>
+        /// <returns>The formatted date string, or "Invalid Date" if parsing fails.</returns>
+        public string FormatDate(string dateString)
         {
-            if (!string.IsNullOrEmpty(reportContent))
+            if (DateTime.TryParse(dateString, out DateTime parsedDate))
             {
-                // Split the content of the report based on commas (considering that content can be inside quotes)
-                string[] reportData = reportContent.Split(new[] { ',' }, 5); // Split into 4 parts maximum
-
-                // Ensure that the data contains enough elements to assign to the controls
-                if (reportData.Length == 5)
-                {
-                    // Assign the split data to the appropriate fields
-                    txtDate.Text = FormatDate(reportData[0]); // Date
-                    txtAliasCreator.Text = reportData[1];   // Creator Alias
-                    txtSelectedAlias.Text = reportData[2];  // Selected Alias
-                    txtSubject.Text = reportData[3];        // Subject
-                    rtxtDisplayReport.Text = reportData[4].Trim('"'); // Report text
-                }
-                else
-                {
-                    // Show an error message if the data does not match the expected format
-                    Debug.WriteLine("The report does not match the expected format.");
-                    MessageBox.Show("The report does not match the expected format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                return parsedDate.ToString("dd-MM-yyyy"); // Format as "dd-MM-yyyy"
             }
             else
             {
-                // Show an error message if the report content is empty
-                Debug.WriteLine("The report content is empty.");
-                MessageBox.Show("The report content is empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine($"Failed to parse the date: {dateString}");
+                return "Invalid Date"; // Fallback for invalid date
             }
         }
-        */
     }
 }

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -19,6 +20,8 @@ namespace CRUD_System.Interfaces
     {
         #region PROPERTIES
         public bool EditMode { get; set; }
+        public bool IsReport { get; set; }
+
 
         private int currentPage = 1; // Track pagenumbers
         private const int itemsPerPage = 15; // Maximum items per page
@@ -186,6 +189,9 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
+            // Empty textboxes report field
+            TextBoxesReportEmpty();
+
             // Check if the cached user data is empty or not loaded
             if (cache.CachedLoginData == null || cache.CachedLoginData.Count == 0)
             {
@@ -583,9 +589,63 @@ namespace CRUD_System.Interfaces
             string currentDate = Timers.CurrentDate.ToShortDateString();
             string currentTime = Timers.CurrentTime.ToString(@"hh\:mm\:ss");
 
-            adminControl.txtAliasNotes.Text = adminControl.txtAlias.Text;
-            adminControl.txtDateReport.Text = $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}";
+            adminControl.txtAliasReport.Text = adminControl.txtAlias.Text;
         }
         #endregion TEXTBOXES ADMIN
+
+        #region TEXTBOXES REPORT
+        /*
+        public void TextBoxesReportConfig(string[] reportContentSplit)
+        {
+            ReportManager reportManager = new ReportManager(adminControl);
+            if (adminControl == null) return;
+
+            string reportDate = reportManager.FormatDate(reportContentSplit[0]); // Date
+            string reportCreator = reportContentSplit[1];                        // Creator Alias
+            string reportSubject = reportContentSplit[3];                        // Subject
+            string reportTextReport = reportContentSplit[4].Trim('"');           // Report text
+
+            adminControl.txtDateReport.Text = ReportManager.IsReport ? reportDate : DateTime.Now.ToString("dd-MM-yyyy");
+            adminControl.txtCreator.Text = reportCreator;
+            adminControl.txtSubject.Text = reportSubject;
+            adminControl.rtxReport.Text = reportTextReport;
+
+            adminControl.txtCreator.Visible = !ReportManager.IsReport;
+            adminControl.txtSubject.Visible = !ReportManager.IsReport;
+            adminControl.rtxReport.ReadOnly = !ReportManager.IsReport;
+            adminControl.comboBoxSubjectReport.Visible = ReportManager.IsReport;
+
+            adminControl.btnCreateReport.Visible = ReportManager.IsReport;
+            adminControl.btnSaveReport.Visible = ReportManager.IsReport;
+        }
+        */
+
+        public void TextBoxesReportEmpty()
+        {
+            adminControl.txtDateReport.Text = string.Empty;
+            adminControl.txtCreator.Text = string.Empty;
+            adminControl.txtSubject.Text = string.Empty;
+            adminControl.rtxReport.Text = string.Empty;
+        }
+
+
+
+        public void TextBoxesReportConfig()
+        {
+            adminControl.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
+
+            adminControl.txtSubject.Visible = !IsReport;
+            adminControl.txtCreator.Visible = !IsReport;
+            adminControl.txtDateReport.Visible = IsReport;
+            adminControl.rtxReport.ReadOnly = !IsReport;
+            
+            adminControl.comboBoxSubjectReport.Visible = IsReport;
+            
+            adminControl.btnCreateReport.Text = adminControl.ToggleIsReportMode() ? "Report" : "Cancel";
+            adminControl.rtxReport.BackColor = adminControl.ToggleIsReportMode() ? Color.White : Color.LightGray;
+            adminControl.btnSaveReport.Visible = IsReport;
+            adminControl.listViewFiles.SelectedItems.Clear();
+        }
+        #endregion TEXTBOXES REPORT
     }
 }

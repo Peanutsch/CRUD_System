@@ -36,17 +36,16 @@ namespace CRUD_System
         readonly ProfileManager profileManager = new ProfileManager();
         readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
         readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        private ReportManager reportManager;
 
         bool isAdmin;
         readonly bool onlineStatus = false;
         readonly bool isSick = false;
+        bool editMode = false;
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
 
-
-
-        bool editMode = false;
         #endregion PROPERTIES
 
         #region Constructor
@@ -57,6 +56,8 @@ namespace CRUD_System
             // Assign the UserInterface field; if no instance is provided, create a new UserInterface instance
             this.adminInterface = adminInterface ?? new AdminInterface(this);
 
+            reportManager = new ReportManager(this);
+
             // Load data_users.csv for display in listbox
             this.adminInterface.LoadDetailsListBox();
         }
@@ -64,12 +65,7 @@ namespace CRUD_System
 
         public void UserControl_Load(object sender, EventArgs e)
         {
-            //ListViewFiles listViewFiles = new ListViewFiles(this);
-            AdminMainControl adminControl = new AdminMainControl();
-            string selectedAlias = adminControl.txtAlias.Text;
-            //string directoryPath = FindCSVFiles.FindReportFile(selectedAlias, "report");
-            //listViewFiles.LoadFilesIntoListView(directoryPath, selectedAlias);
-            //listViewFiles.LoadFilesIntoListView(directoryPath, selectedAlias);
+            string selectedAlias = txtAlias.Text;
         }
 
         #region BUTTONS SoC (Seperate of Concerns)
@@ -172,17 +168,6 @@ namespace CRUD_System
         }
 
         /// <summary>
-        /// Handles the event when the 'Is Admin' checkbox state changes.
-        /// Marks the current user as an admin when the checkbox is checked.
-        /// </summary>
-        /// <param name="sender">The source of the event (the CheckBox).</param>
-        /// <param name="e">The event data (checkbox change).</param>
-        private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
-        {
-            isAdmin = chkIsAdmin.Checked;
-        }
-
-        /// <summary>
         /// Handles click event to open for for creating new password 
         /// </summary>
         /// <param name="sender">The source of the event</param>
@@ -238,25 +223,6 @@ namespace CRUD_System
 
             return modus;
         }
-
-        /// <summary>
-        /// Handles the selection change event for the ListBox in the admin interface.
-        /// Triggers the appropriate selection handler in AdminInterface.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
-        public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            listViewFiles.Items.Clear();
-            adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
-        }
-
-        private void listBoxLogs_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // 
-        }
-
-
 
         /// <summary>
         /// Handles the drawing of items in the ListBox. This method delegates the actual drawing 
@@ -343,6 +309,7 @@ namespace CRUD_System
             }
         }
 
+        /*
         /// <summary>
         /// Handles the double-click event for the ListView displaying files.
         /// </summary>
@@ -394,31 +361,36 @@ namespace CRUD_System
                 }
             });
         }
+        */
 
-        private void buttonEmptyReport_Click(object sender, EventArgs e)
+        public bool ToggleIsReportMode()
         {
-            string selectedAlias = txtAlias.Text;
-            string newReportText = rtxReport.Text;
-
-            if (!string.IsNullOrEmpty(newReportText) && !string.IsNullOrEmpty(selectedAlias))
-            {
-                // Clean up rtxNewReport
-                rtxReport.Text = string.Empty;
-            }
-            else
-            {
-                Debug.WriteLine("No text!");
-                MessageBox.Show("No text!");
-                return;
-            }
+            bool modus = adminInterface.IsReport = !adminInterface.IsReport;
+            return modus;
         }
 
-        private void buttonSaveReport_Click(object sender, EventArgs e)
+        private void buttonMakeReport_Click(object sender, EventArgs e)
+        {
+            interactionHandler.PerformActionIfUserSelected(() =>
+            {
+                adminInterface.TextBoxesReportEmpty();
+                adminInterface.IsReport = ToggleIsReportMode();
+
+                Debug.WriteLine($"btnMakeReport IsRepor: {adminInterface.IsReport}");
+
+                adminInterface.TextBoxesReportConfig();
+            },
+            () => message.MessageInvalidNoUserSelected());
+        }
+
+        private void btnSaveReport_Click(object sender, EventArgs e)
         {
             ReportManager reportManager = new ReportManager(this);
-            reportManager.ButtonSaveReport_ClickHandler();
+            reportManager.btnSaveReport();
         }
+        #endregion BUTTONS SoC (Seperate of Concerns)
 
+        #region KEY HANDLERS
         /// <summary>
         /// Handles the KeyPress event for the txtPhonenumber textbox.
         /// Allows only numeric digits, the '+' and '-' characters, and the Backspace key.
@@ -488,10 +460,68 @@ namespace CRUD_System
                 e.SuppressKeyPress = true;
             }
         }
+        #endregion KEY HANDLERS
 
-        #endregion BUTTONS SoC (Seperate of Concerns)
+        #region SELECTED ITEM CHANGED
+        /// <summary>
+        /// Handles the event when the 'Is Admin' checkbox state changes.
+        /// Marks the current user as an admin when the checkbox is checked.
+        /// </summary>
+        /// <param name="sender">The source of the event (the CheckBox).</param>
+        /// <param name="e">The event data (checkbox change).</param>
+        private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
+        {
+            isAdmin = chkIsAdmin.Checked;
+        }
 
-        #region TextBox Search
+        /// <summary>
+        /// Handles the selection change event for the ListBox in the admin interface.
+        /// Triggers the appropriate selection handler in AdminInterface.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            listViewFiles.Items.Clear();
+
+            /*
+            string selectedUserString = listViewFiles.SelectedItems[0].Text;
+            string selectedAlias = txtAlias.Text;
+
+            Debug.WriteLine($"ListBoxAdmin_SelectedIndexChanged> isSelectedAlias = {selectedAlias}");
+
+            reportManager.ReportHandler(selectedUserString, selectedAlias);
+            */
+            adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
+        }
+
+        private void listBoxLogs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 
+        }
+        private void listViewFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Controleer of een item geselecteerd is
+            if (listViewFiles.SelectedItems.Count > 0)
+            {
+                // Verkrijg de tekst van het eerste geselecteerde item
+                string selectedUserString = listViewFiles.SelectedItems[0].Text;
+
+                if (!string.IsNullOrEmpty(selectedUserString))
+                {
+                    string selectedAlias = txtAlias.Text;
+                    Debug.WriteLine($"listViewFiles_SelectedIndexChanged> isSelectedAlias = {selectedAlias}");
+                    reportManager.ReportDisplay(selectedUserString, selectedAlias);
+                }
+            }
+            else
+            {
+                Debug.WriteLine("SelectedIndex> Geen item geselecteerd.");
+            }
+        }
+        #endregion SELECTED ITEM CHANGED
+
+        #region TEXTBOX SEARCH
         public int searchCurrentPage = 1; // Current page number for the search results, starting at 1
         private const int searchItemsPerPage = 15; // Maximum number of items displayed per page during search
         private List<string> currentSearchResults = new(); // Cache to store the current search results for efficient pagination
@@ -563,29 +593,7 @@ namespace CRUD_System
             // Update the page navigation label to reflect the current page and total pages
             adminInterface.UpdatePageLabel();
         }
-        #endregion TextBox Search
+        #endregion TEXTBOX SEARCH
 
-        private void listViewFiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ListViewFiles listView = new ListViewFiles();
-
-            // Controleer of een item geselecteerd is
-            if (listViewFiles.SelectedItems.Count > 0)
-            {
-                // Verkrijg de tekst van het eerste geselecteerde item
-                string selectedUserString = listViewFiles.SelectedItems[0].Text;
-
-                if (!string.IsNullOrEmpty(selectedUserString))
-                {
-                    //Debug.WriteLine($"SelectedIndex> Selected Item: {selectedUserString}");
-                    ReportManager reportManager = new ReportManager();
-                    reportManager.DisplayReport(selectedUserString + "_report.csv", txtAlias.Text);
-                }
-            }
-            else
-            {
-                Debug.WriteLine("SelectedIndex> Geen item geselecteerd.");
-            }
-        }
     }
 }

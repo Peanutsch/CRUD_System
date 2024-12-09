@@ -84,14 +84,12 @@ namespace CRUD_System.Handlers
         {
             try
             {
-                string rootPath = RootPath.GetRootPath();
-                string fileName = selectedUserString + "_report.csv";
-
+                int counter = 1;
                 if (!string.IsNullOrEmpty(selectedUserString))
                 {
+                    string rootPath = RootPath.GetRootPath();
+                    string fileName = selectedUserString + "_report.csv";
                     string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), alias, fileName);
-                    Debug.WriteLine($"GetSubject> fileName: {fileName}");
-                    Debug.WriteLine($"GetSubject> filePath: {filePath}");
 
                     EncryptionManager.DecryptFile(filePath);
 
@@ -105,17 +103,21 @@ namespace CRUD_System.Handlers
 
                         EncryptionManager.EncryptFile(filePath);
 
+                        counter++;
                         return isSubject;
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.WriteLine($"GetSubject> Error: {ex.Message}");
+
+                return string.Empty;
+
             }
             return string.Empty;
         }
 
+        /*
         /// <summary>
         /// Registers the event handler for the ListView's double-click event.
         /// </summary>
@@ -139,6 +141,7 @@ namespace CRUD_System.Handlers
                 }
             };
         }
+        */
         #endregion PROCESS
     }
 }

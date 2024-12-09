@@ -18,7 +18,7 @@ namespace CRUD_System
         {
             InitializeComponent();
         }
-
+        /*
         /// <summary>
         /// Loads the report content into the form controls from the provided report content string.
         /// </summary>
@@ -72,7 +72,7 @@ namespace CRUD_System
                 return "Invalid Date"; // Fallback for invalid date
             }
         }
-
+        */
 
         public void btnCloseForm_Click(object sender, EventArgs e)
         {
