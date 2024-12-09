@@ -54,33 +54,67 @@ namespace CRUD_System.Handlers
 
                     foreach (FileInfo fileInfo in fileInfos)
                     {
-                        // Create a ListViewItem for each file, using Name and Date
-                        ListViewItem item = new ListViewItem(fileInfo.Name);
-                        item.SubItems.Add(fileInfo.CreationTime.ToString("dd/MM/yyyy"));
+                        string[] itemSplit = fileInfo.Name.Split("_");
+                        if (itemSplit.Length >= 2)
+                        {
+                            string itemUse = string.Join("_", itemSplit[0], itemSplit[1]);
+                            string subject = GetSubject(itemUse, itemSplit[0]); // itemSplit[0] is alias
 
-                        // Set the Tag property to the full file path
-                        item.Tag = fileInfo.FullName;
+                            // Create ListViewItem
+                            ListViewItem item = new ListViewItem(itemUse);
 
-                        // Add the item to the ListView
-                        adminControl.listViewFiles.Items.Add(item);
+                            ////// GET FILE SUBJECT AS SUBITEMS ////
+                            item.SubItems.Add(!string.IsNullOrEmpty(subject) ? subject : "Unknown");
+
+                            // Add item to ListView
+                            adminControl.listViewFiles.Items.Add(item);
+
+                            // Set the Tag property to the full file path
+                            item.Tag = fileInfo.FullName;
+                        }
                     }
 
                     // Force a refresh of the ListView to ensure it's displaying correctly
                     adminControl.listViewFiles.Refresh();
                 }
-                else
-                {
-                    // No error message: directory and file will be made when report file created
-                    return;
-                }
-            }
-            else
-            {
-                // No error message: directory and file will be made when report file created
-                return;
             }
         }
 
+        public string GetSubject(string selectedUserString, string alias)
+        {
+            try
+            {
+                string rootPath = RootPath.GetRootPath();
+                string fileName = selectedUserString + "_report.csv";
+
+                if (!string.IsNullOrEmpty(selectedUserString))
+                {
+                    string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), alias, fileName);
+                    Debug.WriteLine($"GetSubject> fileName: {fileName}");
+                    Debug.WriteLine($"GetSubject> filePath: {filePath}");
+
+                    EncryptionManager.DecryptFile(filePath);
+
+                    var readFile = File.ReadAllLines(filePath)
+                                       .Select(line => line.Split(",")) // Split each line into an array of fields
+                                       .ToList(); // Store all records in readFile
+
+                    foreach (string[] line in readFile)
+                    {
+                        string isSubject = line[3];
+
+                        EncryptionManager.EncryptFile(filePath);
+
+                        return isSubject;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"GetSubject> Error: {ex.Message}");
+            }
+            return string.Empty;
+        }
 
         /// <summary>
         /// Registers the event handler for the ListView's double-click event.
@@ -92,8 +126,6 @@ namespace CRUD_System.Handlers
             {
                 // Check if any item is selected and if the Tag property is not null
                 var selectedItem = adminControl.listViewFiles.SelectedItems.Cast<ListViewItem>().FirstOrDefault();
-                //Debug.WriteLine($"ListViewFiles HandleDoubleClick selectedItem: {selectedItem}");
-
                 if (selectedItem?.Tag is string filePath && !string.IsNullOrEmpty(filePath))
                 {
                     // Invoke the action if filePath is valid

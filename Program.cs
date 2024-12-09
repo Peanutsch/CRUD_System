@@ -33,6 +33,7 @@ namespace CRUD_System
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
             //EncryptionManager.EncryptFile(filePath.HRFilePath); // hr.csv
             //EncryptionManager.EncryptFile(filePath.ReportFilePath); // {alias}_report.csv
+            //EncryptFile("peer001", "report", "peer001_09122024-103625_report.csv");
 
             //DecryptSingleCSVFile("mist001", "logEvents");
             //DecryptSingleCSVFile("peer001", "logEvents");
@@ -300,26 +301,30 @@ namespace CRUD_System
         #endregion CREATE CSV FILES
 
         #region DECRYPT FILE
-        public static void DecryptSingleCSVFile(string alias, string directoryName)
+        public static void DecryptSingleCSVFile(string alias, string directoryName, string fileName)
         {
             string rootPath = RootPath.GetRootPath();
             string logPath = Path.Combine(rootPath, directoryName);
             
             //string file_logs = Path.Combine(logPath, $"{alias}_logs.csv");
-            EncryptionManager.DecryptFile(Path.Combine(logPath, "2024", alias, $"{alias}_{directoryName}.csv"));
+            EncryptionManager.DecryptFile(Path.Combine(logPath, "2024", alias, fileName));
         }
         #endregion DECRYPT FILE
 
         #region ENCRYPT FILE
-        public static void EncryptFile(string alias)
+        public static void EncryptFile(string alias, string directoryName, string fileName)
         {
             // Set rootpath
             string rootPath = RootPath.GetRootPath();
             // Set map
-            string logPath = Path.Combine(rootPath, "Logs");
+            string logPath = Path.Combine(rootPath, directoryName);
 
-            //string file_logs = Path.Combine(logPath, $"{alias}_logs.csv");
-            EncryptionManager.EncryptFile(Path.Combine(logPath, $"{alias}_logs.csv"));
+            Debug.WriteLine($"alias: {alias}");
+            Debug.WriteLine($"directoryName: {directoryName}");
+            Debug.WriteLine($"fileName: {fileName}");
+
+            EncryptionManager.EncryptFile(Path.Combine(logPath, "2024", alias, fileName));
+            Debug.WriteLine($"Encrypted: {Path.Combine(logPath, "2024", alias, fileName)}");
         }
         #endregion ENCRYPT FILE
     }

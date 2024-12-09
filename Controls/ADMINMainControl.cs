@@ -40,8 +40,6 @@ namespace CRUD_System
         bool isAdmin;
         readonly bool onlineStatus = false;
         readonly bool isSick = false;
-        //private bool previousSickStatus = false;
-
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
@@ -60,7 +58,6 @@ namespace CRUD_System
             this.adminInterface = adminInterface ?? new AdminInterface(this);
 
             // Load data_users.csv for display in listbox
-            //EncryptionManager.DecryptFile(path.UserFilePath);
             this.adminInterface.LoadDetailsListBox();
         }
         #endregion CONSTRUCTOR
@@ -381,8 +378,8 @@ namespace CRUD_System
                 // Read the content of the decrypted file
                 string reportContent = File.ReadAllText(filePath);
                 string selectedAlias = txtAlias.Text;
-                // Open the ShowReportForm via FormInteractionHandler
 
+                // Open the ShowReportForm via FormInteractionHandler
                 interactionHandler.Open_ShowReportForm(this, reportContent, selectedAlias); // Pass the current UserControl (e.g., parentControl)
 
                 // After viewing, re-encrypt the file
@@ -408,7 +405,7 @@ namespace CRUD_System
                 // Clean up rtxNewReport
                 rtxNewReport.Text = string.Empty;
             }
-            else 
+            else
             {
                 Debug.WriteLine("No text!");
                 MessageBox.Show("No text!");
@@ -567,5 +564,27 @@ namespace CRUD_System
             adminInterface.UpdatePageLabel();
         }
         #endregion TextBox Search
+
+        private void listViewFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListViewFiles listView = new ListViewFiles();
+
+            // Controleer of een item geselecteerd is
+            if (listViewFiles.SelectedItems.Count > 0)
+            {
+                // Verkrijg de tekst van het eerste geselecteerde item
+                string selectedUserString = listViewFiles.SelectedItems[0].Text;
+
+                if (!string.IsNullOrEmpty(selectedUserString))
+                {
+                    Debug.WriteLine($"SelectedIndex> Selected Item: {selectedUserString}");
+                    //listView.GetSubject(selectedUserString, txtAlias.Text);
+                }
+            }
+            else
+            {
+                Debug.WriteLine("SelectedIndex> Geen item geselecteerd.");
+            }
+        }
     }
 }
