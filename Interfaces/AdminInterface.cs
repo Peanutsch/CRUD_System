@@ -584,7 +584,7 @@ namespace CRUD_System.Interfaces
             string currentTime = Timers.CurrentTime.ToString(@"hh\:mm\:ss");
 
             adminControl.txtAliasNotes.Text = adminControl.txtAlias.Text;
-            adminControl.txtCurrentDateReport.Text = $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}";
+            adminControl.txtDateReport.Text = $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}";
         }
         #endregion TEXTBOXES ADMIN
     }

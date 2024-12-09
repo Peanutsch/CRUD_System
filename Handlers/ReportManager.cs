@@ -34,7 +34,7 @@ namespace CRUD_System.Handlers
             // Retrieve the alias of the user to whom the report is related
             string selectedAlias = adminControl!.txtAlias.Text;
             // Retrieve the report text, enclosed in quotes
-            string newReportText = $"\"{adminControl.rtxNewReport.Text}\"";
+            string newReportText = $"\"{adminControl.rtxReport.Text}\"";
             // Retrieve the selected subject from the dropdown
             string subject = adminControl.comboBoxSubjectReport.Text;
             // Generate a unique timestamp for the report file
@@ -67,7 +67,7 @@ namespace CRUD_System.Handlers
             }
 
             // Clear the report text box after saving
-            adminControl.rtxNewReport.Text = string.Empty;
+            adminControl.rtxReport.Text = string.Empty;
         }
 
         /// <summary>
@@ -121,5 +121,70 @@ namespace CRUD_System.Handlers
             // Ensure the ListView visually updates
             listView.Refresh();
         }
+
+        public void DisplayReport(string fileName, string alias)
+        {
+            Debug.WriteLine($"DisplayReport: {fileName}");
+            string rootPath = RootPath.GetRootPath();
+            string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), alias, fileName);
+
+            var reportContent = File.ReadAllText(filePath);
+            var reportContentSplit = reportContent.Split(",");
+
+            // Ensure that the data contains enough elements to assign to the controls
+            if (reportContentSplit.Length >= 5)
+            {
+                // Assign the split data to the appropriate fields
+                adminControl!.txtDateReport.Text = reportContentSplit[0]; // Date
+                adminControl.txtAliasNotes.Text = reportContentSplit[1];   // Creator Alias
+                //adminControl.txtSelectedAlias.Text = reportContentSplit[2];  // Selected Alias
+                adminControl.txtSubject.Text = reportContentSplit[3];        // Subject
+                adminControl.rtxReport.Text = reportContentSplit[4].Trim('"'); // Report text
+            }
+            else
+            {
+                // Show an error message if the data does not match the expected format
+                Debug.WriteLine("The report does not match the expected format.");
+                MessageBox.Show("The report does not match the expected format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /*
+        /// <summary>
+        /// Loads the report content into the form controls from the provided report content string.
+        /// </summary>
+        /// <param name="reportContent">The content of the report as a comma-separated string.</param>
+        public void LoadReport(string reportContent)
+        {
+            if (!string.IsNullOrEmpty(reportContent))
+            {
+                // Split the content of the report based on commas (considering that content can be inside quotes)
+                string[] reportData = reportContent.Split(new[] { ',' }, 5); // Split into 4 parts maximum
+
+                // Ensure that the data contains enough elements to assign to the controls
+                if (reportData.Length == 5)
+                {
+                    // Assign the split data to the appropriate fields
+                    txtDate.Text = FormatDate(reportData[0]); // Date
+                    txtAliasCreator.Text = reportData[1];   // Creator Alias
+                    txtSelectedAlias.Text = reportData[2];  // Selected Alias
+                    txtSubject.Text = reportData[3];        // Subject
+                    rtxtDisplayReport.Text = reportData[4].Trim('"'); // Report text
+                }
+                else
+                {
+                    // Show an error message if the data does not match the expected format
+                    Debug.WriteLine("The report does not match the expected format.");
+                    MessageBox.Show("The report does not match the expected format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                // Show an error message if the report content is empty
+                Debug.WriteLine("The report content is empty.");
+                MessageBox.Show("The report content is empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        */
     }
 }

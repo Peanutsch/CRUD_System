@@ -398,12 +398,12 @@ namespace CRUD_System
         private void buttonEmptyReport_Click(object sender, EventArgs e)
         {
             string selectedAlias = txtAlias.Text;
-            string newReportText = rtxNewReport.Text;
+            string newReportText = rtxReport.Text;
 
             if (!string.IsNullOrEmpty(newReportText) && !string.IsNullOrEmpty(selectedAlias))
             {
                 // Clean up rtxNewReport
-                rtxNewReport.Text = string.Empty;
+                rtxReport.Text = string.Empty;
             }
             else
             {
@@ -577,8 +577,9 @@ namespace CRUD_System
 
                 if (!string.IsNullOrEmpty(selectedUserString))
                 {
-                    Debug.WriteLine($"SelectedIndex> Selected Item: {selectedUserString}");
-                    //listView.GetSubject(selectedUserString, txtAlias.Text);
+                    //Debug.WriteLine($"SelectedIndex> Selected Item: {selectedUserString}");
+                    ReportManager reportManager = new ReportManager();
+                    reportManager.DisplayReport(selectedUserString + "_report.csv", txtAlias.Text);
                 }
             }
             else

@@ -65,12 +65,14 @@
             this.columnHeader1 = new ColumnHeader();
             this.columnHeader2 = new ColumnHeader();
             this.lblReports = new Label();
-            this.txtCurrentDateReport = new TextBox();
+            this.txtDateReport = new TextBox();
             this.txtAliasNotes = new TextBox();
             this.comboBoxSubjectReport = new ComboBox();
-            this.rtxNewReport = new RichTextBox();
+            this.rtxReport = new RichTextBox();
             this.buttonEmptyReport = new Button();
             this.buttonSaveReport = new Button();
+            this.txtSubject = new TextBox();
+            this.txtCreator = new TextBox();
             this.SuspendLayout();
             // 
             // txtName
@@ -283,9 +285,9 @@
             // 
             // btnForceLogOutUser
             // 
-            this.btnForceLogOutUser.BackColor = SystemColors.ActiveCaption;
+            this.btnForceLogOutUser.BackColor = Color.LightGreen;
             this.btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnForceLogOutUser.Location = new Point(333, 266);
+            this.btnForceLogOutUser.Location = new Point(392, 267);
             this.btnForceLogOutUser.Name = "btnForceLogOutUser";
             this.btnForceLogOutUser.Size = new Size(150, 30);
             this.btnForceLogOutUser.TabIndex = 32;
@@ -433,22 +435,23 @@
             this.lblReports.TabIndex = 48;
             this.lblReports.Text = "Reports";
             // 
-            // txtCurrentDateReport
+            // txtDateReport
             // 
-            this.txtCurrentDateReport.Enabled = false;
-            this.txtCurrentDateReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.txtCurrentDateReport.Location = new Point(1335, 67);
-            this.txtCurrentDateReport.Multiline = true;
-            this.txtCurrentDateReport.Name = "txtCurrentDateReport";
-            this.txtCurrentDateReport.Size = new Size(140, 23);
-            this.txtCurrentDateReport.TabIndex = 45;
-            this.txtCurrentDateReport.TextAlign = HorizontalAlignment.Center;
+            this.txtDateReport.Enabled = false;
+            this.txtDateReport.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.txtDateReport.Location = new Point(1335, 67);
+            this.txtDateReport.Multiline = true;
+            this.txtDateReport.Name = "txtDateReport";
+            this.txtDateReport.PlaceholderText = "Date";
+            this.txtDateReport.Size = new Size(140, 23);
+            this.txtDateReport.TabIndex = 45;
+            this.txtDateReport.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAliasNotes
             // 
             this.txtAliasNotes.Enabled = false;
             this.txtAliasNotes.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.txtAliasNotes.Location = new Point(1189, 35);
+            this.txtAliasNotes.Location = new Point(1189, 5);
             this.txtAliasNotes.Name = "txtAliasNotes";
             this.txtAliasNotes.PlaceholderText = "Alias";
             this.txtAliasNotes.ReadOnly = true;
@@ -458,6 +461,7 @@
             // 
             // comboBoxSubjectReport
             // 
+            this.comboBoxSubjectReport.Enabled = false;
             this.comboBoxSubjectReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.comboBoxSubjectReport.FormattingEnabled = true;
             this.comboBoxSubjectReport.Items.AddRange(new object[] { "Report", "Memo", "Evaluation", "Other" });
@@ -467,15 +471,16 @@
             this.comboBoxSubjectReport.TabIndex = 46;
             this.comboBoxSubjectReport.Text = "Subject:";
             // 
-            // rtxNewReport
+            // rtxReport
             // 
-            this.rtxNewReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.rtxNewReport.Location = new Point(1189, 97);
-            this.rtxNewReport.Name = "rtxNewReport";
-            this.rtxNewReport.ScrollBars = RichTextBoxScrollBars.Vertical;
-            this.rtxNewReport.Size = new Size(288, 316);
-            this.rtxNewReport.TabIndex = 47;
-            this.rtxNewReport.Text = "";
+            this.rtxReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.rtxReport.Location = new Point(1189, 97);
+            this.rtxReport.Name = "rtxReport";
+            this.rtxReport.ReadOnly = true;
+            this.rtxReport.ScrollBars = RichTextBoxScrollBars.Vertical;
+            this.rtxReport.Size = new Size(288, 316);
+            this.rtxReport.TabIndex = 47;
+            this.rtxReport.Text = "";
             // 
             // buttonEmptyReport
             // 
@@ -501,15 +506,41 @@
             this.buttonSaveReport.UseVisualStyleBackColor = false;
             this.buttonSaveReport.Click += this.buttonSaveReport_Click;
             // 
+            // txtSubject
+            // 
+            this.txtSubject.Enabled = false;
+            this.txtSubject.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.txtSubject.Location = new Point(1189, 38);
+            this.txtSubject.Multiline = true;
+            this.txtSubject.Name = "txtSubject";
+            this.txtSubject.PlaceholderText = "Subject";
+            this.txtSubject.Size = new Size(140, 23);
+            this.txtSubject.TabIndex = 50;
+            this.txtSubject.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtCreator
+            // 
+            this.txtCreator.Enabled = false;
+            this.txtCreator.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.txtCreator.Location = new Point(1335, 38);
+            this.txtCreator.Multiline = true;
+            this.txtCreator.Name = "txtCreator";
+            this.txtCreator.PlaceholderText = "Creator";
+            this.txtCreator.Size = new Size(140, 23);
+            this.txtCreator.TabIndex = 51;
+            this.txtCreator.TextAlign = HorizontalAlignment.Center;
+            // 
             // AdminMainControl
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
             this.BorderStyle = BorderStyle.FixedSingle;
-            this.Controls.Add(this.rtxNewReport);
+            this.Controls.Add(this.txtCreator);
+            this.Controls.Add(this.txtSubject);
+            this.Controls.Add(this.rtxReport);
             this.Controls.Add(this.buttonSaveReport);
-            this.Controls.Add(this.txtCurrentDateReport);
+            this.Controls.Add(this.txtDateReport);
             this.Controls.Add(this.comboBoxSubjectReport);
             this.Controls.Add(this.lblReports);
             this.Controls.Add(this.buttonEmptyReport);
@@ -571,11 +602,13 @@
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         public Label lblReports;
-        public TextBox txtCurrentDateReport;
+        public TextBox txtDateReport;
         public TextBox txtAliasNotes;
         public ComboBox comboBoxSubjectReport;
-        public RichTextBox rtxNewReport;
+        public RichTextBox rtxReport;
         public Button buttonEmptyReport;
         public Button buttonSaveReport;
+        public TextBox txtSubject;
+        public TextBox txtCreator;
     }
 }
