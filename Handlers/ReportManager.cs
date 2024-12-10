@@ -33,39 +33,34 @@ namespace CRUD_System.Handlers
         {
             if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && !string.IsNullOrEmpty(adminControl.rtxReport.Text))
             {
-                
-                var currentUser = AuthenticationService.CurrentUser;                                // Get the current logged-in user
-                string selectedAlias = adminControl!.txtAlias.Text;                                 // Retrieve the alias of the user to whom the report is related
-                string newReportText = $"{adminControl.rtxReport.Text.Replace(",", ";")}";      // Retrieve the report text, replacing "," with ";"
-                string subject = adminControl.comboBoxSubjectReport.Text;                           // Retrieve the selected subject from the dropdown
-                string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");                        // Generate a unique timestamp for the report file
+                var currentUser = AuthenticationService.CurrentUser;
+                string selectedAlias = adminControl!.txtAlias.Text;
+                string newReportText = $"{adminControl.rtxReport.Text.Replace(",", ";")}";
+                string subject = adminControl.comboBoxSubjectReport.Text;
+                string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
 
-                // Confirm the save action with the user
                 DialogResult dr = message.MessageConfirmSaveNote(selectedAlias);
                 if (dr == DialogResult.No)
                 {
-                    return; // Exit if the user cancels the action
+                    return;
                 }
 
-                // Create the report file in the format: {Date},{CreatorAlias},{UserAlias},{Subject},{Report}
                 CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser!, selectedAlias, subject, newReportText);
 
-                AdminInterface adminInterface = new AdminInterface();
-                adminInterface.IsReport = false;
-                Debug.WriteLine($"btnSaveReport IsReport: {adminInterface.IsReport}");
-                adminInterface.TextBoxesReportConfig();
+                // Reset to default state after saving
+                ToggleReportMode(false); // Exit report mode
             }
             else
             {
-                // Log and display a message if validation fails
                 Debug.WriteLine("Not Valid! Missing conditions...");
                 MessageBox.Show("Not Valid! Missing conditions...");
                 return;
             }
-            // Clear rtxReport, refresh ListViewFiles
+
             adminControl.rtxReport.Clear();
-            RefreshListViewFiles();    
+            RefreshListViewFiles();
         }
+
 
         /// <summary>
         /// Refreshes the ListView in the UI to display the latest report files.
@@ -99,17 +94,6 @@ namespace CRUD_System.Handlers
                 // Add each file to the ListView
                 foreach (var fileInfo in fileInfos)
                 {
-                    /*
-                    // Create a ListViewItem with the file name
-                    ListViewItem item = new ListViewItem(fileInfo.Name);
-                    // Add the creation date as a sub-item
-                    item.SubItems.Add(fileInfo.CreationTime.ToString("dd/MM/yyyy"));
-                    // Store the full file path in the Tag property
-                    item.Tag = fileInfo.FullName;
-
-                    // Add the item to the ListView
-                    listView.Items.Add(item);
-                    */
                     string[] itemSplit = fileInfo.Name.Split("_");
                     if (itemSplit.Length >= 2)
                     {
@@ -217,5 +201,31 @@ namespace CRUD_System.Handlers
                 return "Invalid Date"; // Fallback for invalid date
             }
         }
+
+        public void ToggleReportMode(bool enable)
+        {
+            AdminInterface adminInterface = new AdminInterface();
+            adminInterface.IsReport = enable;
+
+            Debug.WriteLine($"ToggleReportMode IsReport: {adminInterface.IsReport}");
+
+            adminInterface.TextBoxesReportEmpty();
+
+            adminControl!.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
+
+            adminControl.txtSubject.Visible = !adminInterface.IsReport;
+            adminControl.txtCreator.Visible = !adminInterface.IsReport;
+            adminControl.rtxReport.ReadOnly = !adminInterface.IsReport;
+            adminControl.lblCreatedBy.Visible = !adminInterface.IsReport;
+            adminControl.lblCurrentDate.Visible = adminInterface.IsReport;
+
+            adminControl.comboBoxSubjectReport.Visible = adminInterface.IsReport;
+
+            adminControl.btnCreateReport.Text = adminInterface.IsReport ? "Exit" : "Report";
+            adminControl.rtxReport.BackColor = adminInterface.IsReport ? Color.White : Color.LightGray;
+            adminControl.btnSaveReport.Visible = adminInterface.IsReport;
+            adminControl.listViewFiles.SelectedItems.Clear();
+        }
+
     }
 }

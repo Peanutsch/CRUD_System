@@ -375,6 +375,7 @@ namespace CRUD_System
             {
                 adminInterface.TextBoxesReportEmpty();
                 adminInterface.IsReport = ToggleIsReportMode();
+                //reportManager.ToggleReportMode(true);
 
                 Debug.WriteLine($"btnMakeReport IsReport: {adminInterface.IsReport}");
 
