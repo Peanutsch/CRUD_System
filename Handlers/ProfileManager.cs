@@ -305,6 +305,11 @@ namespace CRUD_System.Handlers
 
                 // Notify the admin that the account creation was successful
                 message.MessageNewAccountSucces(isAlias);
+
+                AdminInterface adminInterface = new AdminInterface();
+                AdminMainControl adminControl = new AdminMainControl();
+                adminControl.listBoxAdmin.Items.Clear();
+                adminInterface.ReloadListBoxWithSelection(isAlias);
             }
         }
 

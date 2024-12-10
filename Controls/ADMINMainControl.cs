@@ -309,60 +309,6 @@ namespace CRUD_System
             }
         }
 
-        /*
-        /// <summary>
-        /// Handles the double-click event for the ListView displaying files.
-        /// </summary>
-        /// <param name="sender">The source of the event (typically the ListView).</param>
-        /// <param name="e">The event arguments.</param>
-        public void listViewFiles_DoubleClick(object sender, EventArgs e)
-        {
-            ListViewFiles listViewFiles = new ListViewFiles(this);
-
-            listViewFiles.HandleDoubleClick(filePath =>
-            {
-                // Perform decryption of the selected file
-                try
-                {
-                    if (File.Exists(filePath))
-                    {
-                        EncryptionManager.DecryptFile(filePath);  // Decrypt the specific file
-                    }
-                    else
-                    {
-                        Debug.WriteLine("The selected file does not exist.");
-                        MessageBox.Show("The selected file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error decrypting file: {ex.Message}");
-                    MessageBox.Show($"Error decrypting file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // Read the content of the decrypted file
-                string reportContent = File.ReadAllText(filePath);
-                string selectedAlias = txtAlias.Text;
-
-                // Open the ShowReportForm via FormInteractionHandler
-                interactionHandler.Open_ShowReportForm(this, reportContent, selectedAlias); // Pass the current UserControl (e.g., parentControl)
-
-                // After viewing, re-encrypt the file
-                try
-                {
-                    EncryptionManager.EncryptFile(filePath); // Encrypt the file again after viewing
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error re-encrypting file: {ex.Message}");
-                    MessageBox.Show($"Error re-encrypting file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            });
-        }
-        */
-
         public bool ToggleIsReportMode()
         {
             bool modus = adminInterface.IsReport = !adminInterface.IsReport;
@@ -418,6 +364,7 @@ namespace CRUD_System
                 && e.KeyCode != Keys.Back
                 && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right
                 && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
+                && e.KeyCode != Keys.Space
                 && !e.Control && !e.Shift)
             {
                 e.SuppressKeyPress = true;
@@ -435,6 +382,7 @@ namespace CRUD_System
                 && e.KeyCode != Keys.Back
                 && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right
                 && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
+                && e.KeyCode != Keys.Space
                 && !e.Control && !e.Shift)
             {
                 e.SuppressKeyPress = true;
@@ -452,6 +400,7 @@ namespace CRUD_System
                 && e.KeyCode != Keys.Back
                 && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right
                 && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
+                && e.KeyCode != Keys.Space
                 && !e.Control && !e.Shift)
             {
                 e.SuppressKeyPress = true;

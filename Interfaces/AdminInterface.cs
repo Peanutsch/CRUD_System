@@ -517,6 +517,7 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void InterfaceEditModeAdmin()
         {
+            var currentUser = AuthenticationService.CurrentUser;
             // Toggle Edit and Cancel button text based on EditMode status
             adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User";
 
@@ -551,8 +552,13 @@ namespace CRUD_System.Interfaces
 
             // Adjust other action buttons based on EditMode status
             ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
-            ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
+
+            if (currentUser == "admin")
+            {
+                ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
+            }
+            
 
             // Disable ListBox when in edit mode to prevent user changes in selection
             if (adminControl.listBoxAdmin != null)
@@ -587,21 +593,25 @@ namespace CRUD_System.Interfaces
         /// <param name="aliasToLogOut">The alias of the selected user to check online status.</param>
         public void SetForceLogOutUserBtn(string aliasToLogOut)
         {
-            // Check if the cache is empty, and reload data if necessary.
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            var currentUser = AuthenticationService.CurrentUser;
+            if (currentUser == "admin")
             {
-                cache.LoadDecryptedData();
+                // Check if the cache is empty, and reload data if necessary.
+                if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+                {
+                    cache.LoadDecryptedData();
+                }
+
+                // Determine if the selected user is online
+                bool isOnline = cache.CachedUserData
+                    .Skip(1) // Skip the header row
+                    .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == aliasToLogOut) // Match alias
+                    .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online based on the 9th column
+
+                // Display the "Force log Out User" button if the user is online
+                adminControl.btnForceLogOutUser.Enabled = isOnline;
+                adminControl.btnForceLogOutUser.Visible = isOnline;
             }
-
-            // Determine if the selected user is online
-            bool isOnline = cache.CachedUserData
-                .Skip(1) // Skip the header row
-                .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == aliasToLogOut) // Match alias
-                .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online based on the 9th column
-
-            // Display the "Force log Out User" button if the user is online
-            adminControl.btnForceLogOutUser.Enabled = isOnline;
-            adminControl.btnForceLogOutUser.Visible = isOnline;
         }
         #endregion EDITMODE DISPLAY
 

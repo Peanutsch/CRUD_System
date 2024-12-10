@@ -74,7 +74,8 @@
             this.txtPhonenumber.Size = new Size(325, 23);
             this.txtPhonenumber.TabIndex = 6;
             this.txtPhonenumber.TextAlign = HorizontalAlignment.Center;
-            this.txtPhonenumber.KeyPress += TxtPhonenumber_KeyPress;
+            //this.txtPhonenumber.KeyPress += TxtPhonenumber_KeyPress;
+            this.txtPhonenumber.KeyDown += TxtPhonenumber_KeyDown;
             // 
             // txtZIPCode
             // 

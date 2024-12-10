@@ -107,17 +107,21 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event, typically the TxtPhonenumber textbox.</param>
         /// <param name="e">The KeyPressEventArgs containing the event data.</param>
-        public void TxtPhonenumber_KeyPress(object sender, KeyPressEventArgs e)
+        public void TxtPhonenumber_KeyDown(object sender, KeyEventArgs e)
         {
-            // Allow only digits, the '+' and '-' characters, and Backspace
-            if (!char.IsDigit(e.KeyChar)        // Check if the key is a digit (0-9)
-                && e.KeyChar != '+'             // Allow the '+' character
-                && e.KeyChar != '-'             // Allow the '-' character
-                && e.KeyChar != (char)8)        // Allow Backspace (ASCII code 8)
+            // Allow only digits, the '+' and '-' characters, Backspace, and Ctrl+V, Ctrl+C
+            if (!char.IsDigit((char)e.KeyCode)                              // Check if the key is a digit (0-9)
+                && e.KeyCode != Keys.Add                                    // Allow the '+' character
+                && e.KeyCode != Keys.Subtract                               // Allow the '-' character
+                && e.KeyCode != Keys.Back                                   // Allow Backspace
+                && e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9   // Allow Numpad
+                && !(e.Control && e.KeyCode == Keys.V)                      // Allow Ctrl+V for paste
+                && !(e.Control && e.KeyCode == Keys.C))                     // Allow Ctrl+C for copy
             {
-                e.Handled = true; // Prevent the key from being processed further
+                e.SuppressKeyPress = true; // Prevent the key from being processed further
             }
         }
+
 
         /// <summary>
         /// Handles the KeyDown event for the txtName textbox.
@@ -126,12 +130,12 @@ namespace CRUD_System
         /// </summary>
         public void TxtName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!char.IsLetter((char)e.KeyCode)                      // Block non-letter keys
-                && e.KeyCode != Keys.Back                            // Allow Backspace
-                && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right // Allow arrow keys
+            if (!char.IsLetter((char)e.KeyCode)                                 // Block non-letter keys
+                && e.KeyCode != Keys.Back                                       // Allow Backspace
+                && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right            // Allow arrow keys
                 && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
-                && !e.Control && !e.Shift                            // Allow Ctrl and Shift
-                && !(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9)) // Block NumPad numbers
+                && e.KeyCode != Keys.Space                                      
+                && !(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))   // Block NumPad numbers
             {
                 e.SuppressKeyPress = true; // Suppress invalid keypress
             }
@@ -148,7 +152,7 @@ namespace CRUD_System
                 && e.KeyCode != Keys.Back                            // Allow Backspace
                 && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right // Allow arrow keys
                 && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
-                && !e.Control && !e.Shift                            // Allow Ctrl and Shift
+                && e.KeyCode != Keys.Space
                 && !(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9)) // Block NumPad numbers
             {
                 e.SuppressKeyPress = true; // Suppress invalid keypress
@@ -166,7 +170,7 @@ namespace CRUD_System
                 && e.KeyCode != Keys.Back                            // Allow Backspace
                 && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right // Allow arrow keys
                 && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
-                && !e.Control && !e.Shift                            // Allow Ctrl and Shift
+                && e.KeyCode != Keys.Space
                 && !(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9)) // Block NumPad numbers
             {
                 e.SuppressKeyPress = true; // Suppress invalid keypress
