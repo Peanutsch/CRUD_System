@@ -107,7 +107,7 @@ namespace CRUD_System
             editMode = false; // Close editMode
             adminInterface.EditMode = false;
             adminInterface.InterfaceEditModeAdmin();
-            adminInterface.ReloadListBoxAdmin(userIndex); // Reload listbox
+            adminInterface.ReloadListBoxWithSelection(txtAlias.Text); // Reload listbox
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace CRUD_System
 
                 // Empty TextBoxes and reload ListBox
                 adminInterface.EmptyTextBoxesAdmin();
-                adminInterface.ReloadListBoxAdmin(-1);
+                adminInterface.ReloadListBoxWithSelection(txtAlias.Text);
 
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
@@ -150,7 +150,7 @@ namespace CRUD_System
 
             // Reload listbox
             listBoxAdmin.Items.Clear();
-            adminInterface.ReloadListBoxAdmin(-1);
+            adminInterface.ReloadListBoxWithSelection(txtAlias.Text);
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace CRUD_System
 
                 // Reload the listbox to reflect changes
                 listBoxAdmin.Items.Clear();
-                adminInterface.ReloadListBoxAdmin(userIndex);
+                adminInterface.ReloadListBoxWithSelection(txtAlias.Text);
 
                 // Disable and hide the logout button after action
                 btnForceLogOutUser.Enabled = false;
@@ -375,10 +375,6 @@ namespace CRUD_System
             {
                 adminInterface.TextBoxesReportEmpty();
                 adminInterface.IsReport = ToggleIsReportMode();
-                //reportManager.ToggleReportMode(true);
-
-                Debug.WriteLine($"btnMakeReport IsReport: {adminInterface.IsReport}");
-
                 adminInterface.TextBoxesReportConfig();
             },
             () => message.MessageInvalidNoUserSelected());

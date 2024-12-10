@@ -128,6 +128,7 @@
             // 
             listBoxAdmin.DrawMode = DrawMode.OwnerDrawFixed;
             listBoxAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            listBoxAdmin.HorizontalScrollbar = true;
             listBoxAdmin.ItemHeight = 15;
             listBoxAdmin.Location = new Point(24, 35);
             listBoxAdmin.Name = "listBoxAdmin";
@@ -163,7 +164,7 @@
             // 
             btnDeleteUser.BackColor = SystemColors.ActiveCaption;
             btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnDeleteUser.Location = new Point(432, 409);
+            btnDeleteUser.Location = new Point(541, 406);
             btnDeleteUser.Name = "btnDeleteUser";
             btnDeleteUser.Size = new Size(150, 30);
             btnDeleteUser.TabIndex = 9;
@@ -264,7 +265,7 @@
             chkIsAdmin.CheckAlign = ContentAlignment.MiddleRight;
             chkIsAdmin.Enabled = false;
             chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkIsAdmin.Location = new Point(588, 414);
+            chkIsAdmin.Location = new Point(432, 414);
             chkIsAdmin.Name = "chkIsAdmin";
             chkIsAdmin.Size = new Size(97, 22);
             chkIsAdmin.TabIndex = 8;
@@ -499,7 +500,7 @@
             // 
             // btnSaveReport
             // 
-            btnSaveReport.BackColor = SystemColors.ActiveCaption;
+            btnSaveReport.BackColor = Color.LightGreen;
             btnSaveReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSaveReport.Location = new Point(1337, 419);
             btnSaveReport.Name = "btnSaveReport";

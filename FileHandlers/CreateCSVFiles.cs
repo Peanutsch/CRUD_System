@@ -92,8 +92,6 @@ namespace CRUD_System.FileHandlers
 
                         // Encrypt the file
                         EncryptionManager.EncryptFile(fileLogs);
-
-                        Debug.WriteLine($"Created {fileLogs}");
                     }
                 }
                 catch (Exception ex)
@@ -104,7 +102,7 @@ namespace CRUD_System.FileHandlers
             }
             else
             {
-                Console.WriteLine("Alias cannot be null or empty.");
+                Debug.WriteLine("Alias cannot be null or empty.");
             }
         }
         #endregion LOGEVENTS

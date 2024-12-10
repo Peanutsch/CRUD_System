@@ -207,8 +207,6 @@ namespace CRUD_System.Handlers
             AdminInterface adminInterface = new AdminInterface();
             adminInterface.IsReport = enable;
 
-            Debug.WriteLine($"ToggleReportMode IsReport: {adminInterface.IsReport}");
-
             adminInterface.TextBoxesReportEmpty();
 
             adminControl!.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");

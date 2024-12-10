@@ -84,6 +84,10 @@ namespace CRUD_System.Handlers
 
                     logEvents.LogEventUpdateUserDetails(currentUser, alias);
                     message.MessageUpdateSucces();
+
+                    // Select updated alias in ListBox
+                    AdminInterface adminInterface = new AdminInterface();
+                    adminInterface.ReloadListBoxWithSelection(alias);
                 }
                 catch (Exception ex)
                 {
@@ -275,9 +279,10 @@ namespace CRUD_System.Handlers
 
             //=== PASSWORD TEMP ISALIAS ===//
             // Generate password
-            //string isPassword = PasswordManager.PasswordGenerator();
-            string isPassword = isAlias;
+            string isPassword = PasswordManager.PasswordGenerator();
+            //string isPassword = isAlias;
             Debug.WriteLine($"Created Password: {isPassword}");
+            Debug.WriteLine($"Welcome Email to {Email}");
 
             // Default values new user
             bool onlineStatus = false;

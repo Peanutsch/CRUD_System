@@ -112,14 +112,10 @@ namespace CRUD_System.FileHandlers
                 EncryptionManager.DecryptFile(fileLogs);
                 File.AppendAllText(fileLogs, newLog + Environment.NewLine);
                 EncryptionManager.EncryptFile(fileLogs);
-
-                Debug.WriteLine($"Appended log for {selectedAlias}: {newLog}");
             }
             catch (Exception ex)
             {
-                // Handle exceptions gracefully
                 Debug.WriteLine($"An error occurred while appending to the log file for alias {selectedAlias}: {ex.Message}");
-                //MessageBox.Show($"An error occurred while appending to the log file for alias {selectedAlias}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

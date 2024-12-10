@@ -137,6 +137,71 @@ namespace CRUD_System.Interfaces
         }
 
         /// <summary>
+        /// Reloads the ListBox and reselects the specified item.
+        /// </summary>
+        /// <param name="aliasToSelect">The alias of the user to reselect after reloading.</param>
+        public void ReloadListBoxWithSelection(string aliasToSelect)
+        {
+            // Controleer of ListBoxAdmin is geïnitialiseerd
+            if (adminControl?.listBoxAdmin == null)
+            {
+                throw new InvalidOperationException("ListBoxAdmin is not initialized.");
+            }
+
+            // Refresh the cache
+            cache.LoadDecryptedData();
+
+            // Clear the ListBox
+            adminControl.listBoxAdmin.Items.Clear();
+
+            // Calculate start and end indices for the current page
+            int startIndex = (currentPage - 1) * itemsPerPage;
+            int endIndex = Math.Min(startIndex + itemsPerPage, cache.CachedUserData.Count);
+
+            // Skip header rows and load items for the current page
+            var userDetailsForPage = cache.CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
+
+            foreach (var userDetailsArray in userDetailsForPage)
+            {
+                // Selection of items to display in ListBoxAdmin
+                string name = userDetailsArray[0];
+                string surname = userDetailsArray[1];
+                string alias = userDetailsArray[2];
+                string email = userDetailsArray[6];
+                string phonenumber = userDetailsArray[7];
+                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
+                string isSick = userDetailsArray.Length > 9 && userDetailsArray[9] == "True" ? "| [ABSENCE due ILLNESS]" : string.Empty;
+
+                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline} {isSick}";
+                if (!string.IsNullOrEmpty(listItem))
+                {
+                    adminControl.listBoxAdmin.Items.Add(listItem);
+                }
+            }
+
+            // Update the page label
+            UpdatePageLabel();
+
+            // Try to reselect the previously edited item
+            if (!string.IsNullOrEmpty(aliasToSelect))
+            {
+                for (int i = 0; i < adminControl.listBoxAdmin.Items.Count; i++)
+                {
+                    var currentItem = adminControl.listBoxAdmin.Items[i];
+                    if (currentItem?.ToString()!.Contains($"({aliasToSelect})") == true)
+                    {
+                        adminControl.listBoxAdmin.SelectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            // Refresh the ListBox to trigger the DrawItem event
+            adminControl.listBoxAdmin.Refresh();
+        }
+
+        /*
+        /// <summary>
         /// Reloads the user list box after making changes, refreshing the interface display.
         /// </summary>
         /// <param name="userIndex">The index of the updated user.</param>
@@ -180,6 +245,7 @@ namespace CRUD_System.Interfaces
             // Refresh the ListBox to trigger the DrawItem event
             adminControl.listBoxAdmin.Refresh();
         }
+        */
 
         /// <summary>
         /// Handles the event when a user is selected in the ListBox. It fills the details for the selected user in the textboxes,
@@ -606,8 +672,6 @@ namespace CRUD_System.Interfaces
 
         public void TextBoxesReportConfig()
         {
-            Debug.WriteLine($"TextBoxesReportConfig IsReport: {IsReport}");
-
             TextBoxesReportEmpty();
 
             adminControl.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
