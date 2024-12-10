@@ -247,7 +247,14 @@ namespace CRUD_System.Handlers
             }
             form.labelAlias.TextAlign = ContentAlignment.TopLeft;
             form.labelAlias.BackColor = isAdmin ? Color.LightGreen : Color.LightBlue;
-            form.labelAlias.Text = isAdmin ? "Admin" : "User";
+            if (!TheOne)
+            {
+                form.labelAlias.Text = isAdmin ? "Admin" : "User";
+            }
+            else
+            {
+                form.labelAlias.Text = " NEO ";
+            }
         }
         #endregion LOGIN
 

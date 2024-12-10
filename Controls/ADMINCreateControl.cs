@@ -23,8 +23,6 @@ namespace CRUD_System
         private readonly ProfileManager profileManager = new ProfileManager();
         private readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        //private readonly AdminMainControl adminMainControl = new AdminMainControl();
-        //private readonly AdminInterface adminInterface = new AdminInterface();
 
         bool isAdmin = false;
         #endregion PROPERTIES
@@ -122,7 +120,7 @@ namespace CRUD_System
                 && e.KeyCode != Keys.Add                                    // Allow the '+' character
                 && e.KeyCode != Keys.Subtract                               // Allow the '-' character
                 && e.KeyCode != Keys.Back                                   // Allow Backspace
-                && e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9   // Allow Numpad
+                //&& e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9   // Allow Numpad
                 && !(e.Control && e.KeyCode == Keys.V)                      // Allow Ctrl+V for paste
                 && !(e.Control && e.KeyCode == Keys.C))                     // Allow Ctrl+C for copy
             {

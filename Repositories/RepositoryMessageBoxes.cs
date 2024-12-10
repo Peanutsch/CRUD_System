@@ -55,6 +55,11 @@ namespace CRUD_System.Repositories
         {
         return MessageBox.Show($"Are you sure you want to delete the file '{fileName}'?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
+
+        public DialogResult MessageConfirmIsTheOne(string alias)
+        {
+            return MessageBox.Show($"Are you sure you give {alias} the role of The One and be SuperUser?", "Confirm Change Role", MessageBoxButtons.YesNo);
+        }
         #endregion CONFIRM
 
         #region SUCCES
@@ -128,6 +133,11 @@ namespace CRUD_System.Repositories
         public DialogResult MessageUserAlreadyOnline(string alias)
         {
             return MessageBox.Show($"User with alias [{alias.ToUpper()}] is already online");
+        }
+
+        public DialogResult MessageDetailsNotComplete()
+        {
+            return MessageBox.Show("Details are not complete. Name, Surname and Email are mandatory");
         }
         #endregion INVALID
     }

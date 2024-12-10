@@ -443,5 +443,43 @@ namespace CRUD_System.Handlers
             DataCache.LoadCache();
         }
         #endregion ABSENCE DUE ILLNESS
+
+        #region IS THE ONE
+        /// <summary>
+        /// Updates the 'Is The One' status for a specific user identified by their alias.
+        /// Ensures the cached login data is loaded, modifies the relevant entry, 
+        /// and saves the changes to the encrypted data files.
+        /// </summary>
+        /// <param name="alias">The alias of the user to update.</param>
+        /// <param name="isTheOne">The new status indicating whether the user is "The One".</param>
+        public void IsTheOne(string alias, bool isTheOne)
+        {
+            // Check if the cached login data is empty. If so, load the decrypted data.
+            if (cache.CachedLoginData.Count == 0)
+            {
+                cache.LoadDecryptedData();
+            }
+
+            // Initialize an instance of AdminMainControl (if necessary for further use).
+            AdminMainControl adminControl = new AdminMainControl();
+
+            // Locate the user in the cached login data by matching their alias.
+            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias is in the first field (index 0)
+
+            if (login != null)
+            {
+                // Update the 'Is The One' status (assumed to be at index 4 in the data array).
+                login[4] = isTheOne.ToString();
+                Debug.WriteLine($"login[4]: {login[4]}"); // Log the updated value for debugging purposes.
+            }
+
+            // Save the updated login data and encrypt it for security.
+            cache.SaveAndEncryptData();
+
+            // Notify the user that the update was successful.
+            message.MessageUpdateSucces();
+        }
+
+        #endregion IS THE ONE
     }
 }

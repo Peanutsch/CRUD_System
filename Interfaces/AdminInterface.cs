@@ -24,7 +24,6 @@ namespace CRUD_System.Interfaces
 
         private int currentPage = 1; // Track pagenumbers
         private const int itemsPerPage = 15; // Maximum items per page in listBoxAdmin
-        private const int itemsPerPageLogs = 50; // Maximum items per page in listBoxLogs
 
         public List<string[]> CachedUserData => cache.CachedUserData;
 
@@ -398,6 +397,7 @@ namespace CRUD_System.Interfaces
             ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
             adminControl.btnShowListBoxLogs.Visible = EditMode;
             adminControl.btnDeleteFile.Visible = EditMode;
+            adminControl.chkIsTheOne.Visible = EditMode;
         }
 
         /// <summary>

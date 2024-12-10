@@ -39,9 +39,9 @@ namespace CRUD_System
         private ReportManager reportManager;
 
         bool isAdmin;
+        bool editMode = false;
         readonly bool onlineStatus = false;
         readonly bool isSick = false;
-        bool editMode = false;
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
@@ -440,14 +440,43 @@ namespace CRUD_System
 
         #region SELECTED ITEM CHANGED
         /// <summary>
-        /// Handles the event when the 'Is Admin' checkbox state changes.
-        /// Marks the current user as an admin when the checkbox is checked.
+        /// Handles the event triggered when the 'Is Admin' checkbox state changes.
+        /// Enables or disables the 'Is The One' checkbox based on the admin status.
+        /// Ensures the 'Is The One' checkbox is unchecked when admin rights are removed.
         /// </summary>
         /// <param name="sender">The source of the event (the CheckBox).</param>
-        /// <param name="e">The event data (checkbox change).</param>
+        /// <param name="e">The event data (state change of the checkbox).</param>
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             isAdmin = chkIsAdmin.Checked;
+
+            // Enable 'Is The One' checkbox only if the user is marked as Admin
+            chkIsTheOne.Enabled = isAdmin;
+
+            // Ensure 'Is The One' checkbox is unchecked when admin rights are removed
+            if (!isAdmin)
+            {
+                chkIsTheOne.Checked = false;
+            }
+        }
+
+        private void chkIsNeo_CheckedChanged(object sender, EventArgs e)
+        {
+            bool isTheOne = chkIsTheOne.Checked;
+            string isAlias = txtAlias.Text;
+
+            if (isTheOne)
+            {
+                // Confirm to save changes
+                DialogResult dr = message.MessageConfirmIsTheOne(isAlias);
+                if (dr != DialogResult.Yes)
+                {
+                    chkIsTheOne.Checked = false;
+                    return;
+                }
+                profileManager.IsTheOne(isAlias, isTheOne);
+            }
+
         }
 
         /// <summary>
