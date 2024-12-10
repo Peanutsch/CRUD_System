@@ -245,6 +245,17 @@ namespace CRUD_System
             adminInterface.NextPage();
         }
 
+        private void btnPreviousPageLogs_Click(object sender, EventArgs e)
+        {
+            adminInterface.PreviousPageLogs();
+        }
+
+        private void btnNextPageLogs_Click(object sender, EventArgs e)
+        {
+            adminInterface.NextPageLogs();
+        }
+
+
         /// <summary>
         /// Handles the state change of the 'Absence Due to Illness' checkbox.
         /// If the checkbox changes from checked to unchecked, it performs an action
@@ -526,6 +537,65 @@ namespace CRUD_System
             adminInterface.UpdatePageLabel();
         }
         #endregion TEXTBOX SEARCH
+
+        private void btnShowListBoxLogs_Click(object sender, EventArgs e)
+        {
+            // Toggle the visibility of listBoxLogs
+            listBoxLogs.Visible = !listBoxLogs.Visible;
+
+            // Update the button text based on the visibility status
+            btnShowListBoxLogs.Text = listBoxLogs.Visible ? "Hide Logs" : "Show Logs";
+        }
+
+        private void btnDeleteFile_Click(object sender, EventArgs e)
+        {
+            // Controleer of de huidige gebruiker admin is
+            if (AuthenticationService.CurrentUser == "admin") // Controleer op admin-status
+            {
+                // Controleer of een bestand is geselecteerd in de listViewFiles
+                if (listViewFiles.SelectedItems.Count > 0)
+                {
+                    // Verkrijg het geselecteerde bestand
+                    string selectedFile = listViewFiles.SelectedItems[0].Text;
+
+                    // Toon een bevestigingsdialoog
+                    var confirmResult = MessageBox.Show($"Are you sure you want to delete the file '{selectedFile}'?",
+                                                        "Confirm Delete",
+                                                        MessageBoxButtons.YesNo,
+                                                        MessageBoxIcon.Warning);
+
+                    if (confirmResult == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            // Verwijder het bestand
+                            File.Delete(selectedFile);
+
+                            // Verwijder het item uit de listViewFiles
+                            listViewFiles.Items.Remove(listViewFiles.SelectedItems[0]);
+
+                            MessageBox.Show("File successfully deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"An error occurred while deleting the file: {ex.Message}",
+                                            "Error",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a file to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                // Meld dat alleen admin toegang heeft tot deze actie
+                MessageBox.Show("Only administrators can delete files.", "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
     }
 }

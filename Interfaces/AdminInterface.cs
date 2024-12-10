@@ -24,7 +24,8 @@ namespace CRUD_System.Interfaces
 
 
         private int currentPage = 1; // Track pagenumbers
-        private const int itemsPerPage = 15; // Maximum items per page
+        private const int itemsPerPage = 15; // Maximum items per page in listBoxAdmin
+        private const int itemsPerPageLogs = 50; // Maximum items per page in listBoxLogs
 
         public List<string[]> CachedUserData => cache.CachedUserData;
 
@@ -200,53 +201,6 @@ namespace CRUD_System.Interfaces
             adminControl.listBoxAdmin.Refresh();
         }
 
-        /*
-        /// <summary>
-        /// Reloads the user list box after making changes, refreshing the interface display.
-        /// </summary>
-        /// <param name="userIndex">The index of the updated user.</param>
-        public void ReloadListBoxAdmin(int userIndex)
-        {
-            // Refresh the cache
-            cache.LoadDecryptedData();
-
-            // Refresh only if a valid index is selected
-            if (userIndex >= 0 && userIndex < adminControl.listBoxAdmin.Items.Count)
-            {
-                adminControl.Refresh();
-            }
-
-            // Clear the ListBox
-            adminControl.listBoxAdmin.Items.Clear();
-
-            // Calculate start and end indices for the current page
-            int startIndex = (currentPage - 1) * itemsPerPage;
-            int endIndex = Math.Min(startIndex + itemsPerPage, CachedUserData.Count);
-
-            // Skip header rows and load items for the current page
-            var userDetailsForPage = CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
-
-            foreach (var userDetailsArray in userDetailsForPage)
-            {
-                // Selection of items to display in ListBoxAdmin
-                string name = userDetailsArray[0];
-                string surname = userDetailsArray[1];
-                string alias = userDetailsArray[2];
-                string email = userDetailsArray[6];
-                string phonenumber = userDetailsArray[7];
-                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
-
-                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
-                adminControl.listBoxAdmin.Items.Add(listItem);
-
-                UpdatePageLabel();
-            }
-
-            // Refresh the ListBox to trigger the DrawItem event
-            adminControl.listBoxAdmin.Refresh();
-        }
-        */
-
         /// <summary>
         /// Handles the event when a user is selected in the ListBox. It fills the details for the selected user in the textboxes,
         /// and disables the Force log Out button if the selected user is the current admin user.
@@ -353,6 +307,8 @@ namespace CRUD_System.Interfaces
         /// and re-encrypts it afterward.
         /// </summary>
         /// <param name="alias">The alias of the user whose logs need to be loaded.</param>
+
+
         public void LoadListBoxLogs(string alias)
         {
             // Prepare the log file
@@ -377,6 +333,45 @@ namespace CRUD_System.Interfaces
                 return;
             }
         }
+
+
+        /*
+         public void LoadListBoxLogs(string alias)
+        {
+        // Prepare the log file
+        string? logFile = PrepareLogFile(alias);
+
+        if (!string.IsNullOrEmpty(logFile))
+        {
+            // Parse log entries from the file into structured data
+            var logEntries = ParseLogFile(logFile);
+
+            // Step 3: Sort log entries by date/time in descending order
+            var sortedEntries = SortLogEntriesDescending(logEntries);
+
+            // Calculate the start and end indices for the current page
+            int startIndex = (currentPage - 1) * itemsPerPageLogs;
+            int endIndex = Math.Min(startIndex + itemsPerPageLogs, sortedEntries.Count);
+
+
+            // Get the subset of log entries for the current page
+            var pagedEntries = sortedEntries.Skip(startIndex).Take(itemsPerPage).ToList();
+
+            // Populate the ListBox with the sorted log entries for the current page
+            PopulateListBox(pagedEntries);
+
+            // Re-encrypt the log file after processing
+            EncryptionManager.EncryptFile(logFile);
+        }
+        else
+        {
+            return;
+        }
+    }
+        */
+
+
+
 
         /// <summary>
         /// Finds the log file for the specified user alias and decrypts it if the file exists.
@@ -476,7 +471,7 @@ namespace CRUD_System.Interfaces
 
         #region Listbox Pages
         /// <summary>
-        /// Navigates to the next page if it exists.
+        /// Navigates to the next page listBoxAdmin if it exists.
         /// </summary>
         public void NextPage()
         {
@@ -489,14 +484,60 @@ namespace CRUD_System.Interfaces
         }
 
         /// <summary>
-        /// Navigates to the previous page if it exists.
+        /// Navigates to the previous page listBoxAdmin if it exists.
         /// </summary>
         public void PreviousPage()
         {
             if (currentPage > 1)
             {
                 currentPage--;
-                LoadDetailsListBox();
+                LoadListBoxLogs(adminControl.txtAlias.Text);
+            }
+        }
+
+        /// <summary>
+        /// Navigates to the next page in listBoxLogs if it exists.
+        /// </summary>
+        public void NextPageLogs()
+        {
+            // Calculate the total number of pages based on the number of log entries
+            string? logFile = PrepareLogFile(adminControl.txtAlias.Text);
+            if (!string.IsNullOrEmpty(logFile))
+            {
+                // Parse log entries and count them
+                var logEntries = ParseLogFile(logFile);
+                int totalLogEntries = logEntries.Count; // The number of log entries
+
+                // Calculate the total number of pages
+                int totalPages = (int)Math.Ceiling(totalLogEntries / (double)itemsPerPageLogs);
+
+                if (currentPage < totalPages)
+                {
+                    currentPage++;
+                    LoadListBoxLogs(adminControl.txtAlias.Text);
+                }
+            }
+        }
+
+        public void PreviousPageLogs()
+        {
+            // Calculate the total number of pages based on the number of log entries
+            string? logFile = PrepareLogFile(adminControl.txtAlias.Text);
+            if (!string.IsNullOrEmpty(logFile))
+            {
+                // Parse log entries and count them
+                var logEntries = ParseLogFile(logFile);
+                int totalLogEntries = logEntries.Count; // The number of log entries
+
+                // Calculate the total number of pages
+                int totalPages = (int)Math.Ceiling(totalLogEntries / (double)itemsPerPageLogs);
+
+                // Navigate to the previous page if possible
+                if (currentPage > 1)
+                {
+                    currentPage--;
+                    LoadListBoxLogs(adminControl.txtAlias.Text); // Reload the logs for the previous page
+                }
             }
         }
 
@@ -508,6 +549,18 @@ namespace CRUD_System.Interfaces
         {
             int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage);
             adminControl.lblPageNumber.Text = totalPages > 0 ? $"Page {currentPage} of {totalPages}" : "No pages available";
+        }
+
+        /// <summary>
+        /// Updates the page navigation label to display the current page and total pages.
+        /// If no pages are available, it shows a placeholder message.
+        /// </summary>
+        public void UpdatePageLabelLogs()
+        {
+            /*
+            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPageLogs);
+            adminControl.lblPageNumber.Text = totalPages > 0 ? $"Page {currentPage} of {totalPages}" : "No pages available";
+            */
         }
         #endregion Listbox Pages
 
@@ -557,6 +610,8 @@ namespace CRUD_System.Interfaces
             if (currentUser == "admin")
             {
                 ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
+                adminControl.btnShowListBoxLogs.Visible = EditMode;
+                adminControl.btnDeleteFile.Visible = EditMode;
             }
             
 

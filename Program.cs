@@ -33,7 +33,8 @@ namespace CRUD_System
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
             //EncryptionManager.EncryptFile(filePath.HRFilePath); // hr.csv
             //EncryptionManager.EncryptFile(filePath.ReportFilePath); // {alias}_report.csv
-            //EncryptFile("mist001", "report", "mist001_08122024-120813_report.csv");
+
+            //EncryptFile("mist001", "logevents", "mist001_logevents.csv");
 
             //DecryptSingleCSVFile("mist001", "logEvents");
             //DecryptSingleCSVFile("peer001", "logEvents");

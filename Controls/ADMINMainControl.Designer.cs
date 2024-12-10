@@ -60,7 +60,6 @@
             txtAbsenceIllness = new TextBox();
             btnCallInSick = new Button();
             listBoxLogs = new ListBox();
-            lblLoggings = new Label();
             listViewFiles = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
@@ -76,6 +75,11 @@
             lblSelectedAlias = new Label();
             lblCreatedBy = new Label();
             lblCurrentDate = new Label();
+            btnPreviousPageLogs = new Button();
+            btnNextPageLogs = new Button();
+            lblPageNumberLogs = new Label();
+            btnShowListBoxLogs = new Button();
+            btnDeleteFile = new Button();
             SuspendLayout();
             // 
             // txtName
@@ -164,7 +168,7 @@
             // 
             btnDeleteUser.BackColor = SystemColors.ActiveCaption;
             btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            btnDeleteUser.Location = new Point(541, 406);
+            btnDeleteUser.Location = new Point(541, 409);
             btnDeleteUser.Name = "btnDeleteUser";
             btnDeleteUser.Size = new Size(150, 30);
             btnDeleteUser.TabIndex = 9;
@@ -389,30 +393,21 @@
             listBoxLogs.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             listBoxLogs.FormattingEnabled = true;
             listBoxLogs.HorizontalScrollbar = true;
-            listBoxLogs.Location = new Point(800, 35);
+            listBoxLogs.Location = new Point(800, 32);
             listBoxLogs.Name = "listBoxLogs";
-            listBoxLogs.Size = new Size(383, 116);
+            listBoxLogs.Size = new Size(383, 372);
             listBoxLogs.TabIndex = 41;
+            listBoxLogs.Visible = false;
             listBoxLogs.SelectedIndexChanged += listBoxLogs_SelectedIndexChanged;
-            // 
-            // lblLoggings
-            // 
-            lblLoggings.AutoSize = true;
-            lblLoggings.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            lblLoggings.Location = new Point(800, 17);
-            lblLoggings.Name = "lblLoggings";
-            lblLoggings.Size = new Size(63, 16);
-            lblLoggings.TabIndex = 42;
-            lblLoggings.Text = "Loggings";
             // 
             // listViewFiles
             // 
             listViewFiles.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2 });
             listViewFiles.Font = new Font("Courier New", 9F, FontStyle.Bold);
             listViewFiles.FullRowSelect = true;
-            listViewFiles.Location = new Point(800, 170);
+            listViewFiles.Location = new Point(800, 36);
             listViewFiles.Name = "listViewFiles";
-            listViewFiles.Size = new Size(383, 243);
+            listViewFiles.Size = new Size(383, 377);
             listViewFiles.TabIndex = 47;
             listViewFiles.UseCompatibleStateImageBehavior = false;
             listViewFiles.View = View.Details;
@@ -432,7 +427,7 @@
             // 
             lblReports.AutoSize = true;
             lblReports.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            lblReports.Location = new Point(800, 154);
+            lblReports.Location = new Point(800, 17);
             lblReports.Name = "lblReports";
             lblReports.Size = new Size(56, 16);
             lblReports.TabIndex = 48;
@@ -466,7 +461,7 @@
             // 
             comboBoxSubjectReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             comboBoxSubjectReport.FormattingEnabled = true;
-            comboBoxSubjectReport.Items.AddRange(new object[] { "Report", "Memo", "Evaluation", "Other" });
+            comboBoxSubjectReport.Items.AddRange(new object[] { "Update Details", "Note", "Report", "Evaluation", "Copy Messages", "Other" });
             comboBoxSubjectReport.Location = new Point(1189, 67);
             comboBoxSubjectReport.Name = "comboBoxSubjectReport";
             comboBoxSubjectReport.Size = new Size(140, 24);
@@ -566,12 +561,82 @@
             lblCurrentDate.Text = "Current Date";
             lblCurrentDate.Visible = false;
             // 
+            // btnPreviousPageLogs
+            // 
+            btnPreviousPageLogs.BackColor = SystemColors.ActiveCaption;
+            btnPreviousPageLogs.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            btnPreviousPageLogs.Location = new Point(929, 3);
+            btnPreviousPageLogs.Name = "btnPreviousPageLogs";
+            btnPreviousPageLogs.Size = new Size(75, 23);
+            btnPreviousPageLogs.TabIndex = 55;
+            btnPreviousPageLogs.Text = "Prev";
+            btnPreviousPageLogs.UseVisualStyleBackColor = false;
+            btnPreviousPageLogs.Visible = false;
+            btnPreviousPageLogs.Click += btnPreviousPageLogs_Click;
+            // 
+            // btnNextPageLogs
+            // 
+            btnNextPageLogs.BackColor = SystemColors.ActiveCaption;
+            btnNextPageLogs.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            btnNextPageLogs.Location = new Point(1100, 3);
+            btnNextPageLogs.Name = "btnNextPageLogs";
+            btnNextPageLogs.Size = new Size(75, 23);
+            btnNextPageLogs.TabIndex = 56;
+            btnNextPageLogs.Text = "Next";
+            btnNextPageLogs.UseVisualStyleBackColor = false;
+            btnNextPageLogs.Visible = false;
+            btnNextPageLogs.Click += btnNextPageLogs_Click;
+            // 
+            // lblPageNumberLogs
+            // 
+            lblPageNumberLogs.AutoSize = true;
+            lblPageNumberLogs.BackColor = SystemColors.ActiveCaption;
+            lblPageNumberLogs.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            lblPageNumberLogs.Location = new Point(1010, 6);
+            lblPageNumberLogs.Name = "lblPageNumberLogs";
+            lblPageNumberLogs.Size = new Size(84, 16);
+            lblPageNumberLogs.TabIndex = 57;
+            lblPageNumberLogs.Text = "Page 1 of 2";
+            lblPageNumberLogs.Visible = false;
+            // 
+            // btnShowListBoxLogs
+            // 
+            btnShowListBoxLogs.BackColor = SystemColors.ActiveCaption;
+            btnShowListBoxLogs.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnShowListBoxLogs.Location = new Point(800, 419);
+            btnShowListBoxLogs.Name = "btnShowListBoxLogs";
+            btnShowListBoxLogs.Size = new Size(140, 30);
+            btnShowListBoxLogs.TabIndex = 58;
+            btnShowListBoxLogs.Text = "ListBoxLogs";
+            btnShowListBoxLogs.UseVisualStyleBackColor = false;
+            btnShowListBoxLogs.Visible = false;
+            btnShowListBoxLogs.Click += btnShowListBoxLogs_Click;
+            // 
+            // btnDeleteFile
+            // 
+            btnDeleteFile.BackColor = Color.Red;
+            btnDeleteFile.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDeleteFile.Location = new Point(1035, 419);
+            btnDeleteFile.Name = "btnDeleteFile";
+            btnDeleteFile.Size = new Size(140, 30);
+            btnDeleteFile.TabIndex = 59;
+            btnDeleteFile.Text = "Delete File";
+            btnDeleteFile.UseVisualStyleBackColor = false;
+            btnDeleteFile.Visible = false;
+            btnDeleteFile.Click += btnDeleteFile_Click;
+            // 
             // AdminMainControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(btnDeleteFile);
+            Controls.Add(listBoxLogs);
+            Controls.Add(btnShowListBoxLogs);
+            Controls.Add(lblPageNumberLogs);
+            Controls.Add(btnNextPageLogs);
+            Controls.Add(btnPreviousPageLogs);
             Controls.Add(lblCurrentDate);
             Controls.Add(lblCreatedBy);
             Controls.Add(lblSelectedAlias);
@@ -585,8 +650,6 @@
             Controls.Add(lblReports);
             Controls.Add(listViewFiles);
             Controls.Add(comboBoxSubjectReport);
-            Controls.Add(lblLoggings);
-            Controls.Add(listBoxLogs);
             Controls.Add(btnCallInSick);
             Controls.Add(txtAbsenceIllness);
             Controls.Add(btnPreviousPage);
@@ -636,7 +699,6 @@
         public TextBox txtAbsenceIllness;
         public Button btnCallInSick;
         public ListBox listBoxLogs;
-        public Label lblLoggings;
         public ListView listViewFiles;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
@@ -652,5 +714,10 @@
         public Label lblSelectedAlias;
         public Label lblCreatedBy;
         public Label lblCurrentDate;
+        public Button btnPreviousPageLogs;
+        public Button btnNextPageLogs;
+        public Label lblPageNumberLogs;
+        public Button btnShowListBoxLogs;
+        public Button btnDeleteFile;
     }
 }
