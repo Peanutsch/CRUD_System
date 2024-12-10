@@ -245,17 +245,6 @@ namespace CRUD_System
             adminInterface.NextPage();
         }
 
-        private void btnPreviousPageLogs_Click(object sender, EventArgs e)
-        {
-            adminInterface.PreviousPageLogs();
-        }
-
-        private void btnNextPageLogs_Click(object sender, EventArgs e)
-        {
-            adminInterface.NextPageLogs();
-        }
-
-
         /// <summary>
         /// Handles the state change of the 'Absence Due to Illness' checkbox.
         /// If the checkbox changes from checked to unchecked, it performs an action
@@ -342,6 +331,33 @@ namespace CRUD_System
             ReportManager reportManager = new ReportManager(this);
             reportManager.btnSaveReport();
         }
+
+        /// <summary>
+        /// Handles the deletion of a selected file from the listViewFiles control. 
+        /// Only administrators are allowed to perform this action.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the delete button.</param>
+        /// <param name="e">Contains event data.</param>
+        private void btnDeleteFile_Click(object sender, EventArgs e)
+        {
+            // Check if the current user is an administrator
+            if (AuthenticationService.CurrentUser == "admin" || AuthenticationService.CurrentUser == "mist001") // Ensure the user has admin privileges
+            {
+                DeleteFileReport();
+            }
+        }
+
+        /// <summary>
+        /// Handles the click event of the "Show Logs" button.
+        /// Opens the report form to display log details in a ListBox.
+        /// </summary>
+        /// <param name="sender">The source of the event (button).</param>
+        /// <param name="e">Event arguments associated with the click event.</param>
+        private void btnShowListBoxLogs_Click(object sender, EventArgs e)
+        {
+            interactionHandler.Open_ShowReportForm(this, txtAlias.Text);
+        }
+
         #endregion BUTTONS SoC (Seperate of Concerns)
 
         #region KEY HANDLERS
@@ -538,64 +554,65 @@ namespace CRUD_System
         }
         #endregion TEXTBOX SEARCH
 
-        private void btnShowListBoxLogs_Click(object sender, EventArgs e)
+        #region DELETE FILE REPORT
+        /// <summary>
+        /// Deletes a report file associated with the specified alias.
+        /// </summary>
+        /// <param name="aliasToDelete">The alias of the user whose report file is to be deleted.</param>
+        /// <remarks>
+        /// This method checks if a file is selected in the ListView before attempting to delete it.
+        /// Only The One admins have access to this functionality. A confirmation prompt is displayed 
+        /// before the file is deleted. If the deletion succeeds, the file is removed from both the file system 
+        /// and the ListView control.
+        /// </remarks>
+        /// <exception cref="IOException">Thrown if there is an issue accessing or deleting the file.</exception>
+        /// <exception cref="UnauthorizedAccessException">Thrown if access to the file is denied.</exception>
+        public void DeleteFileReport()
         {
-            // Toggle the visibility of listBoxLogs
-            listBoxLogs.Visible = !listBoxLogs.Visible;
-
-            // Update the button text based on the visibility status
-            btnShowListBoxLogs.Text = listBoxLogs.Visible ? "Hide Logs" : "Show Logs";
-        }
-
-        private void btnDeleteFile_Click(object sender, EventArgs e)
-        {
-            // Controleer of de huidige gebruiker admin is
-            if (AuthenticationService.CurrentUser == "admin") // Controleer op admin-status
+            // Check if a file is selected in the ListView
+            if (btnDeleteFile.Visible && listViewFiles.SelectedItems.Count > 0)
             {
-                // Controleer of een bestand is geselecteerd in de listViewFiles
-                if (listViewFiles.SelectedItems.Count > 0)
+                // Get the name of the selected file
+                string selectedFile = listViewFiles.SelectedItems[0].Text;
+
+
+                // Construct the full name of the report file
+                string fileName = selectedFile + "_report.csv";
+                Debug.WriteLine($"fileName: {fileName}");
+                // Locate the directory where the report file resides
+                string reportDirectory = FindCSVFiles.FindReportFile(txtAlias.Text, "report");
+                Debug.WriteLine($"reportDirectory: {reportDirectory}");
+                string fileToDelete = Path.Combine(reportDirectory, fileName);
+
+                Debug.WriteLine($"fileToDelete: {fileToDelete}");
+                // Show a confirmation dialog before deleting the file
+                DialogResult dr = message.MessageConfirmDeleteFile(fileName);
+                if (dr == DialogResult.Yes)
                 {
-                    // Verkrijg het geselecteerde bestand
-                    string selectedFile = listViewFiles.SelectedItems[0].Text;
-
-                    // Toon een bevestigingsdialoog
-                    var confirmResult = MessageBox.Show($"Are you sure you want to delete the file '{selectedFile}'?",
-                                                        "Confirm Delete",
-                                                        MessageBoxButtons.YesNo,
-                                                        MessageBoxIcon.Warning);
-
-                    if (confirmResult == DialogResult.Yes)
+                    try
                     {
-                        try
-                        {
-                            // Verwijder het bestand
-                            File.Delete(selectedFile);
+                        // Attempt to delete the file from the file system
+                        File.Delete(fileToDelete);
 
-                            // Verwijder het item uit de listViewFiles
-                            listViewFiles.Items.Remove(listViewFiles.SelectedItems[0]);
+                        // Remove the deleted file from the ListView
+                        listViewFiles.Items.Remove(listViewFiles.SelectedItems[0]);
 
-                            MessageBox.Show("File successfully deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"An error occurred while deleting the file: {ex.Message}",
-                                            "Error",
-                                            MessageBoxButtons.OK,
-                                            MessageBoxIcon.Error);
-                        }
+                        // Notify the user about the successful deletion
+                        MessageBox.Show("File successfully deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Please select a file to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    catch (Exception ex)
+                    {
+                        // Display an error message if the deletion fails
+                        MessageBox.Show($"An error occurred while deleting the file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             else
             {
-                // Meld dat alleen admin toegang heeft tot deze actie
-                MessageBox.Show("Only administrators can delete files.", "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                // Notify the user to select a file before attempting to delete
+                MessageBox.Show("Please select a file to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
+        #endregion DELETE FILE REPORT
     }
 }

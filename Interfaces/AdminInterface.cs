@@ -282,9 +282,6 @@ namespace CRUD_System.Interfaces
                 adminControl.chkIsAdmin.Checked = loginDetails[2] == "True";
                 adminControl.txtAbsenceIllness.Visible = userDetails[9] == "True"; // isSick
 
-                // Load listBoxLogs with data form corresponding {alias}_logs.csv
-                LoadListBoxLogs(selectedAlias);
-
                 // Enable Force log Out button if the selected user is not the current user
                 if (AuthenticationService.CurrentUser != selectedAlias)
                 {
@@ -300,175 +297,6 @@ namespace CRUD_System.Interfaces
         }
         #endregion LISTBOX ADMIN
 
-        #region LISTBOX LOGS
-        /// <summary>
-        /// Loads the log entries of a specified user (alias) into the ListBox, 
-        /// sorting them in descending order by timestamp. Decrypts the log file for processing 
-        /// and re-encrypts it afterward.
-        /// </summary>
-        /// <param name="alias">The alias of the user whose logs need to be loaded.</param>
-
-
-        public void LoadListBoxLogs(string alias)
-        {
-            // Prepare the log file
-            string? logFile = PrepareLogFile(alias);
-
-            if (!string.IsNullOrEmpty(logFile))
-            {
-                // Parse log entries from the file into structured data
-                var logEntries = ParseLogFile(logFile);
-
-                // Step 3: Sort log entries by date/time in descending order
-                var sortedEntries = SortLogEntriesDescending(logEntries);
-
-                // Populate the ListBox with the sorted log entries
-                PopulateListBox(sortedEntries);
-
-                // Re-encrypt the log file after processing
-                EncryptionManager.EncryptFile(logFile);
-            }
-            else
-            {
-                return;
-            }
-        }
-
-
-        /*
-         public void LoadListBoxLogs(string alias)
-        {
-        // Prepare the log file
-        string? logFile = PrepareLogFile(alias);
-
-        if (!string.IsNullOrEmpty(logFile))
-        {
-            // Parse log entries from the file into structured data
-            var logEntries = ParseLogFile(logFile);
-
-            // Step 3: Sort log entries by date/time in descending order
-            var sortedEntries = SortLogEntriesDescending(logEntries);
-
-            // Calculate the start and end indices for the current page
-            int startIndex = (currentPage - 1) * itemsPerPageLogs;
-            int endIndex = Math.Min(startIndex + itemsPerPageLogs, sortedEntries.Count);
-
-
-            // Get the subset of log entries for the current page
-            var pagedEntries = sortedEntries.Skip(startIndex).Take(itemsPerPage).ToList();
-
-            // Populate the ListBox with the sorted log entries for the current page
-            PopulateListBox(pagedEntries);
-
-            // Re-encrypt the log file after processing
-            EncryptionManager.EncryptFile(logFile);
-        }
-        else
-        {
-            return;
-        }
-    }
-        */
-
-
-
-
-        /// <summary>
-        /// Finds the log file for the specified user alias and decrypts it if the file exists.
-        /// </summary>
-        /// <param name="alias">The alias of the user.</param>
-        /// <returns>The decrypted file path, or null if the file is not found.</returns>
-        private string? PrepareLogFile(string alias)
-        {
-            // Find the file path for the user's logs
-            string logFile = FindCSVFiles.FindCSVFile(alias, "logevents");
-
-            // Check if the file exists
-            if (File.Exists(logFile))
-            {
-                // Decrypt the file
-                EncryptionManager.DecryptFile(logFile);
-                return logFile;
-            }
-
-            // Return null if the file does not exist
-            return null;
-        }
-
-        /// <summary>
-        /// Parses the log file into a list of tuples containing the timestamp and the full log entry string.
-        /// </summary>
-        /// <param name="logFile">The path to the log file.</param>
-        /// <returns>A list of log entries with timestamps for sorting.</returns>
-        private List<Tuple<DateTime, string>> ParseLogFile(string logFile)
-        {
-            var logEntries = new List<Tuple<DateTime, string>>();
-
-            // Read all lines from the file
-            var lines = File.ReadAllLines(logFile);
-
-            foreach (var line in lines)
-            {
-                // Split each line into parts
-                var parts = line.Split(',');
-
-                // Ensure the line has the expected number of parts
-                if (parts.Length >= 4)
-                {
-                    string date = parts[0];         // Date dd-MM-yyyy
-                    string time = parts[1];         // Time HH:mm:ss
-                    string aliasInLog = parts[2];   // Alias
-                    string logEvent = parts[3];     // Log event
-
-                    // Combine date and time into a single DateTime object
-                    if (DateTime.TryParse($"{date} {time}", out DateTime logDateTime))
-                    {
-                        // Add the parsed log entry as a tuple (timestamp, full entry string)
-                        logEntries.Add(new Tuple<DateTime, string>(logDateTime, $"{date} {time} {aliasInLog} {logEvent}"));
-                    }
-                }
-            }
-
-            return logEntries;
-        }
-
-        /// <summary>
-        /// Sorts the log entries by their timestamp in descending order (most recent first).
-        /// </summary>
-        /// <param name="logEntries">The list of log entries with timestamps.</param>
-        /// <returns>A list of log entry strings sorted by timestamp.</returns>
-        private List<string> SortLogEntriesDescending(List<Tuple<DateTime, string>> logEntries)
-        {
-            // Order entries by the DateTime component and return only the log strings
-            return logEntries
-                .OrderByDescending(entry => entry.Item1)
-                .Select(entry => entry.Item2)
-                .ToList();
-        }
-
-        /// <summary>
-        /// Populates the ListBox control with sorted log entries.
-        /// </summary>
-        /// <param name="sortedEntries">The sorted list of log entry strings.</param>
-        private void PopulateListBox(List<string> sortedEntries)
-        {
-            // Clear the ListBox before adding new items
-            adminControl.listBoxLogs.Items.Clear();
-
-            // Add each log entry to the ListBox
-            foreach (var entry in sortedEntries)
-            {
-                adminControl.listBoxLogs.Items.Add(entry);
-
-                // Check if the current entry contains "logged IN"
-                if (entry.Contains("logged IN"))
-                {
-                    adminControl.listBoxLogs.Items.Add("======="); // Extra line in listBoxLogs as divider
-                }
-            }
-        }
-        #endregion LISTBOX LOGS
-
         #region Listbox Pages
         /// <summary>
         /// Navigates to the next page listBoxAdmin if it exists.
@@ -480,6 +308,7 @@ namespace CRUD_System.Interfaces
             {
                 currentPage++;
                 LoadDetailsListBox();
+                //EmptyTextBoxesAdmin();
             }
         }
 
@@ -490,54 +319,8 @@ namespace CRUD_System.Interfaces
         {
             if (currentPage > 1)
             {
-                currentPage--;
-                LoadListBoxLogs(adminControl.txtAlias.Text);
-            }
-        }
-
-        /// <summary>
-        /// Navigates to the next page in listBoxLogs if it exists.
-        /// </summary>
-        public void NextPageLogs()
-        {
-            // Calculate the total number of pages based on the number of log entries
-            string? logFile = PrepareLogFile(adminControl.txtAlias.Text);
-            if (!string.IsNullOrEmpty(logFile))
-            {
-                // Parse log entries and count them
-                var logEntries = ParseLogFile(logFile);
-                int totalLogEntries = logEntries.Count; // The number of log entries
-
-                // Calculate the total number of pages
-                int totalPages = (int)Math.Ceiling(totalLogEntries / (double)itemsPerPageLogs);
-
-                if (currentPage < totalPages)
-                {
-                    currentPage++;
-                    LoadListBoxLogs(adminControl.txtAlias.Text);
-                }
-            }
-        }
-
-        public void PreviousPageLogs()
-        {
-            // Calculate the total number of pages based on the number of log entries
-            string? logFile = PrepareLogFile(adminControl.txtAlias.Text);
-            if (!string.IsNullOrEmpty(logFile))
-            {
-                // Parse log entries and count them
-                var logEntries = ParseLogFile(logFile);
-                int totalLogEntries = logEntries.Count; // The number of log entries
-
-                // Calculate the total number of pages
-                int totalPages = (int)Math.Ceiling(totalLogEntries / (double)itemsPerPageLogs);
-
-                // Navigate to the previous page if possible
-                if (currentPage > 1)
-                {
-                    currentPage--;
-                    LoadListBoxLogs(adminControl.txtAlias.Text); // Reload the logs for the previous page
-                }
+                LoadDetailsListBox();
+                //EmptyTextBoxesAdmin();
             }
         }
 
@@ -549,18 +332,6 @@ namespace CRUD_System.Interfaces
         {
             int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage);
             adminControl.lblPageNumber.Text = totalPages > 0 ? $"Page {currentPage} of {totalPages}" : "No pages available";
-        }
-
-        /// <summary>
-        /// Updates the page navigation label to display the current page and total pages.
-        /// If no pages are available, it shows a placeholder message.
-        /// </summary>
-        public void UpdatePageLabelLogs()
-        {
-            /*
-            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPageLogs);
-            adminControl.lblPageNumber.Text = totalPages > 0 ? $"Page {currentPage} of {totalPages}" : "No pages available";
-            */
         }
         #endregion Listbox Pages
 
@@ -607,8 +378,9 @@ namespace CRUD_System.Interfaces
             ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
 
-            if (currentUser == "admin")
+            if (currentUser == "admin" || currentUser == "mist001")
             {
+                
                 ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
                 adminControl.btnShowListBoxLogs.Visible = EditMode;
                 adminControl.btnDeleteFile.Visible = EditMode;
@@ -620,6 +392,13 @@ namespace CRUD_System.Interfaces
             {
                 adminControl.listBoxAdmin.Enabled = !EditMode;
             }
+        }
+
+        public void TheOneInterface()
+        {
+            ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
+            adminControl.btnShowListBoxLogs.Visible = EditMode;
+            adminControl.btnDeleteFile.Visible = EditMode;
         }
 
         /// <summary>

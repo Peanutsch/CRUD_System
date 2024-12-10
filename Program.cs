@@ -42,7 +42,7 @@ namespace CRUD_System
 
             #region Create/Edit CSV Files
             // Add new column in csv file
-            //AddNewColumn(filePath.UserFilePath);
+            //AddNewColumn(filePath.LoginFilePath);
 
             // Create CIS Notice CSV Files in map cis_notices
             //CreateCISNoticeCSV();
@@ -70,7 +70,7 @@ namespace CRUD_System
             // Do not forget to Decrypt and Encrypt file!!!!!
 
             // New column name and its default value for each row
-            string newColumnName = "[9] Absence due Illness";
+            string newColumnName = "[4] The One";
             string defaultValue = "False";
 
             // List to store updated lines of the CSV

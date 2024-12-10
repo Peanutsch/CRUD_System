@@ -27,7 +27,7 @@ namespace CRUD_System.Handlers
         #region CONSTRUCTOR
         public ProfileManager()
         {
-            // 
+            //
         }
         #endregion CONSTRUCTOR
 

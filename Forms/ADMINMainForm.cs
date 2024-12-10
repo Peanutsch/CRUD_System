@@ -64,5 +64,14 @@ namespace CRUD_System
             authService.PerformLogout();
         }
         #endregion BUTTONS
+
+        public void FormConfig(string isTheOne)
+        {
+            if (isTheOne == "admin" || isTheOne == "mist001")
+            {
+                this.BackColor = Color.DarkRed;
+                this.Text = "F I U M (FuckItUp- mode)";
+            }
+        }
     }
 }

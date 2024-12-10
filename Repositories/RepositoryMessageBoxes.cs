@@ -50,6 +50,11 @@ namespace CRUD_System.Repositories
         {
             return MessageBox.Show($"Please confirm to save this note for user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
+
+        public DialogResult MessageConfirmDeleteFile(string fileName)
+        {
+        return MessageBox.Show($"Are you sure you want to delete the file '{fileName}'?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        }
         #endregion CONFIRM
 
         #region SUCCES

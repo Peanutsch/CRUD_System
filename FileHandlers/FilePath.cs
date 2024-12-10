@@ -132,6 +132,7 @@ namespace CRUD_System.FileHandlers
         }
         #endregion PROCESSING
 
+        #region SEARCH CIS NOTICES
         /// <summary>
         /// Searches for the correct CSV file for the user: {alias}_cis_notices.csv.
         /// If the file doesn't exist, it creates a new one in the "cis_notices" directory.
@@ -182,5 +183,6 @@ namespace CRUD_System.FileHandlers
                 return;
             }
         }
+        #endregion SEARCH CIS NOTICES
     }
 }

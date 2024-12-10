@@ -197,8 +197,10 @@ namespace CRUD_System.Handlers
             if (isAdmin) // Send to admin interface
             {
                 CurrentUserRole = isAdmin;
+
                 AdminMainForm adminForm = new AdminMainForm();
                 DisplayUserAlias(adminForm, isAdmin);
+                adminForm.FormConfig(inputUserName);
                 adminForm.ShowDialog();
             }
             else // Send to user interface

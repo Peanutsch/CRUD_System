@@ -86,13 +86,13 @@
             Controls.Add(buttonLOGOUT);
             Controls.Add(textBoxUserName);
             Controls.Add(UserControl);
-            Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            Font = new Font("Courier New", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
             Name = "MainFormADMIN";
+            Text = "Display UserDetails Admin";
             StartPosition = FormStartPosition.CenterScreen;
             this.FormClosing += this.MainFormADMIN_FormClosing;
-            Text = "Display UserDetails Admin";
             Load += MainFormAdmin_Load;
             ResumeLayout(false);
             PerformLayout();
