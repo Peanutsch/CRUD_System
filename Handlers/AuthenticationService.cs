@@ -206,25 +206,17 @@ namespace CRUD_System.Handlers
             UpdateUserOnlineStatus(CurrentUser, true);
             AdminInterface adminInterface = new AdminInterface();
             
-            if (TheOne)
-            {
-                // Is user The One?
-                Debug.WriteLine($"ProcessSuccessfulLogin> Welcome {CurrentUser}. Today you're The One!");
-                MessageBox.Show($"ProcessSuccessfulLogin> Welcome {CurrentUser}. Today you're The One!");
-                
-            }
-
             logEvents.UserLoggedIn(CurrentUser);
 
             bool isAdmin = IsAdmin(inputUserName, inputUserPassword);
             if (isAdmin) // Send to admin interface
             {
-                CurrentUserRole = isAdmin;
-                
                 AdminMainForm adminForm = new AdminMainForm();
+                CurrentUserRole = isAdmin;
                 adminForm.FormConfig();
                 DisplayUserAlias(adminForm, isAdmin);
                 adminForm.ShowDialog();
+
             }
             else // Send to user interface
             {

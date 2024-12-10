@@ -382,11 +382,7 @@ namespace CRUD_System.Interfaces
 
             if (AuthenticationService.TheOne)
             {
-                //TheOneInterface(currentUser!);
-                Debug.WriteLine($"AdminInterface> Here you go {currentUser}. Lets go FUIm!");
-                ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
-                adminControl.btnShowListBoxLogs.Visible = EditMode;
-                adminControl.btnDeleteFile.Visible = EditMode;
+                TheOneInterface();
             }
             
 
@@ -397,9 +393,8 @@ namespace CRUD_System.Interfaces
             }
         }
 
-        public void TheOneInterface(string currentUser)
+        public void TheOneInterface()
         {
-            Debug.WriteLine($"TheOneInterface> Here you go {currentUser}. Lets go FUIm!");
             ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
             adminControl.btnShowListBoxLogs.Visible = EditMode;
             adminControl.btnDeleteFile.Visible = EditMode;

@@ -22,8 +22,9 @@ namespace CRUD_System
         private readonly AccountManager accountManager = new AccountManager();
         private readonly ProfileManager profileManager = new ProfileManager();
         private readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
-        private readonly AdminMainControl adminMainControl = new AdminMainControl();
-        private readonly AdminInterface adminInterface = new AdminInterface();
+        private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        //private readonly AdminMainControl adminMainControl = new AdminMainControl();
+        //private readonly AdminInterface adminInterface = new AdminInterface();
 
         bool isAdmin = false;
         #endregion PROPERTIES
@@ -70,6 +71,13 @@ namespace CRUD_System
                                        txtAddress.Text.Trim(), txtZIPCode.Text.Trim(),
                                        txtCity.Text.Trim(), txtEmail.Text.Trim(),
                                        txtPhonenumber.Text.Trim(), isAdmin);
+
+            if (string.IsNullOrEmpty(txtName.Text) || string.IsNullOrEmpty(txtSurname.Text) || string.IsNullOrEmpty(txtEmail.Text))
+            {
+                Debug.WriteLine("Details are not complete. Name, Surname and Email are mandatory");
+                message.MessageDetailsNotComplete();
+                return;
+            }
 
             // Close CreateFormADMIN, return to MainFormADMIN
             interactionHandler.Close_CreateForm(this.ParentForm);
@@ -121,7 +129,6 @@ namespace CRUD_System
                 e.SuppressKeyPress = true; // Prevent the key from being processed further
             }
         }
-
 
         /// <summary>
         /// Handles the KeyDown event for the txtName textbox.
