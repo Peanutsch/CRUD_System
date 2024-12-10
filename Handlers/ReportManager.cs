@@ -99,6 +99,7 @@ namespace CRUD_System.Handlers
                 // Add each file to the ListView
                 foreach (var fileInfo in fileInfos)
                 {
+                    /*
                     // Create a ListViewItem with the file name
                     ListViewItem item = new ListViewItem(fileInfo.Name);
                     // Add the creation date as a sub-item
@@ -108,16 +109,36 @@ namespace CRUD_System.Handlers
 
                     // Add the item to the ListView
                     listView.Items.Add(item);
+                    */
+                    string[] itemSplit = fileInfo.Name.Split("_");
+                    if (itemSplit.Length >= 2)
+                    {
+                        ListViewFiles listViewFiles = new ListViewFiles();
+                        string itemUse = string.Join("_", itemSplit[0], itemSplit[1]);
+                        string subject = listViewFiles.GetSubject(itemUse, itemSplit[0]); // itemSplit[0] is alias
+
+                        // Create ListViewItem
+                        ListViewItem item = new ListViewItem(itemUse);
+
+                        ////// GET FILE SUBJECT AS SUBITEMS ////
+                        item.SubItems.Add(!string.IsNullOrEmpty(subject) ? subject : "Unknown");
+
+                        // Add item to ListView
+                        adminControl.listViewFiles.Items.Add(item);
+
+                        // Set the Tag property to the full file path
+                        item.Tag = fileInfo.FullName;
+                    }
+                    else
+                    {
+                        // Log if the directory is not found
+                        Debug.WriteLine($"Directory not found: {reportDirectory}");
+                    }
+
+                    // Ensure the ListView visually updates
+                    listView.Refresh();
                 }
             }
-            else
-            {
-                // Log if the directory is not found
-                Debug.WriteLine($"Directory not found: {reportDirectory}");
-            }
-
-            // Ensure the ListView visually updates
-            listView.Refresh();
         }
 
         /// <summary>

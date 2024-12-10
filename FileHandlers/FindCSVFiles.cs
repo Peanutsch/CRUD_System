@@ -24,7 +24,6 @@ namespace CRUD_System.FileHandlers
             // Check if the target directory exists
             if (!Directory.Exists(filePath))
             {
-                Debug.WriteLine($"Directory {directory} does not exist yet");
                 return string.Empty;
             }
 
@@ -55,7 +54,6 @@ namespace CRUD_System.FileHandlers
             // Check if the target directory exists
             if (!Directory.Exists(filePath))
             {
-                //Debug.WriteLine($"{directory} directory does not exist yet.");
                 return string.Empty;
             }
 

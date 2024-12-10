@@ -483,15 +483,6 @@ namespace CRUD_System
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
             listViewFiles.Items.Clear();
-
-            /*
-            string selectedUserString = listViewFiles.SelectedItems[0].Text;
-            string selectedAlias = txtAlias.Text;
-
-            Debug.WriteLine($"ListBoxAdmin_SelectedIndexChanged> isSelectedAlias = {selectedAlias}");
-
-            reportManager.ReportHandler(selectedUserString, selectedAlias);
-            */
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }
 
@@ -510,13 +501,8 @@ namespace CRUD_System
                 if (!string.IsNullOrEmpty(selectedUserString))
                 {
                     string selectedAlias = txtAlias.Text;
-                    Debug.WriteLine($"listViewFiles_SelectedIndexChanged> isSelectedAlias = {selectedAlias}");
                     reportManager.ReportDisplay(selectedUserString, selectedAlias);
                 }
-            }
-            else
-            {
-                Debug.WriteLine("SelectedIndex> Geen item geselecteerd.");
             }
         }
         #endregion SELECTED ITEM CHANGED
