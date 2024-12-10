@@ -73,7 +73,7 @@ namespace CRUD_System.Repositories
             return MessageBox.Show($"New account {alias} created succesfully!");
         }
 
-        public DialogResult MessageReportSaved(string selectedAlias, string date)
+        public DialogResult MessageReportSaved(string date, string selectedAlias)
         {
             return MessageBox.Show($"Report saved as {selectedAlias}_{date}_report.csv");
         }

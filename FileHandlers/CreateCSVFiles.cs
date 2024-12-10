@@ -144,8 +144,6 @@ namespace CRUD_System.FileHandlers
                         // Encrypt the file
                         EncryptionManager.EncryptFile(fileReports);
 
-                        Debug.WriteLine($"Created {fileReports}");
-
                         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
                         message.MessageReportSaved(DateTime.Now.ToString("ddMMyyyy-HHmmss"), selectedAlias);
                     }
@@ -159,7 +157,7 @@ namespace CRUD_System.FileHandlers
             }
             else
             {
-                Console.WriteLine("Alias cannot be null or empty.");
+                Debug.WriteLine("Alias cannot be null or empty.");
             }
         }
         #endregion REPORTS

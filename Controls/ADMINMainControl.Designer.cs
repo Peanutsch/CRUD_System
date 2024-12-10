@@ -74,6 +74,8 @@
             txtSubject = new TextBox();
             txtCreator = new TextBox();
             lblSelectedAlias = new Label();
+            lblCreatedBy = new Label();
+            lblCurrentDate = new Label();
             SuspendLayout();
             // 
             // txtName
@@ -536,11 +538,32 @@
             // 
             lblSelectedAlias.AutoSize = true;
             lblSelectedAlias.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            lblSelectedAlias.Location = new Point(1209, 16);
+            lblSelectedAlias.Location = new Point(1189, 16);
             lblSelectedAlias.Name = "lblSelectedAlias";
             lblSelectedAlias.Size = new Size(105, 16);
             lblSelectedAlias.TabIndex = 52;
             lblSelectedAlias.Text = "Selected Alias";
+            // 
+            // lblCreatedBy
+            // 
+            lblCreatedBy.AutoSize = true;
+            lblCreatedBy.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            lblCreatedBy.Location = new Point(1337, 16);
+            lblCreatedBy.Name = "lblCreatedBy";
+            lblCreatedBy.Size = new Size(77, 16);
+            lblCreatedBy.TabIndex = 53;
+            lblCreatedBy.Text = "Created by";
+            // 
+            // lblCurrentDate
+            // 
+            lblCurrentDate.AutoSize = true;
+            lblCurrentDate.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            lblCurrentDate.Location = new Point(1337, 46);
+            lblCurrentDate.Name = "lblCurrentDate";
+            lblCurrentDate.Size = new Size(91, 16);
+            lblCurrentDate.TabIndex = 54;
+            lblCurrentDate.Text = "Current Date";
+            lblCurrentDate.Visible = false;
             // 
             // AdminMainControl
             // 
@@ -548,6 +571,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(lblCurrentDate);
+            Controls.Add(lblCreatedBy);
             Controls.Add(lblSelectedAlias);
             Controls.Add(btnCreateReport);
             Controls.Add(btnSaveReport);
@@ -624,5 +649,7 @@
         public TextBox txtSubject;
         public TextBox txtCreator;
         public Label lblSelectedAlias;
+        public Label lblCreatedBy;
+        public Label lblCurrentDate;
     }
 }

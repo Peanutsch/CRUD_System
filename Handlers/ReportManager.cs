@@ -24,6 +24,7 @@ namespace CRUD_System.Handlers
             adminControl = control;
         }
         #endregion CONSTRUCTOR
+
         /// <summary>
         /// Handles the logic for saving a report. Validates input, confirms the action with the user, 
         /// creates a new report CSV file, and refreshes the ListView to display the new report.
@@ -32,16 +33,12 @@ namespace CRUD_System.Handlers
         {
             if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && !string.IsNullOrEmpty(adminControl.rtxReport.Text))
             {
-                // Get the current logged-in user
-                var currentUser = AuthenticationService.CurrentUser;
-                // Retrieve the alias of the user to whom the report is related
-                string selectedAlias = adminControl!.txtAlias.Text;
-                // Retrieve the report text, enclosed in quotes
-                string newReportText = $"\"{adminControl.rtxReport.Text}\"";
-                // Retrieve the selected subject from the dropdown
-                string subject = adminControl.comboBoxSubjectReport.Text;
-                // Generate a unique timestamp for the report file
-                string dateFile = DateTime.Now.ToString("ddMMyyyy-HHmmss");
+                
+                var currentUser = AuthenticationService.CurrentUser;                                // Get the current logged-in user
+                string selectedAlias = adminControl!.txtAlias.Text;                                 // Retrieve the alias of the user to whom the report is related
+                string newReportText = $"{adminControl.rtxReport.Text.Replace(",", ";")}";      // Retrieve the report text, replacing "," with ";"
+                string subject = adminControl.comboBoxSubjectReport.Text;                           // Retrieve the selected subject from the dropdown
+                string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");                        // Generate a unique timestamp for the report file
 
                 // Confirm the save action with the user
                 DialogResult dr = message.MessageConfirmSaveNote(selectedAlias);
@@ -51,10 +48,12 @@ namespace CRUD_System.Handlers
                 }
 
                 // Create the report file in the format: {Date},{CreatorAlias},{UserAlias},{Subject},{Report}
-                CreateCSVFiles.CreateReportsCSV(dateFile, currentUser!, selectedAlias, subject, newReportText);
+                CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser!, selectedAlias, subject, newReportText);
 
-                // Refresh the ListView to show the new report
-                RefreshListViewFiles();
+                AdminInterface adminInterface = new AdminInterface();
+                adminInterface.IsReport = false;
+                Debug.WriteLine($"btnSaveReport IsReport: {adminInterface.IsReport}");
+                adminInterface.TextBoxesReportConfig();
             }
             else
             {
@@ -63,11 +62,9 @@ namespace CRUD_System.Handlers
                 MessageBox.Show("Not Valid! Missing conditions...");
                 return;
             }
-                AdminInterface adminInterface = new AdminInterface();
-                adminInterface.IsReport = false;
-                Debug.WriteLine($"btnSaveReport IsReport: {adminInterface.IsReport}");
-                adminControl.rtxReport.Clear();
-                adminInterface.TextBoxesReportConfig();
+            // Clear rtxReport, refresh ListViewFiles
+            adminControl.rtxReport.Clear();
+            RefreshListViewFiles();    
         }
 
         /// <summary>
@@ -157,13 +154,14 @@ namespace CRUD_System.Handlers
                 // Parse the report content
                 string reportCreator = reportContentSplit[1];               // Creator Alias
                 string reportSubject = reportContentSplit[3];               // Subject
-                string reportTextReport = reportContentSplit[4].Trim();     // // Full text, including commas
+                string reportTextReport = reportContentSplit[4];     // // Full text, including commas
                 string reportDate = isFileNameSplit[1].Replace("-", " ");   // Format date part of the filename (if applicable)
 
                 // Update the admin control fields with parsed data
                 adminControl.txtCreator.Text = reportCreator; // Creator
                 adminControl.txtSubject.Text = reportSubject; // Subject
-                adminControl.rtxReport.Text = $"\"{reportTextReport}\"".Replace("\"", "").Trim();
+                adminControl.rtxReport.Text = $"{reportTextReport}".Replace(";", ",").Trim();
+
                 // Format numbers as DD-MM-YYYY and clean up text
                 adminControl.txtDateReport.Text = Regex.Replace(reportDate
                                                   .Replace("\"", ""),

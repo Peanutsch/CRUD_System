@@ -176,8 +176,6 @@ namespace CRUD_System.Interfaces
 
                 UpdatePageLabel();
             }
-            // Empty textboxes
-            //EmptyTextBoxesAdmin();
 
             // Refresh the ListBox to trigger the DrawItem event
             adminControl.listBoxAdmin.Refresh();
@@ -424,7 +422,6 @@ namespace CRUD_System.Interfaces
             {
                 currentPage++;
                 LoadDetailsListBox();
-                //EmptyTextBoxesAdmin();
             }
         }
 
@@ -437,7 +434,6 @@ namespace CRUD_System.Interfaces
             {
                 currentPage--;
                 LoadDetailsListBox();
-                //EmptyTextBoxesAdmin();
             }
         }
 
@@ -448,9 +444,7 @@ namespace CRUD_System.Interfaces
         public void UpdatePageLabel()
         {
             int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage);
-            adminControl.lblPageNumber.Text = totalPages > 0
-                                              ? $"Page {currentPage} of {totalPages}"
-                                              : "No pages available";
+            adminControl.lblPageNumber.Text = totalPages > 0 ? $"Page {currentPage} of {totalPages}" : "No pages available";
         }
         #endregion Listbox Pages
 
@@ -554,15 +548,23 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void EmptyTextBoxesAdmin()
         {
-            // Refill textboxes with empty values
-            adminControl.txtName.Text = string.Empty;
-            adminControl.txtSurname.Text = string.Empty;
-            adminControl.txtAlias.Text = string.Empty;
-            adminControl.txtAddress.Text = string.Empty;
-            adminControl.txtZIPCode.Text = string.Empty;
-            adminControl.txtCity.Text = string.Empty;
-            adminControl.txtEmail.Text = string.Empty;
-            adminControl.txtPhonenumber.Text = string.Empty;
+            // Array textboxes for refill with string.Empty
+            var textFields = new[]
+            {
+            adminControl.txtName,
+            adminControl.txtSurname,
+            adminControl.txtAlias,
+            adminControl.txtAddress,
+            adminControl.txtZIPCode,
+            adminControl.txtCity,
+            adminControl.txtEmail,
+            adminControl.txtPhonenumber 
+            };
+
+            foreach (var field in textFields)
+            {
+                field.Text = string.Empty;
+            }
 
             adminControl.txtAdmin.Visible = false;
             adminControl.txtAbsenceIllness.Visible = false;
@@ -570,6 +572,7 @@ namespace CRUD_System.Interfaces
             // Update button states to false
             adminControl.InteractionHandler.UserSelected = false;
         }
+            
 
         /// <summary>
         /// Populates the textboxes with the details of a selected user.
@@ -596,32 +599,6 @@ namespace CRUD_System.Interfaces
         #endregion TEXTBOXES ADMIN
 
         #region TEXTBOXES REPORT
-        /*
-        public void TextBoxesReportConfig(string[] reportContentSplit)
-        {
-            ReportManager reportManager = new ReportManager(adminControl);
-            if (adminControl == null) return;
-
-            string reportDate = reportManager.FormatDate(reportContentSplit[0]); // Date
-            string reportCreator = reportContentSplit[1];                        // Creator Alias
-            string reportSubject = reportContentSplit[3];                        // Subject
-            string reportTextReport = reportContentSplit[4].Trim('"');           // Report text
-
-            adminControl.txtDateReport.Text = ReportManager.IsReport ? reportDate : DateTime.Now.ToString("dd-MM-yyyy");
-            adminControl.txtCreator.Text = reportCreator;
-            adminControl.txtSubject.Text = reportSubject;
-            adminControl.rtxReport.Text = reportTextReport;
-
-            adminControl.txtCreator.Visible = !ReportManager.IsReport;
-            adminControl.txtSubject.Visible = !ReportManager.IsReport;
-            adminControl.rtxReport.ReadOnly = !ReportManager.IsReport;
-            adminControl.comboBoxSubjectReport.Visible = ReportManager.IsReport;
-
-            adminControl.btnCreateReport.Visible = ReportManager.IsReport;
-            adminControl.btnSaveReport.Visible = ReportManager.IsReport;
-        }
-        */
-
         public void TextBoxesReportEmpty()
         {
             adminControl.txtDateReport.Text = string.Empty;
@@ -630,20 +607,23 @@ namespace CRUD_System.Interfaces
             adminControl.rtxReport.Text = string.Empty;
         }
 
-
-
         public void TextBoxesReportConfig()
         {
+            Debug.WriteLine($"TextBoxesReportConfig IsReport: {IsReport}");
+
+            TextBoxesReportEmpty();
+
             adminControl.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
 
             adminControl.txtSubject.Visible = !IsReport;
             adminControl.txtCreator.Visible = !IsReport;
-            adminControl.txtDateReport.Visible = IsReport;
             adminControl.rtxReport.ReadOnly = !IsReport;
+            adminControl.lblCreatedBy.Visible = !IsReport;
+            adminControl.lblCurrentDate.Visible = IsReport;
             
             adminControl.comboBoxSubjectReport.Visible = IsReport;
             
-            adminControl.btnCreateReport.Text = adminControl.ToggleIsReportMode() ? "Report" : "Cancel";
+            adminControl.btnCreateReport.Text = adminControl.ToggleIsReportMode() ? "Report" : "Exit";
             adminControl.rtxReport.BackColor = adminControl.ToggleIsReportMode() ? Color.White : Color.LightGray;
             adminControl.btnSaveReport.Visible = IsReport;
             adminControl.listViewFiles.SelectedItems.Clear();
