@@ -28,6 +28,7 @@ namespace CRUD_System.Handlers
         #region PROPERTIES
         public static string? CurrentUser { get; set; }
         public static bool CurrentUserRole { get; set; }
+        public static bool TheOne  { get; set; }
 
         FilePaths path = new FilePaths();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
@@ -85,8 +86,20 @@ namespace CRUD_System.Handlers
                 u[1] == inputUserPassword);
 
             // Return the admin status if the user is found
-            return user != default && bool.Parse(user[2]); //user[2];
+            return user != default && bool.Parse(user[2]);
         }
+
+        public bool Neo(string inputUserName, string inputPassword)
+        {
+            // Zoek de gebruiker in de cache, vergelijk op username en password
+            var user = cache.CachedLoginData.FirstOrDefault(u =>
+                u[0].Trim().Equals(inputUserName.Trim(), StringComparison.OrdinalIgnoreCase) &&
+                u[1].Trim().Equals(inputPassword.Trim()));
+            
+            // Controleer of de gebruiker bestaat en of 'the one' True is
+            return user != null && bool.TryParse(user[4], out bool theOne) && theOne;
+        }
+
 
         /// <summary>
         /// Checks if the user is offline.
@@ -187,9 +200,19 @@ namespace CRUD_System.Handlers
         private void ProcessSuccessfulLogin(string inputUserName, string inputUserPassword)
         {
             CurrentUser = inputUserName.ToLower();
+            TheOne = Neo(inputUserName, inputUserPassword);
 
             // Online Status = true
             UpdateUserOnlineStatus(CurrentUser, true);
+            AdminInterface adminInterface = new AdminInterface();
+            
+            if (TheOne)
+            {
+                // Is user The One?
+                Debug.WriteLine($"ProcessSuccessfulLogin> Welcome {CurrentUser}. Today you're The One!");
+                MessageBox.Show($"ProcessSuccessfulLogin> Welcome {CurrentUser}. Today you're The One!");
+                
+            }
 
             logEvents.UserLoggedIn(CurrentUser);
 
@@ -197,10 +220,10 @@ namespace CRUD_System.Handlers
             if (isAdmin) // Send to admin interface
             {
                 CurrentUserRole = isAdmin;
-
+                
                 AdminMainForm adminForm = new AdminMainForm();
+                adminForm.FormConfig();
                 DisplayUserAlias(adminForm, isAdmin);
-                adminForm.FormConfig(inputUserName);
                 adminForm.ShowDialog();
             }
             else // Send to user interface

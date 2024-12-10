@@ -1,6 +1,7 @@
 [0] NAME,[1] SURNAME,[2] ALIAS,[3] ADRESS,[4] ZIPCODE,[5] CITY,[6] EMAIL ADRESS,[7] PHONENUMBER,[8] ONLINE STATUS
 Admin,Adminimaxi,admin,Enschedesestraat 6,7554RX,Hengelo,admin@admin.com,+31534256987,False
-Michiel,ter Elst,mist001,Hengelosestraat 13,7557 AA,Enschede,peanutsch@duck.com,+31642027905,False
+Michiel,ter Elst,
+,Hengelosestraat 13,7557 AA,Enschede,peanutsch@duck.com,+31642027905,False
 Peer,Usher,peer001,Userstraat 26,6969 BJ,Oldenzaal,p.usher@mail.nl,0747789654,False
 Persona,NewInTown,pewn001,straat 6,1234 AA,Almelo,pintown@mail.nl,+31123456789,False
 Moor,Beerplies,moes001,Straat 18,4321 BB,Oldenzaal,beerplies@drunk.nl,+31987654321,False

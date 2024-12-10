@@ -22,7 +22,6 @@ namespace CRUD_System.Interfaces
         public bool EditMode { get; set; }
         public bool IsReport { get; set; }
 
-
         private int currentPage = 1; // Track pagenumbers
         private const int itemsPerPage = 15; // Maximum items per page in listBoxAdmin
         private const int itemsPerPageLogs = 50; // Maximum items per page in listBoxLogs
@@ -342,6 +341,8 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void InterfaceEditModeAdmin()
         {
+            Debug.WriteLine($"AdminInterface TheOne: {AuthenticationService.TheOne}");
+
             var currentUser = AuthenticationService.CurrentUser;
             // Toggle Edit and Cancel button text based on EditMode status
             adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User";
@@ -379,9 +380,10 @@ namespace CRUD_System.Interfaces
             ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
 
-            if (currentUser == "admin" || currentUser == "mist001")
+            if (AuthenticationService.TheOne)
             {
-                
+                //TheOneInterface(currentUser!);
+                Debug.WriteLine($"AdminInterface> Here you go {currentUser}. Lets go FUIm!");
                 ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
                 adminControl.btnShowListBoxLogs.Visible = EditMode;
                 adminControl.btnDeleteFile.Visible = EditMode;
@@ -395,8 +397,9 @@ namespace CRUD_System.Interfaces
             }
         }
 
-        public void TheOneInterface()
+        public void TheOneInterface(string currentUser)
         {
+            Debug.WriteLine($"TheOneInterface> Here you go {currentUser}. Lets go FUIm!");
             ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
             adminControl.btnShowListBoxLogs.Visible = EditMode;
             adminControl.btnDeleteFile.Visible = EditMode;
@@ -429,7 +432,7 @@ namespace CRUD_System.Interfaces
         public void SetForceLogOutUserBtn(string aliasToLogOut)
         {
             var currentUser = AuthenticationService.CurrentUser;
-            if (currentUser == "admin")
+            if (AuthenticationService.TheOne)
             {
                 // Check if the cache is empty, and reload data if necessary.
                 if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)

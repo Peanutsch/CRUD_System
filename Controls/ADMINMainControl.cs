@@ -340,11 +340,14 @@ namespace CRUD_System
         /// <param name="e">Contains event data.</param>
         private void btnDeleteFile_Click(object sender, EventArgs e)
         {
+            DeleteFileReport();
+            /*
             // Check if the current user is an administrator
-            if (AuthenticationService.CurrentUser == "admin" || AuthenticationService.CurrentUser == "mist001") // Ensure the user has admin privileges
+            if (adminInterface.TheOne) // Ensure the user isThe One
             {
                 DeleteFileReport();
             }
+            */
         }
 
         /// <summary>

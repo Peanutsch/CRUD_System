@@ -65,10 +65,11 @@ namespace CRUD_System
         }
         #endregion BUTTONS
 
-        public void FormConfig(string isTheOne)
+        public void FormConfig()
         {
-            if (isTheOne == "admin" || isTheOne == "mist001")
+            if (AuthenticationService.TheOne)
             {
+                this.labelAlias.Text = "NEO";
                 this.BackColor = Color.DarkRed;
                 this.Text = "F I U M (FuckItUp- mode)";
             }
