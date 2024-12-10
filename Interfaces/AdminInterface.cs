@@ -319,8 +319,9 @@ namespace CRUD_System.Interfaces
         {
             if (currentPage > 1)
             {
+                currentPage--;
                 LoadDetailsListBox();
-                //EmptyTextBoxesAdmin();
+                EmptyTextBoxesAdmin();
             }
         }
 
