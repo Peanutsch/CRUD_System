@@ -68,11 +68,12 @@ namespace CRUD_System
             // Parse the admin status, online status and isSick status as bools
             bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
             bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
+            bool isTheOne = bool.TryParse(loginDetails[4], out bool parsedIsTheOne) && parsedIsTheOne;
             bool isSick = bool.TryParse(userDetails[9], out bool parsedIsSick) && parsedIsSick;
 
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
+                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
             }
 
             AdminInterface adminInterface = new AdminInterface();

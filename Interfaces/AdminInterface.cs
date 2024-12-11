@@ -304,6 +304,7 @@ namespace CRUD_System.Interfaces
             int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage); // Total pages (subtract header rows)
             if (currentPage < totalPages)
             {
+                adminControl.btnNextPage.Enabled = true;
                 currentPage++;
                 LoadDetailsListBox();
                 //EmptyTextBoxesAdmin();
@@ -317,6 +318,7 @@ namespace CRUD_System.Interfaces
         {
             if (currentPage > 1)
             {
+                adminControl.btnPreviousPage.Enabled = true;
                 currentPage--;
                 LoadDetailsListBox();
                 EmptyTextBoxesAdmin();
@@ -340,8 +342,6 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void InterfaceEditModeAdmin()
         {
-            Debug.WriteLine($"AdminInterface TheOne: {AuthenticationService.TheOne}");
-
             var currentUser = AuthenticationService.CurrentUser;
             // Toggle Edit and Cancel button text based on EditMode status
             adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User";
@@ -379,7 +379,7 @@ namespace CRUD_System.Interfaces
             ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
 
-            if (AuthenticationService.TheOne)
+            if (AuthenticationService.IsTheOne)
             {
                 TheOneInterface();
             }
@@ -394,10 +394,23 @@ namespace CRUD_System.Interfaces
 
         public void TheOneInterface()
         {
+            var currentUser = AuthenticationService.CurrentUser;
+
             ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
-            adminControl.btnShowListBoxLogs.Visible = EditMode;
-            adminControl.btnDeleteFile.Visible = EditMode;
-            adminControl.chkIsTheOne.Visible = EditMode;
+            ToggleControlVisibility(adminControl.btnShowListBoxLogs, EditMode);
+            ToggleControlVisibility(adminControl.btnDeleteReport, EditMode, Color.Red);
+
+            if (adminControl.chkIsAdmin.Checked && currentUser != "admin" ||
+                adminControl.chkIsAdmin.Checked && currentUser != "mist001")
+            {
+                Debug.WriteLine($"{adminControl.txtAlias.Text} is Admin. Rights isTheOne is possible...");
+                ToggleControlVisibility(adminControl.chkIsTheOne, EditMode);
+            }
+            else
+            {
+                adminControl.chkIsTheOne.Visible = !EditMode;
+                adminControl.chkIsTheOne.Enabled = true;
+            }
         }
 
         /// <summary>
@@ -427,7 +440,7 @@ namespace CRUD_System.Interfaces
         public void SetForceLogOutUserBtn(string aliasToLogOut)
         {
             var currentUser = AuthenticationService.CurrentUser;
-            if (AuthenticationService.TheOne)
+            if (AuthenticationService.IsTheOne)
             {
                 // Check if the cache is empty, and reload data if necessary.
                 if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)

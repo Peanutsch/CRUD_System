@@ -28,7 +28,7 @@ namespace CRUD_System.Handlers
         #region PROPERTIES
         public static string? CurrentUser { get; set; }
         public static bool CurrentUserRole { get; set; }
-        public static bool TheOne  { get; set; }
+        public static bool IsTheOne  { get; set; }
 
         FilePaths path = new FilePaths();
         RepositoryLogEvents logEvents = new RepositoryLogEvents();
@@ -97,7 +97,7 @@ namespace CRUD_System.Handlers
                 u[1].Trim().Equals(inputPassword.Trim()));
             
             // Controleer of de gebruiker bestaat en of 'the one' True is
-            return user != null && bool.TryParse(user[4], out bool theOne) && theOne;
+            return user != null && bool.TryParse(user[4], out bool IsTheOne) && IsTheOne;
         }
 
 
@@ -200,7 +200,7 @@ namespace CRUD_System.Handlers
         private void ProcessSuccessfulLogin(string inputUserName, string inputUserPassword)
         {
             CurrentUser = inputUserName.ToLower();
-            TheOne = Neo(inputUserName, inputUserPassword);
+            IsTheOne = Neo(inputUserName, inputUserPassword);
 
             // Online Status = true
             UpdateUserOnlineStatus(CurrentUser, true);
@@ -247,7 +247,7 @@ namespace CRUD_System.Handlers
             }
             form.labelAlias.TextAlign = ContentAlignment.TopLeft;
             form.labelAlias.BackColor = isAdmin ? Color.LightGreen : Color.LightBlue;
-            if (!TheOne)
+            if (!IsTheOne)
             {
                 form.labelAlias.Text = isAdmin ? "Admin" : "User";
             }

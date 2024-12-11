@@ -67,9 +67,9 @@ namespace CRUD_System
 
         public void FormConfig()
         {
-            if (AuthenticationService.TheOne)
+            if (AuthenticationService.IsTheOne)
             {
-                this.labelAlias.Text = "NEO";
+                this.labelAlias.Text = " NEO ";
                 this.BackColor = Color.DarkRed;
                 this.Text = "F I U M (FuckItUp- mode)";
             }

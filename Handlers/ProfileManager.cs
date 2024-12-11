@@ -36,7 +36,7 @@ namespace CRUD_System.Handlers
         /// Updates user details in data_users.csv
         /// Updates isAdmin in data_login.csv
         /// </summary>
-        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick, bool isTheOne)
         {
             // Confirm to save changes
             DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
@@ -76,7 +76,12 @@ namespace CRUD_System.Handlers
                     var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias field
                     if (login != null)
                     {
+                        Debug.WriteLine($"***\nloginLine before: {login}");
                         login[2] = isAdmin.ToString(); // Update online status
+                        // Update 'IsTheOne' status
+                        login[4] = isTheOne.ToString();
+                        Debug.WriteLine($"login[4]: {login[4]}");
+                        Debug.WriteLine($"loginLine after: {login}\n***");
                     }
 
                     // Save changes to the data files and encrypt them
@@ -468,9 +473,11 @@ namespace CRUD_System.Handlers
 
             if (login != null)
             {
-                // Update the 'Is The One' status (assumed to be at index 4 in the data array).
+                Debug.WriteLine($"***\nloginLine before: {login}");
+                // Update 'IsTheOne' status
                 login[4] = isTheOne.ToString();
-                Debug.WriteLine($"login[4]: {login[4]}"); // Log the updated value for debugging purposes.
+                Debug.WriteLine($"login[4]: {login[4]}");
+                Debug.WriteLine($"loginLine after: {login}\n***");
             }
 
             // Save the updated login data and encrypt it for security.

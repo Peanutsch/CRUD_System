@@ -36,10 +36,11 @@ namespace CRUD_System
         readonly ProfileManager profileManager = new ProfileManager();
         readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
         readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        private ReportManager reportManager;
+        readonly ReportManager reportManager;
 
         bool isAdmin;
         bool editMode = false;
+        bool isTheOne = false;
         readonly bool onlineStatus = false;
         readonly bool isSick = false;
 
@@ -102,7 +103,7 @@ namespace CRUD_System
 
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
+                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
             }
             editMode = false; // Close editMode
             adminInterface.EditMode = false;
@@ -334,20 +335,13 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the deletion of a selected file from the listViewFiles control. 
-        /// Only administrators are allowed to perform this action.
+        /// Only TheOne's are allowed to perform this action.
         /// </summary>
         /// <param name="sender">The source of the event, typically the delete button.</param>
         /// <param name="e">Contains event data.</param>
-        private void btnDeleteFile_Click(object sender, EventArgs e)
+        private void btnDeleteReport_Click(object sender, EventArgs e)
         {
             DeleteFileReport();
-            /*
-            // Check if the current user is an administrator
-            if (adminInterface.TheOne) // Ensure the user isThe One
-            {
-                DeleteFileReport();
-            }
-            */
         }
 
         /// <summary>
@@ -450,34 +444,49 @@ namespace CRUD_System
         {
             isAdmin = chkIsAdmin.Checked;
 
-            // Enable 'Is The One' checkbox only if the user is marked as Admin
-            chkIsTheOne.Enabled = isAdmin;
-
-            // Ensure 'Is The One' checkbox is unchecked when admin rights are removed
             if (!isAdmin)
             {
                 chkIsTheOne.Checked = false;
             }
         }
 
-        private void chkIsNeo_CheckedChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Handles the event triggered when the 'Is The One' checkbox state changes.
+        /// Prompts the user for confirmation if the checkbox is checked and updates the profile accordingly.
+        /// If confirmation is declined, the checkbox is reset to unchecked.
+        /// </summary>
+        /// <param name="sender">The source of the event (the CheckBox).</param>
+        /// <param name="e">The event data (state change of the checkbox).</param>
+        private void chkIsIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
+            if (AuthenticationService.IsTheOne)
+            {
+                chkIsTheOne.Checked = true;
+            }
+
+            // Get the state of the 'Is The One' checkbox
             bool isTheOne = chkIsTheOne.Checked;
+
+            // Retrieve the alias from the text box
             string isAlias = txtAlias.Text;
 
             if (isTheOne)
             {
-                // Confirm to save changes
+                // Show confirmation dialog to save changes
                 DialogResult dr = message.MessageConfirmIsTheOne(isAlias);
+
+                // If the user declines, reset the checkbox and exit the method
                 if (dr != DialogResult.Yes)
                 {
                     chkIsTheOne.Checked = false;
                     return;
                 }
-                profileManager.IsTheOne(isAlias, isTheOne);
-            }
 
+                // Update the user's profile to reflect 'Is The One' status
+                //profileManager.IsTheOne(isAlias, isTheOne);
+            }
         }
+
 
         /// <summary>
         /// Handles the selection change event for the ListBox in the admin interface.
@@ -602,7 +611,7 @@ namespace CRUD_System
         public void DeleteFileReport()
         {
             // Check if a file is selected in the ListView
-            if (btnDeleteFile.Visible && listViewFiles.SelectedItems.Count > 0)
+            if (btnDeleteReport.Visible && listViewFiles.SelectedItems.Count > 0)
             {
                 // Get the name of the selected file
                 string selectedFile = listViewFiles.SelectedItems[0].Text;

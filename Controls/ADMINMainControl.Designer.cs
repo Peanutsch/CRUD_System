@@ -75,7 +75,7 @@
             lblCreatedBy = new Label();
             lblCurrentDate = new Label();
             btnShowListBoxLogs = new Button();
-            btnDeleteFile = new Button();
+            btnDeleteReport = new Button();
             chkIsTheOne = new CheckBox();
             SuspendLayout();
             // 
@@ -559,18 +559,18 @@
             btnShowListBoxLogs.Visible = false;
             btnShowListBoxLogs.Click += btnShowListBoxLogs_Click;
             // 
-            // btnDeleteFile
+            // btnDeleteReport
             // 
-            btnDeleteFile.BackColor = Color.Red;
-            btnDeleteFile.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteFile.Location = new Point(1043, 419);
-            btnDeleteFile.Name = "btnDeleteFile";
-            btnDeleteFile.Size = new Size(140, 30);
-            btnDeleteFile.TabIndex = 59;
-            btnDeleteFile.Text = "Delete File";
-            btnDeleteFile.UseVisualStyleBackColor = false;
-            btnDeleteFile.Visible = false;
-            btnDeleteFile.Click += btnDeleteFile_Click;
+            btnDeleteReport.BackColor = Color.Red;
+            btnDeleteReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDeleteReport.Location = new Point(1043, 419);
+            btnDeleteReport.Name = "btnDeleteReport";
+            btnDeleteReport.Size = new Size(140, 30);
+            btnDeleteReport.TabIndex = 59;
+            btnDeleteReport.Text = "Delete File";
+            btnDeleteReport.UseVisualStyleBackColor = false;
+            btnDeleteReport.Visible = false;
+            btnDeleteReport.Click += btnDeleteReport_Click;
             // 
             // chkIsTheOne
             // 
@@ -586,7 +586,7 @@
             chkIsTheOne.TextAlign = ContentAlignment.MiddleRight;
             chkIsTheOne.UseVisualStyleBackColor = true;
             chkIsTheOne.Visible = false;
-            chkIsTheOne.CheckedChanged += chkIsNeo_CheckedChanged;
+            chkIsTheOne.CheckedChanged += chkIsIsTheOne_CheckedChanged;
             // 
             // AdminMainControl
             // 
@@ -595,7 +595,7 @@
             BackColor = SystemColors.ActiveCaption;
             BorderStyle = BorderStyle.FixedSingle;
             Controls.Add(chkIsTheOne);
-            Controls.Add(btnDeleteFile);
+            Controls.Add(btnDeleteReport);
             Controls.Add(btnShowListBoxLogs);
             Controls.Add(lblCurrentDate);
             Controls.Add(lblCreatedBy);
@@ -674,7 +674,7 @@
         public Label lblCreatedBy;
         public Label lblCurrentDate;
         public Button btnShowListBoxLogs;
-        public Button btnDeleteFile;
+        public Button btnDeleteReport;
         public CheckBox chkIsTheOne;
     }
 }
