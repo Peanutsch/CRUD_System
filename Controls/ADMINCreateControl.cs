@@ -31,8 +31,20 @@ namespace CRUD_System
         public AdminCreateControl()
         {
             InitializeComponent();
+            
+            SetChkIsAdmin();
         }
         #endregion CONSTRUCTOR
+
+        public void SetChkIsAdmin()
+        { 
+            if (AuthenticationService.IsTheOne)
+            {
+                chkIsAdmin.Visible = true;
+                chkIsAdmin.Enabled = true;
+            }
+
+        }
 
         #region BUTTONS
         /// <summary>

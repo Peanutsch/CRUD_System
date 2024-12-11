@@ -72,18 +72,6 @@ namespace CRUD_System.Handlers
                         user[9] = isSick.ToString(); // Update online status
                     }
 
-                    // Find the user in the cached login data by alias and update isAdmin.
-                    var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias field
-                    if (login != null)
-                    {
-                        Debug.WriteLine($"***\nloginLine before: {login}");
-                        login[2] = isAdmin.ToString(); // Update online status
-                        // Update 'IsTheOne' status
-                        login[4] = isTheOne.ToString();
-                        Debug.WriteLine($"login[4]: {login[4]}");
-                        Debug.WriteLine($"loginLine after: {login}\n***");
-                    }
-
                     // Save changes to the data files and encrypt them
                     cache.SaveAndEncryptData();
 
@@ -455,9 +443,9 @@ namespace CRUD_System.Handlers
         /// Ensures the cached login data is loaded, modifies the relevant entry, 
         /// and saves the changes to the encrypted data files.
         /// </summary>
-        /// <param name="alias">The alias of the user to update.</param>
+        /// <param name="selectedAlias">The alias of the user to update.</param>
         /// <param name="isTheOne">The new status indicating whether the user is "The One".</param>
-        public void IsTheOne(string alias, bool isTheOne)
+        public void IsTheOne(string selectedAlias, bool isTheOne)
         {
             // Check if the cached login data is empty. If so, load the decrypted data.
             if (cache.CachedLoginData.Count == 0)
@@ -469,7 +457,7 @@ namespace CRUD_System.Handlers
             AdminMainControl adminControl = new AdminMainControl();
 
             // Locate the user in the cached login data by matching their alias.
-            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias is in the first field (index 0)
+            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == selectedAlias); // Alias is in the first field (index 0)
 
             if (login != null)
             {

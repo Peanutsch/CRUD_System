@@ -52,6 +52,7 @@
             this.chkIsAdmin.Text = "isAdmin";
             this.chkIsAdmin.TextAlign = ContentAlignment.MiddleCenter;
             this.chkIsAdmin.UseVisualStyleBackColor = true;
+            this.chkIsAdmin.Visible = false;
             this.chkIsAdmin.CheckedChanged += this.chkIsAdmin_CheckedChanged;
             // 
             // btnCancel

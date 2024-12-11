@@ -163,7 +163,7 @@
             // 
             // btnDeleteUser
             // 
-            btnDeleteUser.BackColor = SystemColors.ActiveCaption;
+            btnDeleteUser.BackColor = Color.Red;
             btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
             btnDeleteUser.Location = new Point(432, 419);
             btnDeleteUser.Name = "btnDeleteUser";
@@ -263,7 +263,6 @@
             // chkIsAdmin
             // 
             chkIsAdmin.AutoSize = true;
-            chkIsAdmin.Enabled = false;
             chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             chkIsAdmin.Location = new Point(127, 289);
             chkIsAdmin.Name = "chkIsAdmin";
@@ -291,7 +290,7 @@
             // 
             btnForceLogOutUser.BackColor = Color.LightGreen;
             btnForceLogOutUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnForceLogOutUser.Location = new Point(355, 284);
+            btnForceLogOutUser.Location = new Point(389, 284);
             btnForceLogOutUser.Name = "btnForceLogOutUser";
             btnForceLogOutUser.Size = new Size(150, 30);
             btnForceLogOutUser.TabIndex = 32;
@@ -576,7 +575,6 @@
             // 
             chkIsTheOne.AutoSize = true;
             chkIsTheOne.CheckAlign = ContentAlignment.MiddleRight;
-            chkIsTheOne.Enabled = false;
             chkIsTheOne.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             chkIsTheOne.Location = new Point(242, 289);
             chkIsTheOne.Name = "chkIsTheOne";
@@ -585,7 +583,6 @@
             chkIsTheOne.Text = "isTheOne";
             chkIsTheOne.TextAlign = ContentAlignment.MiddleRight;
             chkIsTheOne.UseVisualStyleBackColor = true;
-            chkIsTheOne.Checked = false;
             chkIsTheOne.Visible = false;
             chkIsTheOne.CheckedChanged += chkIsIsTheOne_CheckedChanged;
             // 

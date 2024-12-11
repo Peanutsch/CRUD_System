@@ -435,8 +435,6 @@ namespace CRUD_System
         #region SELECTED ITEM CHANGED
         /// <summary>
         /// Handles the event triggered when the 'Is Admin' checkbox state changes.
-        /// Enables or disables the 'Is The One' checkbox based on the admin status.
-        /// Ensures the 'Is The One' checkbox is unchecked when admin rights are removed.
         /// </summary>
         /// <param name="sender">The source of the event (the CheckBox).</param>
         /// <param name="e">The event data (state change of the checkbox).</param>
@@ -454,7 +452,13 @@ namespace CRUD_System
         /// <param name="e">The event data (state change of the checkbox).</param>
         private void chkIsIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
-            //
+            adminInterface.SelectedUserIsTheOne = !adminInterface.SelectedUserIsTheOne;
+            /*
+            if (chkIsTheOne.Checked)
+            {
+                profileManager.IsTheOne(txtAlias.Text ,true);
+            }
+            */
         }
 
 
