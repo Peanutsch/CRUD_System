@@ -443,11 +443,6 @@ namespace CRUD_System
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             isAdmin = chkIsAdmin.Checked;
-
-            if (!isAdmin)
-            {
-                chkIsTheOne.Checked = false;
-            }
         }
 
         /// <summary>
@@ -459,32 +454,7 @@ namespace CRUD_System
         /// <param name="e">The event data (state change of the checkbox).</param>
         private void chkIsIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
-            if (AuthenticationService.IsTheOne)
-            {
-                chkIsTheOne.Checked = true;
-            }
-
-            // Get the state of the 'Is The One' checkbox
-            bool isTheOne = chkIsTheOne.Checked;
-
-            // Retrieve the alias from the text box
-            string isAlias = txtAlias.Text;
-
-            if (isTheOne)
-            {
-                // Show confirmation dialog to save changes
-                DialogResult dr = message.MessageConfirmIsTheOne(isAlias);
-
-                // If the user declines, reset the checkbox and exit the method
-                if (dr != DialogResult.Yes)
-                {
-                    chkIsTheOne.Checked = false;
-                    return;
-                }
-
-                // Update the user's profile to reflect 'Is The One' status
-                //profileManager.IsTheOne(isAlias, isTheOne);
-            }
+            //
         }
 
 
@@ -504,6 +474,7 @@ namespace CRUD_System
         {
             // 
         }
+
         private void listViewFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Controleer of een item geselecteerd is

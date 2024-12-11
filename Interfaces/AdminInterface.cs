@@ -22,10 +22,13 @@ namespace CRUD_System.Interfaces
         public bool EditMode { get; set; }
         public bool IsReport { get; set; }
 
+        bool selectedUserIsTheOne = false;
+
         private int currentPage = 1; // Track pagenumbers
         private const int itemsPerPage = 15; // Maximum items per page in listBoxAdmin
 
         public List<string[]> CachedUserData => cache.CachedUserData;
+        public List<string[]> CachedLoginData => cache.CachedLoginData;
 
         readonly DataCache cache = new DataCache();
         private readonly AdminMainControl adminControl;
@@ -78,8 +81,9 @@ namespace CRUD_System.Interfaces
                 string isSick = userDetailsArray.Length > 9 && userDetailsArray[9] == "True" ? "| [ABSENCE due ILLNESS]" : string.Empty;
 
                 string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline} {isSick}";
+
                 adminControl.listBoxAdmin.Items.Add(listItem);
-                
+
                 UpdatePageLabel();
             }
         }
@@ -241,6 +245,18 @@ namespace CRUD_System.Interfaces
                 {
                     FillTextboxesAdmin(userDetailsArray);
                 }
+
+                // Retrieve login details from the cache
+                var loginDetailsArray = cache.CachedLoginData!
+                                       .Skip(1) // Skip header row
+                                       .FirstOrDefault(details => details[0] == selectedAlias);
+
+                // If selected user is TheOne, bool selectedUserIsTheOne is true
+                if (loginDetailsArray![4] == "True")
+                {
+                    selectedUserIsTheOne = true;
+                }
+
                 FindReportFile(selectedAlias);
                 HandleSelectedUserStatus(selectedAlias);
             }
@@ -351,7 +367,9 @@ namespace CRUD_System.Interfaces
 
             // Adjust visibility and enablement of buttons based on EditMode
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
-            ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
+            ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
+            ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
+            //ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
             //ToggleControlVisibility(adminControl.chkAbsenceDueIllness, EditMode);
 
             // Array of text fields to enable or disable in EditMode for user editing
@@ -375,16 +393,11 @@ namespace CRUD_System.Interfaces
                 }
             }
 
-            // Adjust other action buttons based on EditMode status
-            ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
-            ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
-
             if (AuthenticationService.IsTheOne)
             {
                 TheOneInterface();
             }
             
-
             // Disable ListBox when in edit mode to prevent user changes in selection
             if (adminControl.listBoxAdmin != null)
             {
@@ -399,17 +412,14 @@ namespace CRUD_System.Interfaces
             ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
             ToggleControlVisibility(adminControl.btnShowListBoxLogs, EditMode);
             ToggleControlVisibility(adminControl.btnDeleteReport, EditMode, Color.Red);
+            
+            if (currentUser == "admin" || currentUser == "mist001")
 
-            if (adminControl.chkIsAdmin.Checked && currentUser != "admin" ||
-                adminControl.chkIsAdmin.Checked && currentUser != "mist001")
             {
-                Debug.WriteLine($"{adminControl.txtAlias.Text} is Admin. Rights isTheOne is possible...");
-                ToggleControlVisibility(adminControl.chkIsTheOne, EditMode);
-            }
-            else
-            {
-                adminControl.chkIsTheOne.Visible = !EditMode;
-                adminControl.chkIsTheOne.Enabled = true;
+                adminControl.chkIsTheOne.Visible = EditMode;
+                adminControl.chkIsTheOne.Enabled = EditMode;
+                adminControl.chkIsTheOne.Checked = selectedUserIsTheOne;
+                adminControl.chkIsAdmin.Visible = EditMode;
             }
         }
 

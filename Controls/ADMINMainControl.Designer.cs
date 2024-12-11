@@ -585,6 +585,7 @@
             chkIsTheOne.Text = "isTheOne";
             chkIsTheOne.TextAlign = ContentAlignment.MiddleRight;
             chkIsTheOne.UseVisualStyleBackColor = true;
+            chkIsTheOne.Checked = false;
             chkIsTheOne.Visible = false;
             chkIsTheOne.CheckedChanged += chkIsIsTheOne_CheckedChanged;
             // 

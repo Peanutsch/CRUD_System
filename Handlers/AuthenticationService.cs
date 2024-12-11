@@ -30,10 +30,10 @@ namespace CRUD_System.Handlers
         public static bool CurrentUserRole { get; set; }
         public static bool IsTheOne  { get; set; }
 
-        FilePaths path = new FilePaths();
-        RepositoryLogEvents logEvents = new RepositoryLogEvents();
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        DataCache cache = new DataCache();
+        private readonly FilePaths path = new FilePaths();
+        private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
+        private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        private readonly DataCache cache = new DataCache();
 
         public bool onlineStatus = false;
         #endregion PROPERTIES
@@ -78,7 +78,7 @@ namespace CRUD_System.Handlers
         /// <param name="inputUserName">The username of the user.</param>
         /// <param name="inputUserPassword">The password of the user.</param>
         /// <returns>True if the user is an admin; otherwise, false.</returns>
-        public bool IsAdmin(string inputUserName, string inputUserPassword)
+        public bool CheckRole(string inputUserName, string inputUserPassword)
         {
             // Find the user in the list where both username and password match
             var user = cache.CachedLoginData.FirstOrDefault(u =>
@@ -208,11 +208,12 @@ namespace CRUD_System.Handlers
             
             logEvents.UserLoggedIn(CurrentUser);
 
-            bool isAdmin = IsAdmin(inputUserName, inputUserPassword);
+            bool isAdmin = CheckRole(inputUserName, inputUserPassword);
             if (isAdmin) // Send to admin interface
             {
                 AdminMainForm adminForm = new AdminMainForm();
                 CurrentUserRole = isAdmin;
+
                 adminForm.FormConfig();
                 DisplayUserAlias(adminForm, isAdmin);
                 adminForm.ShowDialog();
