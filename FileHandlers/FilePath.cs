@@ -2,6 +2,9 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
+using CRUD_System.Handlers;
+using System.Linq.Expressions;
 
 namespace CRUD_System.FileHandlers
 {
@@ -11,44 +14,111 @@ namespace CRUD_System.FileHandlers
     /// </summary>
     public class FilePaths
     {
+        #region PROPERTIES
         public string UserFilePath { get; private set; }
         public string LoginFilePath { get; private set; }
         public string LogEventFilePath { get; private set; }
+        public string? FileCisNotices { get; private set; }
+        public string? ReportFilePath { get; private set; }
 
+        public static string rootPath = RootPath.GetRootPath() ?? string.Empty;
+
+        #endregion PROPERTIES
+
+        #region CONSTRUCTOR
         /// <summary>
         /// Initializes a new instance of the <see cref="FilePaths"/> class.
         /// Sets file paths for user data, login data, and log events based on the root directory.
         /// </summary>
         public FilePaths()
-        {
-            string rootPath = RootPath.GetRootPath() ?? string.Empty;
-
+        { 
             UserFilePath = Path.Combine(rootPath, "CSV", "data_users.csv");
             LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
             LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
+            //FileCisNotices = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString() ,alias, $"{alias}_cis_notices.csv");
+            ReportFilePath = Path.Combine(rootPath, "report", "2024", "peer001", "peer001_report.csv");
         }
 
-        /// <summary>
-        /// Reads the content of a specified file and returns it as a list of strings.
-        /// </summary>
-        /// <param name="filePath">The path of the file to read.</param>
-        /// <returns>A list of strings containing each line of the file, or an empty list if the file does not exist.</returns>
-        public List<string> ReadFileContent(string filePath)
+        public void SetAlias(string alias)
         {
-            return File.Exists(filePath) ? File.ReadAllLines(filePath).ToList() : new List<string>();
+            FileCisNotices = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString() ,alias, $"{alias}_cis_notices.csv");
         }
 
+        #endregion CONSTRUCTOR
+
+        #region PROCESSING
         /// <summary>
-        /// Appends a new log entry to the log events file.
+        /// Ensures the log events file for the selected alias exists, creating it if necessary.
         /// </summary>
-        /// <param name="newLog">The log entry to append.</param>
-        public void AppendToLog(string newLog)
+        /// <param name="selectedAlias">The alias for which the log events file should be created.</param>
+        public void CreateLogEventCSV(string selectedAlias)
         {
-            if (!string.IsNullOrEmpty(LogEventFilePath))
+            try
             {
-                File.AppendAllText(LogEventFilePath, newLog + Environment.NewLine);
+                string logPath = Path.Combine(rootPath, "logevents", Timers.CurrentYear.ToString(), selectedAlias);
+
+                // Ensure the logevents directory exists
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+
+                string fileLogs = Path.Combine(logPath, $"{selectedAlias}_logevents.csv");
+
+                // Create the log file with default headers if it doesn't exist
+                if (!File.Exists(fileLogs))
+                {
+                    File.WriteAllText(fileLogs, "Date,Event,Details,User" + Environment.NewLine);
+                    EncryptionManager.EncryptFile(fileLogs);
+
+                    Debug.WriteLine($"Created {selectedAlias}_logevents.csv");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions gracefully
+                Debug.WriteLine($"An error occurred while creating the log file for alias {selectedAlias}: {ex.Message}");
+                //MessageBox.Show($"An error occurred while creating the log file for alias {selectedAlias}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Appends a new log entry to the log events file for the selected alias.
+        /// If the file does not exist, it is created first.
+        /// </summary>
+        /// <param name="selectedAlias">The alias for which the log entry is being added.</param>
+        /// <param name="newLog">The log entry to append.</param>
+        public void AppendToLog(string selectedAlias, string newLog)
+        {
+            try
+            {
+                string logPath = Path.Combine(rootPath, "logevents", Timers.CurrentYear.ToString(), selectedAlias);
+
+                // Ensure the logevents directory exists
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+
+                string fileLogs = Path.Combine(logPath, $"{selectedAlias}_logevents.csv");
+
+                // Create the log file if it doesn't exist
+                if (!File.Exists(fileLogs))
+                {
+                    CreateLogEventCSV(selectedAlias);
+                }
+
+                // Decrypt the file, append the new log, and re-encrypt
+                EncryptionManager.DecryptFile(fileLogs);
+                File.AppendAllText(fileLogs, newLog + Environment.NewLine);
+                EncryptionManager.EncryptFile(fileLogs);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred while appending to the log file for alias {selectedAlias}: {ex.Message}");
+            }
+        }
+
 
         /// <summary>
         /// Returns path userLines and loginLines
@@ -60,5 +130,59 @@ namespace CRUD_System.FileHandlers
             var loginLines = File.ReadAllLines(LoginFilePath).ToList();
             return (userLines, loginLines);
         }
+        #endregion PROCESSING
+
+        #region SEARCH CIS NOTICES
+        /// <summary>
+        /// Searches for the correct CSV file for the user: {alias}_cis_notices.csv.
+        /// If the file doesn't exist, it creates a new one in the "cis_notices" directory.
+        /// </summary>
+        /// <param name="alias">The alias of the user.</param>
+        public void SearchCIS_Notice(string alias)
+        {
+            DataCache cache = new DataCache();
+            if (!string.IsNullOrEmpty(alias))
+            {
+                try
+                {
+                    string noticesPath = Path.Combine(rootPath, "cis_notices", alias);
+
+                    // Ensure the cis_notices directory exists
+                    if (!Directory.Exists(noticesPath))
+                    {
+                        Directory.CreateDirectory(noticesPath);
+                    }
+
+                    string file_cis_notices = Path.Combine(noticesPath, $"{alias}_cis_notices.csv");
+
+                    if (!File.Exists(file_cis_notices))
+                    {
+                        // Create a new file with default headers (or leave empty)
+                        File.WriteAllText(file_cis_notices, $"{alias},{string.Empty},{string.Empty}\n");
+
+                        // Encrypt file
+                        EncryptionManager.EncryptFile(file_cis_notices);
+                    }
+                    else
+                    {
+                        // Read the file contents (if needed, process the data further)
+                        string[] fileContents = File.ReadAllLines(file_cis_notices);
+                        // Optionally process or log the data
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions gracefully (e.g., log the error or show a user-friendly message)
+                    Debug.WriteLine($"An error occurred: {ex.Message}");
+                    MessageBox.Show($"An error occurred: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Alias cannot be null or empty.");
+                return;
+            }
+        }
+        #endregion SEARCH CIS NOTICES
     }
 }

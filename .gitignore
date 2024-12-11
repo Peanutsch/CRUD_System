@@ -90,7 +90,6 @@ StyleCopReport.xml
 *.tmp
 *.tmp_proj
 *_wpftmp.csproj
-*.log
 *.vspscc
 *.vssscc
 .builds
@@ -338,7 +337,7 @@ OpenCover/
 # Azure Stream Analytics local run output
 ASALocalRun/
 
-# MSBuild Binary and Structured Log
+# MSBuild Binary and Structured log
 *.binlog
 
 # NVidia Nsight GPU debugger configuration file

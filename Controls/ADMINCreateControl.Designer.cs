@@ -52,6 +52,7 @@
             this.chkIsAdmin.Text = "isAdmin";
             this.chkIsAdmin.TextAlign = ContentAlignment.MiddleCenter;
             this.chkIsAdmin.UseVisualStyleBackColor = true;
+            this.chkIsAdmin.Visible = false;
             this.chkIsAdmin.CheckedChanged += this.chkIsAdmin_CheckedChanged;
             // 
             // btnCancel
@@ -74,6 +75,8 @@
             this.txtPhonenumber.Size = new Size(325, 23);
             this.txtPhonenumber.TabIndex = 6;
             this.txtPhonenumber.TextAlign = HorizontalAlignment.Center;
+            //this.txtPhonenumber.KeyPress += TxtPhonenumber_KeyPress;
+            this.txtPhonenumber.KeyDown += TxtPhonenumber_KeyDown;
             // 
             // txtZIPCode
             // 
@@ -104,6 +107,7 @@
             this.txtSurname.TabIndex = 1;
             this.txtSurname.TextAlign = HorizontalAlignment.Center;
             this.txtSurname.TextChanged += this.TxtAlias_TextChanged;
+            this.txtSurname.KeyDown += TxtSurname_KeyDown;
             // 
             // txtName
             // 
@@ -114,6 +118,7 @@
             this.txtName.TabIndex = 0;
             this.txtName.TextAlign = HorizontalAlignment.Center;
             this.txtName.TextChanged += this.TxtAlias_TextChanged;
+            this.txtName.KeyDown += TxtName_KeyDown;
             // 
             // txtEmail
             // 
@@ -141,6 +146,7 @@
             this.txtCity.Size = new Size(325, 23);
             this.txtCity.TabIndex = 4;
             this.txtCity.TextAlign = HorizontalAlignment.Center;
+            this.txtCity.KeyDown += TxtCity_KeyDown;
             // 
             // btnSaveEdit
             // 
@@ -152,7 +158,7 @@
             this.btnSaveEdit.TabIndex = 8;
             this.btnSaveEdit.Text = "Save";
             this.btnSaveEdit.UseVisualStyleBackColor = false;
-            this.btnSaveEdit.Click += this.btnSaveEdit_Click;
+            this.btnSaveEdit.Click += this.btnSave_Click;
             // 
             // AdminCreateControl
             // 

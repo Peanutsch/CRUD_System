@@ -15,10 +15,11 @@ namespace CRUD_System.Handlers
     /// </summary>
     public class AccountManager
     {
-        FilePaths path = new FilePaths();
-
+        #region PROPERTIES
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        #endregion PROPERTIES
 
+        #region PROCES
         /// <summary>
         /// Finds the index of a user by their alias in both user and login data.
         /// </summary>
@@ -31,100 +32,138 @@ namespace CRUD_System.Handlers
         /// </returns>
         public int FindUserIndexByAlias(List<string> userLines, List<string> loginLines, string alias)
         {
-            for (int index = 0; index < userLines.Count; index++)
+            // Load cache
+            DataCache.LoadCache();
+
+            // Check if cache is loaded correctly
+            if (DataCache.CachedLoginLines == null || DataCache.CachedLoginLines.Count == 0)
             {
-                var userDetails = userLines[index].Split(',');
-                var loginDetails = loginLines[index].Split(",");
-                if (userDetails[2] == alias && loginDetails[0] == alias)
+                DataCache dataCache = new DataCache();
+                dataCache.LoadDecryptedData();
+            }
+
+            // Search through the cached login data for the alias
+            for (int index = 0; index < DataCache.CachedLoginLines?.Count; index++)
+            {
+                var loginDetails = DataCache.CachedLoginLines[index].Split(",");
+
+                // Assuming the first element of loginDetails is the encrypted alias
+                string encryptedAlias = loginDetails[0].Trim();
+
+                // Decrypt the alias using your decryption method
+                string decryptedAlias = AesEncryption.DecryptWithFixedKey(encryptedAlias, AesEncryption.EncryptionKey);
+
+                // Compare the decrypted alias with the provided alias
+                if (decryptedAlias == alias.Trim())
                 {
-                    return index;
+                    return index; // Return the index if found
                 }
             }
-            // Alias not found
+
+            // If not found, show a message
             message.MessageUserNotFound(alias);
-            return -1;
+            return -1; // Return -1 if the alias was not found
         }
 
         /// <summary>
         /// Generates a unique alias for the user based on the first two letters of the first name
         /// and the last two letters of the surname, followed by a number that increments if the alias already exists.
-        /// Diacritics in letters like é, è, and ô are removed for the alias.
+        /// Diacritics and unwanted characters are removed for the alias.
         /// </summary>
         /// <returns>A unique alias as a string.</returns>
         public string CreateTXTAlias(string Name, string Surname)
         {
-        // Normalize and remove diacritics from the Name and Surname
-        Name = RemoveDiacritics(Name);
-        Surname = RemoveDiacritics(Surname);
+            // Normalize and clean the Name and Surname
+            Name = CleanText(Name);
+            Surname = CleanText(Surname);
 
-        if (Name.Length < 2)
-        {
-            Name += Name; // Double name
-        }
-        if (Surname.Length < 2)
-        {
-            Surname += Surname; // Double surname
-        }
+            // Extract only letters
+            Name = new string(Name.Where(char.IsLetter).ToArray());
+            Surname = new string(Surname.Where(char.IsLetter).ToArray());
 
-        string initialAlias = Name.Substring(0, 2).ToLower() + Surname.Substring(Surname.Length - 2).ToLower();
-        int counter = 1;
-        string finalAlias = initialAlias + "001";
+            // Ensure Name and Surname have enough letters
+            if (Name.Length < 2) Name = Name.PadRight(2, 'x'); // Fallback to 'x' if insufficient letters
+            if (Surname.Length < 2) Surname = Surname.PadRight(2, 'y'); // Fallback to 'y' if insufficient letters
 
-        // Check if the alias already exists and increment the number if necessary
-        while (AliasExists(finalAlias))
-        {
-            counter++;
-            string newNumber = counter.ToString("D3"); // Ensures it always has 3 digits
-            finalAlias = initialAlias + newNumber;
-        }
+            // Generate the base alias
+            string initialAlias = Name.Substring(0, 2).ToLower() + Surname.Substring(Surname.Length - 2).ToLower();
+            int counter = 1;
 
-        return finalAlias;
-    }
-
-    /// <summary>
-    /// Removes diacritics from the input string.
-    /// </summary>
-    /// <param name="text">The input string with potential diacritics.</param>
-    /// <returns>A string without diacritics.</returns>
-    private string RemoveDiacritics(string text)
-    {
-        var normalizedString = text.Normalize(NormalizationForm.FormD);
-        var stringBuilder = new StringBuilder();
-
-        foreach (var chars in normalizedString)
-        {
-            var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(chars);
-            if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+            // Loop to generate a unique alias
+            string finalAlias;
+            while (true)
             {
-                stringBuilder.Append(chars);
-            }
-        }
+                string newNumber = counter.ToString("D3"); // Ensures it always has 3 digits
+                finalAlias = initialAlias + newNumber;
 
-        return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
-    }
-
-
-    /// <summary>
-    /// Checks if the given alias already exists in the data_login.csv file.
-    /// </summary>
-    /// <param name="alias">The alias to check for existence.</param>
-    /// <returns>True if the alias exists; otherwise, false.</returns>
-    private bool AliasExists(string alias)
-        {
-            // Read all lines from data_login.csv
-            var loginLines = File.ReadAllLines(path.LoginFilePath);
-
-            // Check if the alias already exists
-            foreach (var line in loginLines)
-            {
-                var loginDetails = line.Split(',');
-                if (loginDetails[0] == alias)
+                // Check if alias already exists
+                if (!AliasExists(finalAlias))
                 {
-                    Debug.WriteLine($"Alias {alias} already exist");
-                    return true; // Alias already exists
+                    break; // Exit the loop if the alias is unique
+                }
+
+                counter++; // Increment counter if alias exists
+            }
+
+            return finalAlias;
+        }
+
+
+        /// <summary>
+        /// Removes diacritics, punctuation, and unwanted characters from the input string.
+        /// </summary>
+        /// <param name="text">The input string with potential diacritics, punctuation, and unwanted characters.</param>
+        /// <returns>A string without diacritics, punctuation, and unwanted characters.</returns>
+        private string CleanText(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return string.Empty;
+
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var chars in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(chars);
+
+                // Retain only letters, numbers, and spaces (or any other desired categories)
+                if (unicodeCategory == UnicodeCategory.LowercaseLetter ||
+                    unicodeCategory == UnicodeCategory.UppercaseLetter ||
+                    unicodeCategory == UnicodeCategory.DecimalDigitNumber ||
+                    unicodeCategory == UnicodeCategory.SpaceSeparator)
+                {
+                    stringBuilder.Append(chars);
                 }
             }
-            return false; // Alias does not exist
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+
+        /// <summary>
+        /// Checks if the given alias already exists in the data_login.csv file.
+        /// </summary>
+        /// <param name="alias">The alias to check for existence.</param>
+        /// <returns>True if the alias exists; otherwise, false.</returns>
+        private bool AliasExists(string alias)
+        {
+            DataCache cache = new DataCache();
+            // Check if the cached user data is empty or not loaded
+            if (cache.CachedLoginData == null || cache.CachedLoginData.Count == 0)
+            {
+                cache.LoadDecryptedData();
+            }
+
+            foreach (var line in cache.CachedLoginData!)
+            {
+                //var loginDetails = line.Split(','); // Ensure splitting is done if data contains multiple fields
+                if (line[0].Trim() == alias)
+                {
+                    Debug.WriteLine($"Alias {alias} already exists.");
+                    return true;
+                }
+            }
+            return false;
         }
     }
+    #endregion PROCES
 }

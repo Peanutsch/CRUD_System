@@ -15,15 +15,18 @@ namespace CRUD_System
 {
     public partial class UserMainForm : Form
     {
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"CSV\log.csv");
+        #region PROPERTIES
+        AuthenticationService authService = new AuthenticationService();
+        #endregion PROPERTIES
 
-        AuthenticationService loginHandler = new AuthenticationService();
-
+        #region CONSTRUCTOR
         public UserMainForm()
         {
             InitializeComponent();
         }
+        #endregion CONSTRUCTOR
 
+        #region BUTTONS
         private void MainFormUsers_Load(object sender, EventArgs e)
         {
             // Set focus to the logout button when the form is loaded
@@ -39,14 +42,15 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            loginHandler.PerformLogout();
+            authService.PerformLogout();
             this.Hide(); // Hide the MainForm
         }
 
         private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            loginHandler.PerformLogout();
+            authService.PerformLogout();
         }
+        #endregion BUTTONS
     }
 }
 

@@ -1,16 +1,23 @@
 ﻿using CRUD_System.FileHandlers;
+using Microsoft.Win32;
 using System;
 
 namespace CRUD_System.Handlers
 {
     public class FormInteractionHandler
     {
+        #region PROPERTIES
         public bool UserSelected { get; set; } // Property to store selection state
+        
+        private ShowLogsForm? showReportForm;
+        #endregion PROPERTIES
 
+        #region CONSTRUCTOR
         public FormInteractionHandler()
         {
             //
         }
+        #endregion CONSTRUCTOR
 
         #region CREATE FORM
         /// <summary>
@@ -86,6 +93,57 @@ namespace CRUD_System.Handlers
         }
         #endregion CREATE NEW PASSWORD
 
+        #region SHOW REPORT FORM
+        /// <summary> 
+        /// Opens the ShowReportForm as a dialog without hiding the parent control.
+        /// </summary>
+        /// <param name="parentControl">
+        /// The parent control (e.g., a UserControl or Form) to pass along to the ShowReportForm. 
+        /// If null, an error message will be shown indicating that the parent control is invalid.
+        /// </param>
+        public void Open_ShowReportForm(UserControl? parentControl = null, string selectedAlias = "")
+        {
+            if (parentControl == null)
+            {
+                MessageBox.Show("Parent control is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (showReportForm == null || showReportForm.IsDisposed)
+            {
+                showReportForm = new ShowLogsForm();
+            }
+
+            // Load the report content into the ShowReportForm
+            showReportForm.LoadListBoxLogs(selectedAlias);
+            showReportForm.Show();
+        }
+        #endregion SHOW REPORT FORM
+
+        #region CALL IN SICK
+        public void Open_AbsenceDueIllnessForm(Form? parentControl = null)
+        {
+            if (parentControl != null)
+            {
+                parentControl.Hide();
+
+                // Open AbsenceDueIllnessForm zonder te proberen het opnieuw te sluiten via Close()
+                using AbsenceDueIllnessForm? absenceForm = parentControl as AbsenceDueIllnessForm;
+                {
+                    absenceForm?.ShowDialog(); // Show the existing form as Dialog
+                }
+
+                parentControl.Show(); // Restore visibility after closing the form
+            }
+            else
+            {
+                MessageBox.Show("Parent form is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        #endregion CALL IN SICK
+
+        #region BUTTON HANDLER
         /// <summary>
         /// Executes a specified action if a user is selected, otherwise executes a fallback action if provided.
         /// </summary>
@@ -102,5 +160,6 @@ namespace CRUD_System.Handlers
                 noUserSelectedAction?.Invoke();
             }
         }
+        #endregion BUTTON HANDLER
     }
 }

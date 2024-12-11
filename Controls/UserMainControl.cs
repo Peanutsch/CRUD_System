@@ -31,7 +31,6 @@ namespace CRUD_System
         AccountManager accountManager = new AccountManager();
         ProfileManager profileManager = new ProfileManager();
         FormInteractionHandler interactionHandler = new FormInteractionHandler();
-
         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         // Property to expose the InteractionHandler instance for external access
@@ -45,7 +44,6 @@ namespace CRUD_System
         {
             InitializeComponent();
             this.userInterface = userInterface ?? new UserInterface(this);
-
             this.userInterface.LoadDetailsListBoxThisUser();
         }
         #endregion CONSTRUCTOR
@@ -65,16 +63,22 @@ namespace CRUD_System
             int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
 
             var loginDetails = loginLines[loginIndex].Split(",");
+            var userDetails = userLines[userIndex].Split(",");
 
-            // Parse the admin status and online status as bools
+            // Parse the admin status, online status and isSick status as bools
             bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
             bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
+            bool isTheOne = bool.TryParse(loginDetails[4], out bool parsedIsTheOne) && parsedIsTheOne;
+            bool isSick = bool.TryParse(userDetails[9], out bool parsedIsSick) && parsedIsSick;
 
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
+                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
             }
-            editMode = false; // Close editMode
+
+            AdminInterface adminInterface = new AdminInterface();
+            adminInterface.EditMode = false;
+            userInterface.InterfaceEditModeUser();
             userInterface.ReloadListBoxUser(userIndex); // Reload interface
         }
 
@@ -99,6 +103,10 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
+                // Close EditMode
+                userInterface.EditMode = false;
+                userInterface.InterfaceEditModeUser();
+                // Open New Password Form
                 interactionHandler.Open_CreateNewPasswordForm();
             });
 
@@ -110,7 +118,6 @@ namespace CRUD_System
 
             return modus;
         }
-        #endregion BUTTONS
 
         public void ListBoxUser_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -119,7 +126,19 @@ namespace CRUD_System
 
         private void comboBoxStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Check if SelectedItem is not null before calling ToString
+            if (comboBoxStatus.SelectedItem != null)
+            {
+                string? status = comboBoxStatus.SelectedItem.ToString();
 
+                if (!string.IsNullOrEmpty(status))
+                {
+                    // Pass the selected status to the StatusIndicator method
+                    userInterface.StatusIndicator(status);
+                }
+            }
         }
+
+        #endregion BUTTONS
     }
 }

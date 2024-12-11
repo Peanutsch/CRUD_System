@@ -12,29 +12,53 @@ namespace CRUD_System.Repositories
     internal class RepositoryMessageBoxes
     {
         #region CONFIRM
-        public DialogResult MessageBoxConfirmNewUser(string alias)
+        public DialogResult MessageConfirmNewUser(string alias)
         {
             return MessageBox.Show($"Please confirm to SAVE new account {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToSAVEChanges(string alias)
+        public DialogResult MessageConfirmToSAVEChanges(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToSAVEPassword(string alias)
+        public DialogResult MessageConfirmToSAVEPassword(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the new password for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the new password for {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToGeneratePassword(string alias)
+        public DialogResult MessageConfirmToGeneratePassword(string alias)
         {
-            return MessageBox.Show($"Please confirm to GENERATE a NEW password for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to GENERATE a NEW password for {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToDELETE(string aliasToDelete)
+        public DialogResult MessageConfirmToDELETE(string aliasToDelete)
         {
-            return MessageBox.Show($"Please confirm to DELETE account {aliasToDelete.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to DELETE account {aliasToDelete.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+        }
+
+        public DialogResult MessageConfirmCallInSickNotification(string alias)
+        {
+            return MessageBox.Show($"Please confirm to set user {alias.ToUpper()} on Absence due Illness", "Confirm", MessageBoxButtons.YesNo);
+        }
+
+        public DialogResult MessageConfirmForceLogOutUser(string alias)
+        {
+            return MessageBox.Show($"Please confirm to logout user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+        }
+        public DialogResult MessageConfirmSaveNote(string alias)
+        {
+            return MessageBox.Show($"Please confirm to save this note for user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+        }
+
+        public DialogResult MessageConfirmDeleteFile(string fileName)
+        {
+        return MessageBox.Show($"Are you sure you want to delete the file '{fileName}'?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        }
+
+        public DialogResult MessageConfirmIsTheOne(string alias)
+        {
+            return MessageBox.Show($"Are you sure you give {alias} the role of The One and be SuperUser?", "Confirm Change Role", MessageBoxButtons.YesNo);
         }
         #endregion CONFIRM
 
@@ -58,6 +82,12 @@ namespace CRUD_System.Repositories
         {
             return MessageBox.Show($"New account {alias} created succesfully!");
         }
+
+        public DialogResult MessageReportSaved(string date, string selectedAlias)
+        {
+            return MessageBox.Show($"Report saved as {selectedAlias}_{date}_report.csv");
+        }
+
         #endregion SUCCES
 
         #region INVALID
@@ -103,6 +133,11 @@ namespace CRUD_System.Repositories
         public DialogResult MessageUserAlreadyOnline(string alias)
         {
             return MessageBox.Show($"User with alias [{alias.ToUpper()}] is already online");
+        }
+
+        public DialogResult MessageDetailsNotComplete()
+        {
+            return MessageBox.Show("Details are not complete. Name, Surname and Email are mandatory");
         }
         #endregion INVALID
     }

@@ -1,6 +1,8 @@
+using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CRUD_System
@@ -13,8 +15,7 @@ namespace CRUD_System
     public partial class LoginForm : Form
     {
         #region PROPERTIES
-        AuthenticationService loginHandler = new AuthenticationService();
-
+        AuthenticationService authService = new AuthenticationService();
         private bool isPasswordVisible = false;
         #endregion PROPERTIES
 
@@ -89,7 +90,7 @@ namespace CRUD_System
 
                     this.Hide();
                     // Validate username and password, and display appropriate message
-                    loginHandler.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+                    authService.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
                     this.Close();
                 }
             };
@@ -104,7 +105,7 @@ namespace CRUD_System
         {
             this.Hide();
             // Validate username and password, and display appropriate message
-            loginHandler.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+            authService.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
             this.Close();
         }
 

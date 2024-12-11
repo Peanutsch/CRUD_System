@@ -8,4 +8,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Cryptography\**" />
+    <EmbeddedResource Remove="Cryptography\**" />
+    <None Remove="Cryptography\**" />
+  </ItemGroup>
+
 </Project>
