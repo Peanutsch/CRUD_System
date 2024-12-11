@@ -447,6 +447,7 @@ namespace CRUD_System.Handlers
         /// <param name="isTheOne">The new status indicating whether the user is "The One".</param>
         public void IsTheOne(string selectedAlias, bool isTheOne)
         {
+            AdminInterface adminInterface = new AdminInterface();
             // Check if the cached login data is empty. If so, load the decrypted data.
             if (cache.CachedLoginData.Count == 0)
             {
@@ -459,13 +460,18 @@ namespace CRUD_System.Handlers
             // Locate the user in the cached login data by matching their alias.
             var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == selectedAlias); // Alias is in the first field (index 0)
 
-            if (login != null)
+            if (login != null && adminInterface.SelectedUserIsAdmin)
             {
                 Debug.WriteLine($"***\nloginLine before: {login}");
                 // Update 'IsTheOne' status
                 login[4] = isTheOne.ToString();
                 Debug.WriteLine($"login[4]: {login[4]}");
                 Debug.WriteLine($"loginLine after: {login}\n***");
+            }
+            else
+            {
+                Debug.WriteLine($"login != null and selected user must be Admin");
+                Debug.WriteLine($"login: {login} Selected User: {adminInterface.SelectedUserIsAdmin}");
             }
 
             // Save the updated login data and encrypt it for security.

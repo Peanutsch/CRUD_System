@@ -22,6 +22,7 @@ namespace CRUD_System.Interfaces
         public bool EditMode { get; set; }
         public bool IsReport { get; set; }
         public bool SelectedUserIsTheOne { get; set; }
+        public bool SelectedUserIsAdmin { get; set; }
 
         private int currentPage = 1; // Track pagenumbers
         private const int itemsPerPage = 15; // Maximum items per page in listBoxAdmin
@@ -288,6 +289,11 @@ namespace CRUD_System.Interfaces
 
             adminControl.txtAbsenceIllness.Visible = userDetails![9] == "True"; // isSick
             adminControl.txtAdmin.Visible = loginDetails![2] == "True"; // IsAdmin
+
+            if (loginDetails![2] == "True")
+            {
+                SelectedUserIsAdmin = true;
+            }
 
             if (loginDetails != null && userDetails != null && AuthenticationService.IsTheOne)
             {
