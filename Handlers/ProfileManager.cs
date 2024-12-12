@@ -123,7 +123,7 @@ namespace CRUD_System.Handlers
                 if (AdminInterface.SelectedUserIsAdmin)
                 {
                     login[4] = AdminMainControl.IsTheOne.ToString();
-                    Debug.WriteLine($"Updated 'The One' status to: {login[4]}");
+                    Debug.WriteLine($"Updated 'The One' status to {login[4]}");
 
                     var currentUser = AuthenticationService.CurrentUser;
                     logEvents.LogEventUpdateStatusIsTheOne(currentUser!, alias);
@@ -235,10 +235,16 @@ namespace CRUD_System.Handlers
         private (List<string>, List<string>) RemoveUserFromLines(List<string> userLines, List<string> loginLines, string aliasToDelete)
         {
             // Remove the user from userLines based on the alias
-            userLines = userLines.Where(line => !line.Split(',')[2].Trim().Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase)).ToList();
+            userLines = userLines.Where(line => !line.Split(',')[2]
+                                                      .Trim()
+                                                      .Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase))
+                                                      .ToList();
 
             // Remove the user from loginLines based on the alias
-            loginLines = loginLines.Where(line => !line.Split(',')[0].Trim().Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase)).ToList();
+            loginLines = loginLines.Where(line => !line.Split(',')[0]
+                                                       .Trim()
+                                                       .Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase))
+                                                       .ToList();
 
             return (userLines, loginLines);
         }

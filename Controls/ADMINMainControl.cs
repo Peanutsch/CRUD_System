@@ -363,48 +363,34 @@ namespace CRUD_System
         #region KEY HANDLERS
         /// <summary>
         /// Handles the KeyPress event for the txtPhonenumber textbox.
-        /// Allows only numeric digits, the '+' and '-' characters, the Backspace key,
-        /// and clipboard shortcuts (Ctrl+V and Ctrl+C).
+        /// Allows only numeric digits, '+', '-', Backspace, Spacebar, and clipboard shortcuts (Ctrl+C and Ctrl+V).
         /// Suppresses any other key inputs to ensure only valid phone number characters are entered.
         /// </summary>
         /// <param name="sender">The source of the event, typically the TxtPhonenumber textbox.</param>
         /// <param name="e">The KeyEventArgs containing the event data.</param>
+        /// <summary>
+        /// Handles the KeyDown event for the txtPhonenumber textbox.
+        /// Allows numeric digits, '+', '-', Backspace, Spacebar, and clipboard shortcuts (Ctrl+C, Ctrl+V).
+        /// Suppresses any other invalid key inputs.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The KeyEventArgs containing the event data.</param>
         public void TxtPhonenumber_KeyDown(object sender, KeyEventArgs e)
         {
-            // Allow digits (main keyboard and numpad)
-            if ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) ||
-                (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
-            {
-                return; // Allow numeric input
-            }
-
-            // Allow '+' and '-' characters
-            if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add ||
-                e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract)
-            {
-                return; // Allow plus and minus
-            }
-
-            // Allow Backspace
-            if (e.KeyCode == Keys.Back)
+            // Allow valid keys: digits (main and numpad), Backspace, Space, '+', '-', and clipboard shortcuts
+            if ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) || // Digits (main keyboard)
+                (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9) || // Digits (numpad)
+                e.KeyCode == Keys.Back || // Backspace
+                e.KeyCode == Keys.Space || // Spacebar
+                e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add || // Plus
+                e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract || // Minus
+                (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.V))) // Clipboard shortcuts
             {
                 return;
             }
 
-            // Allow clipboard shortcuts (Ctrl+C and Ctrl+V)
-            if (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.V))
-            {
-                return;
-            }
-
-            // Allow Spacebar
-            if (e.KeyCode == Keys.Space)
-            {
-                return;
-            }
-
-            // Block all other keys
-            e.SuppressKeyPress = true; // Prevent invalid keys from being processed
+            // Suppress all other keys
+            e.SuppressKeyPress = true;
         }
 
         /// <summary>
