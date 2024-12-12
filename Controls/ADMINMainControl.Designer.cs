@@ -219,7 +219,7 @@
             txtPhonenumber.Size = new Size(218, 26);
             txtPhonenumber.TabIndex = 7;
             txtPhonenumber.TextAlign = HorizontalAlignment.Center;
-            txtPhonenumber.KeyPress += TxtPhonenumber_KeyPress;
+            txtPhonenumber.KeyDown += TxtPhonenumber_KeyDown;
             // 
             // btnGeneratePSW
             // 

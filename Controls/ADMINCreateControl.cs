@@ -121,25 +121,50 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the KeyPress event for the txtPhonenumber textbox.
-        /// Allows only numeric digits, the '+' and '-' characters, and the Backspace key.
+        /// Allows only numeric digits, the '+' and '-' characters, the Backspace key,
+        /// and clipboard shortcuts (Ctrl+V and Ctrl+C).
         /// Suppresses any other key inputs to ensure only valid phone number characters are entered.
         /// </summary>
         /// <param name="sender">The source of the event, typically the TxtPhonenumber textbox.</param>
-        /// <param name="e">The KeyPressEventArgs containing the event data.</param>
+        /// <param name="e">The KeyEventArgs containing the event data.</param>
         public void TxtPhonenumber_KeyDown(object sender, KeyEventArgs e)
         {
-            // Allow only digits, the '+' and '-' characters, Backspace, and Ctrl+V, Ctrl+C
-            if (!char.IsDigit((char)e.KeyCode)                              // Check if the key is a digit (0-9)
-                && e.KeyCode != Keys.Add                                    // Allow the '+' character
-                && e.KeyCode != Keys.Subtract                               // Allow the '-' character
-                && e.KeyCode != Keys.Back                                   // Allow Backspace
-                //&& e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9   // Allow Numpad
-                && !(e.Control && e.KeyCode == Keys.V)                      // Allow Ctrl+V for paste
-                && !(e.Control && e.KeyCode == Keys.C))                     // Allow Ctrl+C for copy
+            // Allow digits (main keyboard and numpad)
+            if ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) ||
+                (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
             {
-                e.SuppressKeyPress = true; // Prevent the key from being processed further
+                return; // Allow numeric input
             }
+
+            // Allow '+' and '-' characters
+            if (e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add ||
+                e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract)
+            {
+                return; // Allow plus and minus
+            }
+
+            // Allow Backspace
+            if (e.KeyCode == Keys.Back)
+            {
+                return;
+            }
+
+            // Allow clipboard shortcuts (Ctrl+C and Ctrl+V)
+            if (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.V))
+            {
+                return;
+            }
+
+            // Allow Spacebar
+            if(e.KeyCode == Keys.Space)
+            {
+                return;
+            }
+
+            // Block all other keys
+            e.SuppressKeyPress = true; // Prevent invalid keys from being processed
         }
+
 
         /// <summary>
         /// Handles the KeyDown event for the txtName textbox.
