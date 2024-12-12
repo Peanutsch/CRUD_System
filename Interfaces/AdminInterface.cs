@@ -22,7 +22,7 @@ namespace CRUD_System.Interfaces
         public bool EditMode { get; set; }
         public bool IsReport { get; set; }
         public bool SelectedUserIsTheOne { get; set; }
-        public bool SelectedUserIsAdmin { get; set; }
+        public static bool SelectedUserIsAdmin { get; set; }
 
         public List<string[]> CachedUserData => cache.CachedUserData;
         public List<string[]> CachedLoginData => cache.CachedLoginData;
@@ -295,7 +295,7 @@ namespace CRUD_System.Interfaces
                 SelectedUserIsAdmin = true;
             }
 
-            if (loginDetails != null && userDetails != null && AuthenticationService.IsTheOne)
+            if (loginDetails != null && userDetails != null && AuthenticationService.CurrentUserIsTheOne)
             {
                 adminControl.btnDeleteUser.Visible = EditMode;
                 adminControl.btnShowListBoxLogs.Visible = EditMode;
@@ -384,7 +384,7 @@ namespace CRUD_System.Interfaces
             ToggleControlVisibility(adminControl.btnCreateUser, EditMode);
             //ToggleControlVisibility(adminControl.chkAbsenceDueIllness, EditMode);
 
-            if (AuthenticationService.IsTheOne)
+            if (AuthenticationService.CurrentUserIsTheOne)
             {
                 // Adjust visibility and enablement of buttons based on EditMode
                 ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
@@ -451,7 +451,7 @@ namespace CRUD_System.Interfaces
         public void SetForceLogOutUserBtn(string aliasToLogOut)
         {
             var currentUser = AuthenticationService.CurrentUser;
-            if (AuthenticationService.IsTheOne)
+            if (AuthenticationService.CurrentUserIsTheOne)
             {
                 // Check if the cache is empty, and reload data if necessary.
                 if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)

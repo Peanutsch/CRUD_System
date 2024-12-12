@@ -67,7 +67,7 @@ namespace CRUD_System
 
         public void FormConfig()
         {
-            if (AuthenticationService.IsTheOne)
+            if (AuthenticationService.CurrentUserIsTheOne)
             {
                 this.labelAlias.Text = " NEO ";
                 this.BackColor = Color.DarkRed;

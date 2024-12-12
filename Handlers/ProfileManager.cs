@@ -36,19 +36,19 @@ namespace CRUD_System.Handlers
         /// Updates user details in data_users.csv
         /// Updates isAdmin in data_login.csv
         /// </summary>
-        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex, string name, string surname, string alias, string address, string zipCode, string city, string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick, bool isTheOne)
+        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex,
+                                      string name, string surname, string alias, string address, string zipCode, string city,
+                                      string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick, bool isTheOne)
         {
-            // Confirm to save changes
-            DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
-            if (dr != DialogResult.Yes)
-            {
-                return;
-            }
-
-            // Check if the cache is empty, and reload data if necessary.
             if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
                 cache.LoadDecryptedData();
+            }
+
+            DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
+            if (dr == DialogResult.No)
+            {
+                return;
             }
 
             var currentUser = AuthenticationService.CurrentUser;
@@ -56,8 +56,8 @@ namespace CRUD_System.Handlers
             {
                 try
                 {
-                    // Find the user in the cached user data by alias and update their online status.
-                    var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias); // Alias field
+                    Debug.WriteLine($"Looking for {alias} in CachedUserData");
+                    var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias);
                     if (user != null)
                     {
                         user[0] = name;
@@ -69,27 +69,49 @@ namespace CRUD_System.Handlers
                         user[6] = email;
                         user[7] = phoneNumber;
                         user[8] = onlineStatus.ToString();
-                        user[9] = isSick.ToString(); // Update online status
+                        user[9] = isSick.ToString();
                     }
 
-                    // Save changes to the data files and encrypt them
+                    Debug.WriteLine("CachedLoginData:");
+                    foreach (var line in cache.CachedLoginData)
+                    {
+                        Debug.WriteLine(string.Join(", ", line));
+                    }
+
+                    DialogResult result = message.MessageConfirmIsTheOne(alias);
+                    if (result == DialogResult.No)
+                    {
+                        return;
+                    }
+
+                    Debug.WriteLine($"Looking for {alias} in CachedLoginData");
+                    var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
+                    if (login != null)
+                    {
+                        Debug.WriteLine($"Found login: {string.Join(", ", login)}");
+
+                        if (AdminInterface.SelectedUserIsAdmin)
+                        {
+                            login[4] = AdminMainControl.IsTheOne.ToString();
+                            Debug.WriteLine($"Updated 'The One' status to: {login[4]}");
+                        }
+                    }
+
                     cache.SaveAndEncryptData();
 
+                    AdminInterface adminInterface = new AdminInterface();
                     logEvents.LogEventUpdateUserDetails(currentUser, alias);
                     message.MessageUpdateSucces();
-
-                    // Select updated alias in ListBox
-                    AdminInterface adminInterface = new AdminInterface();
                     adminInterface.ReloadListBoxWithSelection(alias);
                 }
                 catch (Exception ex)
                 {
-                    Debug.Write("Error: " + ex.ToString());
+                    Debug.WriteLine($"Error while updating user {alias}: {ex}");
                     message.MessageSomethingWentWrong();
-                    return;
                 }
             }
         }
+
         #endregion UPDATE USER DETAILS
 
         #region DELETE USER
@@ -454,13 +476,19 @@ namespace CRUD_System.Handlers
                 cache.LoadDecryptedData();
             }
 
+            DialogResult dr = message.MessageConfirmIsTheOne(selectedAlias);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+
             // Initialize an instance of AdminMainControl (if necessary for further use).
-            AdminMainControl adminControl = new AdminMainControl();
+            //AdminMainControl adminControl = new AdminMainControl();
 
             // Locate the user in the cached login data by matching their alias.
             var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == selectedAlias); // Alias is in the first field (index 0)
 
-            if (login != null && adminInterface.SelectedUserIsAdmin)
+            if (login != null && AdminInterface.SelectedUserIsAdmin)
             {
                 Debug.WriteLine($"***\nloginLine before: {login}");
                 // Update 'IsTheOne' status
@@ -471,7 +499,7 @@ namespace CRUD_System.Handlers
             else
             {
                 Debug.WriteLine($"login != null and selected user must be Admin");
-                Debug.WriteLine($"login: {login} Selected User: {adminInterface.SelectedUserIsAdmin}");
+                Debug.WriteLine($"login: {login} Selected User: {AdminInterface.SelectedUserIsAdmin}");
             }
 
             // Save the updated login data and encrypt it for security.

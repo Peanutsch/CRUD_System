@@ -29,6 +29,8 @@ namespace CRUD_System
     public partial class AdminMainControl : UserControl
     {
         #region PROPERTIES
+        public static bool IsTheOne {  get; set; }
+
         readonly FilePaths path = new FilePaths();
 
         readonly AdminInterface adminInterface;
@@ -40,7 +42,7 @@ namespace CRUD_System
 
         bool isAdmin;
         bool editMode = false;
-        bool isTheOne = false;
+        readonly bool isTheOne = false;
         readonly bool onlineStatus = false;
         readonly bool isSick = false;
 
@@ -445,20 +447,25 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the event triggered when the 'Is The One' checkbox state changes.
-        /// Prompts the user for confirmation if the checkbox is checked and updates the profile accordingly.
-        /// If confirmation is declined, the checkbox is reset to unchecked.
+        /// Toggles the 'SelectedUserIsTheOne' property in the admin interface.
+        /// If the checkbox is checked and the current user is not already marked as 'The One',
+        /// updates the selected user's profile to mark them as 'The One'.
+        /// Exits the method without further actions if the checkbox is unchecked or the current user is already 'The One'.
         /// </summary>
         /// <param name="sender">The source of the event (the CheckBox).</param>
         /// <param name="e">The event data (state change of the checkbox).</param>
-        private void chkIsIsTheOne_CheckedChanged(object sender, EventArgs e)
+        private void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
-            adminInterface.SelectedUserIsTheOne = !adminInterface.SelectedUserIsTheOne;
-            /*
-            if (chkIsTheOne.Checked)
+            //adminInterface.SelectedUserIsTheOne = !adminInterface.SelectedUserIsTheOne;
+
+            if (AdminInterface.SelectedUserIsAdmin && chkIsTheOne.Checked)
             {
-                profileManager.IsTheOne(txtAlias.Text ,true);
+                IsTheOne = chkIsTheOne.Checked;
             }
-            */
+            else
+            {
+                IsTheOne = false;
+            }
         }
 
 

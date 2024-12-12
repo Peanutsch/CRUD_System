@@ -584,7 +584,7 @@
             chkIsTheOne.TextAlign = ContentAlignment.MiddleRight;
             chkIsTheOne.UseVisualStyleBackColor = true;
             chkIsTheOne.Visible = false;
-            chkIsTheOne.CheckedChanged += chkIsIsTheOne_CheckedChanged;
+            chkIsTheOne.CheckedChanged += chkIsTheOne_CheckedChanged;
             // 
             // AdminMainControl
             // 

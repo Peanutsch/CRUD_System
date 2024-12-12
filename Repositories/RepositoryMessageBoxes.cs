@@ -58,7 +58,7 @@ namespace CRUD_System.Repositories
 
         public DialogResult MessageConfirmIsTheOne(string alias)
         {
-            return MessageBox.Show($"Are you sure you give {alias} the role of The One and be SuperUser?", "Confirm Change Role", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Are you sure to change SuperUser role for {alias}?", "Confirm Change Role", MessageBoxButtons.YesNo);
         }
         #endregion CONFIRM
 

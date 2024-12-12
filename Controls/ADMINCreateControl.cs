@@ -38,7 +38,7 @@ namespace CRUD_System
 
         public void SetChkIsAdmin()
         { 
-            if (AuthenticationService.IsTheOne)
+            if (AuthenticationService.CurrentUserIsTheOne)
             {
                 chkIsAdmin.Visible = true;
                 chkIsAdmin.Enabled = true;
