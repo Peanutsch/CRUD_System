@@ -24,11 +24,11 @@ namespace CRUD_System.Interfaces
         public bool SelectedUserIsTheOne { get; set; }
         public bool SelectedUserIsAdmin { get; set; }
 
-        private int currentPage = 1; // Track pagenumbers
-        private const int itemsPerPage = 15; // Maximum items per page in listBoxAdmin
-
         public List<string[]> CachedUserData => cache.CachedUserData;
         public List<string[]> CachedLoginData => cache.CachedLoginData;
+
+        private int currentPage = 1; // Track pagenumbers
+        private const int itemsPerPage = 15; // Maximum items per page in listBoxAdmin
 
         readonly DataCache cache = new DataCache();
         private readonly AdminMainControl adminControl;
