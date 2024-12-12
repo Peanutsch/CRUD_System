@@ -36,6 +36,7 @@ namespace CRUD_System
         }
         #endregion CONSTRUCTOR
 
+        // Only when CurrentUserIsTheOne, then chkIsAdmin visible and enabled
         public void SetChkIsAdmin()
         { 
             if (AuthenticationService.CurrentUserIsTheOne)

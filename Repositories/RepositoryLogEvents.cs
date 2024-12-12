@@ -123,7 +123,7 @@ namespace CRUD_System.Repositories
             string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logevents");
             string userLogFile = FindCSVFiles.FindCSVFile(alias, "logevents");
 
-            if (AuthenticationService.CurrentUserRole && currentUser != alias) // Log the event in admin and user files
+            if (AuthenticationService.CurrentUserIsAdmin && currentUser != alias) // Log the event in admin and user files
             {
                 path.AppendToLog(currentUser, newLog);
             }
@@ -178,7 +178,7 @@ namespace CRUD_System.Repositories
             string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logevents");
             string userLogFile = FindCSVFiles.FindCSVFile(alias, "logevents");
 
-            if (AuthenticationService.CurrentUserRole && currentUser != alias) // Log the event in admin and user files
+            if (AuthenticationService.CurrentUserIsAdmin && currentUser != alias) // Log the event in admin and user files
             {
                 path.AppendToLog(currentUser, newLog);
             }

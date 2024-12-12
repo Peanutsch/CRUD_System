@@ -27,7 +27,7 @@ namespace CRUD_System.Handlers
     {
         #region PROPERTIES
         public static string? CurrentUser { get; set; }
-        public static bool CurrentUserRole { get; set; }
+        public static bool CurrentUserIsAdmin { get; set; }
         public static bool CurrentUserIsTheOne { get; set; }
 
         private readonly FilePaths path = new FilePaths();
@@ -212,7 +212,7 @@ namespace CRUD_System.Handlers
             if (isAdmin) // Send to admin interface
             {
                 AdminMainForm adminForm = new AdminMainForm();
-                CurrentUserRole = isAdmin;
+                CurrentUserIsAdmin = isAdmin;
 
                 adminForm.FormConfig();
                 DisplayUserAlias(adminForm, isAdmin);
