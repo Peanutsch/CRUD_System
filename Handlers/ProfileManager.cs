@@ -32,84 +32,130 @@ namespace CRUD_System.Handlers
         #endregion CONSTRUCTOR
 
         #region UPDATE USER DETAILS
+
         /// <summary>
-        /// Updates user details in data_users.csv
-        /// Updates isAdmin in data_login.csv
+        /// Updates user details and login data.
         /// </summary>
         public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex,
-                                      string name, string surname, string alias, string address, string zipCode, string city,
-                                      string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick, bool isTheOne)
+                               string name, string surname, string alias, string address, string zipCode, string city,
+                               string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick, bool isTheOne)
         {
+            // Ensure the cache is loaded with decrypted data before proceeding
             if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
                 cache.LoadDecryptedData();
             }
 
+            try
+            {
+                // Update user details in the cached data
+                UpdateCachedUserDetails(alias, name, surname, address, zipCode, city, email, phoneNumber, onlineStatus, isSick);
+
+                // Update "The One" status if it has been modified
+                if (AdminMainControl.ChkIsTheOneChanged)
+                {
+                    UpdateCachedLoginDetails(alias, isTheOne);
+                    AdminMainControl.ChkIsTheOneChanged = false;
+                }
+
+                // Save updated data and log the changes
+                SaveDataAndLogUpdates(alias);
+
+                // Reload the UI and maintain selection
+                ReloadUIWithSelection(alias);
+            }
+            catch (Exception ex)
+            {
+                // Log the error and notify the user
+                Debug.WriteLine($"Error while updating user {alias}: {ex}");
+                message.MessageSomethingWentWrong();
+            }
+        }
+
+        /// <summary>
+        /// Updates the user's details in the cached user data.
+        /// </summary>
+        private void UpdateCachedUserDetails(string alias, string name, string surname, string address, string zipCode,
+                                      string city, string email, string phoneNumber, bool onlineStatus, bool isSick)
+        {
+            // Confirm with the user before saving changes
             DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
             if (dr == DialogResult.No)
             {
                 return;
             }
 
-            var currentUser = AuthenticationService.CurrentUser;
-            if (!string.IsNullOrEmpty(currentUser))
+            // Find and update the user in the cached data
+            var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias);
+            if (user != null)
             {
-                try
+                user[0] = name;
+                user[1] = surname;
+                user[2] = alias;
+                user[3] = address;
+                user[4] = zipCode;
+                user[5] = city;
+                user[6] = email;
+                user[7] = phoneNumber;
+                user[8] = onlineStatus.ToString();
+                user[9] = isSick.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Updates the login details of the user, including "The One" status.
+        /// </summary>
+        /// <param name="alias">The alias of the user to update.</param>
+        /// <param name="isTheOne">Indicates if the user has special "The One" status.</param>
+        private void UpdateCachedLoginDetails(string alias, bool isTheOne)
+        {
+            // Confirm with the user before modifying "The One" status
+            DialogResult dr = message.MessageConfirmIsTheOne(alias);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+
+            // Find and update the login details in the cached data
+            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
+            if (login != null)
+            {
+                if (AdminInterface.SelectedUserIsAdmin)
                 {
-                    Debug.WriteLine($"Looking for {alias} in CachedUserData");
-                    var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias);
-                    if (user != null)
-                    {
-                        user[0] = name;
-                        user[1] = surname;
-                        user[2] = alias;
-                        user[3] = address;
-                        user[4] = zipCode;
-                        user[5] = city;
-                        user[6] = email;
-                        user[7] = phoneNumber;
-                        user[8] = onlineStatus.ToString();
-                        user[9] = isSick.ToString();
-                    }
+                    login[4] = AdminMainControl.IsTheOne.ToString();
+                    Debug.WriteLine($"Updated 'The One' status to: {login[4]}");
 
-                    Debug.WriteLine("CachedLoginData:");
-                    foreach (var line in cache.CachedLoginData)
-                    {
-                        Debug.WriteLine(string.Join(", ", line));
-                    }
-
-                    DialogResult result = message.MessageConfirmIsTheOne(alias);
-                    if (result == DialogResult.No)
-                    {
-                        return;
-                    }
-
-                    Debug.WriteLine($"Looking for {alias} in CachedLoginData");
-                    var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
-                    if (login != null)
-                    {
-                        Debug.WriteLine($"Found login: {string.Join(", ", login)}");
-
-                        if (AdminInterface.SelectedUserIsAdmin)
-                        {
-                            login[4] = AdminMainControl.IsTheOne.ToString();
-                            Debug.WriteLine($"Updated 'The One' status to: {login[4]}");
-                        }
-                    }
-
-                    cache.SaveAndEncryptData();
-
-                    AdminInterface adminInterface = new AdminInterface();
-                    logEvents.LogEventUpdateUserDetails(currentUser, alias);
-                    message.MessageUpdateSucces();
-                    adminInterface.ReloadListBoxWithSelection(alias);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error while updating user {alias}: {ex}");
-                    message.MessageSomethingWentWrong();
+                    var currentUser = AuthenticationService.CurrentUser;
+                    logEvents.LogEventUpdateStatusIsTheOne(currentUser!, alias);
                 }
             }
+        }
+
+        /// <summary>
+        /// Saves the updated user and login data, and logs the changes.
+        /// </summary>
+        /// <param name="alias">The alias of the updated user.</param>
+        private void SaveDataAndLogUpdates(string alias)
+        {
+            // Save and encrypt the updated data
+            cache.SaveAndEncryptData();
+
+            // Log the changes
+            var currentUser = AuthenticationService.CurrentUser;
+            logEvents.LogEventUpdateUserDetails(currentUser!, alias);
+
+            // Notify the user of a successful update
+            message.MessageUpdateSucces();
+        }
+
+        /// <summary>
+        /// Reloads the UI and ensures the updated user remains selected in the list.
+        /// </summary>
+        /// <param name="alias">The alias of the updated user.</param>
+        private void ReloadUIWithSelection(string alias)
+        {
+            AdminInterface adminInterface = new AdminInterface();
+            adminInterface.ReloadListBoxWithSelection(alias);
         }
 
         #endregion UPDATE USER DETAILS

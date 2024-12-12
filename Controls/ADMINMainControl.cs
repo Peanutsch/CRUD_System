@@ -30,6 +30,7 @@ namespace CRUD_System
     {
         #region PROPERTIES
         public static bool IsTheOne {  get; set; }
+        public static bool ChkIsTheOneChanged { get; set; }
 
         readonly FilePaths path = new FilePaths();
 
@@ -447,16 +448,16 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the event triggered when the 'Is The One' checkbox state changes.
-        /// Toggles the 'SelectedUserIsTheOne' property in the admin interface.
-        /// If the checkbox is checked and the current user is not already marked as 'The One',
-        /// updates the selected user's profile to mark them as 'The One'.
-        /// Exits the method without further actions if the checkbox is unchecked or the current user is already 'The One'.
+        /// Toggles the 'IsTheOne' property based on the checkbox state.
+        /// If the checkbox is checked and the selected user is an admin, marks the current user as 'The One'.
+        /// If the checkbox is unchecked or the selected user is not an admin, the 'IsTheOne' property is set to false.
+        /// Sets flag 'ChkIsTheOneChanged' to true to indicate a change in the checkbox state.
         /// </summary>
-        /// <param name="sender">The source of the event (the CheckBox).</param>
-        /// <param name="e">The event data (state change of the checkbox).</param>
+        /// <param name="sender">The source of the event, typically the 'chkIsTheOne' checkbox.</param>
+        /// <param name="e">The event data containing information about the state change of the checkbox.</param>
         private void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
-            //adminInterface.SelectedUserIsTheOne = !adminInterface.SelectedUserIsTheOne;
+            ChkIsTheOneChanged = true;
 
             if (AdminInterface.SelectedUserIsAdmin && chkIsTheOne.Checked)
             {

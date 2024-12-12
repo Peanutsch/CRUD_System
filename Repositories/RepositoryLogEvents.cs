@@ -130,6 +130,16 @@ namespace CRUD_System.Repositories
             path.AppendToLog(alias, newLog);
         }
 
+        public void LogEventUpdateStatusIsTheOne(string currentUser, string alias)
+        {
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status IsTheOne for [{alias.ToUpper()}]");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status IsTheOne for [{alias.ToUpper()}]";
+            string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logevents");
+            string userLogFile = FindCSVFiles.FindCSVFile(alias, "logevents");
+            path.AppendToLog(currentUser, newLog);
+            path.AppendToLog(alias, newLog);
+        }
+
         /// <summary>
         /// Logs the event when a user is deleted.
         /// </summary>
