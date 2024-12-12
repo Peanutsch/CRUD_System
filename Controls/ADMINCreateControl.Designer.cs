@@ -28,158 +28,157 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.chkIsAdmin = new CheckBox();
-            this.btnCancel = new Button();
-            this.txtPhonenumber = new TextBox();
-            this.txtZIPCode = new TextBox();
-            this.txtAlias = new TextBox();
-            this.txtSurname = new TextBox();
-            this.txtName = new TextBox();
-            this.txtEmail = new TextBox();
-            this.txtAddress = new TextBox();
-            this.txtCity = new TextBox();
-            this.btnSaveEdit = new Button();
-            this.SuspendLayout();
+            chkIsAdmin = new CheckBox();
+            btnCancel = new Button();
+            txtPhonenumber = new TextBox();
+            txtZIPCode = new TextBox();
+            txtAlias = new TextBox();
+            txtSurname = new TextBox();
+            txtName = new TextBox();
+            txtEmail = new TextBox();
+            txtAddress = new TextBox();
+            txtCity = new TextBox();
+            btnSaveEdit = new Button();
+            SuspendLayout();
             // 
             // chkIsAdmin
             // 
-            this.chkIsAdmin.AutoSize = true;
-            this.chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.chkIsAdmin.Location = new Point(687, 104);
-            this.chkIsAdmin.Name = "chkIsAdmin";
-            this.chkIsAdmin.Size = new Size(97, 22);
-            this.chkIsAdmin.TabIndex = 7;
-            this.chkIsAdmin.Text = "isAdmin";
-            this.chkIsAdmin.TextAlign = ContentAlignment.MiddleCenter;
-            this.chkIsAdmin.UseVisualStyleBackColor = true;
-            this.chkIsAdmin.Visible = false;
-            this.chkIsAdmin.CheckedChanged += this.chkIsAdmin_CheckedChanged;
+            chkIsAdmin.AutoSize = true;
+            chkIsAdmin.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            chkIsAdmin.Location = new Point(687, 104);
+            chkIsAdmin.Name = "chkIsAdmin";
+            chkIsAdmin.Size = new Size(97, 22);
+            chkIsAdmin.TabIndex = 7;
+            chkIsAdmin.Text = "isAdmin";
+            chkIsAdmin.TextAlign = ContentAlignment.MiddleCenter;
+            chkIsAdmin.UseVisualStyleBackColor = true;
+            chkIsAdmin.Visible = false;
+            chkIsAdmin.CheckedChanged += chkIsAdmin_CheckedChanged;
             // 
             // btnCancel
             // 
-            this.btnCancel.BackColor = SystemColors.ActiveCaption;
-            this.btnCancel.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnCancel.Location = new Point(690, 132);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new Size(104, 30);
-            this.btnCancel.TabIndex = 9;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = false;
-            this.btnCancel.Click += this.btnCancel_Click;
+            btnCancel.BackColor = SystemColors.ActiveCaption;
+            btnCancel.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnCancel.Location = new Point(690, 132);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(104, 30);
+            btnCancel.TabIndex = 9;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // txtPhonenumber
             // 
-            this.txtPhonenumber.Location = new Point(359, 103);
-            this.txtPhonenumber.Name = "txtPhonenumber";
-            this.txtPhonenumber.PlaceholderText = "Phonenumber";
-            this.txtPhonenumber.Size = new Size(325, 23);
-            this.txtPhonenumber.TabIndex = 6;
-            this.txtPhonenumber.TextAlign = HorizontalAlignment.Center;
-            //this.txtPhonenumber.KeyPress += TxtPhonenumber_KeyPress;
-            this.txtPhonenumber.KeyDown += TxtPhonenumber_KeyDown;
+            txtPhonenumber.Location = new Point(359, 103);
+            txtPhonenumber.Name = "txtPhonenumber";
+            txtPhonenumber.PlaceholderText = "Phonenumber";
+            txtPhonenumber.Size = new Size(325, 23);
+            txtPhonenumber.TabIndex = 6;
+            txtPhonenumber.TextAlign = HorizontalAlignment.Center;
+            txtPhonenumber.KeyDown += TxtPhonenumber_KeyDown;
             // 
             // txtZIPCode
             // 
-            this.txtZIPCode.Location = new Point(359, 74);
-            this.txtZIPCode.Name = "txtZIPCode";
-            this.txtZIPCode.PlaceholderText = "ZIP Code";
-            this.txtZIPCode.Size = new Size(325, 23);
-            this.txtZIPCode.TabIndex = 3;
-            this.txtZIPCode.TextAlign = HorizontalAlignment.Center;
+            txtZIPCode.Location = new Point(359, 74);
+            txtZIPCode.Name = "txtZIPCode";
+            txtZIPCode.PlaceholderText = "ZIP Code";
+            txtZIPCode.Size = new Size(325, 23);
+            txtZIPCode.TabIndex = 3;
+            txtZIPCode.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAlias
             // 
-            this.txtAlias.Enabled = false;
-            this.txtAlias.Location = new Point(28, 16);
-            this.txtAlias.Name = "txtAlias";
-            this.txtAlias.PlaceholderText = "Alias";
-            this.txtAlias.ReadOnly = true;
-            this.txtAlias.Size = new Size(325, 23);
-            this.txtAlias.TabIndex = 100;
-            this.txtAlias.TextAlign = HorizontalAlignment.Center;
+            txtAlias.Enabled = false;
+            txtAlias.Location = new Point(28, 16);
+            txtAlias.Name = "txtAlias";
+            txtAlias.PlaceholderText = "Alias";
+            txtAlias.ReadOnly = true;
+            txtAlias.Size = new Size(325, 23);
+            txtAlias.TabIndex = 100;
+            txtAlias.TextAlign = HorizontalAlignment.Center;
             // 
             // txtSurname
             // 
-            this.txtSurname.Location = new Point(359, 45);
-            this.txtSurname.Name = "txtSurname";
-            this.txtSurname.PlaceholderText = "Surname";
-            this.txtSurname.Size = new Size(325, 23);
-            this.txtSurname.TabIndex = 1;
-            this.txtSurname.TextAlign = HorizontalAlignment.Center;
-            this.txtSurname.TextChanged += this.TxtAlias_TextChanged;
-            this.txtSurname.KeyDown += TxtSurname_KeyDown;
+            txtSurname.Location = new Point(359, 45);
+            txtSurname.Name = "txtSurname";
+            txtSurname.PlaceholderText = "Surname (required)";
+            txtSurname.Size = new Size(325, 23);
+            txtSurname.TabIndex = 1;
+            txtSurname.TextAlign = HorizontalAlignment.Center;
+            txtSurname.TextChanged += TxtAlias_TextChanged;
+            txtSurname.KeyDown += TxtSurname_KeyDown;
             // 
             // txtName
             // 
-            this.txtName.Location = new Point(28, 45);
-            this.txtName.Name = "txtName";
-            this.txtName.PlaceholderText = "Name";
-            this.txtName.Size = new Size(325, 23);
-            this.txtName.TabIndex = 0;
-            this.txtName.TextAlign = HorizontalAlignment.Center;
-            this.txtName.TextChanged += this.TxtAlias_TextChanged;
-            this.txtName.KeyDown += TxtName_KeyDown;
+            txtName.Location = new Point(28, 45);
+            txtName.Name = "txtName";
+            txtName.PlaceholderText = "Name (required)";
+            txtName.Size = new Size(325, 23);
+            txtName.TabIndex = 0;
+            txtName.TextAlign = HorizontalAlignment.Center;
+            txtName.TextChanged += TxtAlias_TextChanged;
+            txtName.KeyDown += TxtName_KeyDown;
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new Point(28, 103);
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.PlaceholderText = "E-mail";
-            this.txtEmail.Size = new Size(325, 23);
-            this.txtEmail.TabIndex = 5;
-            this.txtEmail.TextAlign = HorizontalAlignment.Center;
+            txtEmail.Location = new Point(28, 103);
+            txtEmail.Name = "txtEmail";
+            txtEmail.PlaceholderText = "E-mail (required)";
+            txtEmail.Size = new Size(325, 23);
+            txtEmail.TabIndex = 5;
+            txtEmail.TextAlign = HorizontalAlignment.Center;
             // 
             // txtAddress
             // 
-            this.txtAddress.Location = new Point(28, 74);
-            this.txtAddress.Name = "txtAddress";
-            this.txtAddress.PlaceholderText = "Adress";
-            this.txtAddress.Size = new Size(325, 23);
-            this.txtAddress.TabIndex = 2;
-            this.txtAddress.TextAlign = HorizontalAlignment.Center;
+            txtAddress.Location = new Point(28, 74);
+            txtAddress.Name = "txtAddress";
+            txtAddress.PlaceholderText = "Adress";
+            txtAddress.Size = new Size(325, 23);
+            txtAddress.TabIndex = 2;
+            txtAddress.TextAlign = HorizontalAlignment.Center;
             // 
             // txtCity
             // 
-            this.txtCity.Location = new Point(687, 74);
-            this.txtCity.Name = "txtCity";
-            this.txtCity.PlaceholderText = "City";
-            this.txtCity.Size = new Size(325, 23);
-            this.txtCity.TabIndex = 4;
-            this.txtCity.TextAlign = HorizontalAlignment.Center;
-            this.txtCity.KeyDown += TxtCity_KeyDown;
+            txtCity.Location = new Point(687, 74);
+            txtCity.Name = "txtCity";
+            txtCity.PlaceholderText = "City";
+            txtCity.Size = new Size(325, 23);
+            txtCity.TabIndex = 4;
+            txtCity.TextAlign = HorizontalAlignment.Center;
+            txtCity.KeyDown += TxtCity_KeyDown;
             // 
             // btnSaveEdit
             // 
-            this.btnSaveEdit.BackColor = Color.LightGreen;
-            this.btnSaveEdit.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnSaveEdit.Location = new Point(595, 132);
-            this.btnSaveEdit.Name = "btnSaveEdit";
-            this.btnSaveEdit.Size = new Size(89, 30);
-            this.btnSaveEdit.TabIndex = 8;
-            this.btnSaveEdit.Text = "Save";
-            this.btnSaveEdit.UseVisualStyleBackColor = false;
-            this.btnSaveEdit.Click += this.btnSave_Click;
+            btnSaveEdit.BackColor = Color.LightGreen;
+            btnSaveEdit.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSaveEdit.Location = new Point(595, 132);
+            btnSaveEdit.Name = "btnSaveEdit";
+            btnSaveEdit.Size = new Size(89, 30);
+            btnSaveEdit.TabIndex = 8;
+            btnSaveEdit.Text = "Save";
+            btnSaveEdit.UseVisualStyleBackColor = false;
+            btnSaveEdit.Click += btnSave_Click;
             // 
             // AdminCreateControl
             // 
-            this.AutoScaleDimensions = new SizeF(7F, 15F);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.BackColor = SystemColors.ActiveCaption;
-            this.Controls.Add(this.chkIsAdmin);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.txtPhonenumber);
-            this.Controls.Add(this.txtZIPCode);
-            this.Controls.Add(this.txtAlias);
-            this.Controls.Add(this.txtSurname);
-            this.Controls.Add(this.txtName);
-            this.Controls.Add(this.txtEmail);
-            this.Controls.Add(this.txtAddress);
-            this.Controls.Add(this.txtCity);
-            this.Controls.Add(this.btnSaveEdit);
-            this.Name = "AdminCreateControl";
-            this.Size = new Size(1038, 198);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveCaption;
+            Controls.Add(chkIsAdmin);
+            Controls.Add(btnCancel);
+            Controls.Add(txtPhonenumber);
+            Controls.Add(txtZIPCode);
+            Controls.Add(txtAlias);
+            Controls.Add(txtSurname);
+            Controls.Add(txtName);
+            Controls.Add(txtEmail);
+            Controls.Add(txtAddress);
+            Controls.Add(txtCity);
+            Controls.Add(btnSaveEdit);
+            Name = "AdminCreateControl";
+            Size = new Size(1038, 198);
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

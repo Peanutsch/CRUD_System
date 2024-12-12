@@ -85,7 +85,7 @@ namespace CRUD_System
 
             if (string.IsNullOrEmpty(txtName.Text) || string.IsNullOrEmpty(txtSurname.Text) || string.IsNullOrEmpty(txtEmail.Text))
             {
-                Debug.WriteLine("Details are not complete. Name, Surname and Email are mandatory");
+                Debug.WriteLine("Details are not complete. Name, Surname and Email are required");
                 message.MessageDetailsNotComplete();
                 return;
             }
