@@ -70,10 +70,10 @@ namespace CRUD_System.Repositories
         /// </summary>
         /// <param name="currentUser">The username of the user who created the new account.</param>
         /// <param name="isAlias">The alias of the user who was created.</param>
-        public void NewAccount(string currentUser, string isAlias)
+        public void NewAccount(string currentUser, string isAlias, string isPassword, string isEmail)
         {
-            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created user [{isAlias.ToUpper()}]");
-            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created user [{isAlias.ToUpper()}]";
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created user [{isAlias.ToUpper()}]. Sent email to {isEmail} with password: {isPassword}");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created user [{isAlias.ToUpper()}]. Sent email to {isEmail} with password: {isPassword}";
             string adminlogFile = FindCSVFiles.FindCSVFile(currentUser, "logevents");
             string userLogFile = FindCSVFiles.FindCSVFile(isAlias, "logevents");
             path.AppendToLog(currentUser, newLog);

@@ -333,7 +333,7 @@ namespace CRUD_System
         private void btnSaveReport_Click(object sender, EventArgs e)
         {
             ReportManager reportManager = new ReportManager(this);
-            reportManager.btnSaveReport();
+            reportManager.btnSaveReportHandler();
         }
 
         /// <summary>

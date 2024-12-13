@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace CRUD_System.Handlers
 {
@@ -202,6 +203,12 @@ namespace CRUD_System.Handlers
             // log the deletion event
             LogDeletion(currentUser, aliasToDelete);
 
+            AdminMainControl adminControl = new AdminMainControl();
+            ReportManager reportMAnager = new ReportManager(adminControl);
+
+            string reportText = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")}\n[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
+            reportMAnager.ReportDeleteUser(alias, "Deleted", reportText);
+
             // Show a success message after deletion
             message.MessageDeleteSucces(aliasToDelete);
 
@@ -342,14 +349,11 @@ namespace CRUD_System.Handlers
 
             // Generate a unique alias and password for the user
             string isAlias = GenerateAlias(Name, Surname);
-            Debug.WriteLine($"New account for Alias: {isAlias}");
 
             //=== PASSWORD TEMP ISALIAS ===//
             // Generate password
             string isPassword = PasswordManager.PasswordGenerator();
             //string isPassword = isAlias;
-            Debug.WriteLine($"Created Password: {isPassword}");
-            Debug.WriteLine($"Welcome Email to {Email}");
 
             // Default values new user
             bool onlineStatus = false;
@@ -358,6 +362,10 @@ namespace CRUD_System.Handlers
             // Confirm the creation of the new user with the alias
             if (ConfirmNewUserCreation(isAlias))
             {
+                Debug.WriteLine($"New account for Alias: {isAlias}");
+                Debug.WriteLine($"Created Password: {isPassword}");
+                Debug.WriteLine($"Welcome Email to {Email}");
+
                 // Save the new user's data to the system (cache and file storage)
                 SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin, onlineStatus, isSick);
 
@@ -368,7 +376,7 @@ namespace CRUD_System.Handlers
                 };
 
                 // log the creation of the new user
-                LogNewAccountCreation(isAlias);
+                LogNewAccountCreation(isAlias, isPassword, Email);
 
                 // Notify the admin that the account creation was successful
                 message.MessageNewAccountSucces(isAlias);
@@ -377,6 +385,12 @@ namespace CRUD_System.Handlers
                 AdminMainControl adminControl = new AdminMainControl();
                 adminControl.listBoxAdmin.Items.Clear();
                 adminInterface.ReloadListBoxWithSelection(isAlias);
+                adminInterface.EditMode = false;
+                adminInterface.InterfaceEditModeAdmin();
+            }
+            else
+            {
+                return;
             }
         }
 
@@ -391,8 +405,10 @@ namespace CRUD_System.Handlers
             EncryptionManager.DecryptFile(path.UserFilePath);
             EncryptionManager.DecryptFile(path.LoginFilePath);
 
+            bool isTheOne = false;
+
             // Prepare the new data
-            string newDataLogin = $"{alias},{password},{isAdmin},{onlineStatus}";
+            string newDataLogin = $"{alias},{password},{isAdmin},{onlineStatus},{isTheOne}";
             string newDataUsers = $"{name},{surname},{alias},{address},{zipCode},{city},{email},{phoneNumber},{onlineStatus},{isSick}";
 
             // Append the new data to the files
@@ -444,17 +460,24 @@ namespace CRUD_System.Handlers
         /// <summary>
         /// Logs the creation of a new user account.
         /// </summary>
-        private void LogNewAccountCreation(string alias)
+        private void LogNewAccountCreation(string alias, string password, string email)
         {
             var currentUser = AuthenticationService.CurrentUser;
             if (!string.IsNullOrEmpty(currentUser))
             {
+                AdminMainControl adminControl = new AdminMainControl();
                 // Create default CSV files line = {string.Empty},{string.Empty},{string.Empty}
-                CreateCSVFiles.CreateCISNoticeCSV(alias);
+                //CreateCSVFiles.CreateCISNoticeCSV(alias);
                 CreateCSVFiles.CreateLogCSV(alias); //, currentUser.ToUpper(), logEvent);
 
                 // log event in {alias}_log.csv
-                logEvents.NewAccount(currentUser, alias);
+                logEvents.NewAccount(currentUser, alias, password, email);
+
+                // Temporary copy of logEvent in rtxReport
+                ReportManager reportManager = new ReportManager(adminControl);
+                string reportText = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")}\n[{currentUser!.ToUpper()}]," +
+                                $"Created user [{alias.ToUpper()}].\nSent email to {email} with password: {password}";
+                reportManager.ReportSaveNewUser(alias, "New User", reportText);
             }
         }
         #endregion SAVE NEW USER

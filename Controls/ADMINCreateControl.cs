@@ -78,17 +78,17 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            profileManager.SaveNewUser(txtName.Text.Trim(), txtSurname.Text.Trim(), 
-                                       txtAddress.Text.Trim(), txtZIPCode.Text.Trim(),
-                                       txtCity.Text.Trim(), txtEmail.Text.Trim(),
-                                       txtPhonenumber.Text.Trim(), isAdmin);
-
             if (string.IsNullOrEmpty(txtName.Text) || string.IsNullOrEmpty(txtSurname.Text) || string.IsNullOrEmpty(txtEmail.Text))
             {
                 Debug.WriteLine("Details are not complete. Name, Surname and Email are required");
                 message.MessageDetailsNotComplete();
                 return;
             }
+
+            profileManager.SaveNewUser(txtName.Text.Trim(), txtSurname.Text.Trim(), 
+                                       txtAddress.Text.Trim(), txtZIPCode.Text.Trim(),
+                                       txtCity.Text.Trim(), txtEmail.Text.Trim(),
+                                       txtPhonenumber.Text.Trim(), isAdmin);
 
             // Close CreateFormADMIN, return to MainFormADMIN
             interactionHandler.Close_CreateForm(this.ParentForm);

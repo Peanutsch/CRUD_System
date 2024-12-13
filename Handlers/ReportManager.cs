@@ -30,7 +30,7 @@ namespace CRUD_System.Handlers
         /// Handles the logic for saving a report. Validates input, confirms the action with the user, 
         /// creates a new report CSV file, and refreshes the ListView to display the new report.
         /// </summary>
-        public void btnSaveReport()
+        public void btnSaveReportHandler()
         {
             if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && !string.IsNullOrEmpty(adminControl.rtxReport.Text))
             {
@@ -60,6 +60,24 @@ namespace CRUD_System.Handlers
 
             adminControl.rtxReport.Clear();
             RefreshListViewFiles();
+        }
+
+        public void SaveReportNewUser(string isNewAlias, string isSubject,string isReportText)
+        {
+            string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
+            var currentUser = AuthenticationService.CurrentUser;
+            string reportText = $"{isReportText.Replace(",", ";")}";           
+
+            try
+            {
+                CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser!, isNewAlias, isSubject, reportText);
+                Debug.WriteLine($"Create report for new useraccount {isNewAlias} succes!");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Error creating report for new useraccount {isNewAlias}:\n{e}");
+            }
+            
         }
 
 

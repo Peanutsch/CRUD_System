@@ -381,7 +381,7 @@ namespace CRUD_System.Interfaces
 
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
-            ToggleControlVisibility(adminControl.btnCreateUser, EditMode);
+            //ToggleControlVisibility(adminControl.btnCreateUser, EditMode);
             //ToggleControlVisibility(adminControl.chkAbsenceDueIllness, EditMode);
 
             if (AuthenticationService.CurrentUserIsTheOne)
