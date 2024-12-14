@@ -163,119 +163,115 @@ namespace CRUD_System.Handlers
 
         #region DELETE USER
         /// <summary>
-        /// Deletes a user from the data files (data_users.csv and data_login.csv), 
-        /// after confirming the action and performing necessary decryption and encryption.
+        /// Deletes a user from the data files (data_users.csv and data_login.csv) 
+        /// after confirming the action, decrypting the files, and updating the data.
         /// </summary>
-        /// <param name="alias">The alias of the user to delete.</param>
-        public void DeleteUser(string alias)
+        /// <param name="aliasToDelete">The alias of the user to be deleted.</param>
+        public void DeleteUser(string aliasToDelete)
         {
-            AdminInterface adminInterface = new AdminInterface();
-            var currentUser = AuthenticationService.CurrentUser;
-
-            string aliasToDelete = alias;
-
-            // Confirm the deletion with the user
-            if (!ConfirmDeletion(aliasToDelete))
-            {
+            // Confirm deletion and validate the current user
+            if (!ConfirmAndValidate(aliasToDelete))
                 return;
-            }
 
-            // If current user is not valid, show error and exit
-            if (string.IsNullOrEmpty(currentUser))
-            {
-                message.MessageSomethingWentWrong();
-                return;
-            }
-
-            // Decrypt both user and login files before performing any actions on them
+            // Decrypt the user and login data files
             EncryptionManager.DecryptFile(path.UserFilePath);
             EncryptionManager.DecryptFile(path.LoginFilePath);
 
-            // Read the current data from the files
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
+            // Remove the user from the data
+            var (updatedUserLines, updatedLoginLines) = RemoveUserFromData(aliasToDelete);
 
-            // Remove the specified user from the data
-            (userLines, loginLines) = RemoveUserFromLines(userLines, loginLines, aliasToDelete);
+            // Save the updated data and re-encrypt the files
+            SaveAndEncryptDataFiles(updatedUserLines, updatedLoginLines);
 
-            // Write the updated user data back to the files
-            WriteUpdatedDataToFile(userLines, loginLines);
+            // Generate a report and log the deletion event
+            ReportAndLogDeletion(aliasToDelete);
 
-            // log the deletion event
-            LogDeletion(currentUser, aliasToDelete);
-
-            AdminMainControl adminControl = new AdminMainControl();
-            ReportManager reportMAnager = new ReportManager(adminControl);
-
-            string reportText = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")}\n[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
-            reportMAnager.ReportDeleteUser(alias, "Deleted", reportText);
-
-            // Show a success message after deletion
-            message.MessageDeleteSucces(aliasToDelete);
-
-            // Re-encrypt the user and login files to ensure data security
-            EncryptionManager.EncryptFile(path.UserFilePath);
-            EncryptionManager.EncryptFile(path.LoginFilePath);
-
-            // Reload Cache
+            // Reload the cache with the updated data
             cache.LoadDecryptedData();
         }
 
         /// <summary>
-        /// Prompts the user with a confirmation dialog for deletion.
+        /// Confirms the deletion of a user and validates the current logged-in user.
         /// </summary>
-        /// <param name="alias">Alias of the user to delete.</param>
-        /// <returns>True if the user confirms the deletion; otherwise, false.</returns>
-        private bool ConfirmDeletion(string alias)
+        /// <param name="aliasToDelete">The alias of the user to be deleted.</param>
+        /// <returns>True if the confirmation and validation succeed; otherwise, false.</returns>
+        private bool ConfirmAndValidate(string aliasToDelete)
         {
-            // Show a confirmation dialog for deletion
-            DialogResult dr = message.MessageConfirmToDELETE(alias);
-            return dr == DialogResult.Yes;
+            // Show a confirmation dialog for the deletion
+            if (message.MessageConfirmToDELETE(aliasToDelete) == DialogResult.No)
+                return false;
+
+            // Validate the current logged-in user
+            if (string.IsNullOrEmpty(AuthenticationService.CurrentUser))
+            {
+                message.MessageSomethingWentWrong();
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
-        /// Removes the user with the specified alias from the given user and login data.
+        /// Removes the user from the user and login data lists.
         /// </summary>
-        /// <param name="userLines">List of user data lines.</param>
-        /// <param name="loginLines">List of login data lines.</param>
-        /// <param name="aliasToDelete">Alias of the user to delete.</param>
-        /// <returns>Updated user and login data without the deleted user.</returns>
-        private (List<string>, List<string>) RemoveUserFromLines(List<string> userLines, List<string> loginLines, string aliasToDelete)
+        /// <param name="aliasToDelete">The alias of the user to be removed.</param>
+        /// <returns>
+        /// A tuple containing the updated user data lines and login data lines.
+        /// </returns>
+        private (List<string> updatedUserLines, List<string> updatedLoginLines) RemoveUserFromData(string aliasToDelete)
         {
-            // Remove the user from userLines based on the alias
-            userLines = userLines.Where(line => !line.Split(',')[2]
-                                                      .Trim()
-                                                      .Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase))
-                                                      .ToList();
+            // Read the existing data from the files
+            var (userLines, loginLines) = path.ReadUserAndLoginData();
 
-            // Remove the user from loginLines based on the alias
-            loginLines = loginLines.Where(line => !line.Split(',')[0]
-                                                       .Trim()
-                                                       .Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase))
-                                                       .ToList();
+            // Filter out the user to be deleted from the user data
+            var updatedUserLines = userLines.Where(line =>
+                !line.Split(',')[2].Trim().Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            return (userLines, loginLines);
+            // Filter out the user to be deleted from the login data
+            var updatedLoginLines = loginLines.Where(line =>
+                !line.Split(',')[0].Trim().Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            return (updatedUserLines, updatedLoginLines);
         }
 
         /// <summary>
-        /// Writes the updated user and login data back to the files.
+        /// Saves the updated user and login data back to the files and re-encrypts them.
         /// </summary>
-        /// <param name="userLines">Updated user data lines.</param>
-        /// <param name="loginLines">Updated login data lines.</param>
-        private void WriteUpdatedDataToFile(List<string> userLines, List<string> loginLines)
+        /// <param name="userLines">The updated user data lines.</param>
+        /// <param name="loginLines">The updated login data lines.</param>
+        private void SaveAndEncryptDataFiles(List<string> userLines, List<string> loginLines)
         {
-            // Write the updated user and login data back to the respective files
+            // Save the updated user data to the file
             File.WriteAllLines(path.UserFilePath, userLines);
+
+            // Save the updated login data to the file
             File.WriteAllLines(path.LoginFilePath, loginLines);
+
+            // Re-encrypt the user data file
+            EncryptionManager.EncryptFile(path.UserFilePath);
+
+            // Re-encrypt the login data file
+            EncryptionManager.EncryptFile(path.LoginFilePath);
         }
 
         /// <summary>
-        /// Logs the event of deleting a user.
+        /// Generates a report and logs the deletion event.
         /// </summary>
-        /// <param name="currentUser">The alias of the user who is performing the deletion.</param>
-        /// <param name="aliasToDelete">The alias of the user being deleted.</param>
-        private void LogDeletion(string currentUser, string aliasToDelete)
+        /// <param name="aliasToDelete">The alias of the deleted user.</param>
+        private void ReportAndLogDeletion(string aliasToDelete)
         {
-            // log the deletion event, including the current user and the user being deleted
+            string? currentUser = AuthenticationService.CurrentUser;
+
+            // Create a deletion report
+            string reportText = $"{DateTime.Today:dd-MM-yyyy},{DateTime.Now:HH:mm:ss}\n[{currentUser!.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
+            var adminControl = new AdminMainControl();
+            var reportManager = new ReportManager(adminControl);
+            reportManager.ReportDeleteUser(aliasToDelete, "Account Deleted", reportText);
+
+            // Show a success message to the user
+            message.MessageDeleteSucces(aliasToDelete);
+            
+            // Log the deletion event
             logEvents.LogEventDeleteUser(currentUser, aliasToDelete);
         }
         #endregion DELETE USER

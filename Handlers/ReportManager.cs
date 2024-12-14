@@ -62,7 +62,7 @@ namespace CRUD_System.Handlers
             RefreshListViewFiles();
         }
 
-        public void SaveReportNewUser(string isNewAlias, string isSubject,string isReportText)
+        public void ReportSaveNewUser(string isNewAlias, string isSubject,string isReportText)
         {
             string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
             var currentUser = AuthenticationService.CurrentUser;
@@ -80,6 +80,26 @@ namespace CRUD_System.Handlers
             
         }
 
+
+        public void ReportDeleteUser(string isAlias, string isSubject, string isReportText)
+        {
+            string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
+            string? currentUser = AuthenticationService.CurrentUser;
+            string reportText = $"{isReportText.Replace(",", ";")}";
+
+            try
+            {
+                // Disable listViewFiles
+                adminControl!.listViewFiles.Enabled = false;
+
+                CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser!, isAlias, isSubject, reportText);
+                Debug.WriteLine($"Create report for deleted useraccount {isAlias} succes!");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Error creating report for new useraccount {isAlias}:\n{e}");
+            }
+        }
 
         /// <summary>
         /// Refreshes the ListView in the UI to display the latest report files.

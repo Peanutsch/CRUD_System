@@ -84,7 +84,6 @@ namespace CRUD_System.Handlers
         {
             try
             {
-                int counter = 1;
                 if (!string.IsNullOrEmpty(selectedUserString))
                 {
                     string rootPath = RootPath.GetRootPath();
@@ -103,7 +102,6 @@ namespace CRUD_System.Handlers
 
                         EncryptionManager.EncryptFile(filePath);
 
-                        counter++;
                         return isSubject;
                     }
                 }
