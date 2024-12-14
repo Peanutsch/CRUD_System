@@ -20,7 +20,7 @@ namespace CRUD_System.Interfaces
     {
         #region PROPERTIES
         public bool EditMode { get; set; }
-        public bool IsReport { get; set; }
+        public static bool IsReport { get; set; }
         public bool SelectedUserIsTheOne { get; set; }
         public static bool SelectedUserIsAdmin { get; set; }
 
@@ -373,6 +373,7 @@ namespace CRUD_System.Interfaces
         public void InterfaceEditModeAdmin()
         {
             var currentUser = AuthenticationService.CurrentUser;
+
             // Toggle Edit and Cancel button text based on EditMode status
             adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User";
 
@@ -529,9 +530,10 @@ namespace CRUD_System.Interfaces
         #region TEXTBOXES REPORT
         public void TextBoxesReportEmpty()
         {
-            adminControl.txtDateReport.Text = string.Empty;
+            //adminControl.txtAliasReport.Text = string.Empty;
             adminControl.txtCreator.Text = string.Empty;
             adminControl.txtSubject.Text = string.Empty;
+            adminControl.txtDateReport.Text = string.Empty;
             adminControl.rtxReport.Text = string.Empty;
         }
 

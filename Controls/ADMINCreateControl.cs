@@ -79,7 +79,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // First letter of Name and City are ToUpper
+            // First letter of Name and City ToUpper
             string name = txtName.Text.Trim();
             string isName = char.ToUpper(name[0]) + name.Substring(1);
 

@@ -242,23 +242,23 @@ namespace CRUD_System.Handlers
         public void ToggleReportMode(bool enable)
         {
             AdminInterface adminInterface = new AdminInterface();
-            adminInterface.IsReport = enable;
+            AdminInterface.IsReport = enable;
 
             adminInterface.TextBoxesReportEmpty();
 
             adminControl!.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
 
-            adminControl.txtSubject.Visible = !adminInterface.IsReport;
-            adminControl.txtCreator.Visible = !adminInterface.IsReport;
-            adminControl.rtxReport.ReadOnly = !adminInterface.IsReport;
-            adminControl.lblCreatedBy.Visible = !adminInterface.IsReport;
-            adminControl.lblCurrentDate.Visible = adminInterface.IsReport;
+            adminControl.txtSubject.Visible = !AdminInterface.IsReport;
+            adminControl.txtCreator.Visible = !AdminInterface.IsReport;
+            adminControl.rtxReport.ReadOnly = !AdminInterface.IsReport;
+            adminControl.lblCreatedBy.Visible = !AdminInterface.IsReport;
+            adminControl.lblCurrentDate.Visible = AdminInterface.IsReport;
 
-            adminControl.comboBoxSubjectReport.Visible = adminInterface.IsReport;
+            adminControl.comboBoxSubjectReport.Visible = AdminInterface.IsReport;
 
-            adminControl.btnCreateReport.Text = adminInterface.IsReport ? "Exit" : "Report";
-            adminControl.rtxReport.BackColor = adminInterface.IsReport ? Color.White : Color.LightGray;
-            adminControl.btnSaveReport.Visible = adminInterface.IsReport;
+            adminControl.btnCreateReport.Text = AdminInterface.IsReport ? "Exit" : "Report";
+            adminControl.rtxReport.BackColor = AdminInterface.IsReport ? Color.White : Color.LightGray;
+            adminControl.btnSaveReport.Visible = AdminInterface.IsReport;
             adminControl.listViewFiles.SelectedItems.Clear();
         }
     }

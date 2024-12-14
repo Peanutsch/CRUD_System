@@ -315,7 +315,7 @@ namespace CRUD_System
 
         public bool ToggleIsReportMode()
         {
-            bool modus = adminInterface.IsReport = !adminInterface.IsReport;
+            bool modus = AdminInterface.IsReport = !AdminInterface.IsReport;
             return modus;
         }
 
@@ -324,7 +324,7 @@ namespace CRUD_System
             interactionHandler.PerformActionIfUserSelected(() =>
             {
                 adminInterface.TextBoxesReportEmpty();
-                adminInterface.IsReport = ToggleIsReportMode();
+                AdminInterface.IsReport = ToggleIsReportMode();
                 adminInterface.TextBoxesReportConfig();
             },
             () => message.MessageInvalidNoUserSelected());
@@ -543,12 +543,19 @@ namespace CRUD_System
                 DisplaySearchResults(searchCurrentPage); // Clear the display and show all users
                 adminInterface.LoadDetailsListBox(); // Load all users into the ListBox
                 adminInterface.EmptyTextBoxesAdmin(); // Clear all input TextBoxes
-                
+
                 // Empty all report textboxes and listView
+                AdminInterface.IsReport = false;
+                adminInterface.TextBoxesReportConfig();
+                adminInterface.TextBoxesReportEmpty();
+                txtAliasReport.Text = string.Empty;
                 listViewFiles.Items.Clear();
+                /*
                 txtAliasReport.Clear();
                 txtDateReport.Clear();
                 rtxReport.Clear();
+                */
+                //adminInterface.TextBoxesReportConfig();
             }
             else
             {
@@ -617,7 +624,6 @@ namespace CRUD_System
             {
                 // Get the name of the selected file
                 string selectedFile = listViewFiles.SelectedItems[0].Text;
-
 
                 // Construct the full name of the report file
                 string fileName = selectedFile + "_report.csv";
