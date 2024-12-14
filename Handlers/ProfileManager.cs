@@ -268,6 +268,10 @@ namespace CRUD_System.Handlers
             var reportManager = new ReportManager(adminControl);
             reportManager.ReportDeleteUser(aliasToDelete, "Account Deleted", reportText);
 
+            // Disable listViewFiles
+            adminControl.listViewFiles.Enabled = false;
+            adminControl.listViewFiles.Items.Clear();
+
             // Show a success message to the user
             message.MessageDeleteSucces(aliasToDelete);
             
@@ -337,11 +341,6 @@ namespace CRUD_System.Handlers
                         string City, string Email,
                         string Phonenumber, bool isAdmin)
         {
-            // Validate user input (e.g., required fields, format, etc.)
-            if (!ValidateUserInput(Name, Surname))
-            {
-                return;
-            }
 
             // Generate a unique alias and password for the user
             string isAlias = GenerateAlias(Name, Surname);
@@ -415,22 +414,8 @@ namespace CRUD_System.Handlers
             EncryptionManager.EncryptFile(path.UserFilePath);
             EncryptionManager.EncryptFile(path.LoginFilePath);
 
-            // ** Update the DataCache with the latest data **
+            // Update the DataCache with the latest data
             DataCache.LoadCache();
-        }
-
-
-        /// <summary>
-        /// Validates the user input to ensure that required fields are not empty.
-        /// </summary>
-        private bool ValidateUserInput(string name, string surname)
-        {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname))
-            {
-                message.MessageInvalidInput();
-                return false;
-            }
-            return true;
         }
 
         /// <summary>
@@ -472,7 +457,7 @@ namespace CRUD_System.Handlers
                 // Temporary copy of logEvent in rtxReport
                 ReportManager reportManager = new ReportManager(adminControl);
                 string reportText = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")}\n[{currentUser!.ToUpper()}]," +
-                                $"Created user [{alias.ToUpper()}].\nSent email to {email} with password: {password}";
+                                    $"Created user [{alias.ToUpper()}].\nSent email to {email} with password: {password}";
                 reportManager.ReportSaveNewUser(alias, "New User", reportText);
             }
         }

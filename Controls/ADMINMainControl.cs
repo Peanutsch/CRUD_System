@@ -543,6 +543,12 @@ namespace CRUD_System
                 DisplaySearchResults(searchCurrentPage); // Clear the display and show all users
                 adminInterface.LoadDetailsListBox(); // Load all users into the ListBox
                 adminInterface.EmptyTextBoxesAdmin(); // Clear all input TextBoxes
+                
+                // Empty all report textboxes and listView
+                listViewFiles.Items.Clear();
+                txtAliasReport.Clear();
+                txtDateReport.Clear();
+                rtxReport.Clear();
             }
             else
             {

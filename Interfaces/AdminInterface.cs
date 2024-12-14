@@ -325,7 +325,7 @@ namespace CRUD_System.Interfaces
         }
         #endregion LISTBOX ADMIN
 
-        #region Listbox Pages
+        #region LISTBOX PAGES
         /// <summary>
         /// Navigates to the next page listBoxAdmin if it exists.
         /// </summary>
@@ -364,7 +364,7 @@ namespace CRUD_System.Interfaces
             int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage);
             adminControl.lblPageNumber.Text = totalPages > 0 ? $"Page {currentPage} of {totalPages}" : "No pages available";
         }
-        #endregion Listbox Pages
+        #endregion LISTBOX PAGES
 
         #region EDIT MODE DISPLAY ADMIN
         /// <summary>
@@ -381,8 +381,6 @@ namespace CRUD_System.Interfaces
 
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
-            //ToggleControlVisibility(adminControl.btnCreateUser, EditMode);
-            //ToggleControlVisibility(adminControl.chkAbsenceDueIllness, EditMode);
 
             if (AuthenticationService.CurrentUserIsTheOne)
             {
@@ -406,7 +404,6 @@ namespace CRUD_System.Interfaces
                 adminControl.txtCity,
                 adminControl.txtEmail,
                 adminControl.txtPhonenumber,
-                //adminControl.txtAdmin
              };
 
             foreach (var field in textFields)
@@ -421,6 +418,7 @@ namespace CRUD_System.Interfaces
             if (adminControl.listBoxAdmin != null)
             {
                 adminControl.listBoxAdmin.Enabled = !EditMode;
+                adminControl.txtSearch.Enabled = !EditMode;
             }
         }
 

@@ -137,7 +137,7 @@ namespace CRUD_System.Repositories
 
         public DialogResult MessageDetailsNotComplete()
         {
-            return MessageBox.Show("Details are not complete. Name, Surname and Email are mandatory");
+            return MessageBox.Show("Details are not complete. Name, Surname and Email are required...");
         }
         #endregion INVALID
     }

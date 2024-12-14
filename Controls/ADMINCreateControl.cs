@@ -73,26 +73,49 @@ namespace CRUD_System
         /// <summary>
         /// Handles the click event to save the new user's details to the database. 
         /// It saves the data and then closes the user creation form.
+        /// Required fields: txtName, txtSurname and txtEmail
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtName.Text) || string.IsNullOrEmpty(txtSurname.Text) || string.IsNullOrEmpty(txtEmail.Text))
+            // First letter of Name and City are ToUpper
+            string name = txtName.Text.Trim();
+            string isName = char.ToUpper(name[0]) + name.Substring(1);
+
+            string city = txtCity.Text.Trim();
+            string isCity = char.ToUpper(city[0]) + city.Substring(1);
+
+            if (!ValidateUserInput(isName, txtSurname.Text.Trim(), txtEmail.Text))
             {
-                Debug.WriteLine("Details are not complete. Name, Surname and Email are required");
-                message.MessageDetailsNotComplete();
                 return;
             }
 
-            profileManager.SaveNewUser(txtName.Text.Trim(), txtSurname.Text.Trim(), 
+            // Pass to SaveUser for processing 
+            profileManager.SaveNewUser(isName, txtSurname.Text.Trim(), 
                                        txtAddress.Text.Trim(), txtZIPCode.Text.Trim(),
-                                       txtCity.Text.Trim(), txtEmail.Text.Trim(),
+                                       isCity, txtEmail.Text.Trim(),
                                        txtPhonenumber.Text.Trim(), isAdmin);
 
             // Close CreateFormADMIN, return to MainFormADMIN
             interactionHandler.Close_CreateForm(this.ParentForm);
         }
+
+        /// <summary>
+        /// Validates the user input to ensure that required fields are not empty.
+        /// </summary>
+        private bool ValidateUserInput(string name, string surname, string email)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(email))
+            {
+                Debug.WriteLine("Details are not complete. Name, Surname and Email are required");
+                message.MessageDetailsNotComplete();
+                return false;
+            }
+            return true;
+        }
+
+
         #endregion BUTTONS
 
         #region ALIAS TEXTBOX HANDLER

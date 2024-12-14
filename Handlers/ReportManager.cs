@@ -32,7 +32,8 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void btnSaveReportHandler()
         {
-            if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && !string.IsNullOrEmpty(adminControl.rtxReport.Text))
+            if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && !string.IsNullOrEmpty(adminControl.rtxReport.Text) &&
+                !string.IsNullOrEmpty(adminControl.txtAliasReport.Text) && !string.IsNullOrEmpty(adminControl.txtDateReport.Text))
             {
                 var currentUser = AuthenticationService.CurrentUser;
                 string selectedAlias = adminControl!.txtAlias.Text;
@@ -53,7 +54,7 @@ namespace CRUD_System.Handlers
             }
             else
             {
-                Debug.WriteLine("Not Valid! Missing conditions...");
+                Debug.WriteLine("Button SaveReport> Not Valid! Missing conditions...");
                 MessageBox.Show("Not Valid! Missing conditions...");
                 return;
             }
@@ -89,9 +90,6 @@ namespace CRUD_System.Handlers
 
             try
             {
-                // Disable listViewFiles
-                adminControl!.listViewFiles.Enabled = false;
-
                 CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser!, isAlias, isSubject, reportText);
                 Debug.WriteLine($"Create report for deleted useraccount {isAlias} succes!");
             }
