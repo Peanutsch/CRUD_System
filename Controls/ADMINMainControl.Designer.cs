@@ -475,6 +475,7 @@
             btnCreateReport.TabIndex = 48;
             btnCreateReport.Text = "Report";
             btnCreateReport.UseVisualStyleBackColor = false;
+            btnCreateReport.Visible = false;
             btnCreateReport.Click += buttonMakeReport_Click;
             // 
             // btnSaveReport
