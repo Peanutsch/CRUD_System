@@ -380,7 +380,8 @@ namespace CRUD_System.Interfaces
             // Set the background color based on EditMode for visual feedback
             adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;
 
-            // SetForceLogOutUserBtn Buttons
+            adminControl.btnCreateUser.Enabled = !EditMode;
+
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
             ToggleControlVisibility(adminControl.btnCreateReport, EditMode);
