@@ -593,6 +593,7 @@
             // btnUploadFile
             // 
             this.btnUploadFile.BackColor = SystemColors.ActiveCaption;
+            this.btnUploadFile.Enabled = false;
             this.btnUploadFile.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.btnUploadFile.Location = new Point(1065, 419);
             this.btnUploadFile.Name = "btnUploadFile";
@@ -600,6 +601,7 @@
             this.btnUploadFile.TabIndex = 61;
             this.btnUploadFile.Text = "Upload File";
             this.btnUploadFile.UseVisualStyleBackColor = false;
+            this.btnUploadFile.Visible = false;
             this.btnUploadFile.Click += this.btnUploadFile_Click;
             // 
             // AdminMainControl

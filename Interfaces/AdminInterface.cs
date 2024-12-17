@@ -381,6 +381,8 @@ namespace CRUD_System.Interfaces
             adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;
 
             adminControl.btnCreateUser.Enabled = !EditMode;
+            adminControl.btnChangePassword.Enabled = !EditMode;
+            adminControl.btnUploadFile.Visible = EditMode;
 
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
