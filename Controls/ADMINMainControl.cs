@@ -29,8 +29,14 @@ namespace CRUD_System
     public partial class AdminMainControl : UserControl
     {
         #region PROPERTIES
-        public static bool IsTheOne {  get; set; }
-        public static bool ChkIsTheOneChanged { get; set; }
+        public static bool IsTheOne
+        {
+            get; set;
+        }
+        public static bool ChkIsTheOneChanged
+        {
+            get; set;
+        }
 
         readonly FilePaths path = new FilePaths();
 
@@ -663,5 +669,10 @@ namespace CRUD_System
             }
         }
         #endregion DELETE FILE REPORT
+
+        private void btnUploadFile_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -77,6 +77,7 @@
             this.btnShowListBoxLogs = new Button();
             this.btnDeleteReport = new Button();
             this.chkIsTheOne = new CheckBox();
+            this.btnUploadFile = new Button();
             this.SuspendLayout();
             // 
             // txtName
@@ -393,7 +394,7 @@
             this.listViewFiles.FullRowSelect = true;
             this.listViewFiles.Location = new Point(800, 36);
             this.listViewFiles.Name = "listViewFiles";
-            this.listViewFiles.Size = new Size(383, 377);
+            this.listViewFiles.Size = new Size(392, 377);
             this.listViewFiles.TabIndex = 47;
             this.listViewFiles.UseCompatibleStateImageBehavior = false;
             this.listViewFiles.View = View.Details;
@@ -423,7 +424,7 @@
             // 
             this.txtDateReport.Enabled = false;
             this.txtDateReport.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtDateReport.Location = new Point(1337, 65);
+            this.txtDateReport.Location = new Point(1350, 65);
             this.txtDateReport.Multiline = true;
             this.txtDateReport.Name = "txtDateReport";
             this.txtDateReport.PlaceholderText = "Date";
@@ -435,7 +436,7 @@
             // 
             this.txtAliasReport.Enabled = false;
             this.txtAliasReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.txtAliasReport.Location = new Point(1189, 35);
+            this.txtAliasReport.Location = new Point(1202, 35);
             this.txtAliasReport.Name = "txtAliasReport";
             this.txtAliasReport.PlaceholderText = "Alias";
             this.txtAliasReport.ReadOnly = true;
@@ -447,8 +448,8 @@
             // 
             this.comboBoxSubjectReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.comboBoxSubjectReport.FormattingEnabled = true;
-            this.comboBoxSubjectReport.Items.AddRange(new object[] { "Update Details", "Note", "Report", "Evaluation", "Copy Messages", "Other" });
-            this.comboBoxSubjectReport.Location = new Point(1189, 67);
+            this.comboBoxSubjectReport.Items.AddRange(new object[] { "Update Details", "Note", "Report", "Evaluation", "Upload File", "Other" });
+            this.comboBoxSubjectReport.Location = new Point(1202, 67);
             this.comboBoxSubjectReport.Name = "comboBoxSubjectReport";
             this.comboBoxSubjectReport.Size = new Size(140, 24);
             this.comboBoxSubjectReport.TabIndex = 46;
@@ -459,7 +460,7 @@
             // 
             this.rtxReport.BackColor = Color.LightGray;
             this.rtxReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.rtxReport.Location = new Point(1189, 97);
+            this.rtxReport.Location = new Point(1202, 97);
             this.rtxReport.Name = "rtxReport";
             this.rtxReport.ReadOnly = true;
             this.rtxReport.ScrollBars = RichTextBoxScrollBars.Vertical;
@@ -471,7 +472,7 @@
             // 
             this.btnCreateReport.BackColor = SystemColors.ActiveCaption;
             this.btnCreateReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnCreateReport.Location = new Point(1189, 419);
+            this.btnCreateReport.Location = new Point(1202, 419);
             this.btnCreateReport.Name = "btnCreateReport";
             this.btnCreateReport.Size = new Size(140, 30);
             this.btnCreateReport.TabIndex = 48;
@@ -484,7 +485,7 @@
             // 
             this.btnSaveReport.BackColor = Color.LightGreen;
             this.btnSaveReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnSaveReport.Location = new Point(1337, 419);
+            this.btnSaveReport.Location = new Point(1350, 419);
             this.btnSaveReport.Name = "btnSaveReport";
             this.btnSaveReport.Size = new Size(140, 30);
             this.btnSaveReport.TabIndex = 49;
@@ -497,7 +498,7 @@
             // 
             this.txtSubject.Enabled = false;
             this.txtSubject.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtSubject.Location = new Point(1189, 65);
+            this.txtSubject.Location = new Point(1202, 65);
             this.txtSubject.Multiline = true;
             this.txtSubject.Name = "txtSubject";
             this.txtSubject.PlaceholderText = "Subject";
@@ -509,7 +510,7 @@
             // 
             this.txtCreator.Enabled = false;
             this.txtCreator.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtCreator.Location = new Point(1337, 35);
+            this.txtCreator.Location = new Point(1350, 35);
             this.txtCreator.Multiline = true;
             this.txtCreator.Name = "txtCreator";
             this.txtCreator.PlaceholderText = "Creator";
@@ -521,7 +522,7 @@
             // 
             this.lblSelectedAlias.AutoSize = true;
             this.lblSelectedAlias.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            this.lblSelectedAlias.Location = new Point(1189, 16);
+            this.lblSelectedAlias.Location = new Point(1202, 16);
             this.lblSelectedAlias.Name = "lblSelectedAlias";
             this.lblSelectedAlias.Size = new Size(105, 16);
             this.lblSelectedAlias.TabIndex = 52;
@@ -531,7 +532,7 @@
             // 
             this.lblCreatedBy.AutoSize = true;
             this.lblCreatedBy.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            this.lblCreatedBy.Location = new Point(1337, 16);
+            this.lblCreatedBy.Location = new Point(1350, 16);
             this.lblCreatedBy.Name = "lblCreatedBy";
             this.lblCreatedBy.Size = new Size(77, 16);
             this.lblCreatedBy.TabIndex = 53;
@@ -541,7 +542,7 @@
             // 
             this.lblCurrentDate.AutoSize = true;
             this.lblCurrentDate.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            this.lblCurrentDate.Location = new Point(1337, 46);
+            this.lblCurrentDate.Location = new Point(1350, 46);
             this.lblCurrentDate.Name = "lblCurrentDate";
             this.lblCurrentDate.Size = new Size(91, 16);
             this.lblCurrentDate.TabIndex = 54;
@@ -554,7 +555,7 @@
             this.btnShowListBoxLogs.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.btnShowListBoxLogs.Location = new Point(800, 419);
             this.btnShowListBoxLogs.Name = "btnShowListBoxLogs";
-            this.btnShowListBoxLogs.Size = new Size(140, 30);
+            this.btnShowListBoxLogs.Size = new Size(127, 30);
             this.btnShowListBoxLogs.TabIndex = 58;
             this.btnShowListBoxLogs.Text = "ListBoxLogs";
             this.btnShowListBoxLogs.UseVisualStyleBackColor = false;
@@ -565,9 +566,9 @@
             // 
             this.btnDeleteReport.BackColor = Color.Red;
             this.btnDeleteReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnDeleteReport.Location = new Point(1043, 419);
+            this.btnDeleteReport.Location = new Point(933, 419);
             this.btnDeleteReport.Name = "btnDeleteReport";
-            this.btnDeleteReport.Size = new Size(140, 30);
+            this.btnDeleteReport.Size = new Size(126, 30);
             this.btnDeleteReport.TabIndex = 59;
             this.btnDeleteReport.Text = "Delete File";
             this.btnDeleteReport.UseVisualStyleBackColor = false;
@@ -589,12 +590,25 @@
             this.chkIsTheOne.Visible = false;
             this.chkIsTheOne.CheckedChanged += this.chkIsTheOne_CheckedChanged;
             // 
+            // btnUploadFile
+            // 
+            this.btnUploadFile.BackColor = SystemColors.ActiveCaption;
+            this.btnUploadFile.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnUploadFile.Location = new Point(1065, 419);
+            this.btnUploadFile.Name = "btnUploadFile";
+            this.btnUploadFile.Size = new Size(127, 30);
+            this.btnUploadFile.TabIndex = 61;
+            this.btnUploadFile.Text = "Upload File";
+            this.btnUploadFile.UseVisualStyleBackColor = false;
+            this.btnUploadFile.Click += this.btnUploadFile_Click;
+            // 
             // AdminMainControl
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
             this.BorderStyle = BorderStyle.FixedSingle;
+            this.Controls.Add(this.btnUploadFile);
             this.Controls.Add(this.chkIsTheOne);
             this.Controls.Add(this.btnDeleteReport);
             this.Controls.Add(this.btnShowListBoxLogs);
@@ -677,5 +691,6 @@
         public Button btnShowListBoxLogs;
         public Button btnDeleteReport;
         public CheckBox chkIsTheOne;
+        public Button btnUploadFile;
     }
 }

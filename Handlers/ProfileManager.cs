@@ -265,8 +265,7 @@ namespace CRUD_System.Handlers
             // Create a deletion report
             string reportText = $"{DateTime.Today:dd-MM-yyyy},{DateTime.Now:HH:mm:ss}\n[{currentUser!.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
             var adminControl = new AdminMainControl();
-            var reportManager = new ReportManager(adminControl);
-            reportManager.ReportDeleteUser(aliasToDelete, "Account Deleted", reportText);
+            ReportManager.ReportDeleteUser(aliasToDelete, "Account Deleted", reportText);
 
             // Disable listViewFiles
             adminControl.listViewFiles.Enabled = false;
@@ -410,12 +409,37 @@ namespace CRUD_System.Handlers
             File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
             File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
 
+            CreateEmailNewUser(alias, email, password);
+
             // Encrypt the user and login files again to secure the data
             EncryptionManager.EncryptFile(path.UserFilePath);
             EncryptionManager.EncryptFile(path.LoginFilePath);
 
             // Update the DataCache with the latest data
             DataCache.LoadCache();
+        }
+
+        /// <summary>
+        /// Creates a new user and sends an email with login credentials.
+        /// </summary>
+        public void CreateEmailNewUser(string alias, string email, string password)
+        {
+            EmailManager emailManager = new EmailManager();
+
+            // Prepare and send the welcome email
+            string subject = "Your New Account Details";
+            string body = $@"
+            <html>
+            <body>
+                <h2>Welcome {alias}!</h2>
+                <p>Your account has been created successfully.</p>
+                <p><strong>Username:</strong> {alias}</p>
+                <p><strong>Password:</strong> {password}</p>
+                <p>Login to start using your account.</p>
+            </body>
+            </html>";
+
+            emailManager.SendEmail(email, subject, body, isHtml: true);
         }
 
         /// <summary>
@@ -455,10 +479,9 @@ namespace CRUD_System.Handlers
                 logEvents.NewAccount(currentUser, alias, password, email);
 
                 // Temporary copy of logEvent in rtxReport
-                ReportManager reportManager = new ReportManager(adminControl);
                 string reportText = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")}\n[{currentUser!.ToUpper()}]," +
                                     $"Created user [{alias.ToUpper()}].\nSent email to {email} with password: {password}";
-                reportManager.ReportSaveNewUser(alias, "New User", reportText);
+                ReportManager.ReportSaveNewUser(alias, "New User", reportText);
             }
         }
         #endregion SAVE NEW USER

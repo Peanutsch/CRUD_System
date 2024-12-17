@@ -17,6 +17,8 @@ namespace CRUD_System.Handlers
     {
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
+        string rootPath = RootPath.GetRootPath();
+
         #region CONSTRUCTOR
         private readonly AdminMainControl? adminControl;
 
@@ -63,7 +65,7 @@ namespace CRUD_System.Handlers
             RefreshListViewFiles();
         }
 
-        public void ReportSaveNewUser(string isNewAlias, string isSubject,string isReportText)
+        public static void ReportSaveNewUser(string isNewAlias, string isSubject,string isReportText)
         {
             string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
             var currentUser = AuthenticationService.CurrentUser;
@@ -81,8 +83,7 @@ namespace CRUD_System.Handlers
             
         }
 
-
-        public void ReportDeleteUser(string isAlias, string isSubject, string isReportText)
+        public static void ReportDeleteUser(string isAlias, string isSubject, string isReportText)
         {
             string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
             string? currentUser = AuthenticationService.CurrentUser;
@@ -97,6 +98,21 @@ namespace CRUD_System.Handlers
             {
                 Debug.WriteLine($"Error creating report for new useraccount {isAlias}:\n{e}");
             }
+        }
+
+        public void BtnUploadFileHandler(string selectedAlias)
+        {
+            // Build the path to the "reports" directory and the alias subdirectory
+            string uploadPath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias);
+
+            // Ensure the alias folder exists within the reports directory
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            UploadFile uploadFile = new UploadFile();
+            UploadFile.Upload(uploadPath);
         }
 
         /// <summary>
@@ -162,6 +178,142 @@ namespace CRUD_System.Handlers
             }
         }
 
+        #region REPORT DISPLAY
+        /// <summary>
+        /// Displays the report for a selected user by reading and decrypting the report file, 
+        /// parsing its content, and updating the adminControl fields accordingly.
+        /// </summary>
+        /// <param name="selectedUserString">The selected user string, typically from a list box or list view.</param>
+        /// <param name="selectedAlias">The alias of the selected user, used to locate the report file.</param>
+        public void ReportDisplay(string selectedUserString, string selectedAlias)
+        {
+            // Get the array of report file paths
+            string[] filePaths = GetReportFilePaths(selectedUserString, selectedAlias);
+
+            // Check if there are any files in the array
+            if (filePaths.Length == 0)
+            {
+                Debug.WriteLine("No report files found!");
+                MessageBox.Show("No report files found for the selected user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Select the first file in the array (you can modify this logic to select another file if needed)
+            string filePath = filePaths[0];
+
+            // Check if the adminControl is null to prevent NullReferenceException
+            if (adminControl == null)
+            {
+                Debug.WriteLine("adminControl is null!");
+                return;
+            }
+
+            // Decrypt and read the report file content
+            string reportContent = DecryptAndReadReport(filePath);
+            if (string.IsNullOrEmpty(reportContent))
+                return;
+
+            // Parse and update the admin control fields
+            if (ParseAndUpdateReportContent(reportContent, filePath))
+            {
+                Debug.WriteLine("The report was successfully loaded.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            // Re-encrypt the report file after processing
+            EncryptionManager.EncryptFile(filePath);
+        }
+
+        /// <summary>
+        /// Constructs the file path for the report and returns all files in the directory.
+        /// </summary>
+        private string[] GetReportFilePaths(string selectedUserString, string selectedAlias)
+        {
+            // Get the full directory path for the selected user and alias
+            string directoryPath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias);
+
+            // Check if the directory exists
+            if (Directory.Exists(directoryPath))
+            {
+                // Retrieve all files in the directory
+                return Directory.GetFiles(directoryPath, "*.*"); // Get all files with any extension
+            }
+            else
+            {
+                return Array.Empty<string>(); // Return an empty array if directory does not exist
+            }
+        }
+
+
+
+        /*
+        /// <summary>
+        /// Constructs the file path for the report.
+        /// </summary>
+        private string GetReportFilePath(string selectedUserString, string selectedAlias)
+        {
+            //return Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias, $"{selectedUserString}_report.csv");
+            return Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias, "*.*");
+        }
+        */
+
+        /// <summary>
+        /// Decrypts and reads the report file content.
+        /// </summary>
+        private string DecryptAndReadReport(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+            {
+                Debug.WriteLine($"Filepath {filePath} is null or does not exist");
+                MessageBox.Show($"Filepath {filePath} is null or does not exist");
+                return string.Empty;
+            }
+
+            // Decrypt the report file and read its content
+            EncryptionManager.DecryptFile(filePath);
+            string reportContent = File.ReadAllText(filePath);
+            return reportContent;
+        }
+
+        /// <summary>
+        /// Parses the report content and updates the admin control fields.
+        /// </summary>
+        private bool ParseAndUpdateReportContent(string reportContent, string filePath)
+        {
+            string[] reportContentSplit = reportContent.Split(",");
+            string[] fileNameSplit = Path.GetFileName(filePath).Split("_");
+
+            // Ensure the report content has at least the expected number of elements
+            if (reportContentSplit.Length < 5)
+            {
+                MessageBox.Show("The report does not match the expected format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            // Parse the report content
+            string reportCreator = reportContentSplit[1]; // Creator Alias
+            string reportSubject = reportContentSplit[3]; // Subject
+            string reportTextReport = reportContentSplit[4]; // Full text, including commas
+            string reportDate = fileNameSplit[1].Replace("-", " "); // Format date part of the filename (if applicable)
+
+            // Update the admin control fields with parsed data
+            adminControl!.txtCreator.Text = reportCreator;
+            adminControl.txtSubject.Text = reportSubject;
+            adminControl.rtxReport.Text = reportTextReport.Replace(";", ",").Trim();
+            adminControl.txtDateReport.Text = FormatDate(reportDate);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Formats the date as DD-MM-YYYY.
+        /// </summary>
+        private string FormatDate(string date)
+        {
+            return Regex.Replace(date.Replace("\"", ""), @"(\d{2})(\d{2})(\d{4})", "$1-$2-$3").Trim();
+        }
+
+        #endregion REPORT DISPLAY
+        /*
         /// <summary>
         /// Displays the report for a selected user by reading and decrypting the report file, 
         /// parsing its content, and updating the adminControl fields accordingly.
@@ -171,7 +323,7 @@ namespace CRUD_System.Handlers
         public void ReportDisplay(string selectedUserString, string selectedAlias)
         {
             // Get the root path and construct the file path for the report
-            string rootPath = RootPath.GetRootPath();
+            
             string isFileName = $"{selectedUserString}_report.csv";
             string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias, isFileName);
 
@@ -220,24 +372,7 @@ namespace CRUD_System.Handlers
             // Re-encrypt the report file after processing to maintain security
             EncryptionManager.EncryptFile(filePath);
         }
-
-        /// <summary>
-        /// Parses a date string and returns it in "dd-MM-yyyy" format.
-        /// </summary>
-        /// <param name="dateString">The date string to parse.</param>
-        /// <returns>The formatted date string, or "Invalid Date" if parsing fails.</returns>
-        public string FormatDate(string dateString)
-        {
-            if (DateTime.TryParse(dateString, out DateTime parsedDate))
-            {
-                return parsedDate.ToString("dd-MM-yyyy"); // Format as "dd-MM-yyyy"
-            }
-            else
-            {
-                Debug.WriteLine($"Failed to parse the date: {dateString}");
-                return "Invalid Date"; // Fallback for invalid date
-            }
-        }
+        */
 
         public void ToggleReportMode(bool enable)
         {
