@@ -382,6 +382,8 @@ namespace CRUD_System.Interfaces
 
             adminControl.btnCreateUser.Enabled = !EditMode;
             adminControl.btnChangePassword.Enabled = !EditMode;
+            adminControl.btnNextPage.Enabled = !EditMode;
+            adminControl.btnPreviousPage.Enabled = !EditMode;
             adminControl.btnUploadFile.Visible = EditMode;
 
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);

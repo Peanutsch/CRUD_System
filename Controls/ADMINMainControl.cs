@@ -329,6 +329,8 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
+                btnEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnEditUserDetails
+                btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
                 adminInterface.TextBoxesReportEmpty();
                 AdminInterface.IsReport = ToggleIsReportMode();
                 adminInterface.TextBoxesReportConfig();
@@ -340,6 +342,8 @@ namespace CRUD_System
         {
             ReportManager reportManager = new ReportManager(this);
             reportManager.btnSaveReportHandler();
+            btnEditUserDetails.Enabled = true; // Enable btnEditUserDetails
+            btnSaveEditUserDetails.Enabled = true; // Enable btnSaveEditUserDetails
         }
 
         /// <summary>
