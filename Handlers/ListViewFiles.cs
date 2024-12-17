@@ -108,9 +108,7 @@ namespace CRUD_System.Handlers
             }
             catch (Exception)
             {
-
                 return string.Empty;
-
             }
             return string.Empty;
         }

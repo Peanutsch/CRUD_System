@@ -512,10 +512,8 @@ namespace CRUD_System
 
         private void listViewFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Controleer of een item geselecteerd is
             if (listViewFiles.SelectedItems.Count > 0)
             {
-                // Verkrijg de tekst van het eerste geselecteerde item
                 string selectedUserString = listViewFiles.SelectedItems[0].Text;
 
                 if (!string.IsNullOrEmpty(selectedUserString))

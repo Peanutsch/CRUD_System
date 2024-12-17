@@ -28,7 +28,7 @@ namespace CRUD_System.Interfaces
         public List<string[]> CachedLoginData => cache.CachedLoginData;
 
         private int currentPage = 1; // Track pagenumbers
-        private const int itemsPerPage = 15; // Maximum items per page in listBoxAdmin
+        private const int itemsPerPage = 16; // Maximum items per page in listBoxAdmin
 
         readonly DataCache cache = new DataCache();
         private readonly AdminMainControl adminControl;
@@ -550,12 +550,13 @@ namespace CRUD_System.Interfaces
 
             adminControl.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
 
+            adminControl.listViewFiles.Enabled = !IsReport; // Disable listViewFile when IsReport. Prevent altering older report text
+            adminControl.rtxReport.ReadOnly = !IsReport;
             adminControl.txtSubject.Visible = !IsReport;
             adminControl.txtCreator.Visible = !IsReport;
-            adminControl.rtxReport.ReadOnly = !IsReport;
             adminControl.lblCreatedBy.Visible = !IsReport;
             adminControl.lblCurrentDate.Visible = IsReport;
-            
+
             adminControl.comboBoxSubjectReport.Visible = IsReport;
             
             adminControl.btnCreateReport.Text = adminControl.ToggleIsReportMode() ? "Report" : "Exit";
