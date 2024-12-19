@@ -384,6 +384,7 @@ namespace CRUD_System.Interfaces
             adminControl.btnChangePassword.Enabled = !EditMode;
             adminControl.btnNextPage.Enabled = !EditMode;
             adminControl.btnPreviousPage.Enabled = !EditMode;
+            adminControl.btnGeneratePSW.Enabled = !EditMode;
             adminControl.btnUploadFile.Visible = EditMode;
 
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
@@ -534,36 +535,62 @@ namespace CRUD_System.Interfaces
         }
         #endregion TEXTBOXES ADMIN
 
-        #region TEXTBOXES REPORT
+        #region TEXTBOXES AND CONFIG REPORT
+        /// <summary>
+        /// Clears the content of all report-related text boxes.
+        /// </summary>
         public void TextBoxesReportEmpty()
         {
-            //adminControl.txtAliasReport.Text = string.Empty;
-            adminControl.txtCreator.Text = string.Empty;
-            adminControl.txtSubject.Text = string.Empty;
-            adminControl.txtDateReport.Text = string.Empty;
-            adminControl.rtxReport.Text = string.Empty;
+            // Clear specific text boxes in the adminControl
+            adminControl.txtCreator.Text = string.Empty; // Clears the "Creator" text box
+            adminControl.txtSubject.Text = string.Empty; // Clears the "Subject" text box
+            adminControl.txtDateReport.Text = string.Empty; // Clears the "Date" text box
+            adminControl.rtxReport.Text = string.Empty; // Clears the rich text box for the report content
         }
 
+        /// <summary>
+        /// Configures the UI elements for report mode or standard mode.
+        /// </summary>
+        /// <remarks>
+        /// This method clears report-related text boxes, sets the current date, 
+        /// and updates the visibility, enabled state, and appearance of various controls 
+        /// based on whether the application is in report mode (`IsReport`).
+        /// </remarks>
         public void TextBoxesReportConfig()
         {
+            // Clears the content of the report text boxes
             TextBoxesReportEmpty();
 
+            // Sets the current date in the "Date" text box, formatted as "dd-MM-yyyy"
             adminControl.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
 
-            adminControl.listViewFiles.Enabled = !IsReport; // Disable listViewFile when IsReport. Prevent altering older report text
-            adminControl.rtxReport.ReadOnly = !IsReport;
-            adminControl.txtSubject.Visible = !IsReport;
-            adminControl.txtCreator.Visible = !IsReport;
-            adminControl.lblCreatedBy.Visible = !IsReport;
-            adminControl.lblCurrentDate.Visible = IsReport;
+            // Configure controls' enabled state based on whether we are in report mode (`IsReport`)
+            adminControl.listViewFiles.Enabled = !IsReport; // Disables the list view to prevent altering older reports
+            adminControl.btnDeleteUser.Enabled = !IsReport; // Disables the "Delete User" button
+            adminControl.btnGeneratePSW.Enabled = !IsReport; // Disables the "Generate Password" button
+            adminControl.btnDeleteReport.Enabled = !IsReport;
 
-            adminControl.comboBoxSubjectReport.Visible = IsReport;
-            
+            adminControl.rtxReport.ReadOnly = !IsReport; // Sets the report text box to read-only when not in report mode
+
+            // Toggle visibility of controls depending on report mode
+            adminControl.txtSubject.Visible = !IsReport; // Shows the "Subject" text box when not in report mode
+            adminControl.txtCreator.Visible = !IsReport; // Shows the "Creator" text box when not in report mode
+            adminControl.lblCreatedBy.Visible = !IsReport; // Shows the "Created By" label when not in report mode
+            adminControl.lblCurrentDate.Visible = IsReport; // Shows the "Current Date" label only in report mode
+
+            adminControl.comboBoxSubjectReport.Visible = IsReport; // Shows the subject selection combo box in report mode
+
+            // Updates the "Create Report" button's text and appearance based on the report mode
             adminControl.btnCreateReport.Text = adminControl.ToggleIsReportMode() ? "Report" : "Exit";
             adminControl.rtxReport.BackColor = adminControl.ToggleIsReportMode() ? Color.White : Color.LightGray;
+
+            // Shows or hides the "Save Report" button based on report mode
             adminControl.btnSaveReport.Visible = IsReport;
+
+            // Clears any selected items in the list view to reset the state
             adminControl.listViewFiles.SelectedItems.Clear();
         }
-        #endregion TEXTBOXES REPORT
+
+        #endregion TEXTBOXES AND CONFIG REPORT
     }
 }

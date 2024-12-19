@@ -267,10 +267,6 @@ namespace CRUD_System.Handlers
             var adminControl = new AdminMainControl();
             ReportManager.ReportDeleteUser(aliasToDelete, "Account Deleted", reportText);
 
-            // Disable listViewFiles
-            adminControl.listViewFiles.Enabled = false;
-            adminControl.listViewFiles.Items.Clear();
-
             // Show a success message to the user
             message.MessageDeleteSucces(aliasToDelete);
             

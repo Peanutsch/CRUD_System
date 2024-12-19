@@ -16,18 +16,18 @@ namespace CRUD_System.Handlers
     internal class ReportManager
     {
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-
-        string rootPath = RootPath.GetRootPath();
-
-        #region CONSTRUCTOR
         private readonly AdminMainControl? adminControl;
 
+        readonly string rootPath = RootPath.GetRootPath();
+
+        #region CONSTRUCTOR
         public ReportManager(AdminMainControl control)
         {
             adminControl = control;
         }
         #endregion CONSTRUCTOR
 
+        #region BUTTONS
         /// <summary>
         /// Handles the logic for saving a report. Validates input, confirms the action with the user, 
         /// creates a new report CSV file, and refreshes the ListView to display the new report.
@@ -65,55 +65,108 @@ namespace CRUD_System.Handlers
             RefreshListViewFiles();
         }
 
-        public static void ReportSaveNewUser(string isNewAlias, string isSubject,string isReportText)
-        {
-            string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
-            var currentUser = AuthenticationService.CurrentUser;
-            string reportText = $"{isReportText.Replace(",", ";")}";           
-
-            try
-            {
-                CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser!, isNewAlias, isSubject, reportText);
-                Debug.WriteLine($"Create report for new useraccount {isNewAlias} succes!");
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"Error creating report for new useraccount {isNewAlias}:\n{e}");
-            }
-            
-        }
-
-        public static void ReportDeleteUser(string isAlias, string isSubject, string isReportText)
-        {
-            string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
-            string? currentUser = AuthenticationService.CurrentUser;
-            string reportText = $"{isReportText.Replace(",", ";")}";
-
-            try
-            {
-                CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser!, isAlias, isSubject, reportText);
-                Debug.WriteLine($"Create report for deleted useraccount {isAlias} succes!");
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"Error creating report for new useraccount {isAlias}:\n{e}");
-            }
-        }
-
+        /// <summary>
+        /// Handles file uploads for a specific user by ensuring the upload directory exists and processing the file.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the user for whom the file is being uploaded.</param>
+        /// <remarks>
+        /// This method builds a path to the "reports" directory for the specified user,
+        /// ensures the directory exists, and initiates the file upload process.
+        /// </remarks>
         public void BtnUploadFileHandler(string selectedAlias)
         {
-            // Build the path to the "reports" directory and the alias subdirectory
+            // Build the path to the "reports" directory for the specified alias
             string uploadPath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias);
 
-            // Ensure the alias folder exists within the reports directory
+            // Ensure the alias directory exists within the "reports" folder
             if (!Directory.Exists(uploadPath))
             {
                 Directory.CreateDirectory(uploadPath);
             }
 
+            // Initialize the upload process
             UploadFile uploadFile = new UploadFile();
             UploadFile.Upload(uploadPath);
         }
+        #endregion BUTTONS
+
+        #region PROCESSING AND HANDLING
+        /// <summary>
+        /// Prepares the report data for saving by generating a timestamp, retrieving the current user,
+        /// and sanitizing the report text.
+        /// </summary>
+        /// <param name="isReportText">The content or body of the report.</param>
+        /// <returns>A tuple containing the timestamp, current user, and sanitized report text.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the current user is null.</exception>
+        private static (string TimeStamp, string CurrentUser, string SanitizedText) PrepareReportData(string isReportText)
+        {
+            // Generate a unique timestamp for the report
+            string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
+
+            // Get the username of the currently authenticated user
+            string? currentUser = AuthenticationService.CurrentUser
+                ?? throw new InvalidOperationException("Current user is not authenticated.");
+
+            // Ensure the report text doesn't contain commas by replacing them with semicolons
+            string sanitizedText = isReportText.Replace(",", ";");
+
+            return (timeStamp, currentUser, sanitizedText);
+        }
+
+        /// <summary>
+        /// Creates and saves a report for a newly created user account.
+        /// </summary>
+        /// <param name="isNewAlias">The alias of the newly created user account.</param>
+        /// <param name="isSubject">The subject or title of the report.</param>
+        /// <param name="isReportText">The content or body of the report.</param>
+        public static void ReportSaveNewUser(string isNewAlias, string isSubject, string isReportText)
+        {
+            try
+            {
+                // Prepare report data
+                var (timeStamp, currentUser, sanitizedText) = PrepareReportData(isReportText);
+
+                // Save the report to a CSV file
+                CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser, isNewAlias, isSubject, sanitizedText);
+                Debug.WriteLine($"Successfully created report for new user account {isNewAlias}!");
+            }
+            catch (Exception e)
+            {
+                // Log any errors that occur during report creation
+                Debug.WriteLine($"Error creating report for new user account {isNewAlias}:\n{e}");
+            }
+        }
+
+        /// <summary>
+        /// Creates and saves a report for a deleted user account.
+        /// </summary>
+        /// <param name="isAlias">The alias of the deleted user account.</param>
+        /// <param name="isSubject">The subject or title of the report.</param>
+        /// <param name="isReportText">The content or body of the report.</param>
+        public static void ReportDeleteUser(string isAlias, string isSubject, string isReportText)
+        {
+            try
+            {
+                // Prepare report data
+                var (timeStamp, currentUser, sanitizedText) = PrepareReportData(isReportText);
+
+                // Save the report to a CSV file
+                CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser, isAlias, isSubject, sanitizedText);
+                Debug.WriteLine($"Successfully created report for deleted user account {isAlias}!");
+
+                // Disable and Clear listViewFiles
+                AdminMainControl adminControl = new AdminMainControl();
+                adminControl.listViewFiles.Items.Clear();
+                adminControl.listViewFiles.Enabled = false;
+                
+            }
+            catch (Exception e)
+            {
+                // Log any errors that occur during report creation
+                Debug.WriteLine($"Error creating report for deleted user account {isAlias}:\n{e}");
+            }
+        }
+
 
         /// <summary>
         /// Refreshes the ListView in the UI to display the latest report files.
@@ -177,6 +230,7 @@ namespace CRUD_System.Handlers
                 }
             }
         }
+        #endregion PROCESSING AND HANDLING
 
         #region REPORT DISPLAY
         /// <summary>
@@ -213,7 +267,7 @@ namespace CRUD_System.Handlers
                 // Parse the report content
                 string reportCreator = reportContentSplit[1];               // Creator Alias
                 string reportSubject = reportContentSplit[3];               // Subject
-                string reportTextReport = reportContentSplit[4];     // // Full text, including commas
+                string reportTextReport = reportContentSplit[4];            // Full text, including commas
                 string reportDate = isFileNameSplit[1].Replace("-", " ");   // Format date part of the filename (if applicable)
 
                 // Update the admin control fields with parsed data
@@ -240,28 +294,49 @@ namespace CRUD_System.Handlers
 
         #endregion REPORT DISPLAY
 
+        #region TOGGLE REPORT MODE
+        /// <summary>
+        /// Toggles the application between report mode and standard mode.
+        /// </summary>
+        /// <param name="enable">
+        /// A boolean value indicating whether to enable report mode.
+        /// If <c>true</c>, report mode is activated; otherwise, standard mode is enabled.
+        /// </param>
+        /// <remarks>
+        /// This method updates the visibility, read-only state, and appearance of various UI elements
+        /// based on the provided <paramref name="enable"/> parameter.
+        /// </remarks>
         public void ToggleReportMode(bool enable)
         {
+            // Create an instance of the AdminInterface to manage global states and UI logic
             AdminInterface adminInterface = new AdminInterface();
+
+            // Update the IsReport flag in the AdminInterface class
             AdminInterface.IsReport = enable;
 
+            // Clear all report-related text boxes to reset the UI
             adminInterface.TextBoxesReportEmpty();
 
-            adminControl!.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
+            // Configure the visibility and state of standard mode controls
+            adminControl!.txtSubject.Visible = !AdminInterface.IsReport; // Subject text box is visible only in standard mode
+            adminControl.txtCreator.Visible = !AdminInterface.IsReport; // Creator text box is visible only in standard mode
+            adminControl.rtxReport.ReadOnly = !AdminInterface.IsReport; // Report text box is read-only in standard mode
+            adminControl.lblCreatedBy.Visible = !AdminInterface.IsReport; // "Created By" label is visible only in standard mode
+            adminControl.lblCurrentDate.Visible = AdminInterface.IsReport; // "Current Date" label is visible only in report mode
 
-            adminControl.txtSubject.Visible = !AdminInterface.IsReport;
-            adminControl.txtCreator.Visible = !AdminInterface.IsReport;
-            adminControl.rtxReport.ReadOnly = !AdminInterface.IsReport;
-            adminControl.lblCreatedBy.Visible = !AdminInterface.IsReport;
-            adminControl.lblCurrentDate.Visible = AdminInterface.IsReport;
+            // Configure visibility of report-specific controls
+            adminControl.comboBoxSubjectReport.Visible = AdminInterface.IsReport; // Subject dropdown is visible only in report mode
 
-            adminControl.comboBoxSubjectReport.Visible = AdminInterface.IsReport;
+            // Configure report-related area
+            adminControl.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy"); // Set current date in the report date text box
+            adminControl.btnCreateReport.Text = AdminInterface.IsReport ? "Exit" : "Report"; // Toggle button text based on mode
+            adminControl.rtxReport.BackColor = AdminInterface.IsReport ? Color.White : Color.LightGray; // Adjust text box background color
+            adminControl.btnSaveReport.Visible = AdminInterface.IsReport; // Show or hide "Save Report" button based on mode
 
-            adminControl.btnCreateReport.Text = AdminInterface.IsReport ? "Exit" : "Report";
-            adminControl.rtxReport.BackColor = AdminInterface.IsReport ? Color.White : Color.LightGray;
-            adminControl.btnSaveReport.Visible = AdminInterface.IsReport;
+            // Clear any selected items in the list view to reset its state
             adminControl.listViewFiles.SelectedItems.Clear();
         }
+        #endregion TOGGLE REPORT MODE
     }
 }
 

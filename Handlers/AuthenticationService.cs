@@ -270,6 +270,11 @@ namespace CRUD_System.Handlers
 
             if (!string.IsNullOrEmpty(currentUser))
             {
+                AdminMainForm adminform = new AdminMainForm();
+                UserMainForm userForm = new UserMainForm();
+                adminform.Dispose();
+                userForm.Dispose();
+
                 UpdateUserOnlineStatus(currentUser, false);
                 logEvents.UserLoggedOut(currentUser);
                 CurrentUser = null;
@@ -311,7 +316,7 @@ namespace CRUD_System.Handlers
             UserMainForm userForm = new UserMainForm();
 
             // Check if the cache is empty, and reload data if necessary.
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            if (cache.CachedUserData.Any() || cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }

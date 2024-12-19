@@ -255,6 +255,11 @@ namespace CRUD_System
             adminInterface.NextPage();
         }
 
+        private void btnUploadFile_Click(object sender, EventArgs e)
+        {
+
+        }
+
         /// <summary>
         /// Handles the state change of the 'Absence Due to Illness' checkbox.
         /// If the checkbox changes from checked to unchecked, it performs an action
@@ -672,9 +677,6 @@ namespace CRUD_System
         }
         #endregion DELETE FILE REPORT
 
-        private void btnUploadFile_Click(object sender, EventArgs e)
-        {
 
-        }
     }
 }

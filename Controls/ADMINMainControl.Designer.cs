@@ -344,7 +344,7 @@
             this.btnNextPage.Name = "btnNextPage";
             this.btnNextPage.Size = new Size(75, 23);
             this.btnNextPage.TabIndex = 36;
-            this.btnNextPage.Text = "Next";
+            this.btnNextPage.Text = ">>>";
             this.btnNextPage.UseVisualStyleBackColor = false;
             this.btnNextPage.Click += this.btnNextPage_Click;
             // 
@@ -356,7 +356,7 @@
             this.btnPreviousPage.Name = "btnPreviousPage";
             this.btnPreviousPage.Size = new Size(75, 23);
             this.btnPreviousPage.TabIndex = 37;
-            this.btnPreviousPage.Text = "Prev";
+            this.btnPreviousPage.Text = "<<<";
             this.btnPreviousPage.UseVisualStyleBackColor = false;
             this.btnPreviousPage.Click += this.btnPreviousPage_Click;
             // 

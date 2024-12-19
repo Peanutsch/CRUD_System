@@ -18,16 +18,16 @@ namespace CRUD_System
         [STAThread]
         static void Main() 
         {
-            #region Decryption
+            #region Decrypt files
             // Decrypt the CSV file
             //EncryptionManager.DecryptFile(filePath.LoginFilePath); // data_login.csv
             //EncryptionManager.DecryptFile(filePath.UserFilePath); // data_users.csv
             //EncryptionManager.DecryptFile(filePath.HRFilePath);
             //DecryptSingleCSVFile("peer001", "report"); //--------------> Do not forget to check if DirectoryName is correct in method. Current setup: peer001
             //DecryptSingleCSVFile("paer001", "log");
-            #endregion Decryption
+            #endregion Decrypt files
 
-            #region Encryption
+            #region Encrypt files
             // Encrypt the CSV file
             //EncryptionManager.EncryptFile(filePath.LoginFilePath); // data_login.csv
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
@@ -38,7 +38,7 @@ namespace CRUD_System
 
             //DecryptSingleCSVFile("mist001", "logEvents");
             //DecryptSingleCSVFile("peer001", "logEvents");
-            #endregion Encryption
+            #endregion Encrypt files
 
             #region Create/Edit CSV Files
             // Add new column in csv file

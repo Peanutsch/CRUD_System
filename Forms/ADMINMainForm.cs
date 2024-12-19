@@ -1,5 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using CRUD_System.Repositories;
 using Microsoft.VisualBasic.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace CRUD_System
     public partial class AdminMainForm : Form
     {
         #region PROPERTIES
-        AuthenticationService authService = new AuthenticationService();
+        private readonly AuthenticationService authService = new AuthenticationService();
         private readonly AdminMainControl adminControl = new AdminMainControl();
         #endregion PROPERTIES
 
@@ -57,11 +58,20 @@ namespace CRUD_System
         /// Handles the form closing event for the MainFormADMIN. 
         /// This method ensures that the user is logged out, their online status is updated, 
         /// and the current user session is cleared when the form is being closed.
-        /// Also triggerd by ALT-F4
+        /// Is also triggerd by ALT-F4
         /// </summary>
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
-            authService.PerformLogout();
+            RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+            DialogResult dr = message.MessageConfirmExit();
+            if (dr == DialogResult.Yes)
+            {
+                authService.PerformLogout();
+            }
+            else
+            {
+                return;
+            }
         }
         #endregion BUTTONS
 

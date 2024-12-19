@@ -60,6 +60,11 @@ namespace CRUD_System.Repositories
         {
             return MessageBox.Show($"Are you sure to change SuperUser role for {alias}?", "Confirm Change Role", MessageBoxButtons.YesNo);
         }
+
+        public DialogResult MessageConfirmExit()
+        {
+            return MessageBox.Show("Are you sure you want to exit?", "Confirm Exit", MessageBoxButtons.YesNo);
+        }
         #endregion CONFIRM
 
         #region SUCCES
