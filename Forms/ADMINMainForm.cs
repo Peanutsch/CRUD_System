@@ -62,16 +62,7 @@ namespace CRUD_System
         /// </summary>
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
-            RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-            DialogResult dr = message.MessageConfirmExit();
-            if (dr == DialogResult.Yes)
-            {
                 authService.PerformLogout();
-            }
-            else
-            {
-                return;
-            }
         }
         #endregion BUTTONS
 

@@ -127,7 +127,7 @@ namespace CRUD_System.Handlers
         public void UpdateUserOnlineStatus(string alias, bool onlineStatus)
         {
             // Check if the cache is empty, and reload data if necessary.
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
@@ -204,8 +204,7 @@ namespace CRUD_System.Handlers
 
             // Online Status = true
             UpdateUserOnlineStatus(CurrentUser, true);
-            AdminInterface adminInterface = new AdminInterface();
-            
+           
             logEvents.UserLoggedIn(CurrentUser);
 
             bool isAdmin = CheckRole(inputUserName, inputUserPassword);
@@ -266,6 +265,12 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void PerformLogout()
         {
+            DialogResult dr = message.MessageConfirmExit();
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+
             var currentUser = CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
