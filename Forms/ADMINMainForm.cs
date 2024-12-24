@@ -62,8 +62,20 @@ namespace CRUD_System
         /// </summary>
         private void MainFormADMIN_FormClosing(object sender, FormClosingEventArgs e)
         {
-                authService.PerformLogout();
+            RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+            DialogResult dr = message.MessageConfirmLogOut();
+
+            if (dr == DialogResult.No)
+            {
+                // Cancel the form closing if the user chooses "No"
+                e.Cancel = true;
+                return;
+            }
+
+            // Perform logout actions
+            authService.PerformLogout();
         }
+
         #endregion BUTTONS
 
         public void FormConfig()

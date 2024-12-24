@@ -265,21 +265,10 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void PerformLogout()
         {
-            DialogResult dr = message.MessageConfirmExit();
-            if (dr == DialogResult.No)
-            {
-                return;
-            }
-
             var currentUser = CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                AdminMainForm adminform = new AdminMainForm();
-                UserMainForm userForm = new UserMainForm();
-                adminform.Dispose();
-                userForm.Dispose();
-
                 UpdateUserOnlineStatus(currentUser, false);
                 logEvents.UserLoggedOut(currentUser);
                 CurrentUser = null;
@@ -301,14 +290,9 @@ namespace CRUD_System.Handlers
             }
 
             AdminInterface adminInterface = new AdminInterface();
-            // Pass the selected alias to SetForceLogOutUserBtn in AdminInterface
-            adminInterface.SetForceLogOutUserBtn(aliasToLogOut);
-
-            // Update the user's online status to offline
-            UpdateUserOnlineStatus(aliasToLogOut, false);
-
-            // Perform the forced logout for the user
-            PerformForcedLogOutByAdmin(aliasToLogOut);
+            adminInterface.SetForceLogOutUserBtn(aliasToLogOut); // Pass the selected alias to SetForceLogOutUserBtn in AdminInterface
+            UpdateUserOnlineStatus(aliasToLogOut, false); // Update the user's online status to offline
+            PerformForcedLogOutByAdmin(aliasToLogOut); // Perform the forced logout for the user
         }
 
         /// <summary>
