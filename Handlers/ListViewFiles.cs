@@ -90,7 +90,9 @@ namespace CRUD_System.Handlers
                 {
                     string rootPath = RootPath.GetRootPath();
                     string fileName = selectedUserString + "_report.csv";
-                    string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), alias, fileName);
+                    string yearFolder = ReportManager.GetYearFolder(selectedUserString);
+                    //string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), alias, fileName);
+                    string filePath = Path.Combine(rootPath, "report", yearFolder, alias, fileName);
 
                     EncryptionManager.DecryptFile(filePath);
 

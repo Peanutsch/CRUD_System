@@ -233,10 +233,14 @@ namespace CRUD_System.Handlers
         #endregion PROCESSING AND HANDLING
 
         #region REPORT DISPLAY
-
-        public string GetYearFolder(string isFileName)
+        /// <summary>
+        /// Extracts the year from the filename, which is expected to follow the format alias_date_timestamp_report.csv.
+        /// </summary>
+        /// <param name="isFileName">The filename containing the date information.</param>
+        /// <returns>The extracted year as a string.</returns>
+        public static string GetYearFolder(string isFileName)
         {
-            // Find the part of the filename that contains the date. Format isFileName: alias_date_timestamp_report.csv
+            // Find the part of the filename that contains the date
             string isDate = isFileName.Split('_')[1].Substring(0, 8);
 
             // Extract the year from the date (last 4 characters)
@@ -245,22 +249,125 @@ namespace CRUD_System.Handlers
             return getYear;
         }
 
+        /// <summary>
+        /// Displays the user's report by preparing, decrypting, parsing, and updating the admin control fields.
+        /// Includes error handling for missing files and format issues.
+        /// </summary>
+        /// <param name="selectedUserReportFileName">The filename of the user's report, excluding the extension.</param>
+        /// <param name="selectedAlias">The alias of the selected user, used to locate the report file.</param>
+        public void ReportDisplay(string selectedUserReportFileName, string selectedAlias)
+        {
+            try
+            {
+                // Step 1: Prepare and decrypt the report
+                string filePath = PrepareAndDecryptReport(selectedUserReportFileName, selectedAlias);
 
+                // Step 2: Parse and display the report content
+                ParseAndDisplayReport(filePath, selectedUserReportFileName);
+
+                // Re-encrypt the report file after processing
+                EncryptionManager.EncryptFile(filePath);
+            }
+            catch (FileNotFoundException ex)
+            {
+                Debug.WriteLine(ex.Message);
+                MessageBox.Show("The report file could not be found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (FormatException ex)
+            {
+                Debug.WriteLine(ex.Message);
+                MessageBox.Show("The report content does not match the expected format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unexpected error: {ex.Message}");
+                MessageBox.Show("An unexpected error occurred while processing the report.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Constructs the file path for the report, verifies its existence, and decrypts it for further processing.
+        /// </summary>
+        /// <param name="selectedUserReportFileName">The filename of the report, excluding the extension.</param>
+        /// <param name="selectedAlias">The alias of the selected user.</param>
+        /// <returns>The decrypted file path of the report.</returns>
+        /// <exception cref="FileNotFoundException">Thrown if the report file does not exist.</exception>
+        private string PrepareAndDecryptReport(string selectedUserReportFileName, string selectedAlias)
+        {
+            // Construct the report file path
+            string isFileName = $"{selectedUserReportFileName}_report.csv";
+            string yearFolder = GetYearFolder(selectedUserReportFileName);
+            string filePath = Path.Combine(rootPath, "report", yearFolder, selectedAlias, isFileName);
+
+            // Check if the file exists before attempting to decrypt
+            if (!File.Exists(filePath))
+            {
+                Debug.WriteLine($"File not found: {filePath}");
+                throw new FileNotFoundException("Report file not found.", filePath);
+            }
+
+            // Decrypt the file
+            EncryptionManager.DecryptFile(filePath);
+
+            return filePath; // Return the file path
+        }
+
+        /// <summary>
+        /// Reads, parses, and displays the content of the decrypted report file.
+        /// Updates the admin control fields with the extracted data.
+        /// </summary>
+        /// <param name="filePath">The file path of the decrypted report.</param>
+        /// <param name="selectedUserReportFileName">The filename of the report, excluding the extension.</param>
+        /// <exception cref="FormatException">Thrown if the report content does not match the expected format.</exception>
+        private void ParseAndDisplayReport(string filePath, string selectedUserReportFileName)
+        {
+            // Read the content of the report file
+            string reportContent = File.ReadAllText(filePath);
+            string[] reportContentSplit = reportContent.Split(","); // Split content by comma
+            string[] isFileNameSplit = selectedUserReportFileName.Split("_"); // Split filename
+
+            // Check if the content is correctly formatted
+            if (reportContentSplit.Length < 5)
+            {
+                throw new FormatException("The report content does not match the expected format.");
+            }
+
+            // Parse the content of the report
+            string reportCreator = reportContentSplit[1]; // Creator Alias
+            string reportSubject = reportContentSplit[3]; // Subject
+            string reportTextReport = reportContentSplit[4]; // Full text, including commas
+            string reportDate = isFileNameSplit[1].Replace("-", " "); // Format date part
+
+            // Ensure adminControl is not null
+            if (adminControl == null)
+            {
+                Debug.WriteLine("adminControl is null!");
+                return;
+            }
+
+            // Update the fields in adminControl
+            adminControl.txtCreator.Text = reportCreator; // Creator
+            adminControl.txtSubject.Text = reportSubject; // Subject
+            adminControl.rtxReport.Text = reportTextReport.Replace(";", ",").Trim();
+            adminControl.txtDateReport.Text = Regex.Replace(reportDate.Replace("\"", ""), @"(\d{2})(\d{2})(\d{4})", "$1-$2-$3").Trim();
+        }
+
+
+        /*
         /// <summary>
         /// Displays the report for a selected user by reading and decrypting the report file, 
         /// parsing its content, and updating the adminControl fields accordingly.
         /// </summary>
-        /// <param name="selectedUserReportFileName">The selected user string, typically from a list box or list view.</param>
+        /// <param name="selectedUserReportFileName">The filename, format: {selectedUserReportFileName}_report.csv.</param>
         /// <param name="selectedAlias">The alias of the selected user, used to locate the report file.</param>
         public void ReportDisplay(string selectedUserReportFileName, string selectedAlias)
         {
             // Get the root path and construct the file path for the report
 
             string isFileName = $"{selectedUserReportFileName}_report.csv";
-            string useFolder = GetYearFolder(selectedUserReportFileName);
+            string yearFolder = GetYearFolder(selectedUserReportFileName);
 
-            //string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias, isFileName);
-            string filePath = Path.Combine(rootPath, "report", useFolder, selectedAlias, isFileName);
+            string filePath = Path.Combine(rootPath, "report", yearFolder, selectedAlias, isFileName);
 
             // Check if the adminControl is null to prevent NullReferenceException
             if (adminControl == null)
@@ -307,6 +414,7 @@ namespace CRUD_System.Handlers
             // Re-encrypt the report file after processing to maintain security
             EncryptionManager.EncryptFile(filePath);
         }
+        */
 
         #endregion REPORT DISPLAY
 
@@ -355,125 +463,3 @@ namespace CRUD_System.Handlers
         #endregion TOGGLE REPORT MODE
     }
 }
-
-/*
-/// <summary>
-/// Displays the report for a selected user by reading and decrypting the report file, 
-/// parsing its content, and updating the adminControl fields accordingly.
-/// </summary>
-/// <param name="selectedUserString">The selected user string, typically from a list box or list view.</param>
-/// <param name="selectedAlias">The alias of the selected user, used to locate the report file.</param>
-public void ReportDisplay(string selectedUserString, string selectedAlias)
-{
-    // Get the array of report file paths
-    string[] filePaths = GetReportFilePaths(selectedUserString, selectedAlias);
-
-    // Check if there are any files in the array
-    if (filePaths.Length == 0)
-    {
-        Debug.WriteLine("No report files found!");
-        MessageBox.Show("No report files found for the selected user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
-    }
-
-    // Select the first file in the array (you can modify this logic to select another file if needed)
-    string filePath = filePaths[0];
-
-    // Check if the adminControl is null to prevent NullReferenceException
-    if (adminControl == null)
-    {
-        Debug.WriteLine("adminControl is null!");
-        return;
-    }
-
-    // Decrypt and read the report file content
-    string reportContent = DecryptAndReadReport(filePath);
-    if (string.IsNullOrEmpty(reportContent))
-        return;
-
-    // Parse and update the admin control fields
-    if (ParseAndUpdateReportContent(reportContent, filePath))
-    {
-        Debug.WriteLine("The report was successfully loaded.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-    // Re-encrypt the report file after processing
-    EncryptionManager.EncryptFile(filePath);
-}
-
-/// <summary>
-/// Constructs the file path for the report and returns all files in the directory.
-/// </summary>
-private string[] GetReportFilePaths(string selectedUserString, string selectedAlias)
-{
-    // Get the full directory path for the selected user and alias
-    string directoryPath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias);
-
-    // Check if the directory exists
-    if (Directory.Exists(directoryPath))
-    {
-        // Retrieve all files in the directory
-        return Directory.GetFiles(directoryPath, "*.*"); // Get all files with any extension
-    }
-    else
-    {
-        return Array.Empty<string>(); // Return an empty array if directory does not exist
-    }
-}
-
-/// <summary>
-/// Decrypts and reads the report file content.
-/// </summary>
-private string DecryptAndReadReport(string filePath)
-{
-    if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
-    {
-        Debug.WriteLine($"Filepath {filePath} is null or does not exist");
-        MessageBox.Show($"Filepath {filePath} is null or does not exist");
-        return string.Empty;
-    }
-
-    // Decrypt the report file and read its content
-    EncryptionManager.DecryptFile(filePath);
-    string reportContent = File.ReadAllText(filePath);
-    return reportContent;
-}
-
-/// <summary>
-/// Parses the report content and updates the admin control fields.
-/// </summary>
-private bool ParseAndUpdateReportContent(string reportContent, string filePath)
-{
-    string[] reportContentSplit = reportContent.Split(",");
-    string[] fileNameSplit = Path.GetFileName(filePath).Split("_");
-
-    // Ensure the report content has at least the expected number of elements
-    if (reportContentSplit.Length < 5)
-    {
-        MessageBox.Show("The report does not match the expected format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return false;
-    }
-
-    // Parse the report content
-    string reportCreator = reportContentSplit[1]; // Creator Alias
-    string reportSubject = reportContentSplit[3]; // Subject
-    string reportTextReport = reportContentSplit[4]; // Full text, including commas
-    string reportDate = fileNameSplit[1].Replace("-", " "); // Format date part of the filename (if applicable)
-
-    // Update the admin control fields with parsed data
-    adminControl!.txtCreator.Text = reportCreator;
-    adminControl.txtSubject.Text = reportSubject;
-    adminControl.rtxReport.Text = reportTextReport.Replace(";", ",").Trim();
-    adminControl.txtDateReport.Text = FormatDate(reportDate);
-
-    return true;
-}
-
-/// <summary>
-/// Formats the date as DD-MM-YYYY.
-/// </summary>
-private string FormatDate(string date)
-{
-    return Regex.Replace(date.Replace("\"", ""), @"(\d{2})(\d{2})(\d{4})", "$1-$2-$3").Trim();
-}
-*/
