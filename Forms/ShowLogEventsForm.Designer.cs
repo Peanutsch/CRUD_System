@@ -1,6 +1,6 @@
 ﻿namespace CRUD_System
 {
-    partial class ShowLogsForm
+    partial class ShowLogEventsForm
     {
         /// <summary>
         /// Required designer variable.

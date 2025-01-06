@@ -22,6 +22,5 @@ namespace CRUD_System
             // Set focus ActiveControl at focusButton
             this.ActiveControl = focusButton;
         }
-
     }
 }

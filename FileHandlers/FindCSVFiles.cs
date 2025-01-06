@@ -45,20 +45,30 @@ namespace CRUD_System.FileHandlers
             return string.Empty; // Return an empty string if file does not exist
         }
 
+        
         public static string FindReportFile(string alias, string directory)
         {
             // Get the root directory path
             string rootPath = RootPath.GetRootPath();
-            string filePath = Path.Combine(rootPath, directory, Timers.CurrentYear.ToString(), alias);
+            int currentYear = Timers.CurrentYear;
 
-            // Check if the target directory exists
-            if (!Directory.Exists(filePath))
+            // Create a range of years from currentYear to 5 years back
+            var rangeYears = Enumerable.Range(currentYear - 5, 6).Reverse(); // 6 because it’s inclusive of the start year
+            foreach (int year in rangeYears)
             {
-                return string.Empty;
+                // Construct the directory path for each year
+                string filePath = Path.Combine(rootPath, directory, year.ToString(), alias);
+
+                // Check if the directory exists
+                if (Directory.Exists(filePath))
+                {
+                    // Return the first found directory path
+                    return filePath;
+                }
             }
 
-            // Return the directory path (not the full file path)
-            return filePath;
+            // If no directory is found, return an empty string
+            return string.Empty;
         }
     }
 }

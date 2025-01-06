@@ -13,9 +13,9 @@ using System.Windows.Forms;
 
 namespace CRUD_System
 {
-    public partial class ShowLogsForm : Form
+    public partial class ShowLogEventsForm : Form
     {
-        public ShowLogsForm()
+        public ShowLogEventsForm()
         {
             InitializeComponent();
         }

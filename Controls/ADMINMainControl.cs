@@ -370,7 +370,7 @@ namespace CRUD_System
         /// <param name="e">Event arguments associated with the click event.</param>
         private void btnShowListBoxLogs_Click(object sender, EventArgs e)
         {
-            interactionHandler.Open_ShowReportForm(this, txtAlias.Text);
+            interactionHandler.Open_ShowLogForm(this, txtAlias.Text);
         }
 
         #endregion BUTTONS SoC (Seperate of Concerns)
@@ -519,12 +519,12 @@ namespace CRUD_System
         {
             if (listViewFiles.SelectedItems.Count > 0)
             {
-                string selectedUserString = listViewFiles.SelectedItems[0].Text;
+                string selectedUserReportFileName = listViewFiles.SelectedItems[0].Text;
 
-                if (!string.IsNullOrEmpty(selectedUserString))
+                if (!string.IsNullOrEmpty(selectedUserReportFileName))
                 {
                     string selectedAlias = txtAlias.Text;
-                    reportManager.ReportDisplay(selectedUserString, selectedAlias);
+                    reportManager.ReportDisplay(selectedUserReportFileName, selectedAlias);
                 }
             }
         }

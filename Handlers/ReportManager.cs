@@ -233,18 +233,34 @@ namespace CRUD_System.Handlers
         #endregion PROCESSING AND HANDLING
 
         #region REPORT DISPLAY
+
+        public string GetYearFolder(string isFileName)
+        {
+            // Find the part of the filename that contains the date. Format isFileName: alias_date_timestamp_report.csv
+            string isDate = isFileName.Split('_')[1].Substring(0, 8);
+
+            // Extract the year from the date (last 4 characters)
+            string getYear = isDate.Substring(4, 4);
+
+            return getYear;
+        }
+
+
         /// <summary>
         /// Displays the report for a selected user by reading and decrypting the report file, 
         /// parsing its content, and updating the adminControl fields accordingly.
         /// </summary>
-        /// <param name="selectedUserString">The selected user string, typically from a list box or list view.</param>
+        /// <param name="selectedUserReportFileName">The selected user string, typically from a list box or list view.</param>
         /// <param name="selectedAlias">The alias of the selected user, used to locate the report file.</param>
-        public void ReportDisplay(string selectedUserString, string selectedAlias)
+        public void ReportDisplay(string selectedUserReportFileName, string selectedAlias)
         {
             // Get the root path and construct the file path for the report
-            
-            string isFileName = $"{selectedUserString}_report.csv";
-            string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias, isFileName);
+
+            string isFileName = $"{selectedUserReportFileName}_report.csv";
+            string useFolder = GetYearFolder(selectedUserReportFileName);
+
+            //string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias, isFileName);
+            string filePath = Path.Combine(rootPath, "report", useFolder, selectedAlias, isFileName);
 
             // Check if the adminControl is null to prevent NullReferenceException
             if (adminControl == null)

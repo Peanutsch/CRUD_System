@@ -9,7 +9,7 @@ namespace CRUD_System.Handlers
         #region PROPERTIES
         public bool UserSelected { get; set; } // Property to store selection state
         
-        private ShowLogsForm? showReportForm;
+        private ShowLogEventsForm? showReportForm;
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -101,7 +101,7 @@ namespace CRUD_System.Handlers
         /// The parent control (e.g., a UserControl or Form) to pass along to the ShowReportForm. 
         /// If null, an error message will be shown indicating that the parent control is invalid.
         /// </param>
-        public void Open_ShowReportForm(UserControl? parentControl = null, string selectedAlias = "")
+        public void Open_ShowLogForm(UserControl? parentControl = null, string selectedAlias = "")
         {
             if (parentControl == null)
             {
@@ -111,7 +111,7 @@ namespace CRUD_System.Handlers
 
             if (showReportForm == null || showReportForm.IsDisposed)
             {
-                showReportForm = new ShowLogsForm();
+                showReportForm = new ShowLogEventsForm();
             }
 
             // Load the report content into the ShowReportForm
