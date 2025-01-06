@@ -265,9 +265,22 @@ namespace CRUD_System.Interfaces
         public void FindReportFile(string selectedAlias)
         {
             ListViewFiles listView = new ListViewFiles(adminControl);
-            string reportDirectory = FindCSVFiles.FindReportFile(selectedAlias, "report");
-            listView.LoadFilesIntoListView(reportDirectory);
+            List<string> reportDirectories = FindCSVFiles.FindReportFilesInFolders(selectedAlias, "report");
+
+            // Check if there are any directories found
+            if (reportDirectories.Any())
+            {
+                foreach (var directory in reportDirectories)
+                {
+                    listView.LoadFilesIntoListView(directory);
+                }
+            }
+            else
+            {
+                Debug.WriteLine("No report directories found.");
+            }
         }
+
 
         /// <summary>
         /// Validates the selected user alias and updates the UI accordingly. It checks the login details for the selected alias, 
@@ -568,7 +581,8 @@ namespace CRUD_System.Interfaces
             adminControl.listViewFiles.Enabled = !IsReport; // Disables the list view to prevent altering older reports
             adminControl.btnDeleteUser.Enabled = !IsReport; // Disables the "Delete User" button
             adminControl.btnGeneratePSW.Enabled = !IsReport; // Disables the "Generate Password" button
-            adminControl.btnDeleteReport.Enabled = !IsReport;
+            adminControl.btnDeleteReport.Enabled = !IsReport; // Disables the "Delete Report" button
+            adminControl.btnSaveEditUserDetails.Enabled = !IsReport; // Disables the "Save Edit" button
 
             adminControl.rtxReport.ReadOnly = !IsReport; // Sets the report text box to read-only when not in report mode
 

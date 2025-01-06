@@ -41,7 +41,7 @@ namespace CRUD_System.Handlers
             if (Directory.Exists(directoryPath) && !string.IsNullOrEmpty(directoryPath))
             {
                 // Retrieve all CSV files in the directory
-                string[] csvFiles = Directory.GetFiles(directoryPath, "*.csv");
+                string[] csvFiles = Directory.GetFiles(directoryPath, "*.csv", SearchOption.AllDirectories);
 
                 // Check if any CSV files are found
                 if (csvFiles.Length > 0)

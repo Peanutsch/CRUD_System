@@ -641,32 +641,53 @@ namespace CRUD_System
                 // Construct the full name of the report file
                 string fileName = selectedFile + "_report.csv";
                 Debug.WriteLine($"fileName: {fileName}");
+
                 // Locate the directory where the report file resides
-                string reportDirectory = FindCSVFiles.FindReportFile(txtAlias.Text, "report");
-                Debug.WriteLine($"reportDirectory: {reportDirectory}");
-                string fileToDelete = Path.Combine(reportDirectory, fileName);
+                List<string> reportDirectories = FindCSVFiles.FindReportFilesInFolders(txtAlias.Text, "report");
 
-                Debug.WriteLine($"fileToDelete: {fileToDelete}");
-                // Show a confirmation dialog before deleting the file
-                DialogResult dr = message.MessageConfirmDeleteFile(fileName);
-                if (dr == DialogResult.Yes)
+                if (reportDirectories.Any()) // Ensure there's at least one directory
                 {
-                    try
+                    bool fileDeleted = false;
+                    foreach (var reportDirectory in reportDirectories)
                     {
-                        // Attempt to delete the file from the file system
-                        File.Delete(fileToDelete);
+                        string fileToDelete = Path.Combine(reportDirectory, fileName);
 
-                        // Remove the deleted file from the ListView
-                        listViewFiles.Items.Remove(listViewFiles.SelectedItems[0]);
+                        if (File.Exists(fileToDelete)) // Check if the file exists
+                        {
+                            // Show a confirmation dialog before deleting the file
+                            DialogResult dr = message.MessageConfirmDeleteFile(fileName);
+                            if (dr == DialogResult.Yes)
+                            {
+                                try
+                                {
+                                    // Attempt to delete the file from the file system
+                                    File.Delete(fileToDelete);
 
-                        // Notify the user about the successful deletion
-                        MessageBox.Show("File successfully deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    // Remove the deleted file from the ListView
+                                    listViewFiles.Items.Remove(listViewFiles.SelectedItems[0]);
+
+                                    fileDeleted = true;
+                                    // Notify the user about the successful deletion
+                                    MessageBox.Show("File successfully deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Display an error message if the deletion fails
+                                    MessageBox.Show($"An error occurred while deleting the file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
+                        }
                     }
-                    catch (Exception ex)
+
+                    if (!fileDeleted)
                     {
-                        // Display an error message if the deletion fails
-                        MessageBox.Show($"An error occurred while deleting the file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("File not found in the directories.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Report directory not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else

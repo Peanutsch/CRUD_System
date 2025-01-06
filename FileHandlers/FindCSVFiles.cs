@@ -45,8 +45,8 @@ namespace CRUD_System.FileHandlers
             return string.Empty; // Return an empty string if file does not exist
         }
 
-        
-        public static string FindReportFile(string alias, string directory)
+
+        public static List<string> FindReportFilesInFolders(string selectedAlias, string folder)
         {
             // Get the root directory path
             string rootPath = RootPath.GetRootPath();
@@ -54,21 +54,24 @@ namespace CRUD_System.FileHandlers
 
             // Create a range of years from currentYear to 5 years back
             var rangeYears = Enumerable.Range(currentYear - 5, 6).Reverse(); // 6 because it’s inclusive of the start year
+
+            List<string> foundDirectories = new List<string>();  // List to store all found directories
+
             foreach (int year in rangeYears)
             {
                 // Construct the directory path for each year
-                string filePath = Path.Combine(rootPath, directory, year.ToString(), alias);
+                string filePath = Path.Combine(rootPath, folder, year.ToString(), selectedAlias);
 
                 // Check if the directory exists
                 if (Directory.Exists(filePath))
                 {
-                    // Return the first found directory path
-                    return filePath;
+                    foundDirectories.Add(filePath); // Add valid directory to the list
                 }
             }
 
-            // If no directory is found, return an empty string
-            return string.Empty;
+            // Return all found directories, or an empty list if none found
+            return foundDirectories;
         }
+
     }
 }
