@@ -104,8 +104,7 @@ namespace CRUD_System.Handlers
             string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
 
             // Get the username of the currently authenticated user
-            string? currentUser = AuthenticationService.CurrentUser
-                ?? throw new InvalidOperationException("Current user is not authenticated.");
+            string? currentUser = AuthenticationService.CurrentUser ?? throw new InvalidOperationException("Current user is not authenticated.");
 
             // Ensure the report text doesn't contain commas by replacing them with semicolons
             string sanitizedText = isReportText.Replace(",", ";");
@@ -167,7 +166,122 @@ namespace CRUD_System.Handlers
             }
         }
 
+        #region Refresh ListViewFiles
+        /// <summary>
+        /// Refreshes the ListView with the latest report files for the given alias.
+        /// </summary>
+        public void RefreshListViewFiles()
+        {
+            // Ensure the AdminMainControl instance is available
+            if (adminControl == null)
+                return;
 
+            // Clear the ListView before refreshing to remove any existing items
+            ClearListViewItems();
+
+            // Get the report directories for the given alias
+            List<string> reportDirectories = GetReportDirectories(adminControl.txtAlias.Text);
+
+            // Check if any report directories were found
+            if (reportDirectories.Any())
+            {
+                // Process each report directory
+                foreach (string reportDirectory in reportDirectories)
+                {
+                    ProcessReportFilesInDirectory(reportDirectory);
+                }
+
+                // Refresh the ListView to ensure it visually updates with new data
+                adminControl.listViewFiles.Refresh();
+            }
+            else
+            {
+                // Log if no report directories were found
+                Debug.WriteLine("No report directories found.");
+            }
+        }
+
+        /// <summary>
+        /// Clears all items in the ListView to prepare for new data.
+        /// </summary>
+        public void ClearListViewItems()
+        {
+            // Ensure the ListView reference is available before attempting to clear it
+            if (adminControl != null)
+            {
+                adminControl.listViewFiles.Items.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the report directories for the specified alias from the "report" folder.
+        /// </summary>
+        /// <param name="alias">The alias used to find specific report directories.</param>
+        /// <returns>A list of report directories for the given alias.</returns>
+        public List<string> GetReportDirectories(string alias)
+        {
+            // Call FindCSVFiles to get the list of report directories for the alias
+            return FindCSVFiles.FindReportFilesInFolders(alias, "report");
+        }
+
+        /// <summary>
+        /// Processes all report files within the specified directory, adds them to the ListView, and sorts them by creation time.
+        /// </summary>
+        /// <param name="reportDirectory">The directory containing the report files to process.</param>
+        public void ProcessReportFilesInDirectory(string reportDirectory)
+        {
+            // Check if the report directory exists before attempting to process it
+            if (Directory.Exists(reportDirectory))
+            {
+                // Get all CSV report files in the directory and subdirectories
+                string[] reportFiles = Directory.GetFiles(reportDirectory, "*.csv", SearchOption.AllDirectories);
+
+                // Convert file paths to FileInfo objects for sorting and handling
+                FileInfo[] fileInfos = reportFiles.Select(file => new FileInfo(file)).ToArray();
+
+                // Sort files by creation time in descending order (newest first)
+                Array.Sort(fileInfos, (f1, f2) => f2.CreationTime.CompareTo(f1.CreationTime));
+
+                // Process each file and add it to the ListView
+                foreach (var fileInfo in fileInfos)
+                {
+                    // Split the file name to extract useful information (alias, subject, etc.)
+                    string[] itemSplit = fileInfo.Name.Split("_");
+                    if (itemSplit.Length >= 2)
+                    {
+                        // Create an instance of ListViewFiles (or use the existing one) to retrieve the file's subject
+                        ListViewFiles listViewFiles = new ListViewFiles();
+                        string itemUse = string.Join("_", itemSplit[0], itemSplit[1]);
+                        string subject = listViewFiles.GetSubject(itemUse, itemSplit[0]); // itemSplit[0] is alias
+
+                        // Create a new ListViewItem for each report file
+                        ListViewItem item = new ListViewItem(itemUse);
+
+                        // Add file subject as a subitem (or "Unknown" if not found)
+                        item.SubItems.Add(!string.IsNullOrEmpty(subject) ? subject : "Unknown");
+
+                        // Add the created item to the ListView
+                        adminControl?.listViewFiles.Items.Add(item);
+
+                        // Store the full file path in the Tag property of the item
+                        item.Tag = fileInfo.FullName;
+                    }
+                    else
+                    {
+                        // Log if the file format is invalid (unable to extract alias and subject)
+                        Debug.WriteLine($"Invalid file format: {fileInfo.Name}");
+                    }
+                }
+            }
+            else
+            {
+                // Log if the report directory doesn't exist
+                Debug.WriteLine($"Directory does not exist: {reportDirectory}");
+            }
+        }
+
+        #endregion Refrsh ListViewFiles
+        /*
         /// <summary>
         /// Refreshes the ListView in the UI to display the latest report files.
         /// Clears the current items, fetches the report files from the directory, 
@@ -247,6 +361,7 @@ namespace CRUD_System.Handlers
                 Debug.WriteLine("No report directories found.");
             }
         }
+        */
 
         #endregion PROCESSING AND HANDLING
 
