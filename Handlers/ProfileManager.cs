@@ -41,6 +41,13 @@ namespace CRUD_System.Handlers
                                string name, string surname, string alias, string address, string zipCode, string city,
                                string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick, bool isTheOne)
         {
+            // Confirm before saving changes
+            DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+
             // Ensure the cache is loaded with decrypted data before proceeding
             if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
@@ -79,13 +86,6 @@ namespace CRUD_System.Handlers
         private void UpdateCachedUserDetails(string alias, string name, string surname, string address, string zipCode,
                                       string city, string email, string phoneNumber, bool onlineStatus, bool isSick)
         {
-            // Confirm with the user before saving changes
-            DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
-            if (dr == DialogResult.No)
-            {
-                return;
-            }
-
             // Find and update the user in the cached data
             var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias);
             if (user != null)
@@ -110,19 +110,19 @@ namespace CRUD_System.Handlers
         /// <param name="isTheOne">Indicates if the user has special "The One" status.</param>
         private void UpdateCachedLoginDetails(string alias, bool isTheOne)
         {
-            // Confirm with the user before modifying "The One" status
-            DialogResult dr = message.MessageConfirmIsTheOne(alias);
-            if (dr == DialogResult.No)
-            {
-                return;
-            }
-
             // Find and update the login details in the cached data
             var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
             if (login != null)
             {
                 if (AdminInterface.SelectedUserIsAdmin)
                 {
+                    // Confirm with the user before modifying "The One" status
+                    DialogResult dr = message.MessageConfirmIsTheOne(alias);
+                    if (dr == DialogResult.No)
+                    {
+                        return;
+                    }
+
                     login[4] = AdminMainControl.IsTheOne.ToString();
                     Debug.WriteLine($"Updated 'The One' status to {login[4]}");
 

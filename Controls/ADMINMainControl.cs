@@ -108,8 +108,6 @@ namespace CRUD_System
             int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
             int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
 
-            var loginDetails = loginLines[loginIndex].Split(",");
-
             if (userIndex != -1)
             {
                 profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
