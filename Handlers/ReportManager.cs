@@ -43,7 +43,7 @@ namespace CRUD_System.Handlers
                 string subject = adminControl.comboBoxSubjectReport.Text;
                 string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
 
-                DialogResult dr = message.MessageConfirmSaveNote(selectedAlias);
+                DialogResult dr = message.MessageConfirmSaveReport(selectedAlias, subject);
                 if (dr == DialogResult.No)
                 {
                     return;

@@ -14,46 +14,46 @@ namespace CRUD_System.Repositories
         #region CONFIRM
         public DialogResult MessageConfirmNewUser(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE new account {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE new account {alias.ToUpper()}", "Confirm Save New Account", MessageBoxButtons.YesNo);
         }
 
         public DialogResult MessageConfirmToSAVEChanges(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}", "Confirm Save Changes", MessageBoxButtons.YesNo);
         }
 
         public DialogResult MessageConfirmToSAVEPassword(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the new password for {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the new password for {alias.ToUpper()}", "Confirm Save Password", MessageBoxButtons.YesNo);
         }
 
         public DialogResult MessageConfirmToGeneratePassword(string alias)
         {
-            return MessageBox.Show($"Please confirm to GENERATE a NEW password for {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to GENERATE a NEW password for {alias.ToUpper()}", "Confirm Generate New Password", MessageBoxButtons.YesNo);
         }
 
         public DialogResult MessageConfirmToDELETE(string aliasToDelete)
         {
-            return MessageBox.Show($"Please confirm to DELETE account {aliasToDelete.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to DELETE account {aliasToDelete.ToUpper()}", "Confirm Delete Account", MessageBoxButtons.YesNo);
         }
 
         public DialogResult MessageConfirmCallInSickNotification(string alias)
         {
-            return MessageBox.Show($"Please confirm to set user {alias.ToUpper()} on Absence due Illness", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to set user {alias.ToUpper()} on Absence due Illness", "Confirm CiS", MessageBoxButtons.YesNo);
         }
 
         public DialogResult MessageConfirmForceLogOutUser(string alias)
         {
-            return MessageBox.Show($"Please confirm to logout user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to logout user {alias.ToUpper()}", "Confirm Forced Logout", MessageBoxButtons.YesNo);
         }
-        public DialogResult MessageConfirmSaveNote(string alias)
+        public DialogResult MessageConfirmSaveReport(string alias, string subject)
         {
-            return MessageBox.Show($"Please confirm to save this note for user {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to save this report with subject [{subject.ToUpper()}] for user {alias.ToUpper()}", "Confirm Save Report", MessageBoxButtons.YesNo);
         }
 
         public DialogResult MessageConfirmDeleteFile(string fileName)
         {
-        return MessageBox.Show($"Are you sure you want to delete the file '{fileName}'?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        return MessageBox.Show($"Are you sure you want to delete the file '{fileName}'?", "Confirm Delete File", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
 
         public DialogResult MessageConfirmIsTheOne(string alias)

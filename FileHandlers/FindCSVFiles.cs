@@ -16,7 +16,7 @@ namespace CRUD_System.FileHandlers
         /// <param name="directory">The alias of the user for which the file is being searched.</param>
         /// <param name="map">The name of the directory where the file is expected to be located (e.g., "Logs").</param>
         /// <returns>The full path to the CSV file if found, otherwise an empty string.</returns>
-        public static string FindCSVFile(string alias, string directory)
+        public static string FindCSVFileLogEvent(string alias, string directory)
         {
             // Get the root directory path
             string rootPath = RootPath.GetRootPath();

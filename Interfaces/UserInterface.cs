@@ -185,7 +185,7 @@ namespace CRUD_System.Interfaces
         private string? PrepareLogFile(string alias)
         {
             // Find the file path for the user's logs
-            string logFile = FindCSVFiles.FindCSVFile(alias, "logevents");
+            string logFile = FindCSVFiles.FindCSVFileLogEvent(alias, "logevents");
 
             // Check if the file exists
             if (File.Exists(logFile))

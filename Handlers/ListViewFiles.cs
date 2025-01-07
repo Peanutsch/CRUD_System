@@ -60,8 +60,6 @@ namespace CRUD_System.Handlers
                             string itemUse = string.Join("_", itemSplit[0], itemSplit[1]);
                             string subject = GetSubject(itemUse, itemSplit[0]); // itemSplit[0] is alias
 
-                            Debug.WriteLine($"itemUse: {itemUse} subject: {subject}");
-
                             // Create ListViewItem
                             ListViewItem item = new ListViewItem(itemUse);
 
