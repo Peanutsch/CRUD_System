@@ -23,58 +23,77 @@ namespace CRUD_System
         #region LISTBOX LOGS
         /// <summary>
         /// Loads the log entries of a specified user (alias) into the ListBox, 
-        /// sorting them in descending order by timestamp. Decrypts the log file for processing 
-        /// and re-encrypts it afterward.
+        /// sorting them in descending order by timestamp. Decrypts the log files for processing 
+        /// and re-encrypts them afterward.
         /// </summary>
         /// <param name="alias">The alias of the user whose logs need to be loaded.</param>
         public void LoadListBoxLogs(string alias)
         {
             txtSelectedAlias.Text = alias;
 
-            // Prepare the log file
-            string? logFile = PrepareLogFile(alias);
+            // Prepare the log files from all year directories
+            List<string> logFiles = PrepareLogFiles(alias);
 
-            if (!string.IsNullOrEmpty(logFile))
+            if (logFiles.Any())
             {
-                // Parse log entries from the file into structured data
-                var logEntries = ParseLogFile(logFile);
+                var allLogEntries = new List<Tuple<DateTime, string>>();
 
-                // Step 3: Sort log entries by date/time in descending order
-                var sortedEntries = SortLogEntriesDescending(logEntries);
+                foreach (string logFile in logFiles)
+                {
+                    // Parse log entries from each file into structured data
+                    var logEntries = ParseLogFile(logFile);
+
+                    // Combine entries from all files
+                    allLogEntries.AddRange(logEntries);
+
+                    // Re-encrypt the log file after processing
+                    EncryptionManager.EncryptFile(logFile);
+                }
+
+                // Sort log entries by date/time in descending order
+                var sortedEntries = SortLogEntriesDescending(allLogEntries);
 
                 // Populate the ListBox with the sorted log entries
                 PopulateListBox(sortedEntries);
-
-                // Re-encrypt the log file after processing
-                EncryptionManager.EncryptFile(logFile);
             }
             else
             {
+                Debug.WriteLine("No log files found in any directories.");
                 return;
             }
         }
 
         /// <summary>
-        /// Finds the log file for the specified user alias and decrypts it if the file exists.
+        /// Finds and decrypts log files for the specified alias across all year directories.
         /// </summary>
         /// <param name="alias">The alias of the user.</param>
-        /// <returns>The decrypted file path, or null if the file is not found.</returns>
-        private string? PrepareLogFile(string alias)
+        /// <returns>A list of decrypted log file paths.</returns>
+        private List<string> PrepareLogFiles(string alias)
         {
-            // Find the file path for the user's logs
-            string logFile = FindCSVFiles.FindCSVFile(alias, "logevents");
+            var logFiles = new List<string>();
 
-            // Check if the file exists
-            if (File.Exists(logFile))
+            // Use FindCSVFiles.FindFilesInFolders to search for directories across multiple years
+            List<string> logDirectories = FindCSVFiles.FindFilesInFolders(alias, "logevents");
+
+            foreach (string directory in logDirectories)
             {
-                // Decrypt the file
-                EncryptionManager.DecryptFile(logFile);
-                return logFile;
+                if (Directory.Exists(directory))
+                {
+                    // Find all CSV files in the directory
+                    string[] files = Directory.GetFiles(directory, "*.csv", SearchOption.TopDirectoryOnly);
+
+                    foreach (string file in files)
+                    {
+                        // Decrypt the file and add it to the list
+                        EncryptionManager.DecryptFile(file);
+                        logFiles.Add(file);
+                    }
+                }
             }
 
-            // Return null if the file does not exist
-            return null;
+            return logFiles;
         }
+
 
         /// <summary>
         /// Parses the log file into a list of tuples containing the timestamp and the full log entry string.

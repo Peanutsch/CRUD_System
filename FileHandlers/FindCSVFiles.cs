@@ -47,30 +47,42 @@ namespace CRUD_System.FileHandlers
         }
 
 
-        public static List<string> FindReportFilesInFolders(string selectedAlias, string folder)
+        /// <summary>
+        /// Finds all directories containing files for a specific alias within a given folder, 
+        /// searching across the current year and the previous five years.
+        /// </summary>
+        /// <param name="selectedAlias">The alias to search for within the folder structure.</param>
+        /// <param name="folder">The folder name where the alias directories are located (e.g., "logevents").</param>
+        /// <returns>A list of directories that match the alias and exist within the specified year range.</returns>
+        public static List<string> FindFilesInFolders(string selectedAlias, string folder)
         {
             // Get the root directory path
             string rootPath = RootPath.GetRootPath();
+
+            // Get the current year for constructing the search range
             int currentYear = Timers.CurrentYear;
 
-            // Create a range of years from currentYear to 5 years back
+            // Create a range of years from the current year to 5 years back
             var rangeYears = Enumerable.Range(currentYear - 5, 6).Reverse(); // 6 because it’s inclusive of the start year
 
-            List<string> foundDirectories = new List<string>();  // List to store all found directories
+            // Initialize a list to store all found directories
+            List<string> foundDirectories = new List<string>();
 
+            // Iterate through each year in the range
             foreach (int year in rangeYears)
             {
-                // Construct the directory path for each year
+                // Construct the directory path for the given year, folder, and alias
                 string filePath = Path.Combine(rootPath, folder, year.ToString(), selectedAlias);
 
                 // Check if the directory exists
                 if (Directory.Exists(filePath))
                 {
-                    foundDirectories.Add(filePath); // Add valid directory to the list
+                    // If the directory exists, add it to the list
+                    foundDirectories.Add(filePath);
                 }
             }
 
-            // Return all found directories, or an empty list if none found
+            // Return all found directories, or an empty list if none were found
             return foundDirectories;
         }
 

@@ -82,41 +82,49 @@ namespace CRUD_System.Handlers
             }
         }
 
+        /// <summary>
+        /// Retrieves the subject field from a specific user's report file. 
+        /// Decrypts the file to read its content and re-encrypts it after processing.
+        /// </summary>
+        /// <param name="selectedUserString">The string identifying the user and report.</param>
+        /// <param name="alias">The alias of the user.</param>
+        /// <returns>The subject field from the report, or an empty string if an error occurs or the subject is not found.</returns>
         public string GetSubject(string selectedUserString, string alias)
         {
             try
             {
+                // Ensure the input string is not null or empty
                 if (!string.IsNullOrEmpty(selectedUserString))
                 {
-                    string rootPath = RootPath.GetRootPath();
-                    string fileName = selectedUserString + "_report.csv";
-                    string yearFolder = ReportManager.GetYearFolder(selectedUserString);
-                    //string filePath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), alias, fileName);
-                    string filePath = Path.Combine(rootPath, "report", yearFolder, alias, fileName);
+                    string rootPath = RootPath.GetRootPath(); // Get the root directory path   
+                    string fileName = selectedUserString + "_report.csv"; // Construct the expected file name
+                    string yearFolder = ReportManager.GetYearFolder(selectedUserString); // Determine the year folder for the report
+                    string filePath = Path.Combine(rootPath, "report", yearFolder, alias, fileName); // Construct the full file path
 
-                    EncryptionManager.DecryptFile(filePath);
+                    EncryptionManager.DecryptFile(filePath); // Decrypt the file for reading
 
+                    // Read all lines from the file and split each line into fields
                     var readFile = File.ReadAllLines(filePath)
-                                       .Select(line => line.Split(",")) // Split each line into an array of fields
-                                       .ToList(); // Store all records in readFile
+                                       .Select(line => line.Split(",")) // Split by commas into arrays of strings
+                                       .ToList(); // Convert to a list for easy iteration
 
+                    // Iterate through the lines to find and return the subject
                     foreach (string[] line in readFile)
                     {
-                        string isSubject = line[3];
+                        string isSubject = line[3]; // Subject is in the 4th column (index 3)
 
-                        Debug.WriteLine($"isSubject: {isSubject}");
-
-                        EncryptionManager.EncryptFile(filePath);
-
+                        EncryptionManager.EncryptFile(filePath); // Re-encrypt the file after processing
                         return isSubject;
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return string.Empty;
+                Debug.WriteLine($"Exception error: {e}...\nReturn string.Empty");
+                return string.Empty; // If any exception occurs, return an empty string
             }
-            return string.Empty;
+
+            return string.Empty; // Return an empty string if no subject is found or input is invalid
         }
         #endregion PROCESS
     }

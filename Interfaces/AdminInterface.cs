@@ -265,7 +265,7 @@ namespace CRUD_System.Interfaces
         public void FindReportFile(string selectedAlias)
         {
             ListViewFiles listView = new ListViewFiles(adminControl);
-            List<string> reportDirectories = FindCSVFiles.FindReportFilesInFolders(selectedAlias, "report");
+            List<string> reportDirectories = FindCSVFiles.FindFilesInFolders(selectedAlias, "report");
 
             // Check if there are any directories found
             if (reportDirectories.Any())

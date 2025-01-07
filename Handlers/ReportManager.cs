@@ -52,6 +52,7 @@ namespace CRUD_System.Handlers
                 CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser!, selectedAlias, subject, newReportText);
 
                 // Reset to default state after saving
+                AdminInterface.IsReport = false;
                 ToggleReportMode(false); // Exit report mode
             }
             else
@@ -165,6 +166,7 @@ namespace CRUD_System.Handlers
                 Debug.WriteLine($"Error creating report for deleted user account {isAlias}:\n{e}");
             }
         }
+        #endregion PROCESSING AND HANDLING
 
         #region Refresh ListViewFiles
         /// <summary>
@@ -221,7 +223,7 @@ namespace CRUD_System.Handlers
         public List<string> GetReportDirectories(string alias)
         {
             // Call FindCSVFiles to get the list of report directories for the alias
-            return FindCSVFiles.FindReportFilesInFolders(alias, "report");
+            return FindCSVFiles.FindFilesInFolders(alias, "report");
         }
 
         /// <summary>
@@ -280,108 +282,9 @@ namespace CRUD_System.Handlers
             }
         }
 
-        #endregion Refrsh ListViewFiles
-        /*
-        /// <summary>
-        /// Refreshes the ListView in the UI to display the latest report files.
-        /// Clears the current items, fetches the report files from the directory, 
-        /// sorts them by creation time, and updates the ListView with the file details.
-        /// </summary>
-        public void RefreshListViewFiles()
-        {
-            // Ensure the AdminMainControl instance is available
-            if (adminControl == null)
-                return;
-
-            // Reference the ListView in the UI
-            var listView = adminControl.listViewFiles;
-
-            listView.Items.Clear();
-
-            // Find the directories containing the report files for the given alias
-            List<string> reportDirectories = FindCSVFiles.FindReportFilesInFolders(adminControl.txtAlias.Text, "report");
-
-            if (reportDirectories.Any()) // Ensure there are directories found
-            {
-                foreach (string reportDirectory in reportDirectories)
-                {
-                    // Check if the directory exists
-                    if (Directory.Exists(reportDirectory))
-                    {
-                        // Get all report files in the directory
-                        string[] reportFiles = Directory.GetFiles(reportDirectory, "*.csv", SearchOption.AllDirectories);
-                        // Convert file paths to FileInfo objects for sorting and details
-                        FileInfo[] fileInfos = reportFiles.Select(file => new FileInfo(file)).ToArray();
-
-                        // Sort files by creation time in descending order (newest first)
-                        Array.Sort(fileInfos, (f1, f2) => f2.CreationTime.CompareTo(f1.CreationTime));
-
-                        // Add each file to the ListView
-                        foreach (var fileInfo in fileInfos)
-                        {
-                            string[] itemSplit = fileInfo.Name.Split("_");
-                            if (itemSplit.Length >= 2)
-                            {
-                                ListViewFiles listViewFiles = new ListViewFiles();
-                                string itemUse = string.Join("_", itemSplit[0], itemSplit[1]);
-                                string subject = listViewFiles.GetSubject(itemUse, itemSplit[0]); // itemSplit[0] is alias
-
-                                // Create ListViewItem
-                                ListViewItem item = new ListViewItem(itemUse);
-
-                                ////// GET FILE SUBJECT AS SUBITEMS ////
-                                item.SubItems.Add(!string.IsNullOrEmpty(subject) ? subject : "Unknown");
-
-                                // Add item to ListView
-                                adminControl.listViewFiles.Items.Add(item);
-
-                                // Set the Tag property to the full file path
-                                item.Tag = fileInfo.FullName;
-                            }
-                            else
-                            {
-                                // Log if the directory is not found
-                                Debug.WriteLine($"Directory not found: {reportDirectory}");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Log if the directory doesn't exist
-                        Debug.WriteLine($"Directory does not exist: {reportDirectory}");
-                    }
-                }
-
-                // Ensure the ListView visually updates
-                listView.Refresh();
-            }
-            else
-            {
-                // Log if no directories are found
-                Debug.WriteLine("No report directories found.");
-            }
-        }
-        */
-
-        #endregion PROCESSING AND HANDLING
+        #endregion Refresh ListViewFiles
 
         #region REPORT DISPLAY
-        /// <summary>
-        /// Extracts the year from the filename, which is expected to follow the format alias_date_timestamp_report.csv.
-        /// </summary>
-        /// <param name="isFileName">The filename containing the date information.</param>
-        /// <returns>The extracted year as a string.</returns>
-        public static string GetYearFolder(string isFileName)
-        {
-            // Find the part of the filename that contains the date
-            string isDate = isFileName.Split('_')[1].Substring(0, 8);
-
-            // Extract the year from the date (last 4 characters)
-            string getYear = isDate.Substring(4, 4);
-
-            return getYear;
-        }
-
         /// <summary>
         /// Displays the user's report by preparing, decrypting, parsing, and updating the admin control fields.
         /// Includes error handling for missing files and format issues.
@@ -392,10 +295,10 @@ namespace CRUD_System.Handlers
         {
             try
             {
-                // Step 1: Prepare and decrypt the report
+                // Prepare and decrypt the report
                 string filePath = PrepareAndDecryptReport(selectedUserReportFileName, selectedAlias);
 
-                // Step 2: Parse and display the report content
+                // Parse and display the report content
                 ParseAndDisplayReport(filePath, selectedUserReportFileName);
 
                 // Re-encrypt the report file after processing
@@ -419,6 +322,22 @@ namespace CRUD_System.Handlers
         }
 
         /// <summary>
+        /// Extracts the year from the filename, which is expected to follow the format alias_date_timestamp_report.csv.
+        /// </summary>
+        /// <param name="isFileName">The filename containing the date information.</param>
+        /// <returns>The extracted year as a string.</returns>
+        public static string GetYearFolder(string isFileName)
+        {
+            // Find the part of the filename that contains the date
+            string isDate = isFileName.Split('_')[1].Substring(0, 8);
+
+            // Extract the year from the date (last 4 characters)
+            string getYear = isDate.Substring(4, 4);
+
+            return getYear;
+        }
+
+        /// <summary>
         /// Constructs the file path for the report, verifies its existence, and decrypts it for further processing.
         /// </summary>
         /// <param name="selectedUserReportFileName">The filename of the report, excluding the extension.</param>
@@ -427,7 +346,8 @@ namespace CRUD_System.Handlers
         /// <exception cref="FileNotFoundException">Thrown if the report file does not exist.</exception>
         private string PrepareAndDecryptReport(string selectedUserReportFileName, string selectedAlias)
         {
-            // Construct the report file path
+            // Construct the report file path.
+            // Format: rootPath\"report"\yearFolder\selectedAlias\isFileName
             string isFileName = $"{selectedUserReportFileName}_report.csv";
             string yearFolder = GetYearFolder(selectedUserReportFileName);
             string filePath = Path.Combine(rootPath, "report", yearFolder, selectedAlias, isFileName);
@@ -527,6 +447,7 @@ namespace CRUD_System.Handlers
 
             // Clear any selected items in the list view to reset its state
             adminControl.listViewFiles.SelectedItems.Clear();
+            adminControl.listViewFiles.Enabled = !AdminInterface.IsReport;
         }
         #endregion TOGGLE REPORT MODE
     }

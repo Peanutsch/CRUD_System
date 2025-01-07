@@ -643,7 +643,7 @@ namespace CRUD_System
                 Debug.WriteLine($"fileName: {fileName}");
 
                 // Locate the directory where the report file resides
-                List<string> reportDirectories = FindCSVFiles.FindReportFilesInFolders(txtAlias.Text, "report");
+                List<string> reportDirectories = FindCSVFiles.FindFilesInFolders(txtAlias.Text, "report");
 
                 if (reportDirectories.Any()) // Ensure there's at least one directory
                 {
