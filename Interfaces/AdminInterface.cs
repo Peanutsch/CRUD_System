@@ -402,6 +402,15 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void InterfaceEditModeAdmin()
         {
+            UpdateInterfaceControls();
+            UpdateTextFieldsAndListBox();
+        }
+
+        /// <summary>
+        /// Updates the interface display and control states based on EditMode.
+        /// </summary>
+        private void UpdateInterfaceControls()
+        {
             var currentUser = AuthenticationService.CurrentUser;
 
             adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User"; // Toggle Edit and Cancel button text based on EditMode status
@@ -420,7 +429,6 @@ namespace CRUD_System.Interfaces
 
             if (AuthenticationService.CurrentUserIsTheOne)
             {
-                // Adjust visibility and enablement of buttons based on EditMode
                 ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
                 ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
                 ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
@@ -429,18 +437,24 @@ namespace CRUD_System.Interfaces
                 ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
                 ToggleControlVisibility(adminControl.btnShowListBoxLogs, EditMode);
             }
+        }
 
+        /// <summary>
+        /// Toggles the enabled state of text fields and listbox based on EditMode.
+        /// </summary>
+        private void UpdateTextFieldsAndListBox()
+        {
             // Array of text fields to enable or disable in EditMode for user editing
             var textFields = new[]
             {
-                adminControl.txtName,
-                adminControl.txtSurname,
-                adminControl.txtAddress,
-                adminControl.txtZIPCode,
-                adminControl.txtCity,
-                adminControl.txtEmail,
-                adminControl.txtPhonenumber,
-             };
+            adminControl.txtName,
+            adminControl.txtSurname,
+            adminControl.txtAddress,
+            adminControl.txtZIPCode,
+            adminControl.txtCity,
+            adminControl.txtEmail,
+            adminControl.txtPhonenumber,
+            };
 
             foreach (var field in textFields)
             {
@@ -449,7 +463,7 @@ namespace CRUD_System.Interfaces
                     field.Enabled = EditMode;
                 }
             }
-            
+
             // Disable ListBox when in edit mode to prevent user changes in selection
             if (adminControl.listBoxAdmin != null)
             {
@@ -504,7 +518,7 @@ namespace CRUD_System.Interfaces
                 adminControl.btnForceLogOutUser.Visible = isOnline;
             }
         }
-        #endregion EDITMODE DISPLAY
+        #endregion EDITMODE DISPLAY ADMIN
 
         #region TEXTBOXES ADMIN
         /// <summary>
@@ -583,7 +597,7 @@ namespace CRUD_System.Interfaces
         /// and updates the visibility, enabled state, and appearance of various controls 
         /// based on whether the application is in report mode (`IsReport`).
         /// </remarks>
-        public void TextBoxesReportConfig()
+        public void ReportConfig()
         {
             // Clears the content of the report text boxes
             TextBoxesReportEmpty();

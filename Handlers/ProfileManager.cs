@@ -62,10 +62,11 @@ namespace CRUD_System.Handlers
                 // Update "The One" status if it has been modified
                 if (AdminMainControl.ChkIsTheOneChanged)
                 {
-                    UpdateCachedLoginDetails(alias, isTheOne);
                     AdminMainControl.ChkIsTheOneChanged = false;
                 }
-
+                
+                UpdateCachedLoginDetails(alias, isTheOne);
+                
                 // Save updated data and log the changes
                 SaveDataAndLogUpdates(alias);
 
@@ -114,6 +115,8 @@ namespace CRUD_System.Handlers
             var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
             if (login != null)
             {
+                login[2] = AdminInterface.SelectedUserIsAdmin.ToString();
+
                 if (AdminInterface.SelectedUserIsAdmin)
                 {
                     // Confirm with the user before modifying "The One" status

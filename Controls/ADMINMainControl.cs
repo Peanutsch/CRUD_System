@@ -336,7 +336,7 @@ namespace CRUD_System
                 btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
                 adminInterface.TextBoxesReportEmpty();
                 AdminInterface.IsReport = ToggleIsReportMode();
-                adminInterface.TextBoxesReportConfig();
+                adminInterface.ReportConfig();
             },
             () => message.MessageInvalidNoUserSelected());
         }
@@ -461,7 +461,7 @@ namespace CRUD_System
         }
         #endregion KEY HANDLERS
 
-        #region SELECTED ITEM CHANGED
+        #region SELECTED ITEM CHANGED AND CHKBOXES
         /// <summary>
         /// Handles the event triggered when the 'Is Admin' checkbox state changes.
         /// </summary>
@@ -470,6 +470,7 @@ namespace CRUD_System
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             isAdmin = chkIsAdmin.Checked;
+            AdminInterface.SelectedUserIsAdmin = isAdmin;
         }
 
         /// <summary>
@@ -484,7 +485,6 @@ namespace CRUD_System
         private void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
             ChkIsTheOneChanged = true;
-
             if (AdminInterface.SelectedUserIsAdmin && chkIsTheOne.Checked)
             {
                 IsTheOne = chkIsTheOne.Checked;
@@ -526,7 +526,7 @@ namespace CRUD_System
                 }
             }
         }
-        #endregion SELECTED ITEM CHANGED
+        #endregion SELECTED ITEM CHANGED AND CHKBOXES
 
         #region TEXTBOX SEARCH
         public int searchCurrentPage = 1; // Current page number for the search results, starting at 1
@@ -557,7 +557,7 @@ namespace CRUD_System
 
                 // Empty all report textboxes and listView
                 AdminInterface.IsReport = false;
-                adminInterface.TextBoxesReportConfig();
+                adminInterface.ReportConfig();
                 adminInterface.TextBoxesReportEmpty();
                 txtAliasReport.Text = string.Empty;
                 listViewFiles.Items.Clear();
