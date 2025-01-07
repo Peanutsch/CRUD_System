@@ -41,8 +41,6 @@ namespace CRUD_System.FileHandlers
                 }
             }
 
-            // File not found
-            //Debug.WriteLine($"No such file in {isFile}");
             return string.Empty; // Return an empty string if file does not exist
         }
 

@@ -55,9 +55,10 @@ namespace CRUD_System.Handlers
                 // Update "The One" status if it has been modified
                 if (AdminMainControl.ChkIsTheOneChanged)
                 {
-                    UpdateCachedLoginDetails(alias, isTheOne);
                     AdminMainControl.ChkIsTheOneChanged = false;
                 }
+                 // Update login details in cached data
+                UpdateCachedLoginDetails(alias, isAdmin, isTheOne);
 
                 // Save updated data and log the changes
                 SaveDataAndLogUpdates(alias);
@@ -108,21 +109,23 @@ namespace CRUD_System.Handlers
         /// </summary>
         /// <param name="alias">The alias of the user to update.</param>
         /// <param name="isTheOne">Indicates if the user has special "The One" status.</param>
-        private void UpdateCachedLoginDetails(string alias, bool isTheOne)
+        private void UpdateCachedLoginDetails(string alias, bool isAdmin, bool isTheOne)
         {
-            // Confirm with the user before modifying "The One" status
-            DialogResult dr = message.MessageConfirmIsTheOne(alias);
-            if (dr == DialogResult.No)
-            {
-                return;
-            }
-
             // Find and update the login details in the cached data
             var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
             if (login != null)
             {
-                if (AdminInterface.SelectedUserIsAdmin)
+                login[2] = isAdmin.ToString();
+
+                if (AdminInterface.SelectedUserIsAdmin && AdminMainControl.IsTheOne)
                 {
+                    // Confirm with the user before modifying "The One" status
+                    DialogResult dr = message.MessageConfirmIsTheOne(alias);
+                    if (dr == DialogResult.No)
+                    {
+                        return;
+                    }
+
                     login[4] = AdminMainControl.IsTheOne.ToString();
                     Debug.WriteLine($"Updated 'The One' status to {login[4]}");
 
@@ -556,9 +559,6 @@ namespace CRUD_System.Handlers
             {
                 return;
             }
-
-            // Initialize an instance of AdminMainControl (if necessary for further use).
-            //AdminMainControl adminControl = new AdminMainControl();
 
             // Locate the user in the cached login data by matching their alias.
             var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == selectedAlias); // Alias is in the first field (index 0)

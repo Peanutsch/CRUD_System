@@ -224,17 +224,6 @@ namespace CRUD_System
         }
 
         /// <summary>
-        /// Toggle between editMode and !editMode
-        /// </summary>
-        /// <returns></returns>
-        private bool ToggleEditMode()
-        {
-            bool modus = editMode = !editMode;
-
-            return modus;
-        }
-
-        /// <summary>
         /// Handles the drawing of items in the ListBox. This method delegates the actual drawing 
         /// process to the <see cref="ListBoxAdmin_DrawItemHandler"/> method in the AdminInterface.
         /// </summary>
@@ -257,7 +246,7 @@ namespace CRUD_System
 
         private void btnUploadFile_Click(object sender, EventArgs e)
         {
-
+            //
         }
 
         /// <summary>
@@ -324,25 +313,6 @@ namespace CRUD_System
             }
         }
 
-        public bool ToggleIsReportMode()
-        {
-            bool modus = AdminInterface.IsReport = !AdminInterface.IsReport;
-            return modus;
-        }
-
-        private void buttonMakeReport_Click(object sender, EventArgs e)
-        {
-            interactionHandler.PerformActionIfUserSelected(() =>
-            {
-                btnEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnEditUserDetails
-                btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
-                adminInterface.TextBoxesReportEmpty();
-                AdminInterface.IsReport = ToggleIsReportMode();
-                adminInterface.TextBoxesReportConfig();
-            },
-            () => message.MessageInvalidNoUserSelected());
-        }
-
         private void btnSaveReport_Click(object sender, EventArgs e)
         {
             ReportManager reportManager = new ReportManager(this);
@@ -373,7 +343,38 @@ namespace CRUD_System
             interactionHandler.Open_ShowLogForm(this, txtAlias.Text);
         }
 
+        private void buttonMakeReport_Click(object sender, EventArgs e)
+        {
+            interactionHandler.PerformActionIfUserSelected(() =>
+            {
+                btnEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnEditUserDetails
+                btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
+                adminInterface.TextBoxesReportEmpty();
+                AdminInterface.IsReport = ToggleIsReportMode();
+                adminInterface.TextBoxesReportConfig();
+            },
+            () => message.MessageInvalidNoUserSelected());
+        }
         #endregion BUTTONS SoC (Seperate of Concerns)
+
+        #region TOGGLE MODES
+        /// <summary>
+        /// Toggle between editMode and !editMode
+        /// </summary>
+        /// <returns></returns>
+        private bool ToggleEditMode()
+        {
+            bool modus = editMode = !editMode;
+
+            return modus;
+        }
+
+        public bool ToggleIsReportMode()
+        {
+            bool modus = AdminInterface.IsReport = !AdminInterface.IsReport;
+            return modus;
+        }
+        #endregion TOGGLE MODES
 
         #region KEY HANDLERS
         /// <summary>
@@ -463,7 +464,7 @@ namespace CRUD_System
         }
         #endregion KEY HANDLERS
 
-        #region SELECTED ITEM CHANGED
+        #region CHECKBOXES
         /// <summary>
         /// Handles the event triggered when the 'Is Admin' checkbox state changes.
         /// </summary>
@@ -496,8 +497,9 @@ namespace CRUD_System
                 IsTheOne = false;
             }
         }
+        #endregion CHECKBOXES
 
-
+        #region SELECTED INDEX CHANGED
         /// <summary>
         /// Handles the selection change event for the ListBox in the admin interface.
         /// Triggers the appropriate selection handler in AdminInterface.
@@ -528,7 +530,7 @@ namespace CRUD_System
                 }
             }
         }
-        #endregion SELECTED ITEM CHANGED
+        #endregion SELECTED INDEX CHANGED
 
         #region TEXTBOX SEARCH
         public int searchCurrentPage = 1; // Current page number for the search results, starting at 1

@@ -203,6 +203,7 @@ namespace CRUD_System.Interfaces
             adminControl.listBoxAdmin.Refresh();
         }
 
+        #region LISTBOX SELECTED INDEX CHANGED
         /// <summary>
         /// Handles the event when a user is selected in the ListBox. It fills the details for the selected user in the textboxes,
         /// and disables the Force log Out button if the selected user is the current admin user.
@@ -224,11 +225,7 @@ namespace CRUD_System.Interfaces
             if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
                 // Close the ShowLogEventsForm if it's already open
-                var openForm = Application.OpenForms.OfType<ShowLogEventsForm>().FirstOrDefault();
-                if (openForm != null)
-                {
-                    openForm.Close();
-                }
+                CloseLogEventsFormIfOpen();
 
                 // Set UserSelected on true
                 adminControl.InteractionHandler.UserSelected = true; // Pass bool true to InterActionHandler
@@ -236,30 +233,24 @@ namespace CRUD_System.Interfaces
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
-                // Ignore btnForceLogOutUser when selection is users own admin account 
+                // Ignore btnForceLogOutUser when selection is user's own admin account
                 if (currentUser == selectedAlias)
                 {
                     adminControl.btnForceLogOutUser.Enabled = false;
                     adminControl.btnForceLogOutUser.Visible = false;
                 }
 
-                // Retrieve user details from the cache
-                var userDetailsArray = cache.CachedUserData
-                                       .Skip(1) // Skip header row
-                                       .FirstOrDefault(details => details[2] == selectedAlias);
+                // Retrieve user and login details
+                var (userDetailsArray, loginDetailsArray) = RetrieveUserAndLoginDetails(selectedAlias);
 
+                // Fill textboxes with user details
                 if (userDetailsArray != null)
                 {
                     FillTextboxesAdmin(userDetailsArray);
                 }
 
-                // Retrieve login details from the cache
-                var loginDetailsArray = cache.CachedLoginData!
-                                       .Skip(1) // Skip header row
-                                       .FirstOrDefault(details => details[0] == selectedAlias);
-
-                // If selected user is TheOne, bool selectedUserIsTheOne is true
-                if (loginDetailsArray![4] == "True")
+                // If selected user is TheOne, set the flag
+                if (loginDetailsArray != null && loginDetailsArray[4] == "True")
                 {
                     SelectedUserIsTheOne = true;
                 }
@@ -268,6 +259,36 @@ namespace CRUD_System.Interfaces
                 HandleSelectedUserStatus(selectedAlias);
             }
         }
+
+        /// <summary>
+        /// Retrieves user and login details from the cache for the selected alias.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the selected user.</param>
+        /// <returns>A tuple containing the user details array and login details array.</returns>
+        private (string[]? userDetailsArray, string[]? loginDetailsArray) RetrieveUserAndLoginDetails(string selectedAlias)
+        {
+            // Retrieve user details from the cache
+            var userDetailsArray = cache.CachedUserData
+                .Skip(1) // Skip header row
+                .FirstOrDefault(details => details[2] == selectedAlias);
+
+            // Retrieve login details from the cache
+            var loginDetailsArray = cache.CachedLoginData!
+                .Skip(1) // Skip header row
+                .FirstOrDefault(details => details[0] == selectedAlias);
+
+            return (userDetailsArray, loginDetailsArray);
+        }
+
+        /// <summary>
+        /// Closes the ShowLogEventsForm if it is already open.
+        /// </summary>
+        private void CloseLogEventsFormIfOpen()
+        {
+            var openForm = Application.OpenForms.OfType<ShowLogEventsForm>().FirstOrDefault();
+            openForm?.Close();
+        }
+        #endregion LISTBOX SELECTED INDEX CHANGED
 
         /// <summary>
         /// Finds and loads report files for a specific user alias into a ListView control.
@@ -291,17 +312,11 @@ namespace CRUD_System.Interfaces
                     listView.LoadFilesIntoListView(directory);
                 }
             }
-            else
-            {
-                // Log a message if no directories are found
-                Debug.WriteLine("No report directories found.");
-            }
         }
 
-
         /// <summary>
-        /// Validates the selected user alias and updates the UI accordingly. It checks the login details for the selected alias, 
-        /// determines if the user is an admin, and updates the visibility of admin-related fields. 
+        /// Validates the selected user alias and updates the UI accordingly. 
+        /// Checks the login details for the selected alias, determines if the user is an admin, and updates the visibility of admin-related fields. 
         /// It also checks if the user is online and enables/disables the Force log Out button.
         /// </summary>
         /// <param name="selectedAlias">The alias of the selected user to be validated.</param>
@@ -325,6 +340,7 @@ namespace CRUD_System.Interfaces
                 SelectedUserIsAdmin = true;
             }
 
+            // Interface when user is superuser TheOne
             if (loginDetails != null && userDetails != null && AuthenticationService.CurrentUserIsTheOne)
             {
                 adminControl.btnDeleteUser.Visible = EditMode;
@@ -367,7 +383,6 @@ namespace CRUD_System.Interfaces
                 adminControl.btnNextPage.Enabled = true;
                 currentPage++;
                 LoadDetailsListBox();
-                //EmptyTextBoxesAdmin();
             }
         }
 

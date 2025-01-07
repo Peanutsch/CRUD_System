@@ -116,9 +116,8 @@ public class DataCache
     /// </summary>
     public void SaveAndEncryptData()
     {
-        EncryptionManager.DecryptFile(userFilePath);
-
-        EncryptionManager.DecryptFile(loginFilePath);
+        EncryptionManager.DecryptFile(userFilePath); // Encrypt data_users.csv
+        EncryptionManager.DecryptFile(loginFilePath); // Encrypt data_login.csv
 
         // Save the cached user data to the file, joining fields into CSV lines.
         // Skip Header, ensure the header and Admin user details are ignored.
@@ -132,7 +131,7 @@ public class DataCache
         // Save the cached login data to the login file.
         // Add the header row explicitly before saving the data.
         File.WriteAllLines(loginFilePath, 
-                           new[] { "[0] Alias,[1] PASSWORD,[2] ADMIN,[3] ONLINESTATUS" }
+                           new[] { "[0] Alias,[1] PASSWORD,[2] ADMIN,[3] ONLINESTATUS, [4] Is the One" }
                            .Skip(1)
                            .Concat(CachedLoginData
                            .Select(fields => string.Join(",", fields)
