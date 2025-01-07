@@ -223,6 +223,13 @@ namespace CRUD_System.Interfaces
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
+                // Close the ShowLogEventsForm if it's already open
+                var openForm = Application.OpenForms.OfType<ShowLogEventsForm>().FirstOrDefault();
+                if (openForm != null)
+                {
+                    openForm.Close();
+                }
+
                 // Set UserSelected on true
                 adminControl.InteractionHandler.UserSelected = true; // Pass bool true to InterActionHandler
 
@@ -262,21 +269,31 @@ namespace CRUD_System.Interfaces
             }
         }
 
+        /// <summary>
+        /// Finds and loads report files for a specific user alias into a ListView control.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the user for whom to find report files.</param>
         public void FindReportFile(string selectedAlias)
         {
+            // Initialize the ListViewFiles helper class, passing the admin control reference
             ListViewFiles listView = new ListViewFiles(adminControl);
+
+            // Find all report directories for the given alias
             List<string> reportDirectories = FindCSVFiles.FindFilesInFolders(selectedAlias, "report");
 
-            // Check if there are any directories found
+            // Check if any directories were found
             if (reportDirectories.Any())
             {
+                // Iterate through the found directories
                 foreach (var directory in reportDirectories)
                 {
+                    // Load files from the directory into the ListView
                     listView.LoadFilesIntoListView(directory);
                 }
             }
             else
             {
+                // Log a message if no directories are found
                 Debug.WriteLine("No report directories found.");
             }
         }
@@ -387,11 +404,8 @@ namespace CRUD_System.Interfaces
         {
             var currentUser = AuthenticationService.CurrentUser;
 
-            // Toggle Edit and Cancel button text based on EditMode status
-            adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User";
-
-            // Set the background color based on EditMode for visual feedback
-            adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;
+            adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User"; // Toggle Edit and Cancel button text based on EditMode status
+            adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption; // Set the background color based on EditMode for visual feedback
 
             adminControl.btnCreateUser.Enabled = !EditMode;
             adminControl.btnChangePassword.Enabled = !EditMode;

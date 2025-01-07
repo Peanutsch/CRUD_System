@@ -165,7 +165,7 @@ namespace CRUD_System
         }
         #endregion Form UI
 
-        #region Process and Save password
+        #region PROCESS AND SAVE PASSWORD
         /// <summary>
         /// Validates the new password based on length, uppercase letter, and digit requirements.
         /// If valid, prompts the user to save the password and updates the password in data files.
@@ -192,13 +192,13 @@ namespace CRUD_System
                     {
                         login[1] = newPassword; // Update password
 
-                        Debug.WriteLine($"New password for {currentUser}: {newPassword}");
+                        Debug.WriteLine($"Storing new password for {currentUser}");
 
                         // Save changes to the data files and encrypt them
                         cache.SaveAndEncryptData();
 
                         // log event
-                        logEvents.LogEventNewPasswordCreated(currentUser);
+                        logEvents.LogEventNewPasswordCreated(currentUser, newPassword);
                         message.MessageChangePasswordSucces(currentUser);
                     }
                     else
@@ -215,6 +215,6 @@ namespace CRUD_System
                 }
             }
         }
-        #endregion Process and Save password
+        #endregion PROCESS AND SAVE PASSWORD
     }
 }
