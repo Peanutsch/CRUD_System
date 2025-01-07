@@ -307,14 +307,14 @@ namespace CRUD_System.Handlers
                 if (login != null)
                 {
                     login[1] = generatedPassword; // Update password
-                    Debug.WriteLine($"Generated password for {alias}: {generatedPassword}");
+                    Debug.WriteLine($"Generated new password for {alias}");
                 }
 
                 // Save changes to the data files and encrypt them
                 cache.SaveAndEncryptData();
 
                 // log event
-                logEvents.LogEventPasswordGenerated(currentUser, alias);
+                logEvents.LogEventPasswordGenerated(currentUser, alias, generatedPassword);
                 message.MessageChangePasswordSucces(alias);
             }
             else
