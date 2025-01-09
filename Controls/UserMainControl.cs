@@ -59,8 +59,8 @@ namespace CRUD_System
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
-            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int userIndex = accountManager.FindUserIndexByAlias(txtAlias.Text);
+            int loginIndex = accountManager.FindUserIndexByAlias(txtAlias.Text);
 
             var loginDetails = loginLines[loginIndex].Split(",");
             var userDetails = userLines[userIndex].Split(",");
@@ -73,7 +73,8 @@ namespace CRUD_System
 
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
+                profileManager.UpdateUserDetails(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, 
+                                                 txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
             }
 
             AdminInterface adminInterface = new AdminInterface();

@@ -54,7 +54,7 @@ namespace CRUD_System.Interfaces
             DataCache.LoadCache();
 
             // Check if the cached user data is empty or not loaded
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            if (!cache.CachedUserData.Any()|| !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
@@ -202,6 +202,7 @@ namespace CRUD_System.Interfaces
             // Refresh the ListBox to trigger the DrawItem event
             adminControl.listBoxAdmin.Refresh();
         }
+        #endregion LISTBOX ADMIN
 
         #region LISTBOX SELECTED INDEX CHANGED
         /// <summary>
@@ -290,14 +291,15 @@ namespace CRUD_System.Interfaces
         }
         #endregion LISTBOX SELECTED INDEX CHANGED
 
+        #region FIND REPORT FILE
         /// <summary>
-        /// Finds and loads report files for a specific user alias into a ListView control.
+        /// Finds and loads report files from corresponding user alias from ListBox into ListViewReports.
         /// </summary>
         /// <param name="selectedAlias">The alias of the user for whom to find report files.</param>
         public void FindReportFile(string selectedAlias)
         {
             // Initialize the ListViewFiles helper class, passing the admin control reference
-            ListViewFiles listView = new ListViewFiles(adminControl);
+            ListViewReports listView = new ListViewReports(adminControl);
 
             // Find all report directories for the given alias
             List<string> reportDirectories = FindCSVFiles.FindFilesInFolders(selectedAlias, "report");
@@ -309,11 +311,13 @@ namespace CRUD_System.Interfaces
                 foreach (var directory in reportDirectories)
                 {
                     // Load files from the directory into the ListView
-                    listView.LoadFilesIntoListView(directory);
+                    listView.LoadReportsIntoListView(directory);
                 }
             }
         }
+        #endregion FIND REPORT FILE
 
+        #region HANDLE SELECTED USER STATUS
         /// <summary>
         /// Validates the selected user alias and updates the UI accordingly. 
         /// Checks the login details for the selected alias, determines if the user is an admin, and updates the visibility of admin-related fields. 
@@ -323,7 +327,7 @@ namespace CRUD_System.Interfaces
         public void HandleSelectedUserStatus(string selectedAlias)
         {
             // Check if the cached user data is empty or not loaded
-            if (cache.CachedLoginData == null || cache.CachedLoginData.Count == 0)
+            if (cache.CachedLoginData == null || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
@@ -369,7 +373,8 @@ namespace CRUD_System.Interfaces
                 adminControl.txtAbsenceIllness.Visible = false; // Hide isSick-related fields if no user details are found
             }
         }
-        #endregion LISTBOX ADMIN
+        #endregion HANDLE SELECTED USER STATUS
+
 
         #region LISTBOX PAGES
         /// <summary>
@@ -621,7 +626,7 @@ namespace CRUD_System.Interfaces
             adminControl.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
 
             // Configure controls' enabled state based on whether we are in report mode (`IsReport`)
-            adminControl.listViewFiles.Enabled = !IsReport; // Disables the list view to prevent altering older reports
+            adminControl.listViewReports.Enabled = !IsReport; // Disables the list view to prevent altering older reports
             adminControl.btnDeleteUser.Enabled = !IsReport; // Disables the "Delete User" button
             adminControl.btnGeneratePSW.Enabled = !IsReport; // Disables the "Generate Password" button
             adminControl.btnDeleteReport.Enabled = !IsReport; // Disables the "Delete Report" button
@@ -645,7 +650,7 @@ namespace CRUD_System.Interfaces
             adminControl.btnSaveReport.Visible = IsReport;
 
             // Clears any selected items in the list view to reset the state
-            adminControl.listViewFiles.SelectedItems.Clear();
+            adminControl.listViewReports.SelectedItems.Clear();
         }
 
         #endregion TEXTBOXES AND CONFIG REPORT

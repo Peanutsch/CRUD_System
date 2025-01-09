@@ -40,7 +40,7 @@ namespace CRUD_System.Interfaces
         public void LoadDetailsListBoxThisUser()
         {
             // Check if the cache is empty, and reload data if necessary.
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
@@ -63,7 +63,7 @@ namespace CRUD_System.Interfaces
             }
 
             // Find the index of the current user in the cached user data (userLines has already skipped the header)
-            var userIndex = repository.FindUserIndexByAlias(userLines, loginLines, currentUser!);
+            var userIndex = repository.FindUserIndexByAlias(currentUser!);
             if (userIndex < 0)
             {
                 Debug.WriteLine($"LoadDetailsListBoxThisUser: User with alias '{currentUser}' not found in cache.");
@@ -80,7 +80,7 @@ namespace CRUD_System.Interfaces
             string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty; // Online status
 
             // Construct the item string to display in the list box
-            string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber}"; //{isOnline}";
+            string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber}";
 
             // Clear existing items in the list box and add the current user's details
             userControl.listBoxUser.Items.Clear();

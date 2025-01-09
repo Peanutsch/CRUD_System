@@ -156,8 +156,8 @@ namespace CRUD_System.Handlers
 
                 // Disable and Clear listViewFiles
                 AdminMainControl adminControl = new AdminMainControl();
-                adminControl.listViewFiles.Items.Clear();
-                adminControl.listViewFiles.Enabled = false;
+                adminControl.listViewReports.Items.Clear();
+                adminControl.listViewReports.Enabled = false;
                 
             }
             catch (Exception e)
@@ -194,7 +194,7 @@ namespace CRUD_System.Handlers
                 }
 
                 // Refresh the ListView to ensure it visually updates with new data
-                adminControl.listViewFiles.Refresh();
+                adminControl.listViewReports.Refresh();
             }
             else
             {
@@ -211,7 +211,7 @@ namespace CRUD_System.Handlers
             // Ensure the ListView reference is available before attempting to clear it
             if (adminControl != null)
             {
-                adminControl.listViewFiles.Items.Clear();
+                adminControl.listViewReports.Items.Clear();
             }
         }
 
@@ -252,7 +252,7 @@ namespace CRUD_System.Handlers
                     if (itemSplit.Length >= 2)
                     {
                         // Create an instance of ListViewFiles (or use the existing one) to retrieve the file's subject
-                        ListViewFiles listViewFiles = new ListViewFiles();
+                        ListViewReports listViewFiles = new ListViewReports();
                         string itemUse = string.Join("_", itemSplit[0], itemSplit[1]);
                         string subject = listViewFiles.GetSubject(itemUse, itemSplit[0]); // itemSplit[0] is alias
 
@@ -263,7 +263,7 @@ namespace CRUD_System.Handlers
                         item.SubItems.Add(!string.IsNullOrEmpty(subject) ? subject : "Unknown");
 
                         // Add the created item to the ListView
-                        adminControl?.listViewFiles.Items.Add(item);
+                        adminControl?.listViewReports.Items.Add(item);
 
                         // Store the full file path in the Tag property of the item
                         item.Tag = fileInfo.FullName;
@@ -446,8 +446,8 @@ namespace CRUD_System.Handlers
             adminControl.btnSaveReport.Visible = AdminInterface.IsReport; // Show or hide "Save Report" button based on mode
 
             // Clear any selected items in the list view to reset its state
-            adminControl.listViewFiles.SelectedItems.Clear();
-            adminControl.listViewFiles.Enabled = !AdminInterface.IsReport;
+            adminControl.listViewReports.SelectedItems.Clear();
+            adminControl.listViewReports.Enabled = !AdminInterface.IsReport;
         }
         #endregion TOGGLE REPORT MODE
     }

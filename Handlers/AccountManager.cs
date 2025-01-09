@@ -30,7 +30,7 @@ namespace CRUD_System.Handlers
         /// The index of the user if found; otherwise, -1. 
         /// If the alias is not found, a message is displayed to indicate this.
         /// </returns>
-        public int FindUserIndexByAlias(List<string> userLines, List<string> loginLines, string alias)
+        public int FindUserIndexByAlias(string alias)
         {
             // Load cache
             DataCache.LoadCache();

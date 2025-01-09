@@ -37,10 +37,16 @@ namespace CRUD_System.Handlers
         /// <summary>
         /// Updates user details and login data.
         /// </summary>
-        public void UpdateUserDetails(List<string> userLines, List<string> loginLines, int userIndex, int loginIndex,
-                               string name, string surname, string alias, string address, string zipCode, string city,
+        public void UpdateUserDetails(string name, string surname, string alias, string address, string zipCode, string city,
                                string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick, bool isTheOne)
         {
+            // Confirm with the user before saving changes
+            DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+
             // Ensure the cache is loaded with decrypted data before proceeding
             if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
             {
@@ -58,7 +64,7 @@ namespace CRUD_System.Handlers
                     AdminMainControl.ChkIsTheOneChanged = false;
                 }
                  // Update login details in cached data
-                UpdateCachedLoginDetails(alias, isAdmin, isTheOne);
+                UpdateCachedLoginDetails(alias, isAdmin);
 
                 // Save updated data and log the changes
                 SaveDataAndLogUpdates(alias);
@@ -80,13 +86,6 @@ namespace CRUD_System.Handlers
         private void UpdateCachedUserDetails(string alias, string name, string surname, string address, string zipCode,
                                       string city, string email, string phoneNumber, bool onlineStatus, bool isSick)
         {
-            // Confirm with the user before saving changes
-            DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
-            if (dr == DialogResult.No)
-            {
-                return;
-            }
-
             // Find and update the user in the cached data
             var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias);
             if (user != null)
@@ -109,7 +108,7 @@ namespace CRUD_System.Handlers
         /// </summary>
         /// <param name="alias">The alias of the user to update.</param>
         /// <param name="isTheOne">Indicates if the user has special "The One" status.</param>
-        private void UpdateCachedLoginDetails(string alias, bool isAdmin, bool isTheOne)
+        private void UpdateCachedLoginDetails(string alias, bool isAdmin)
         {
             // Find and update the login details in the cached data
             var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
@@ -284,7 +283,7 @@ namespace CRUD_System.Handlers
         /// </summary>
         /// <param name="alias">Alias of the user for whom to generate a password.</param>
         /// <param name="isAdmin">Indicates if the user has admin privileges.</param>
-        public void GeneratePasswordNewUser(string alias, bool isAdmin)
+        public void GeneratePasswordNewUser(string alias)
         {
             DialogResult dr = message.MessageConfirmToGeneratePassword(alias);
             if (dr != DialogResult.Yes)
@@ -293,7 +292,7 @@ namespace CRUD_System.Handlers
             }
 
             // Check if the cache is empty, and reload data if necessary.
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }

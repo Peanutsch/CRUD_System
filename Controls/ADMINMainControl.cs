@@ -103,16 +103,12 @@ namespace CRUD_System
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
             // Read lines from data_users.csv and data_login.csv
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
-
-            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-
-            var loginDetails = loginLines[loginIndex].Split(",");
+            int userIndex = accountManager.FindUserIndexByAlias(txtAlias.Text);
 
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
+                profileManager.UpdateUserDetails(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, 
+                                                 txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
             }
             editMode = false; // Close editMode
             adminInterface.EditMode = false;
@@ -172,7 +168,7 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                profileManager.GeneratePasswordNewUser(txtAlias.Text, chkIsAdmin.Checked);
+                profileManager.GeneratePasswordNewUser(txtAlias.Text);
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -196,10 +192,8 @@ namespace CRUD_System
         {
             AuthenticationService authenticationService = new AuthenticationService();
 
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
-
             // Find the user index based on the alias
-            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int userIndex = accountManager.FindUserIndexByAlias(txtAlias.Text);
 
             // Perform action only if a user is selected
             interactionHandler.PerformActionIfUserSelected(() =>
@@ -351,7 +345,7 @@ namespace CRUD_System
                 btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
                 adminInterface.TextBoxesReportEmpty();
                 AdminInterface.IsReport = ToggleIsReportMode();
-                adminInterface.TextBoxesReportConfig();
+                adminInterface.ReportConfig();
             },
             () => message.MessageInvalidNoUserSelected());
         }
@@ -361,7 +355,6 @@ namespace CRUD_System
         /// <summary>
         /// Toggle between editMode and !editMode
         /// </summary>
-        /// <returns></returns>
         private bool ToggleEditMode()
         {
             bool modus = editMode = !editMode;
@@ -369,6 +362,9 @@ namespace CRUD_System
             return modus;
         }
 
+        /// <summary>
+        /// Toggle between IsReport and !IsReport
+        /// </summary>
         public bool ToggleIsReportMode()
         {
             bool modus = AdminInterface.IsReport = !AdminInterface.IsReport;
@@ -473,6 +469,7 @@ namespace CRUD_System
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             isAdmin = chkIsAdmin.Checked;
+            AdminInterface.SelectedUserIsAdmin = isAdmin;
         }
 
         /// <summary>
@@ -508,7 +505,7 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
-            listViewFiles.Items.Clear();
+            listViewReports.Items.Clear();
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }
 
@@ -519,9 +516,9 @@ namespace CRUD_System
 
         private void listViewFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listViewFiles.SelectedItems.Count > 0)
+            if (listViewReports.SelectedItems.Count > 0)
             {
-                string selectedUserReportFileName = listViewFiles.SelectedItems[0].Text;
+                string selectedUserReportFileName = listViewReports.SelectedItems[0].Text;
 
                 if (!string.IsNullOrEmpty(selectedUserReportFileName))
                 {
@@ -561,10 +558,10 @@ namespace CRUD_System
 
                 // Empty all report textboxes and listView
                 AdminInterface.IsReport = false;
-                adminInterface.TextBoxesReportConfig();
+                adminInterface.ReportConfig();
                 adminInterface.TextBoxesReportEmpty();
                 txtAliasReport.Text = string.Empty;
-                listViewFiles.Items.Clear();
+                listViewReports.Items.Clear();
                 /*
                 txtAliasReport.Clear();
                 txtDateReport.Clear();
@@ -635,10 +632,10 @@ namespace CRUD_System
         public void DeleteFileReport()
         {
             // Check if a file is selected in the ListView
-            if (btnDeleteReport.Visible && listViewFiles.SelectedItems.Count > 0)
+            if (btnDeleteReport.Visible && listViewReports.SelectedItems.Count > 0)
             {
                 // Get the name of the selected file
-                string selectedFile = listViewFiles.SelectedItems[0].Text;
+                string selectedFile = listViewReports.SelectedItems[0].Text;
 
                 // Construct the full name of the report file
                 string fileName = selectedFile + "_report.csv";
@@ -666,7 +663,7 @@ namespace CRUD_System
                                     File.Delete(fileToDelete);
 
                                     // Remove the deleted file from the ListView
-                                    listViewFiles.Items.Remove(listViewFiles.SelectedItems[0]);
+                                    listViewReports.Items.Remove(listViewReports.SelectedItems[0]);
 
                                     fileDeleted = true;
                                     // Notify the user about the successful deletion

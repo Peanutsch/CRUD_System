@@ -11,7 +11,7 @@ namespace CRUD_System.Handlers
     /// <summary>
     /// A class that handles the configuration and population of a ListView with file details.
     /// </summary>
-    internal class ListViewFiles
+    internal class ListViewReports
     {
         #region PROPERTIES
         private readonly AdminMainControl adminControl;
@@ -22,7 +22,7 @@ namespace CRUD_System.Handlers
         /// Initializes a new instance of the ListViewFiles class and sets up the ListView.
         /// </summary>
         /// <param name="adminControl">The AdminMainControl containing the ListView.</param>
-        public ListViewFiles(AdminMainControl? adminControl = null)
+        public ListViewReports(AdminMainControl? adminControl = null)
         {
             this.adminControl = adminControl ?? new AdminMainControl();
         }
@@ -33,9 +33,9 @@ namespace CRUD_System.Handlers
         /// Loads files from a specified directory into the ListView.
         /// </summary>
         /// <param name="directoryPath">The directory path to load the files from.</param>
-        public void LoadFilesIntoListView(string directoryPath)
+        public void LoadReportsIntoListView(string directoryPath)
         {
-            adminControl.listViewFiles.Visible = true;
+            adminControl.listViewReports.Visible = true;
 
             // Check if the specified directory exists
             if (Directory.Exists(directoryPath) && !string.IsNullOrEmpty(directoryPath))
@@ -67,7 +67,7 @@ namespace CRUD_System.Handlers
                             item.SubItems.Add(!string.IsNullOrEmpty(subject) ? subject : "Unknown");
 
                             // Add item to ListView
-                            adminControl.listViewFiles.Items.Add(item);
+                            adminControl.listViewReports.Items.Add(item);
 
                             // Set the Tag property to the full file path
                             item.Tag = fileInfo.FullName;
@@ -75,7 +75,7 @@ namespace CRUD_System.Handlers
                     }
 
                     // Force a refresh of the ListView to ensure it's displaying correctly
-                    adminControl.listViewFiles.Refresh();
+                    adminControl.listViewReports.Refresh();
                 }
             }
         }
