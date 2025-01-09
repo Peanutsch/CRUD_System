@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRUD_System.Handlers
+namespace CRUD_System.Encryption
 {
     internal static class AesEncryption
     {

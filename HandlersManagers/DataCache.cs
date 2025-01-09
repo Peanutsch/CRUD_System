@@ -1,8 +1,8 @@
 ﻿using CRUD_System.FileHandlers;
 using System.Diagnostics;
-using CRUD_System.Handlers;
 using CRUD_System;
 using System.Reflection;
+using CRUD_System.Encryption;
 
 /// <summary>
 /// The DataCache class is responsible for managing in-memory caching of user and login data.

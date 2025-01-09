@@ -375,7 +375,6 @@ namespace CRUD_System.Interfaces
         }
         #endregion HANDLE SELECTED USER STATUS
 
-
         #region LISTBOX PAGES
         /// <summary>
         /// Navigates to the next page listBoxAdmin if it exists.

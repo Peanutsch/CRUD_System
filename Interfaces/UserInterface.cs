@@ -1,4 +1,5 @@
-﻿using CRUD_System.FileHandlers;
+﻿using CRUD_System.Encryption;
+using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
 using System;
 using System.Collections.Generic;

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using CRUD_System.Encryption;
 
 namespace CRUD_System.Handlers
 {

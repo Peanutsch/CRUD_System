@@ -60,8 +60,9 @@
             this.txtAbsenceIllness = new TextBox();
             this.btnCallInSick = new Button();
             this.listViewReports = new ListView();
-            this.columnHeader1 = new ColumnHeader();
-            this.columnHeader2 = new ColumnHeader();
+            this.fileColumn = new ColumnHeader();
+            this.createdColumn = new ColumnHeader();
+            this.subjectColumn = new ColumnHeader();
             this.lblReports = new Label();
             this.txtDateReport = new TextBox();
             this.txtAliasReport = new TextBox();
@@ -389,7 +390,7 @@
             // 
             // listViewReports
             // 
-            this.listViewReports.Columns.AddRange(new ColumnHeader[] { this.columnHeader1, this.columnHeader2 });
+            this.listViewReports.Columns.AddRange(new ColumnHeader[] { this.fileColumn, this.createdColumn, this.subjectColumn });
             this.listViewReports.Font = new Font("Courier New", 9F, FontStyle.Bold);
             this.listViewReports.FullRowSelect = true;
             this.listViewReports.Location = new Point(800, 36);
@@ -400,15 +401,20 @@
             this.listViewReports.View = View.Details;
             this.listViewReports.SelectedIndexChanged += this.listViewFiles_SelectedIndexChanged;
             // 
-            // columnHeader1
+            // fileColumn
             // 
-            this.columnHeader1.Text = "File";
-            this.columnHeader1.Width = 250;
+            this.fileColumn.Text = "File";
+            this.fileColumn.Width = 175;
             // 
-            // columnHeader2
+            // createdColumn
             // 
-            this.columnHeader2.Text = "Subject";
-            this.columnHeader2.Width = 125;
+            this.createdColumn.Text = "Created";
+            this.createdColumn.Width = 75;
+            // 
+            // subjectColumn
+            // 
+            this.subjectColumn.Text = "Subject";
+            this.subjectColumn.Width = 175;
             // 
             // lblReports
             // 
@@ -677,8 +683,8 @@
         public TextBox txtAbsenceIllness;
         public Button btnCallInSick;
         public ListView listViewReports;
-        private ColumnHeader columnHeader1;
-        private ColumnHeader columnHeader2;
+        private ColumnHeader fileColumn;
+        private ColumnHeader subjectColumn;
         public Label lblReports;
         public TextBox txtDateReport;
         public TextBox txtAliasReport;
@@ -695,5 +701,6 @@
         public Button btnDeleteReport;
         public CheckBox chkIsTheOne;
         public Button btnUploadFile;
+        private ColumnHeader createdColumn;
     }
 }

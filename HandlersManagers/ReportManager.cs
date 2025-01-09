@@ -1,4 +1,5 @@
-﻿using CRUD_System.FileHandlers;
+﻿using CRUD_System.Encryption;
+using CRUD_System.FileHandlers;
 using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
 using System;
@@ -34,8 +35,10 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void btnSaveReportHandler()
         {
-            if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && !string.IsNullOrEmpty(adminControl.rtxReport.Text) &&
-                !string.IsNullOrEmpty(adminControl.txtAliasReport.Text) && !string.IsNullOrEmpty(adminControl.txtDateReport.Text))
+            if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && 
+                !string.IsNullOrEmpty(adminControl.rtxReport.Text) &&
+                !string.IsNullOrEmpty(adminControl.txtAliasReport.Text) && 
+                !string.IsNullOrEmpty(adminControl.txtDateReport.Text))
             {
                 var currentUser = AuthenticationService.CurrentUser;
                 string selectedAlias = adminControl!.txtAlias.Text;
@@ -168,7 +171,7 @@ namespace CRUD_System.Handlers
         }
         #endregion PROCESSING AND HANDLING
 
-        #region Refresh ListViewFiles
+        #region REFRESH LISTVIEWREPORTS
         /// <summary>
         /// Refreshes the ListView with the latest report files for the given alias.
         /// </summary>
@@ -254,13 +257,14 @@ namespace CRUD_System.Handlers
                         // Create an instance of ListViewFiles (or use the existing one) to retrieve the file's subject
                         ListViewReports listViewFiles = new ListViewReports();
                         string itemUse = string.Join("_", itemSplit[0], itemSplit[1]);
-                        string subject = listViewFiles.GetSubject(itemUse, itemSplit[0]); // itemSplit[0] is alias
+                        (string reportSubject, string reportCreator) = listViewFiles.GetSubjectAndCreator(itemUse, itemSplit[0]); // itemSplit[0] is alias
 
                         // Create a new ListViewItem for each report file
                         ListViewItem item = new ListViewItem(itemUse);
 
                         // Add file subject as a subitem (or "Unknown" if not found)
-                        item.SubItems.Add(!string.IsNullOrEmpty(subject) ? subject : "Unknown");
+                        item.SubItems.Add(!string.IsNullOrEmpty(reportCreator) ? reportCreator : "Unknown");
+                        item.SubItems.Add(!string.IsNullOrEmpty(reportSubject) ? reportSubject : "Unknown");
 
                         // Add the created item to the ListView
                         adminControl?.listViewReports.Items.Add(item);
@@ -281,8 +285,7 @@ namespace CRUD_System.Handlers
                 Debug.WriteLine($"Directory does not exist: {reportDirectory}");
             }
         }
-
-        #endregion Refresh ListViewFiles
+        #endregion REFRESH LISTVIEWREPORTS
 
         #region REPORT DISPLAY
         /// <summary>

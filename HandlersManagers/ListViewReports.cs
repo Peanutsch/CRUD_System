@@ -1,6 +1,8 @@
-﻿using CRUD_System.FileHandlers;
+﻿using CRUD_System.Encryption;
+using CRUD_System.FileHandlers;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -44,7 +46,7 @@ namespace CRUD_System.Handlers
                 string[] csvFiles = Directory.GetFiles(directoryPath, "*.csv", SearchOption.AllDirectories);
 
                 // Check if any CSV files are found
-                if (csvFiles.Length > 0)
+                if (csvFiles.Any())
                 {
                     // Create an array of FileInfo objects for sorting
                     FileInfo[] fileInfos = csvFiles.Select(file => new FileInfo(file)).ToArray();
@@ -54,17 +56,20 @@ namespace CRUD_System.Handlers
 
                     foreach (FileInfo fileInfo in fileInfos)
                     {
+                        // Format csv filename: {alias}_{date}_{time}_report.csv
                         string[] itemSplit = fileInfo.Name.Split("_");
                         if (itemSplit.Length >= 2)
                         {
-                            string itemUse = string.Join("_", itemSplit[0], itemSplit[1]);
-                            string subject = GetSubject(itemUse, itemSplit[0]); // itemSplit[0] is alias
+                            string reportName = string.Join("_", itemSplit[0], itemSplit[1]);
+                            (string reportSubject, string reportCreator) = GetSubjectAndCreator(reportName, itemSplit[0]); // itemSplit[0] is alias
 
                             // Create ListViewItem
-                            ListViewItem item = new ListViewItem(itemUse);
+                            ListViewItem item = new ListViewItem(reportName);
 
-                            ////// GET FILE SUBJECT AS SUBITEMS ////
-                            item.SubItems.Add(!string.IsNullOrEmpty(subject) ? subject : "Unknown");
+                            // Add reportCreator and reportSubjct as subitems in listview.
+                            // Adding subitems goes in order of the columns.
+                            item.SubItems.Add(!string.IsNullOrEmpty(reportCreator) ? reportCreator : "Unknown");
+                            item.SubItems.Add(!string.IsNullOrEmpty(reportSubject) ? reportSubject : "Unknown");
 
                             // Add item to ListView
                             adminControl.listViewReports.Items.Add(item);
@@ -87,7 +92,7 @@ namespace CRUD_System.Handlers
         /// <param name="selectedUserString">The string identifying the user and report.</param>
         /// <param name="alias">The alias of the user.</param>
         /// <returns>The subject field from the report, or an empty string if an error occurs or the subject is not found.</returns>
-        public string GetSubject(string selectedUserString, string alias)
+        public (string Subject, string Creator) GetSubjectAndCreator(string selectedUserString, string alias)
         {
             try
             {
@@ -109,20 +114,20 @@ namespace CRUD_System.Handlers
                     // Iterate through the lines to find and return the subject
                     foreach (string[] line in readFile)
                     {
-                        string isSubject = line[3]; // Subject is in the 4th column (index 3)
-
+                        string isSubject = line[3]; // Subject is index 3
+                        string isCreator = line[1]; // Creator is index 1
                         EncryptionManager.EncryptFile(filePath); // Re-encrypt the file after processing
-                        return isSubject;
+                        return (isSubject, isCreator);
                     }
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine($"Exception error: {e}...\nReturn string.Empty");
-                return string.Empty; // If any exception occurs, return an empty string
+                return ((string.Empty, string.Empty)); // If any exception occurs, return an empty string
             }
 
-            return string.Empty; // Return an empty string if no subject is found or input is invalid
+            return ((string.Empty, string.Empty)); // Return an empty string if no subject is found or input is invalid
         }
         #endregion PROCESS
     }

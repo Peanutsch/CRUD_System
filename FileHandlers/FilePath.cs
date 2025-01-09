@@ -3,8 +3,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
-using CRUD_System.Handlers;
 using System.Linq.Expressions;
+using CRUD_System.Encryption;
 
 namespace CRUD_System.FileHandlers
 {
@@ -78,7 +78,6 @@ namespace CRUD_System.FileHandlers
             {
                 // Handle exceptions gracefully
                 Debug.WriteLine($"An error occurred while creating the log file for alias {selectedAlias}: {ex.Message}");
-                //MessageBox.Show($"An error occurred while creating the log file for alias {selectedAlias}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

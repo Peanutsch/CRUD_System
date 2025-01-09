@@ -696,7 +696,5 @@ namespace CRUD_System
             }
         }
         #endregion DELETE FILE REPORT
-
-
     }
 }
