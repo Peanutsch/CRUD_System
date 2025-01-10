@@ -126,7 +126,7 @@ namespace CRUD_System.Handlers
             {
                 var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(chars);
 
-                // Retain only letters, numbers, and spaces (or any other desired categories)
+                // Retain only letters, numbers, and spaces
                 if (unicodeCategory == UnicodeCategory.LowercaseLetter ||
                     unicodeCategory == UnicodeCategory.UppercaseLetter ||
                     unicodeCategory == UnicodeCategory.DecimalDigitNumber ||

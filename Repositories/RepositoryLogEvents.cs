@@ -118,10 +118,10 @@ namespace CRUD_System.Repositories
             path.AppendToLog(alias, newLog);
         }
 
-        public void LogEventUpdateStatusIsTheOne(string currentUser, string alias)
+        public void LogEventUpdateStatusIsTheOne(string currentUser, string alias, bool isTheOne)
         {
-            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status IsTheOne for [{alias.ToUpper()}]");
-            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status IsTheOne for [{alias.ToUpper()}]";
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status IsTheOne for [{alias.ToUpper()}] to {isTheOne}");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status IsTheOne for [{alias.ToUpper()}] to {isTheOne}";
             path.AppendToLog(currentUser, newLog);
             path.AppendToLog(alias, newLog);
         }

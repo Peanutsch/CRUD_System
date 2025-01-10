@@ -49,7 +49,7 @@ namespace CRUD_System
 
         bool isAdmin;
         bool editMode = false;
-        readonly bool isTheOne = false;
+        //readonly bool isTheOne = false;
         readonly bool onlineStatus = false;
         readonly bool isSick = false;
 
@@ -497,13 +497,13 @@ namespace CRUD_System
         }
         #endregion CHECKBOXES
 
-            #region SELECTED INDEX CHANGED
-            /// <summary>
-            /// Handles the selection change event for the ListBox in the admin interface.
-            /// Triggers the appropriate selection handler in AdminInterface.
-            /// </summary>
-            /// <param name="sender">The source of the event.</param>
-            /// <param name="e">The event data.</param>
+        #region SELECTED INDEX CHANGED
+        /// <summary>
+        /// Handles the selection change event for the ListBox in the admin interface.
+        /// Triggers the appropriate selection handler in AdminInterface.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
             listViewReports.Items.Clear();

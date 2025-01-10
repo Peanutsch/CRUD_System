@@ -59,13 +59,6 @@ namespace CRUD_System.Handlers
                 // Update user details in the cached data
                 UpdateCachedUserDetails(alias, name, surname, address, zipCode, city, email, phoneNumber, onlineStatus, isSick);
 
-                /*
-                // Update "The One" status if it has been modified
-                if (AdminMainControl.ChkIsTheOneChanged)
-                {
-                    AdminMainControl.ChkIsTheOneChanged = false;
-                }
-                */
                  // Update login details in cached data
                 UpdateCachedLoginDetails(alias, isAdmin);
 
@@ -110,50 +103,33 @@ namespace CRUD_System.Handlers
         /// Updates the login details of the user, including "The One" status.
         /// </summary>
         /// <param name="alias">The alias of the user to update.</param>
-        /// <param name="isTheOne">Indicates if the user has special "The One" status.</param>
+        /// <param name="isAdmin">Indicates if the user has admin status.</param>
         private void UpdateCachedLoginDetails(string alias, bool isAdmin)
         {
             // Find and update the login details in the cached data
             var loginData = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
             if (loginData != null)
             {
-                Debug.WriteLine($"isAdmin: {isAdmin}");
-                Debug.WriteLine($"isTheOne: {AdminMainControl.IsTheOne}\n==========");
-
                 loginData[2] = isAdmin.ToString();
                 loginData[4] = AdminMainControl.IsTheOne.ToString();
 
-                Debug.WriteLine($"Updated isAdmin: {isAdmin}");
-                Debug.WriteLine($"Updated isTheOne: {AdminMainControl.IsTheOne}");
-                Debug.WriteLine($"ChkIsTheOneChanged: {AdminMainControl.ChkIsTheOneChanged}");
-
-                if (AdminMainControl.IsTheOne && AdminMainControl.ChkIsTheOneChanged)
+                if (AdminMainControl.ChkIsTheOneChanged)
                 {
                     var currentUser = AuthenticationService.CurrentUser;
-                    logEvents.LogEventUpdateStatusIsTheOne(currentUser!, alias);
+                    logEvents.LogEventUpdateStatusIsTheOne(currentUser!, alias, AdminMainControl.IsTheOne);
+
+                    if (AdminMainControl.IsTheOne)
+                    {
+                        Debug.WriteLine($"[INFO] User {alias} is Neo.");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"[INFO] User {alias} is no longer Neo.");
+                    }
+
                     AdminMainControl.ChkIsTheOneChanged = false;
                 }
-
-                //ConfirmIsTheOne(alias, loginData);
-
             }
-        }
-
-        public void ConfirmIsTheOne(string alias, string[] loginData)
-        {
-            // Confirm with the user before modifying "The One" status
-            DialogResult dr = message.MessageConfirmIsTheOne(alias);
-            if (dr == DialogResult.No)
-            {
-                return;
-            }
-
-            loginData[4] = AdminMainControl.IsTheOne.ToString();
-
-            Debug.WriteLine($"Updated 'The One' status to {loginData[4]}");
-
-            var currentUser = AuthenticationService.CurrentUser;
-            logEvents.LogEventUpdateStatusIsTheOne(currentUser!, alias);
         }
 
         /// <summary>
