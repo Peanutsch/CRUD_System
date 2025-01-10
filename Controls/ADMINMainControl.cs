@@ -108,7 +108,7 @@ namespace CRUD_System
             if (userIndex != -1)
             {
                 profileManager.UpdateUserDetails(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, 
-                                                 txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
+                                                 txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
             }
             editMode = false; // Close editMode
             adminInterface.EditMode = false;
@@ -481,7 +481,7 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event, typically the 'chkIsTheOne' checkbox.</param>
         /// <param name="e">The event data containing information about the state change of the checkbox.</param>
-        private void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
+        public void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
             ChkIsTheOneChanged = true;
 
@@ -492,17 +492,18 @@ namespace CRUD_System
             else
             {
                 IsTheOne = false;
+                ChkIsTheOneChanged = true;
             }
         }
         #endregion CHECKBOXES
 
-        #region SELECTED INDEX CHANGED
-        /// <summary>
-        /// Handles the selection change event for the ListBox in the admin interface.
-        /// Triggers the appropriate selection handler in AdminInterface.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
+            #region SELECTED INDEX CHANGED
+            /// <summary>
+            /// Handles the selection change event for the ListBox in the admin interface.
+            /// Triggers the appropriate selection handler in AdminInterface.
+            /// </summary>
+            /// <param name="sender">The source of the event.</param>
+            /// <param name="e">The event data.</param>
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
             listViewReports.Items.Clear();

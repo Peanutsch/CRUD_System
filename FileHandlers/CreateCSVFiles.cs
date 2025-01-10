@@ -76,7 +76,7 @@ namespace CRUD_System.FileHandlers
                 {
                     string logsPath = Path.Combine(rootPath, "logevents", Timers.CurrentYear.ToString(), alias);
 
-                    // Ensure the alias folder exists within the logevents directory
+                    // Ensure the alias folder exists
                     if (!Directory.Exists(logsPath))
                     {
                         Directory.CreateDirectory(logsPath);
@@ -123,7 +123,7 @@ namespace CRUD_System.FileHandlers
                     // Build the path to the "reports" directory and the alias subdirectory
                     string reportsPath = Path.Combine(rootPath, "report", Timers.CurrentYear.ToString(), selectedAlias);
 
-                    // Ensure the alias folder exists within the reports directory
+                    // Ensure the alias folder existss
                     if (!Directory.Exists(reportsPath))
                     {
                         Directory.CreateDirectory(reportsPath);

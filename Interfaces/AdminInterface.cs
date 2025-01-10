@@ -64,7 +64,7 @@ namespace CRUD_System.Interfaces
 
             // Calculate start and end indices for the current page
             int startIndex = (currentPage - 1) * itemsPerPage;
-            int endIndex = Math.Min(startIndex + itemsPerPage, CachedUserData.Count);
+            //int endIndex = Math.Min(startIndex + itemsPerPage, CachedUserData.Count);
 
             // Skip header rows and load items for the current page
             var userDetailsForPage = CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);

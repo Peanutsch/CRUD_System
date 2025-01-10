@@ -74,7 +74,7 @@ namespace CRUD_System
             if (userIndex != -1)
             {
                 profileManager.UpdateUserDetails(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, 
-                                                 txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick, isTheOne);
+                                                 txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
             }
 
             AdminInterface adminInterface = new AdminInterface();
