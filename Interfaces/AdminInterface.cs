@@ -21,7 +21,7 @@ namespace CRUD_System.Interfaces
         #region PROPERTIES
         public bool EditMode { get; set; }
         public static bool IsReport { get; set; }
-        public bool SelectedUserIsTheOne { get; set; }
+        public static bool SelectedUserIsTheOne { get; set; }
         public static bool SelectedUserIsAdmin { get; set; }
 
         public List<string[]> CachedUserData => cache.CachedUserData;

@@ -503,7 +503,48 @@ namespace CRUD_System
             // Note: The clearing of storeIsAdminStatus is handled in AdminInterface.ListBoxAdmin_SelectedIndexChangedHandler.
         }
 
+        /// <summary>
+        /// Handles the CheckedChanged event for the chkIsTheOne CheckBox. 
+        /// Compares the new isTheOne status with the stored initial status to determine if a change has occurred.
+        /// Updates the ChkIsTheOneChanged flag and synchronizes the isTheOne value with the AdminInterface if needed.
+        /// </summary>
+        /// <param name="sender">The source of the event (chkIsTheOne).</param>
+        /// <param name="e">Event data associated with the CheckedChanged event.</param>
+        private void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
+        {
+            // Retrieve the initial isTheOne status from the second item (index 1) in storeIsAdminNeoStatus
+            bool initialIsTheOneStatus = storeIsAdminNeoStatus[1];
+            Debug.WriteLine($"initialIsTheOneStatus = {initialIsTheOneStatus}");
 
+            // Get the new isTheOne status from the CheckBox
+            bool isTheOneNewStatus = chkIsTheOne.Checked;
+
+            // Compare the new status with the initial status
+            if (isTheOneNewStatus == initialIsTheOneStatus)
+            {
+                // No change in the isTheOne status
+                ChkIsTheOneChanged = false;
+                Debug.WriteLine($"isTheOneNewStatus = {isTheOneNewStatus}, initialIsTheOneStatus = {storeIsAdminNeoStatus[1]}");
+                Debug.WriteLine($"No changes: ChkIsTheOneChanged = {ChkIsTheOneChanged}");
+            }
+            else
+            {
+                // Status has changed; update the flag and isTheOne property
+                Debug.WriteLine($"isTheOneNewStatus = {isTheOneNewStatus}, initialIsTheOneStatus = {storeIsAdminNeoStatus[1]}");
+
+                ChkIsTheOneChanged = true;
+                Debug.WriteLine($"ChkIsTheOneChanged: {ChkIsTheOneChanged}");
+
+                // Update isTheOne and synchronize with the AdminInterface
+                IsTheOne = chkIsTheOne.Checked;
+                AdminInterface.SelectedUserIsTheOne = IsTheOne;
+            }
+
+            // Note: The clearing of storeIsAdminNeoStatus is handled in AdminInterface.ListBoxAdmin_SelectedIndexChangedHandler.
+        }
+
+
+        /*
         /// <summary>
         /// Handles the event triggered when the 'Is The One' checkbox state changes.
         /// Toggles the 'IsTheOne' property based on the checkbox state.
@@ -515,6 +556,14 @@ namespace CRUD_System
         /// <param name="e">The event data containing information about the state change of the checkbox.</param>
         public void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
+            // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
+            bool initialIsNeoStatus = storeIsAdminNeoStatus[1];
+            Debug.WriteLine($"initialIsAdminStatus = {initialIsNeoStatus}");
+
+            // Get the new isAdmin status from the CheckBox
+            bool isAdminNewStatus = chkIsAdmin.Checked;
+
+
             ChkIsTheOneChanged = true;
 
             if (AdminInterface.SelectedUserIsAdmin && chkIsTheOne.Checked)
@@ -527,6 +576,7 @@ namespace CRUD_System
                 ChkIsTheOneChanged = true;
             }
         }
+        */
         #endregion CHECKBOXES
 
         #region SELECTED INDEX CHANGED
