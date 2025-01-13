@@ -488,7 +488,7 @@
             this.btnCreateReport.Text = "Report";
             this.btnCreateReport.UseVisualStyleBackColor = false;
             this.btnCreateReport.Visible = false;
-            this.btnCreateReport.Click += this.buttonMakeReport_Click;
+            this.btnCreateReport.Click += this.btnCreateReport_Click;
             // 
             // btnSaveReport
             // 

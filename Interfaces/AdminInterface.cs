@@ -211,6 +211,10 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
+            // Empty list storeIsAdminStatus
+            adminControl.storeIsAdminNeoStatus.Clear();
+            Debug.WriteLine($"Empty List storeIsAdminStatus, Items in List: {adminControl.storeIsAdminNeoStatus.Count}\n***");
+
             // Empty textboxes report field
             TextBoxesReportEmpty();
 
@@ -225,14 +229,19 @@ namespace CRUD_System.Interfaces
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
+                // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
+                string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
+
+                // Store isAdmin status in list storeIsAdminStatus
+                adminControl.storeIsAdminNeoStatus.Add(SelectedUserIsAdmin); // index 0
+                adminControl.storeIsAdminNeoStatus.Add(SelectedUserIsTheOne); // index 1
+                Debug.WriteLine($"***\nAdding status isAdmin {SelectedUserIsAdmin} and isTheOne {SelectedUserIsTheOne} of  to list storeIsAdminStatus: {SelectedUserIsAdmin}, Items in List = {adminControl.storeIsAdminNeoStatus.Count} (must be 2)");
+
                 // Close the ShowLogEventsForm if it's already open
                 CloseLogEventsFormIfOpen();
 
                 // Set UserSelected on true
                 adminControl.InteractionHandler.UserSelected = true; // Pass bool true to InterActionHandler
-
-                // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
-                string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
                 // Ignore btnForceLogOutUser when selection is user's own admin account
                 if (currentUser == selectedAlias)
@@ -446,6 +455,7 @@ namespace CRUD_System.Interfaces
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
             ToggleControlVisibility(adminControl.btnCreateReport, EditMode);
 
+            // Interface if user is superuser
             if (AuthenticationService.CurrentUserIsTheOne)
             {
                 ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);

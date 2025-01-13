@@ -113,6 +113,25 @@ namespace CRUD_System.Handlers
                 loginData[2] = isAdmin.ToString();
                 loginData[4] = AdminMainControl.IsTheOne.ToString();
 
+                // When isAdmin is changed
+                if (AdminMainControl.ChkIsAdminChanged)
+                {
+                    var currentUser = AuthenticationService.CurrentUser;
+                    logEvents.LogEventUpdateStatusIsAdmin(currentUser!, alias, AdminInterface.SelectedUserIsAdmin);
+
+                    if (AdminInterface.SelectedUserIsAdmin)
+                    {
+                        Debug.WriteLine($"[INFO] User {alias} is Admin.");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"[INFO] User {alias} is no longer Admin.");
+                    }
+
+                    AdminMainControl.ChkIsAdminChanged = false;
+                }
+
+                // When IsTheOne is changed
                 if (AdminMainControl.ChkIsTheOneChanged)
                 {
                     var currentUser = AuthenticationService.CurrentUser;

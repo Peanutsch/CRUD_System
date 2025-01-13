@@ -30,14 +30,14 @@ namespace CRUD_System
     public partial class AdminMainControl : UserControl
     {
         #region PROPERTIES
-        public static bool IsTheOne
-        {
-            get; set;
-        }
-        public static bool ChkIsTheOneChanged
-        {
-            get; set;
-        }
+        public List<bool> storeIsAdminNeoStatus = new List<bool>(); // index 0 = bool admin, index 1 = bool Neo
+
+        public static bool IsTheOne { get; set;}
+        public static bool ChkIsTheOneChanged { get; set;}
+
+        public static bool ChkIsAdminChanged { get; set; }
+
+        
 
         readonly FilePaths path = new FilePaths();
 
@@ -338,10 +338,11 @@ namespace CRUD_System
             interactionHandler.Open_ShowLogForm(this, txtAlias.Text);
         }
 
-        private void buttonMakeReport_Click(object sender, EventArgs e)
+        private void btnCreateReport_Click(object sender, EventArgs e)
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
+                comboBoxSubjectReport.Text = "Subject:";
                 btnEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnEditUserDetails
                 btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
                 adminInterface.TextBoxesReportEmpty();
@@ -463,15 +464,45 @@ namespace CRUD_System
 
         #region CHECKBOXES
         /// <summary>
-        /// Handles the event triggered when the 'Is Admin' checkbox state changes.
+        /// Handles the CheckedChanged event for the chkIsAdmin CheckBox. 
+        /// Compares the new isAdmin status with the stored initial status to determine if a change has occurred.
+        /// Updates the ChkIsAdminChanged flag and synchronizes the isAdmin value with the AdminInterface if needed.
         /// </summary>
-        /// <param name="sender">The source of the event (the CheckBox).</param>
-        /// <param name="e">The event data (state change of the checkbox).</param>
+        /// <param name="sender">The source of the event (chkIsAdmin).</param>
+        /// <param name="e">Event data associated with the CheckedChanged event.</param>
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
-            isAdmin = chkIsAdmin.Checked;
-            AdminInterface.SelectedUserIsAdmin = isAdmin;
+            // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
+            bool initialIsAdminStatus = storeIsAdminNeoStatus[0];
+            Debug.WriteLine($"initialIsAdminStatus = {initialIsAdminStatus}");
+
+            // Get the new isAdmin status from the CheckBox
+            bool isAdminNewStatus = chkIsAdmin.Checked;
+
+            // Compare the new status with the initial status
+            if (isAdminNewStatus == initialIsAdminStatus)
+            {
+                // No change in the isAdmin status
+                ChkIsAdminChanged = false;
+                Debug.WriteLine($"isAdminNewStatus = {isAdminNewStatus} initialIsAdminStatus = {storeIsAdminNeoStatus[0]}");
+                Debug.WriteLine($"No changes: ChkIsAdminChanged = {ChkIsAdminChanged}");
+            }
+            else
+            {
+                // Status has changed; update the flag and isAdmin property
+                Debug.WriteLine($"isAdminNewStatus = {isAdminNewStatus}, initialIsAdminStatus = {storeIsAdminNeoStatus[0]}");
+
+                ChkIsAdminChanged = true;
+                Debug.WriteLine($"ChkIsAdminChanged: {ChkIsAdminChanged}");
+
+                // Update isAdmin and synchronize with the AdminInterface
+                isAdmin = chkIsAdmin.Checked;
+                AdminInterface.SelectedUserIsAdmin = isAdmin;
+            }
+
+            // Note: The clearing of storeIsAdminStatus is handled in AdminInterface.ListBoxAdmin_SelectedIndexChangedHandler.
         }
+
 
         /// <summary>
         /// Handles the event triggered when the 'Is The One' checkbox state changes.

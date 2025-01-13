@@ -126,6 +126,14 @@ namespace CRUD_System.Repositories
             path.AppendToLog(alias, newLog);
         }
 
+        public void LogEventUpdateStatusIsAdmin(string currentUser, string alias, bool isAdmin)
+        {
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status Admin for [{alias.ToUpper()}] to {isAdmin}");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status Admin for [{alias.ToUpper()}] to {isAdmin}";
+            path.AppendToLog(currentUser, newLog);
+            path.AppendToLog(alias, newLog);
+        }
+
         /// <summary>
         /// Logs the event when a user is deleted.
         /// </summary>

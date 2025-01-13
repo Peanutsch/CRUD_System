@@ -54,14 +54,15 @@ namespace CRUD_System.Handlers
                 CreateCSVFiles.CreateReportsCSV(timeStamp, currentUser!, selectedAlias, subject, newReportText);
 
                 // Reset to default state after saving
+                AdminInterface adminInterface = new AdminInterface();
+
                 AdminInterface.IsReport = false;
                 ToggleReportMode(false); // Exit report mode
+                adminInterface.ReportConfig();
 
                 // Set EditMode back to true
-                AdminInterface adminInterface = new AdminInterface();
                 adminInterface.EditMode = true;
                 adminInterface.InterfaceEditModeAdmin();
-
             }
             else
             {
