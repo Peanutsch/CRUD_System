@@ -591,7 +591,7 @@ namespace CRUD_System.Interfaces
             string currentDate = Timers.CurrentDate.ToShortDateString();
             string currentTime = Timers.CurrentTime.ToString(@"hh\:mm\:ss");
 
-            adminControl.txtAliasReport.Text = adminControl.txtAlias.Text;
+            adminControl.reportTxtAlias.Text = adminControl.txtAlias.Text;
         }
         #endregion TEXTBOXES ADMIN
 
@@ -602,10 +602,10 @@ namespace CRUD_System.Interfaces
         public void TextBoxesReportEmpty()
         {
             // Clear specific text boxes in the adminControl
-            adminControl.txtCreator.Text = string.Empty; // Clears the "Creator" text box
-            adminControl.txtSubject.Text = string.Empty; // Clears the "Subject" text box
-            adminControl.txtDateReport.Text = string.Empty; // Clears the "Date" text box
-            adminControl.rtxReport.Text = string.Empty; // Clears the rich text box for the report content
+            adminControl.reportTxtCreator.Text = string.Empty; // Clears the "Creator" text box
+            adminControl.reportTxtSubject.Text = string.Empty; // Clears the "Subject" text box
+            adminControl.reportTxtDate.Text = string.Empty; // Clears the "Date" text box
+            adminControl.reportRichTxReport.Text = string.Empty; // Clears the rich text box for the report content
         }
 
         /// <summary>
@@ -622,7 +622,7 @@ namespace CRUD_System.Interfaces
             TextBoxesReportEmpty();
 
             // Sets the current date in the "Date" text box, formatted as "dd-MM-yyyy"
-            adminControl.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy");
+            adminControl.reportTxtDate.Text = DateTime.Now.ToString("dd-MM-yyyy");
 
             // Configure controls' enabled state based on whether we are in report mode (`IsReport`)
             adminControl.listViewReports.Enabled = !IsReport; // Disables the list view to prevent altering older reports
@@ -631,19 +631,19 @@ namespace CRUD_System.Interfaces
             adminControl.btnDeleteReport.Enabled = !IsReport; // Disables the "Delete Report" button
             adminControl.btnSaveEditUserDetails.Enabled = !IsReport; // Disables the "Save Edit" button
 
-            adminControl.rtxReport.ReadOnly = !IsReport; // Sets the report text box to read-only when not in report mode
+            adminControl.reportRichTxReport.ReadOnly = !IsReport; // Sets the report text box to read-only when not in report mode
 
             // Toggle visibility of controls depending on report mode
-            adminControl.txtSubject.Visible = !IsReport; // Shows the "Subject" text box when not in report mode
-            adminControl.txtCreator.Visible = !IsReport; // Shows the "Creator" text box when not in report mode
-            adminControl.lblCreatedBy.Visible = !IsReport; // Shows the "Created By" label when not in report mode
-            adminControl.lblCurrentDate.Visible = IsReport; // Shows the "Current Date" label only in report mode
+            adminControl.reportTxtSubject.Visible = !IsReport; // Shows the "Subject" text box when not in report mode
+            adminControl.reportTxtCreator.Visible = !IsReport; // Shows the "Creator" text box when not in report mode
+            adminControl.reportLBLCreatedBy.Visible = !IsReport; // Shows the "Created By" label when not in report mode
+            adminControl.reportLBLCurrentDate.Visible = IsReport; // Shows the "Current Date" label only in report mode
 
             adminControl.comboBoxSubjectReport.Visible = IsReport; // Shows the subject selection combo box in report mode
 
             // Updates the "Create Report" button's text and appearance based on the report mode
             adminControl.btnCreateReport.Text = adminControl.ToggleIsReportMode() ? "Report" : "Exit";
-            adminControl.rtxReport.BackColor = adminControl.ToggleIsReportMode() ? Color.White : Color.LightGray;
+            adminControl.reportRichTxReport.BackColor = adminControl.ToggleIsReportMode() ? Color.White : Color.LightGray;
 
             // Shows or hides the "Save Report" button based on report mode
             adminControl.btnSaveReport.Visible = IsReport;

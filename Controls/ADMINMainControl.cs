@@ -16,6 +16,7 @@ using CRUD_System.Handlers;
 using CRUD_System.FileHandlers;
 using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CRUD_System
 {
@@ -510,23 +511,45 @@ namespace CRUD_System
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }
 
-        private void listBoxLogs_SelectedIndexChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Event handler triggered when the selected item in the listViewReports changes.
+        /// Displays the selected user report if an item is selected and valid.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the listViewReports.</param>
+        /// <param name="e">Event data containing information about the event.</param>
+        private void listViewReports_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // 
-        }
-
-        private void listViewFiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
+            // Check if at least one item is selected in the ListView
             if (listViewReports.SelectedItems.Count > 0)
             {
+                // Get the file name of the selected user report
                 string selectedUserReportFileName = listViewReports.SelectedItems[0].Text;
 
+                // Ensure the selected file name is not null or empty
                 if (!string.IsNullOrEmpty(selectedUserReportFileName))
                 {
+                    // Retrieve the alias of the selected user from the txtAlias textbox
                     string selectedAlias = txtAlias.Text;
+
+                    // Use the ReportManager to display the selected report
                     reportManager.ReportDisplay(selectedUserReportFileName, selectedAlias);
                 }
             }
+        }
+
+        /// <summary>
+        /// Event handler triggered when there is an attempt to resize a column in listViewReports.
+        /// Prevents the user from resizing columns by locking their widths.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the listViewReports.</param>
+        /// <param name="e">Event data containing information about the column width change.</param>
+        private void listViewReports_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            // Prevent column width changes by setting the new width to the current width
+            e.NewWidth = listViewReports.Columns[e.ColumnIndex].Width;
+
+            // Cancel the resize action
+            e.Cancel = true;
         }
         #endregion SELECTED INDEX CHANGED
 
@@ -561,7 +584,7 @@ namespace CRUD_System
                 AdminInterface.IsReport = false;
                 adminInterface.ReportConfig();
                 adminInterface.TextBoxesReportEmpty();
-                txtAliasReport.Text = string.Empty;
+                reportTxtAlias.Text = string.Empty;
                 listViewReports.Items.Clear();
                 /*
                 txtAliasReport.Clear();

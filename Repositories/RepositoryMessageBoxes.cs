@@ -144,6 +144,11 @@ namespace CRUD_System.Repositories
         {
             return MessageBox.Show("Details are not complete. Name, Surname and Email are required...");
         }
+
+        public DialogResult MessageReportIsInvalid()
+        {
+            return MessageBox.Show("Report details is not complete! Subject and text are required..."); ;
+        }
         #endregion INVALID
     }
 }

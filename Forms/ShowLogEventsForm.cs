@@ -20,7 +20,7 @@ namespace CRUD_System
             InitializeComponent();
         }
 
-        #region LISTBOX LOGS
+        #region PROCESS LISTBOX LOGS
         /// <summary>
         /// Loads the log entries of a specified user (alias) into the ListBox, 
         /// sorting them in descending order by timestamp. Decrypts the log files for processing 
@@ -167,7 +167,7 @@ namespace CRUD_System
                 }
             }
         }
-        #endregion ADMIN LISTBOX
+        #endregion PROCESS LISTBOX LOGS
 
         public void btnCloseForm_Click(object sender, EventArgs e)
         {

@@ -61,7 +61,7 @@ namespace CRUD_System.Handlers
                         if (itemSplit.Length >= 2)
                         {
                             string reportName = string.Join("_", itemSplit[0], itemSplit[1]);
-                            (string reportSubject, string reportCreator) = GetSubjectAndCreator(reportName, itemSplit[0]); // itemSplit[0] is alias
+                            (string reportSubject, string reportCreator) = GetSubjectAndCreatorAlias(reportName, itemSplit[0]); // itemSplit[0] is alias
 
                             // Create ListViewItem
                             ListViewItem item = new ListViewItem(reportName);
@@ -92,7 +92,7 @@ namespace CRUD_System.Handlers
         /// <param name="selectedUserString">The string identifying the user and report.</param>
         /// <param name="alias">The alias of the user.</param>
         /// <returns>The subject field from the report, or an empty string if an error occurs or the subject is not found.</returns>
-        public (string Subject, string Creator) GetSubjectAndCreator(string selectedUserString, string alias)
+        public (string Subject, string Creator) GetSubjectAndCreatorAlias(string selectedUserString, string alias)
         {
             try
             {

@@ -35,17 +35,16 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void btnSaveReportHandler()
         {
-            if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && 
-                !string.IsNullOrEmpty(adminControl.rtxReport.Text) &&
-                !string.IsNullOrEmpty(adminControl.txtAliasReport.Text) && 
-                !string.IsNullOrEmpty(adminControl.txtDateReport.Text))
-            {
-                var currentUser = AuthenticationService.CurrentUser;
-                string selectedAlias = adminControl!.txtAlias.Text;
-                string newReportText = $"{adminControl.rtxReport.Text.Replace(",", ";")}";
-                string subject = adminControl.comboBoxSubjectReport.Text;
-                string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
+            var currentUser = AuthenticationService.CurrentUser;
+            string selectedAlias = adminControl!.txtAlias.Text;
+            string newReportText = $"{adminControl.reportRichTxReport.Text.Replace(",", ";")}";
+            string subject = adminControl.comboBoxSubjectReport.Text;
+            string timeStamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
 
+            if (adminControl!.comboBoxSubjectReport.Text != "Subject:" && 
+                !string.IsNullOrEmpty(adminControl.reportRichTxReport.Text) &&
+                !string.IsNullOrEmpty(adminControl.reportTxtAlias.Text))
+            {
                 DialogResult dr = message.MessageConfirmSaveReport(selectedAlias, subject);
                 if (dr == DialogResult.No)
                 {
@@ -57,16 +56,22 @@ namespace CRUD_System.Handlers
                 // Reset to default state after saving
                 AdminInterface.IsReport = false;
                 ToggleReportMode(false); // Exit report mode
+
+                // Set EditMode back to true
+                AdminInterface adminInterface = new AdminInterface();
+                adminInterface.EditMode = true;
+                adminInterface.InterfaceEditModeAdmin();
+
             }
             else
             {
-                Debug.WriteLine("Button SaveReport> Not Valid! Missing conditions...");
-                MessageBox.Show("Not Valid! Missing conditions...");
+                Debug.WriteLine("Button SaveReport> Report details is not complete! Subject and text are required...");
+                message.MessageReportIsInvalid();
                 return;
             }
 
-            adminControl.rtxReport.Clear();
-            RefreshListViewFiles();
+            adminControl.reportRichTxReport.Clear();
+            RefreshListViewFiles(selectedAlias);
         }
 
         /// <summary>
@@ -110,7 +115,8 @@ namespace CRUD_System.Handlers
             // Get the username of the currently authenticated user
             string? currentUser = AuthenticationService.CurrentUser ?? throw new InvalidOperationException("Current user is not authenticated.");
 
-            // Ensure the report text doesn't contain commas by replacing them with semicolons
+            // Ensure the report text doesn't contain commas by replacing them with semicolons.
+            // Commas are breaking the text and only the part before the first comma will be used as report
             string sanitizedText = isReportText.Replace(",", ";");
 
             return (timeStamp, currentUser, sanitizedText);
@@ -175,17 +181,17 @@ namespace CRUD_System.Handlers
         /// <summary>
         /// Refreshes the ListView with the latest report files for the given alias.
         /// </summary>
-        public void RefreshListViewFiles()
+        public void RefreshListViewFiles(string selectedAlias)
         {
             // Ensure the AdminMainControl instance is available
             if (adminControl == null)
                 return;
 
             // Clear the ListView before refreshing to remove any existing items
-            ClearListViewItems();
+            adminControl.listViewReports.Items.Clear();
 
             // Get the report directories for the given alias
-            List<string> reportDirectories = GetReportDirectories(adminControl.txtAlias.Text);
+            List<string> reportDirectories = GetReportDirectories(selectedAlias);
 
             // Check if any report directories were found
             if (reportDirectories.Any())
@@ -199,23 +205,6 @@ namespace CRUD_System.Handlers
                 // Refresh the ListView to ensure it visually updates with new data
                 adminControl.listViewReports.Refresh();
             }
-            else
-            {
-                // Log if no report directories were found
-                Debug.WriteLine("No report directories found.");
-            }
-        }
-
-        /// <summary>
-        /// Clears all items in the ListView to prepare for new data.
-        /// </summary>
-        public void ClearListViewItems()
-        {
-            // Ensure the ListView reference is available before attempting to clear it
-            if (adminControl != null)
-            {
-                adminControl.listViewReports.Items.Clear();
-            }
         }
 
         /// <summary>
@@ -223,10 +212,10 @@ namespace CRUD_System.Handlers
         /// </summary>
         /// <param name="alias">The alias used to find specific report directories.</param>
         /// <returns>A list of report directories for the given alias.</returns>
-        public List<string> GetReportDirectories(string alias)
+        public List<string> GetReportDirectories(string selectedAlias)
         {
             // Call FindCSVFiles to get the list of report directories for the alias
-            return FindCSVFiles.FindFilesInFolders(alias, "report");
+            return FindCSVFiles.FindFilesInFolders(selectedAlias, "report");
         }
 
         /// <summary>
@@ -257,14 +246,14 @@ namespace CRUD_System.Handlers
                         // Create an instance of ListViewFiles (or use the existing one) to retrieve the file's subject
                         ListViewReports listViewFiles = new ListViewReports();
                         string itemUse = string.Join("_", itemSplit[0], itemSplit[1]);
-                        (string reportSubject, string reportCreator) = listViewFiles.GetSubjectAndCreator(itemUse, itemSplit[0]); // itemSplit[0] is alias
+                        (string reportSubject, string reportCreator) = listViewFiles.GetSubjectAndCreatorAlias(itemUse, itemSplit[0]); // itemSplit[0] is alias
 
                         // Create a new ListViewItem for each report file
                         ListViewItem item = new ListViewItem(itemUse);
 
                         // Add file subject as a subitem (or "Unknown" if not found)
-                        item.SubItems.Add(!string.IsNullOrEmpty(reportCreator) ? reportCreator : "Unknown");
-                        item.SubItems.Add(!string.IsNullOrEmpty(reportSubject) ? reportSubject : "Unknown");
+                        item.SubItems.Add(!string.IsNullOrEmpty(reportCreator) ? reportCreator : "Unknown"); // subitem 1: creator
+                        item.SubItems.Add(!string.IsNullOrEmpty(reportSubject) ? reportSubject : "Unknown"); // subitem 2: subject
 
                         // Add the created item to the ListView
                         adminControl?.listViewReports.Items.Add(item);
@@ -402,10 +391,10 @@ namespace CRUD_System.Handlers
             }
 
             // Update the fields in adminControl
-            adminControl.txtCreator.Text = reportCreator; // Creator
-            adminControl.txtSubject.Text = reportSubject; // Subject
-            adminControl.rtxReport.Text = reportTextReport.Replace(";", ",").Trim();
-            adminControl.txtDateReport.Text = Regex.Replace(reportDate.Replace("\"", ""), @"(\d{2})(\d{2})(\d{4})", "$1-$2-$3").Trim();
+            adminControl.reportTxtCreator.Text = reportCreator; // Creator
+            adminControl.reportTxtSubject.Text = reportSubject; // Subject
+            adminControl.reportRichTxReport.Text = reportTextReport.Replace(";", ",").Trim();
+            adminControl.reportTxtDate.Text = Regex.Replace(reportDate.Replace("\"", ""), @"(\d{2})(\d{2})(\d{4})", "$1-$2-$3").Trim();
         }
         #endregion REPORT DISPLAY
 
@@ -433,19 +422,19 @@ namespace CRUD_System.Handlers
             adminInterface.TextBoxesReportEmpty();
 
             // Configure the visibility and state of standard mode controls
-            adminControl!.txtSubject.Visible = !AdminInterface.IsReport; // Subject text box is visible only in standard mode
-            adminControl.txtCreator.Visible = !AdminInterface.IsReport; // Creator text box is visible only in standard mode
-            adminControl.rtxReport.ReadOnly = !AdminInterface.IsReport; // Report text box is read-only in standard mode
-            adminControl.lblCreatedBy.Visible = !AdminInterface.IsReport; // "Created By" label is visible only in standard mode
-            adminControl.lblCurrentDate.Visible = AdminInterface.IsReport; // "Current Date" label is visible only in report mode
+            adminControl!.reportTxtSubject.Visible = !AdminInterface.IsReport; // Subject text box is visible only in standard mode
+            adminControl.reportTxtCreator.Visible = !AdminInterface.IsReport; // Creator text box is visible only in standard mode
+            adminControl.reportRichTxReport.ReadOnly = !AdminInterface.IsReport; // Report text box is read-only in standard mode
+            adminControl.reportLBLCreatedBy.Visible = !AdminInterface.IsReport; // "Created By" label is visible only in standard mode
+            adminControl.reportLBLCurrentDate.Visible = AdminInterface.IsReport; // "Current Date" label is visible only in report mode
 
             // Configure visibility of report-specific controls
             adminControl.comboBoxSubjectReport.Visible = AdminInterface.IsReport; // Subject dropdown is visible only in report mode
 
             // Configure report-related area
-            adminControl.txtDateReport.Text = DateTime.Now.ToString("dd-MM-yyyy"); // Set current date in the report date text box
+            adminControl.reportTxtDate.Text = DateTime.Now.ToString("dd-MM-yyyy"); // Set current date in the report date text box
             adminControl.btnCreateReport.Text = AdminInterface.IsReport ? "Exit" : "Report"; // Toggle button text based on mode
-            adminControl.rtxReport.BackColor = AdminInterface.IsReport ? Color.White : Color.LightGray; // Adjust text box background color
+            adminControl.reportRichTxReport.BackColor = AdminInterface.IsReport ? Color.White : Color.LightGray; // Adjust text box background color
             adminControl.btnSaveReport.Visible = AdminInterface.IsReport; // Show or hide "Save Report" button based on mode
 
             // Clear any selected items in the list view to reset its state

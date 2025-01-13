@@ -63,18 +63,18 @@
             this.fileColumn = new ColumnHeader();
             this.createdColumn = new ColumnHeader();
             this.subjectColumn = new ColumnHeader();
-            this.lblReports = new Label();
-            this.txtDateReport = new TextBox();
-            this.txtAliasReport = new TextBox();
+            this.reportLBLReports = new Label();
+            this.reportTxtDate = new TextBox();
+            this.reportTxtAlias = new TextBox();
             this.comboBoxSubjectReport = new ComboBox();
-            this.rtxReport = new RichTextBox();
+            this.reportRichTxReport = new RichTextBox();
             this.btnCreateReport = new Button();
             this.btnSaveReport = new Button();
-            this.txtSubject = new TextBox();
-            this.txtCreator = new TextBox();
-            this.lblSelectedAlias = new Label();
-            this.lblCreatedBy = new Label();
-            this.lblCurrentDate = new Label();
+            this.reportTxtSubject = new TextBox();
+            this.reportTxtCreator = new TextBox();
+            this.reportLBLSelectedAlias = new Label();
+            this.reportLBLCreatedBy = new Label();
+            this.reportLBLCurrentDate = new Label();
             this.btnShowListBoxLogs = new Button();
             this.btnDeleteReport = new Button();
             this.chkIsTheOne = new CheckBox();
@@ -393,13 +393,16 @@
             this.listViewReports.Columns.AddRange(new ColumnHeader[] { this.fileColumn, this.createdColumn, this.subjectColumn });
             this.listViewReports.Font = new Font("Courier New", 9F, FontStyle.Bold);
             this.listViewReports.FullRowSelect = true;
+            this.listViewReports.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             this.listViewReports.Location = new Point(800, 36);
             this.listViewReports.Name = "listViewReports";
+            this.listViewReports.RightToLeft = RightToLeft.No;
             this.listViewReports.Size = new Size(392, 377);
             this.listViewReports.TabIndex = 47;
             this.listViewReports.UseCompatibleStateImageBehavior = false;
             this.listViewReports.View = View.Details;
-            this.listViewReports.SelectedIndexChanged += this.listViewFiles_SelectedIndexChanged;
+            this.listViewReports.ColumnWidthChanging += this.listViewReports_ColumnWidthChanging;
+            this.listViewReports.SelectedIndexChanged += this.listViewReports_SelectedIndexChanged;
             // 
             // fileColumn
             // 
@@ -416,39 +419,39 @@
             this.subjectColumn.Text = "Subject";
             this.subjectColumn.Width = 175;
             // 
-            // lblReports
+            // reportLBLReports
             // 
-            this.lblReports.AutoSize = true;
-            this.lblReports.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            this.lblReports.Location = new Point(800, 17);
-            this.lblReports.Name = "lblReports";
-            this.lblReports.Size = new Size(56, 16);
-            this.lblReports.TabIndex = 48;
-            this.lblReports.Text = "Reports";
+            this.reportLBLReports.AutoSize = true;
+            this.reportLBLReports.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            this.reportLBLReports.Location = new Point(800, 17);
+            this.reportLBLReports.Name = "reportLBLReports";
+            this.reportLBLReports.Size = new Size(56, 16);
+            this.reportLBLReports.TabIndex = 48;
+            this.reportLBLReports.Text = "Reports";
             // 
-            // txtDateReport
+            // reportTxtDate
             // 
-            this.txtDateReport.Enabled = false;
-            this.txtDateReport.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtDateReport.Location = new Point(1350, 65);
-            this.txtDateReport.Multiline = true;
-            this.txtDateReport.Name = "txtDateReport";
-            this.txtDateReport.PlaceholderText = "Date";
-            this.txtDateReport.Size = new Size(140, 26);
-            this.txtDateReport.TabIndex = 45;
-            this.txtDateReport.TextAlign = HorizontalAlignment.Center;
+            this.reportTxtDate.Enabled = false;
+            this.reportTxtDate.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.reportTxtDate.Location = new Point(1350, 65);
+            this.reportTxtDate.Multiline = true;
+            this.reportTxtDate.Name = "reportTxtDate";
+            this.reportTxtDate.PlaceholderText = "Date";
+            this.reportTxtDate.Size = new Size(140, 26);
+            this.reportTxtDate.TabIndex = 45;
+            this.reportTxtDate.TextAlign = HorizontalAlignment.Center;
             // 
-            // txtAliasReport
+            // reportTxtAlias
             // 
-            this.txtAliasReport.Enabled = false;
-            this.txtAliasReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.txtAliasReport.Location = new Point(1202, 35);
-            this.txtAliasReport.Name = "txtAliasReport";
-            this.txtAliasReport.PlaceholderText = "Alias";
-            this.txtAliasReport.ReadOnly = true;
-            this.txtAliasReport.Size = new Size(140, 26);
-            this.txtAliasReport.TabIndex = 44;
-            this.txtAliasReport.TextAlign = HorizontalAlignment.Center;
+            this.reportTxtAlias.Enabled = false;
+            this.reportTxtAlias.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.reportTxtAlias.Location = new Point(1202, 35);
+            this.reportTxtAlias.Name = "reportTxtAlias";
+            this.reportTxtAlias.PlaceholderText = "Alias";
+            this.reportTxtAlias.ReadOnly = true;
+            this.reportTxtAlias.Size = new Size(140, 26);
+            this.reportTxtAlias.TabIndex = 44;
+            this.reportTxtAlias.TextAlign = HorizontalAlignment.Center;
             // 
             // comboBoxSubjectReport
             // 
@@ -462,17 +465,17 @@
             this.comboBoxSubjectReport.Text = "Subject:";
             this.comboBoxSubjectReport.Visible = false;
             // 
-            // rtxReport
+            // reportRichTxReport
             // 
-            this.rtxReport.BackColor = Color.LightGray;
-            this.rtxReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.rtxReport.Location = new Point(1202, 97);
-            this.rtxReport.Name = "rtxReport";
-            this.rtxReport.ReadOnly = true;
-            this.rtxReport.ScrollBars = RichTextBoxScrollBars.Vertical;
-            this.rtxReport.Size = new Size(288, 316);
-            this.rtxReport.TabIndex = 47;
-            this.rtxReport.Text = "";
+            this.reportRichTxReport.BackColor = Color.LightGray;
+            this.reportRichTxReport.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.reportRichTxReport.Location = new Point(1202, 97);
+            this.reportRichTxReport.Name = "reportRichTxReport";
+            this.reportRichTxReport.ReadOnly = true;
+            this.reportRichTxReport.ScrollBars = RichTextBoxScrollBars.Vertical;
+            this.reportRichTxReport.Size = new Size(288, 316);
+            this.reportRichTxReport.TabIndex = 47;
+            this.reportRichTxReport.Text = "";
             // 
             // btnCreateReport
             // 
@@ -500,60 +503,60 @@
             this.btnSaveReport.Visible = false;
             this.btnSaveReport.Click += this.btnSaveReport_Click;
             // 
-            // txtSubject
+            // reportTxtSubject
             // 
-            this.txtSubject.Enabled = false;
-            this.txtSubject.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtSubject.Location = new Point(1202, 65);
-            this.txtSubject.Multiline = true;
-            this.txtSubject.Name = "txtSubject";
-            this.txtSubject.PlaceholderText = "Subject";
-            this.txtSubject.Size = new Size(140, 26);
-            this.txtSubject.TabIndex = 50;
-            this.txtSubject.TextAlign = HorizontalAlignment.Center;
+            this.reportTxtSubject.Enabled = false;
+            this.reportTxtSubject.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.reportTxtSubject.Location = new Point(1202, 65);
+            this.reportTxtSubject.Multiline = true;
+            this.reportTxtSubject.Name = "reportTxtSubject";
+            this.reportTxtSubject.PlaceholderText = "Subject";
+            this.reportTxtSubject.Size = new Size(140, 26);
+            this.reportTxtSubject.TabIndex = 50;
+            this.reportTxtSubject.TextAlign = HorizontalAlignment.Center;
             // 
-            // txtCreator
+            // reportTxtCreator
             // 
-            this.txtCreator.Enabled = false;
-            this.txtCreator.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtCreator.Location = new Point(1350, 35);
-            this.txtCreator.Multiline = true;
-            this.txtCreator.Name = "txtCreator";
-            this.txtCreator.PlaceholderText = "Creator";
-            this.txtCreator.Size = new Size(140, 26);
-            this.txtCreator.TabIndex = 51;
-            this.txtCreator.TextAlign = HorizontalAlignment.Center;
+            this.reportTxtCreator.Enabled = false;
+            this.reportTxtCreator.Font = new Font("Courier New", 12F, FontStyle.Bold);
+            this.reportTxtCreator.Location = new Point(1350, 35);
+            this.reportTxtCreator.Multiline = true;
+            this.reportTxtCreator.Name = "reportTxtCreator";
+            this.reportTxtCreator.PlaceholderText = "Creator";
+            this.reportTxtCreator.Size = new Size(140, 26);
+            this.reportTxtCreator.TabIndex = 51;
+            this.reportTxtCreator.TextAlign = HorizontalAlignment.Center;
             // 
-            // lblSelectedAlias
+            // reportLBLSelectedAlias
             // 
-            this.lblSelectedAlias.AutoSize = true;
-            this.lblSelectedAlias.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            this.lblSelectedAlias.Location = new Point(1202, 16);
-            this.lblSelectedAlias.Name = "lblSelectedAlias";
-            this.lblSelectedAlias.Size = new Size(105, 16);
-            this.lblSelectedAlias.TabIndex = 52;
-            this.lblSelectedAlias.Text = "Selected Alias";
+            this.reportLBLSelectedAlias.AutoSize = true;
+            this.reportLBLSelectedAlias.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            this.reportLBLSelectedAlias.Location = new Point(1202, 16);
+            this.reportLBLSelectedAlias.Name = "reportLBLSelectedAlias";
+            this.reportLBLSelectedAlias.Size = new Size(105, 16);
+            this.reportLBLSelectedAlias.TabIndex = 52;
+            this.reportLBLSelectedAlias.Text = "Selected Alias";
             // 
-            // lblCreatedBy
+            // reportLBLCreatedBy
             // 
-            this.lblCreatedBy.AutoSize = true;
-            this.lblCreatedBy.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            this.lblCreatedBy.Location = new Point(1350, 16);
-            this.lblCreatedBy.Name = "lblCreatedBy";
-            this.lblCreatedBy.Size = new Size(77, 16);
-            this.lblCreatedBy.TabIndex = 53;
-            this.lblCreatedBy.Text = "Created by";
+            this.reportLBLCreatedBy.AutoSize = true;
+            this.reportLBLCreatedBy.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            this.reportLBLCreatedBy.Location = new Point(1350, 16);
+            this.reportLBLCreatedBy.Name = "reportLBLCreatedBy";
+            this.reportLBLCreatedBy.Size = new Size(77, 16);
+            this.reportLBLCreatedBy.TabIndex = 53;
+            this.reportLBLCreatedBy.Text = "Created by";
             // 
-            // lblCurrentDate
+            // reportLBLCurrentDate
             // 
-            this.lblCurrentDate.AutoSize = true;
-            this.lblCurrentDate.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            this.lblCurrentDate.Location = new Point(1350, 46);
-            this.lblCurrentDate.Name = "lblCurrentDate";
-            this.lblCurrentDate.Size = new Size(91, 16);
-            this.lblCurrentDate.TabIndex = 54;
-            this.lblCurrentDate.Text = "Current Date";
-            this.lblCurrentDate.Visible = false;
+            this.reportLBLCurrentDate.AutoSize = true;
+            this.reportLBLCurrentDate.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            this.reportLBLCurrentDate.Location = new Point(1350, 46);
+            this.reportLBLCurrentDate.Name = "reportLBLCurrentDate";
+            this.reportLBLCurrentDate.Size = new Size(91, 16);
+            this.reportLBLCurrentDate.TabIndex = 54;
+            this.reportLBLCurrentDate.Text = "Current Date";
+            this.reportLBLCurrentDate.Visible = false;
             // 
             // btnShowListBoxLogs
             // 
@@ -621,17 +624,17 @@
             this.Controls.Add(this.chkIsTheOne);
             this.Controls.Add(this.btnDeleteReport);
             this.Controls.Add(this.btnShowListBoxLogs);
-            this.Controls.Add(this.lblCurrentDate);
-            this.Controls.Add(this.lblCreatedBy);
-            this.Controls.Add(this.lblSelectedAlias);
+            this.Controls.Add(this.reportLBLCurrentDate);
+            this.Controls.Add(this.reportLBLCreatedBy);
+            this.Controls.Add(this.reportLBLSelectedAlias);
             this.Controls.Add(this.btnCreateReport);
             this.Controls.Add(this.btnSaveReport);
-            this.Controls.Add(this.txtAliasReport);
-            this.Controls.Add(this.txtSubject);
-            this.Controls.Add(this.rtxReport);
-            this.Controls.Add(this.txtDateReport);
-            this.Controls.Add(this.txtCreator);
-            this.Controls.Add(this.lblReports);
+            this.Controls.Add(this.reportTxtAlias);
+            this.Controls.Add(this.reportTxtSubject);
+            this.Controls.Add(this.reportRichTxReport);
+            this.Controls.Add(this.reportTxtDate);
+            this.Controls.Add(this.reportTxtCreator);
+            this.Controls.Add(this.reportLBLReports);
             this.Controls.Add(this.listViewReports);
             this.Controls.Add(this.comboBoxSubjectReport);
             this.Controls.Add(this.btnCallInSick);
@@ -685,18 +688,18 @@
         public ListView listViewReports;
         private ColumnHeader fileColumn;
         private ColumnHeader subjectColumn;
-        public Label lblReports;
-        public TextBox txtDateReport;
-        public TextBox txtAliasReport;
+        public Label reportLBLReports;
+        public TextBox reportTxtDate;
+        public TextBox reportTxtAlias;
         public ComboBox comboBoxSubjectReport;
-        public RichTextBox rtxReport;
+        public RichTextBox reportRichTxReport;
         public Button btnCreateReport;
         public Button btnSaveReport;
-        public TextBox txtSubject;
-        public TextBox txtCreator;
-        public Label lblSelectedAlias;
-        public Label lblCreatedBy;
-        public Label lblCurrentDate;
+        public TextBox reportTxtSubject;
+        public TextBox reportTxtCreator;
+        public Label reportLBLSelectedAlias;
+        public Label reportLBLCreatedBy;
+        public Label reportLBLCurrentDate;
         public Button btnShowListBoxLogs;
         public Button btnDeleteReport;
         public CheckBox chkIsTheOne;
