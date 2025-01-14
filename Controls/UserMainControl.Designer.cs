@@ -204,8 +204,7 @@ namespace CRUD_System
             this.btnEditUserDetails.Click += this.btnEditUserDetails_Click;
             // 
             // listBoxUser
-            //
-            this.listBoxUser.Visible = false;
+            // 
             this.listBoxUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.listBoxUser.FormattingEnabled = true;
             this.listBoxUser.ItemHeight = 18;
@@ -213,6 +212,7 @@ namespace CRUD_System
             this.listBoxUser.Name = "listBoxUser";
             this.listBoxUser.Size = new Size(680, 22);
             this.listBoxUser.TabIndex = 27;
+            this.listBoxUser.Visible = false;
             this.listBoxUser.SelectedIndexChanged += this.ListBoxUser_SelectedIndexChanged;
             // 
             // comboBoxStatus
@@ -220,7 +220,7 @@ namespace CRUD_System
             this.comboBoxStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.comboBoxStatus.FormattingEnabled = true;
             this.comboBoxStatus.Items.AddRange(new object[] { "Online", "Away", "Break", "Offline" });
-            this.comboBoxStatus.Location = new Point(1112, 16);
+            this.comboBoxStatus.Location = new Point(1079, 16);
             this.comboBoxStatus.MaxDropDownItems = 9;
             this.comboBoxStatus.Name = "comboBoxStatus";
             this.comboBoxStatus.Size = new Size(105, 26);
@@ -244,10 +244,10 @@ namespace CRUD_System
             // txtStatusIndicator
             // 
             this.txtStatusIndicator.BackColor = Color.FromArgb(224, 224, 224);
-            this.txtStatusIndicator.Location = new Point(1223, 16);
+            this.txtStatusIndicator.Location = new Point(1190, 16);
             this.txtStatusIndicator.Multiline = true;
             this.txtStatusIndicator.Name = "txtStatusIndicator";
-            this.txtStatusIndicator.Size = new Size(16, 26);
+            this.txtStatusIndicator.Size = new Size(49, 26);
             this.txtStatusIndicator.TabIndex = 30;
             // 
             // listBoxLogs
