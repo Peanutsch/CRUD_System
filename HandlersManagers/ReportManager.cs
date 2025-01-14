@@ -184,13 +184,19 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void DeleteFileReport()
         {
+            // Get the name of the selected file
+            string selectedFile = adminControl!.listViewReports.SelectedItems[0].Text;
+            string fileName = selectedFile + "_report.csv"; // Append the "_report.csv" suffix
+
             // Validate and retrieve the file path to delete
-            string? fileToDelete = ValidateAndGetFileToDelete();
+            var (fileToDelete, currentUser) = ValidateAndGetFileToDelete(fileName);
 
             if (fileToDelete != null)
             {
                 // Delete the file if validation is successful
-                ProcessDeleteFile(fileToDelete);
+                ProcessDeleteFile(fileToDelete, fileName, currentUser!);
+                adminControl.reportRichTxReport.Clear();
+                adminControl.reportRichTxReport.ReadOnly = true;
             }
         }
 
@@ -198,20 +204,16 @@ namespace CRUD_System.Handlers
         /// Validates the selected report file and retrieves its path if it exists.
         /// Checks if a file is selected, locates the file in the directories, and confirms deletion with the user.
         /// </summary>
-        /// <returns>The path of the file to delete or null if validation fails.</returns>
-        private string? ValidateAndGetFileToDelete()
+        /// <returns>A tuple containing the file path to delete and the current user, or null if validation fails.</returns>
+        private (string? fileToDelete, string? currentUser) ValidateAndGetFileToDelete(string fileName)
         {
             // Check if a file is selected in the ListView
             if (!adminControl!.btnDeleteReport.Visible || adminControl.listViewReports.SelectedItems.Count == 0)
             {
                 // Notify the user that no file is selected
                 MessageBox.Show("Please select a file to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return null;
+                return (null, null);
             }
-
-            // Get the name of the selected file
-            string selectedFile = adminControl.listViewReports.SelectedItems[0].Text;
-            string fileName = selectedFile + "_report.csv"; // Append the "_report.csv" suffix
 
             // Locate directories containing report files
             List<string> reportDirectories = FindCSVFiles.FindFilesInFolders(adminControl.txtAlias.Text, "report");
@@ -220,7 +222,7 @@ namespace CRUD_System.Handlers
             {
                 // Notify the user that no report directory is found
                 MessageBox.Show("Report directory not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
+                return (null, null);
             }
 
             // Check if the file exists in any of the report directories
@@ -230,25 +232,28 @@ namespace CRUD_System.Handlers
 
                 if (File.Exists(fileToDelete)) // File exists in the directory
                 {
+                    var currentUser = AuthenticationService.CurrentUser;
+                    Debug.WriteLine($"CurrentUser: {currentUser}");
+
                     // Ask for user confirmation before deletion
                     DialogResult dr = message.MessageConfirmDeleteFile(fileName);
                     if (dr == DialogResult.Yes)
                     {
-                        return fileToDelete; // Return the path of the file to delete
+                        return (fileToDelete, currentUser); // Return the path of the file to delete and the current user
                     }
                 }
             }
 
-            // Return null if the file is not found or deletion is not confirmed
-            return null;
+            return (null, null);
         }
+
 
         /// <summary>
         /// Deletes the specified file and updates the UI.
         /// Removes the file from the filesystem and the ListView, and notifies the user of the result.
         /// </summary>
         /// <param name="fileToDelete">The path of the file to delete.</param>
-        private void ProcessDeleteFile(string fileToDelete)
+        private void ProcessDeleteFile(string fileToDelete, string fileName, string currentUser)
         {
             try
             {
@@ -259,17 +264,16 @@ namespace CRUD_System.Handlers
                 adminControl!.listViewReports.Items.Remove(adminControl.listViewReports.SelectedItems[0]);
 
                 // Notify the user of successful deletion
-                Debug.WriteLine($"File [{fileToDelete}] successfully deleted...");
-                message.MessageReportDeletedSucces(fileToDelete);
+                Debug.WriteLine($"File [{fileName}] successfully deleted...");
+                message.MessageReportDeletedSucces(fileName);
 
-                var currentUser = AuthenticationService.CurrentUser;
-                if (string.IsNullOrEmpty(currentUser))
+                if (!string.IsNullOrEmpty(currentUser))
                 {
-                    logEvents.LogEventReportDeleted(currentUser!, adminControl.reportTxtAlias.Text, fileToDelete);
+                    logEvents.LogEventReportDeleted(currentUser!, adminControl.reportTxtAlias.Text, fileName);
                 }
                 else
                 {
-                    logEvents.LogEventReportDeleted("UNKNOWN", adminControl.reportTxtAlias.Text, fileToDelete);
+                    logEvents.LogEventReportDeleted("UNKNOWN", adminControl.reportTxtAlias.Text, fileName);
                 }
 
             }
