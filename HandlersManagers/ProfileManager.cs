@@ -117,9 +117,9 @@ namespace CRUD_System.Handlers
                 if (AdminMainControl.ChkIsAdminChanged)
                 {
                     var currentUser = AuthenticationService.CurrentUser;
-                    logEvents.LogEventUpdateStatusIsAdmin(currentUser!, alias, AdminInterface.IsSelectedUserIsAdmin);
+                    logEvents.LogEventUpdateStatusIsAdmin(currentUser!, alias, AdminInterface.IsSelectedUserAdmin);
 
-                    if (AdminInterface.IsSelectedUserIsAdmin)
+                    if (AdminInterface.IsSelectedUserAdmin)
                     {
                         Debug.WriteLine($"[INFO] User {alias} is Admin.");
                     }
@@ -579,7 +579,7 @@ namespace CRUD_System.Handlers
             // Locate the user in the cached login data by matching their alias.
             var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == selectedAlias); // Alias is in the first field (index 0)
 
-            if (login != null && AdminInterface.IsSelectedUserIsAdmin)
+            if (login != null && AdminInterface.IsSelectedUserAdmin)
             {
                 Debug.WriteLine($"***\nloginLine before: {login}");
                 // Update 'IsTheOne' status
@@ -590,7 +590,7 @@ namespace CRUD_System.Handlers
             else
             {
                 Debug.WriteLine($"login != null and selected user must be Admin");
-                Debug.WriteLine($"login: {login} Selected User: {AdminInterface.IsSelectedUserIsAdmin}");
+                Debug.WriteLine($"login: {login} Selected User: {AdminInterface.IsSelectedUserAdmin}");
             }
 
             // Save the updated login data and encrypt it for security.

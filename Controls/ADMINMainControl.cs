@@ -494,20 +494,20 @@ namespace CRUD_System
             {
                 // No change in the isAdmin status
                 ChkIsAdminChanged = false;
-                Debug.WriteLine($"isAdminNewStatus = {isAdminNewStatus} initialIsAdminStatus = {storeIsAdminNeoStatus[0]}");
+                Debug.WriteLine($"\nisAdminNewStatus = {isAdminNewStatus} initialIsAdminStatus = {storeIsAdminNeoStatus[0]}");
                 Debug.WriteLine($"No changes: ChkIsAdminChanged = {ChkIsAdminChanged}");
             }
             else
             {
                 // Status has changed; update the flag and isAdmin property
-                Debug.WriteLine($"isAdminNewStatus = {isAdminNewStatus}, initialIsAdminStatus = {storeIsAdminNeoStatus[0]}");
+                Debug.WriteLine($"\nisAdminNewStatus = {isAdminNewStatus}, initialIsAdminStatus = {storeIsAdminNeoStatus[0]}");
 
                 ChkIsAdminChanged = true;
                 Debug.WriteLine($"ChkIsAdminChanged: {ChkIsAdminChanged}");
 
                 // Update isAdmin and synchronize with the AdminInterface
                 isAdmin = chkIsAdmin.Checked;
-                AdminInterface.IsSelectedUserIsAdmin = isAdmin;
+                AdminInterface.IsSelectedUserAdmin = isAdmin;
             }
 
             // Note: The clearing of storeIsAdminStatus is handled in AdminInterface.ListBoxAdmin_SelectedIndexChangedHandler.
@@ -524,7 +524,6 @@ namespace CRUD_System
         {
             // Retrieve the initial isTheOne status from the second item (index 1) in storeIsAdminNeoStatus
             bool initialIsTheOneStatus = storeIsAdminNeoStatus[1];
-            Debug.WriteLine($"initialIsTheOneStatus = {initialIsTheOneStatus}");
 
             // Get the new isTheOne status from the CheckBox
             bool isTheOneNewStatus = chkIsTheOne.Checked;
@@ -547,7 +546,7 @@ namespace CRUD_System
 
                 // Update isTheOne and synchronize with the AdminInterface
                 IsTheOne = chkIsTheOne.Checked;
-                AdminInterface.IsSelectedUserIsTheOne = IsTheOne;
+                AdminInterface.IsSelectedUserTheOne = IsTheOne;
             }
 
             // Note: The clearing of storeIsAdminNeoStatus is handled in AdminInterface.ListBoxAdmin_SelectedIndexChangedHandler.

@@ -78,7 +78,7 @@ namespace CRUD_System.Handlers
         /// <param name="inputUserName">The username of the user.</param>
         /// <param name="inputUserPassword">The password of the user.</param>
         /// <returns>True if the user is an admin; otherwise, false.</returns>
-        public bool CheckRole(string inputUserName, string inputUserPassword)
+        public bool CheckAdminRole(string inputUserName, string inputUserPassword)
         {
             // Find the user in the list where both username and password match
             var user = cache.CachedLoginData.FirstOrDefault(u =>
@@ -89,17 +89,28 @@ namespace CRUD_System.Handlers
             return user != default && bool.Parse(user[2]);
         }
 
-        public bool Neo(string inputUserName, string inputPassword)
+        /// <summary>
+        /// Checks if the given user has the role of "The One".
+        /// Validates the username and password against cached login data and verifies the role.
+        /// </summary>
+        /// <param name="inputUserName">The username input provided by the user.</param>
+        /// <param name="inputPassword">The password input provided by the user.</param>
+        /// <returns>
+        /// True if the user exists in the cached data, their credentials match, 
+        /// and their role ('The One') is set to True. Otherwise, returns False.
+        /// </returns>
+        public bool CheckNeoRole(string inputUserName, string inputPassword)
         {
-            // Zoek de gebruiker in de cache, vergelijk op username en password
+            // Search for the user in the cached login data, matching both username and password
             var user = cache.CachedLoginData.FirstOrDefault(u =>
-                u[0].Trim().Equals(inputUserName.Trim(), StringComparison.OrdinalIgnoreCase) &&
-                u[1].Trim().Equals(inputPassword.Trim()));
-            
-            // Controleer of de gebruiker bestaat en of 'the one' True is
-            return user != null && bool.TryParse(user[4], out bool IsTheOne) && IsTheOne;
-        }
+                u[0].Trim().Equals(inputUserName.Trim(), StringComparison.OrdinalIgnoreCase) && // Match username (case-insensitive)
+                u[1].Trim().Equals(inputPassword.Trim())); // Match password (case-sensitive)
 
+            // Check if the user exists and parse the role ('The One') from the 5th column of the data
+            return user != null &&                                   // Ensure the user exists
+                   bool.TryParse(user[4], out bool IsTheOne) &&      // Parse the 'The One' role to a boolean
+                   IsTheOne;                                        // Check if the role is True
+        }
 
         /// <summary>
         /// Checks if the user is offline.
@@ -200,14 +211,14 @@ namespace CRUD_System.Handlers
         private void ProcessSuccessfulLogin(string inputUserName, string inputUserPassword)
         {
             CurrentUser = inputUserName.ToLower();
-            CurrentUserIsTheOne = Neo(inputUserName, inputUserPassword);
+            CurrentUserIsTheOne = CheckNeoRole(inputUserName, inputUserPassword);
 
             // Online Status = true
             UpdateUserOnlineStatus(CurrentUser, true);
            
             logEvents.UserLoggedIn(CurrentUser);
 
-            bool isAdmin = CheckRole(inputUserName, inputUserPassword);
+            bool isAdmin = CheckAdminRole(inputUserName, inputUserPassword);
             if (isAdmin) // Send to admin interface
             {
                 AdminMainForm adminForm = new AdminMainForm();

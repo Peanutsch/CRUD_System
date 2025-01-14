@@ -21,8 +21,8 @@ namespace CRUD_System.Interfaces
         #region PROPERTIES
         public bool EditMode { get; set; }
         public static bool IsReport { get; set; }
-        public static bool IsSelectedUserIsTheOne { get; set; }
-        public static bool IsSelectedUserIsAdmin { get; set; }
+        public static bool IsSelectedUserTheOne { get; set; }
+        public static bool IsSelectedUserAdmin { get; set; }
 
         public List<string[]> CachedUserData => cache.CachedUserData;
         public List<string[]> CachedLoginData => cache.CachedLoginData;
@@ -213,7 +213,7 @@ namespace CRUD_System.Interfaces
         {
             // Empty list storeIsAdminStatus
             adminControl.storeIsAdminNeoStatus.Clear();
-            Debug.WriteLine($"Empty List storeIsAdminStatus, Items in List: {adminControl.storeIsAdminNeoStatus.Count}\n***");
+            Debug.WriteLine($"Empty List storeIsAdminStatus, Items in List: {adminControl.storeIsAdminNeoStatus.Count}\n***\n");
 
             // Empty textboxes report field
             TextBoxesReportEmpty();
@@ -232,10 +232,8 @@ namespace CRUD_System.Interfaces
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
-                // Store booleans isAdmin and isTheOne in list storeIsAdminStatus
-                adminControl.storeIsAdminNeoStatus.Add(IsSelectedUserIsAdmin); // index 0
-                adminControl.storeIsAdminNeoStatus.Add(IsSelectedUserIsTheOne); // index 1
-                Debug.WriteLine($"***\nAdding status isAdmin {IsSelectedUserIsAdmin} and isTheOne {IsSelectedUserIsTheOne} of  to list storeIsAdminStatus\nItems in List = {adminControl.storeIsAdminNeoStatus.Count} (must be 2)");
+                // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
+                VerifyRolesAdminTheOne(selectedAlias);
 
                 // Close the ShowLogEventsForm if it's already open
                 CloseLogEventsFormIfOpen();
@@ -262,11 +260,34 @@ namespace CRUD_System.Interfaces
                 // If selected user is TheOne, set the flag
                 if (loginDetailsArray != null && loginDetailsArray[4] == "True")
                 {
-                    IsSelectedUserIsTheOne = true;
+                    IsSelectedUserTheOne = true;
                 }
 
                 FindReportFile(selectedAlias);
                 HandleSelectedUserStatus(selectedAlias);
+            }
+        }
+
+        public void VerifyRolesAdminTheOne(string selectedAlias)
+        {
+            /*
+            // Empty list storeIsAdminStatus
+            adminControl.storeIsAdminNeoStatus.Clear();
+            Debug.WriteLine($"Empty List storeIsAdminStatus, Items in List: {adminControl.storeIsAdminNeoStatus.Count}\n***\n");
+            */
+
+            // Store booleans isAdmin and isTheOne in list storeIsAdminStatus
+            adminControl.storeIsAdminNeoStatus.Add(IsSelectedUserAdmin); // index 0
+            adminControl.storeIsAdminNeoStatus.Add(IsSelectedUserTheOne); // index 1
+            Debug.WriteLine($"***\nFor [{selectedAlias}]\n" +
+                            $"Added status isAdmin ({adminControl.storeIsAdminNeoStatus[0]}) and isTheOne ({adminControl.storeIsAdminNeoStatus[1]}) to list storeIsAdminStatus\n" +
+                            $"Items in List = {adminControl.storeIsAdminNeoStatus.Count} (must be 2)\n");
+
+            int indexCounter = 0;
+            foreach (bool index in adminControl.storeIsAdminNeoStatus)
+            {
+                Debug.WriteLine($"Index {indexCounter}: {index}");
+                indexCounter++;
             }
         }
 
@@ -350,7 +371,7 @@ namespace CRUD_System.Interfaces
 
             if (loginDetails![2] == "True")
             {
-                IsSelectedUserIsAdmin = true;
+                IsSelectedUserAdmin = true;
             }
 
             // Interface when user is superuser TheOne
@@ -361,7 +382,7 @@ namespace CRUD_System.Interfaces
                 adminControl.btnDeleteReport.Visible = EditMode;
 
                 adminControl.chkIsTheOne.Visible = EditMode;
-                adminControl.chkIsTheOne.Checked = IsSelectedUserIsTheOne;
+                adminControl.chkIsTheOne.Checked = IsSelectedUserAdmin;
                 adminControl.chkIsAdmin.Visible = EditMode;
 
                 // Update checkbox fields based on login- and userdetails

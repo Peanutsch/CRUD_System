@@ -1,6 +1,7 @@
 ﻿using CRUD_System.Encryption;
 using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using CRUD_System.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace CRUD_System.Interfaces
 {
@@ -20,10 +22,12 @@ namespace CRUD_System.Interfaces
             get; set;
         }
 
-        FilePaths path = new FilePaths();
-
-        readonly AccountManager repository = new AccountManager();
+        private readonly FilePaths path = new FilePaths();
+        private readonly AccountManager repository = new AccountManager();
         private readonly DataCache cache = new DataCache();
+        private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
+        
+
         private readonly UserMainControl userControl;
         #endregion PROPERTIES
 
@@ -317,30 +321,50 @@ namespace CRUD_System.Interfaces
             // Enable or disable ListBox based on EditMode
             userControl.listBoxUser.Enabled = !EditMode;
         }
+        #endregion INTERFACE USERS
 
-        public void StatusIndicator(string status)
+        #region STATUS INDICATOR
+        public void StatusIndicator(string status, string isAlias)
         {
+            string currentTime = DateTime.Now.ToString("HH:mm");
+
             switch (status)
             {
                 case "Online":
                     userControl.txtStatusIndicator.BackColor = Color.Blue;
+                    string TimeOnline = currentTime;
+
+                    Debug.WriteLine($"{isAlias.ToUpper()} checked Online: {TimeOnline}");
+                    logEvents.CheckStatus(isAlias, status, TimeOnline);
                     break;
-                case "Active":
-                    userControl.txtStatusIndicator.BackColor = Color.Green;
-                    break;
+
                 case "Away":
                     userControl.txtStatusIndicator.BackColor = Color.Orange;
+                    string TimeAway = currentTime;
+
+                    Debug.WriteLine($"{isAlias.ToUpper()} checked Away: {TimeAway}");
+                    logEvents.CheckStatus(isAlias, status, TimeAway);
                     break;
                 case "Break":
                     userControl.txtStatusIndicator.BackColor = Color.Yellow;
+                    string TimeBreak = currentTime;
+
+                    Debug.WriteLine($"{isAlias.ToUpper()} checked Break: {TimeBreak}");
+                    logEvents.CheckStatus(isAlias, status, TimeBreak);
                     break;
-                default:
-                    // Handle an invalid status
-                    userControl.txtStatusIndicator.BackColor = SystemColors.ActiveCaption;
+                case "Offline":
+                    userControl.txtStatusIndicator.BackColor = Color.Gray;
+                    string TimeOffline = currentTime;
+
+                    Debug.WriteLine($"{isAlias.ToUpper()} checked Offline: {TimeOffline}");
+                    logEvents.CheckStatus(isAlias, status, TimeOffline);
                     break;
             }
+            // Clear and reload listbox
+            userControl.listBoxUser.Items.Clear();
+            LoadDetailsListBoxThisUser();
         }
-        #endregion INTERFACE USERS
+        #endregion STATUS INDICATOR
 
         #region TEXTBOXES DETAILS
         /// <summary>

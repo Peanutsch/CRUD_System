@@ -25,13 +25,13 @@ namespace CRUD_System
     public partial class UserMainControl : UserControl
     {
         #region PROPERTIES
-        FilePaths path = new FilePaths();
+        private readonly FilePaths path = new FilePaths();
 
-        UserInterface userInterface;
-        AccountManager accountManager = new AccountManager();
-        ProfileManager profileManager = new ProfileManager();
-        FormInteractionHandler interactionHandler = new FormInteractionHandler();
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        private readonly UserInterface userInterface;
+        private readonly AccountManager accountManager = new AccountManager();
+        private readonly ProfileManager profileManager = new ProfileManager();
+        private readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
@@ -68,7 +68,6 @@ namespace CRUD_System
             // Parse the admin status, online status and isSick status as bools
             bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
             bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
-            bool isTheOne = bool.TryParse(loginDetails[4], out bool parsedIsTheOne) && parsedIsTheOne;
             bool isSick = bool.TryParse(userDetails[9], out bool parsedIsSick) && parsedIsSick;
 
             if (userIndex != -1)
@@ -135,7 +134,7 @@ namespace CRUD_System
                 if (!string.IsNullOrEmpty(status))
                 {
                     // Pass the selected status to the StatusIndicator method
-                    userInterface.StatusIndicator(status);
+                    userInterface.StatusIndicator(status, txtAlias.Text);
                 }
             }
         }

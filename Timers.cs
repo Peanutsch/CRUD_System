@@ -34,8 +34,6 @@ namespace CRUD_System
             TimeBreakStart = DateTime.Now.TimeOfDay;
             CurrentTime = DateTime.Now.TimeOfDay;
             CurrentYear = DateTime.Now.Year;
-
-            // Optionally, you can do something with these times here
         }
     }
 }

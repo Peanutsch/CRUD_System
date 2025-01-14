@@ -147,6 +147,15 @@ namespace CRUD_System.Repositories
         }
         #endregion PROFILEMANAGER
 
+        #region USER MAIN CONTROL
+        public void CheckStatus(string currentUser, string status, string time)
+        {
+            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],checked {status}: {time}");
+            string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],checked {status}: {time}";
+            path.AppendToLog(currentUser, newLog);
+        }
+        #endregion USER MAIN CONTROL
+
         #region CREATE NEW PASSWORD
         /// <summary>
         /// Logs the event when a new password is created for a user.
