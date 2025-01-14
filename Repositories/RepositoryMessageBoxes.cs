@@ -70,29 +70,33 @@ namespace CRUD_System.Repositories
         #region SUCCES
         public DialogResult MessageUpdateSucces()
         {
-            return MessageBox.Show("User Details updated successfully!", "Succes", MessageBoxButtons.OK);
+            return MessageBox.Show("User Details updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public DialogResult MessageDeleteSucces(string aliasToDelete)
         {
-            return MessageBox.Show($"Account deleted [{aliasToDelete.ToUpper()}] successfully!", "Succes", MessageBoxButtons.OK);
+            return MessageBox.Show($"Account deleted [{aliasToDelete.ToUpper()}] successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public DialogResult MessageChangePasswordSucces(string alias)
         {
-            return MessageBox.Show($"Password for [{alias.ToUpper()}] updated succesfully!");
+            return MessageBox.Show($"Password for [{alias.ToUpper()}] updated succesfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public DialogResult MessageNewAccountSucces(string alias)
         {
-            return MessageBox.Show($"New account {alias} created succesfully!");
+            return MessageBox.Show($"New account {alias} created succesfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public DialogResult MessageReportSaved(string date, string selectedAlias)
         {
-            return MessageBox.Show($"Report saved as {selectedAlias}_{date}_report.csv");
+            return MessageBox.Show($"Report saved as {selectedAlias}_{date}_report.csv", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        public DialogResult MessageReportDeletedSucces(string fileToDelete)
+        {
+            return MessageBox.Show($"File {fileToDelete} successfully deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
         #endregion SUCCES
 
         #region INVALID
@@ -148,6 +152,11 @@ namespace CRUD_System.Repositories
         public DialogResult MessageReportIsInvalid()
         {
             return MessageBox.Show("Report details is not complete! Subject and text are required..."); ;
+        }
+
+        public DialogResult MessageReportDeletedError(string fileToDelete, string exMessage)
+        {
+            return MessageBox.Show($"An error occurred while deleting the file {fileToDelete}: {exMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         #endregion INVALID
     }

@@ -21,7 +21,11 @@ namespace CRUD_System
             #region Decrypt files
             // Decrypt the CSV file
             //EncryptionManager.DecryptFile(filePath.LoginFilePath); // data_login.csv
+            //MessageBox.Show("File data_login DECRYPTED");
+
             //EncryptionManager.DecryptFile(filePath.UserFilePath); // data_users.csv
+            //MessageBox.Show("File data_users DECRYPTED");
+
             //EncryptionManager.DecryptFile(filePath.HRFilePath);
             //DecryptSingleCSVFile("peer001", "report"); //--------------> Do not forget to check if DirectoryName is correct in method. Current setup: peer001
             //DecryptSingleCSVFile("paer001", "log");
@@ -30,7 +34,11 @@ namespace CRUD_System
             #region Encrypt files
             // Encrypt the CSV file
             //EncryptionManager.EncryptFile(filePath.LoginFilePath); // data_login.csv
+            //MessageBox.Show("File data_login ENCRYPTED");
+
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
+            //MessageBox.Show("File data_users ENCRYPTED");
+
             //EncryptionManager.EncryptFile(filePath.HRFilePath); // hr.csv
             //EncryptionManager.EncryptFile(filePath.ReportFilePath); // {alias}_report.csv
 

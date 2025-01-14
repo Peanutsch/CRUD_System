@@ -311,7 +311,7 @@ namespace CRUD_System
         private void btnSaveReport_Click(object sender, EventArgs e)
         {
             ReportManager reportManager = new ReportManager(this);
-            reportManager.btnSaveReportHandler();
+            reportManager.BtnSaveReportHandler();
             btnEditUserDetails.Enabled = true; // Enable btnEditUserDetails
             btnSaveEditUserDetails.Enabled = true; // Enable btnSaveEditUserDetails
         }
@@ -352,6 +352,17 @@ namespace CRUD_System
             () => message.MessageInvalidNoUserSelected());
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
+
+        #region DELETE FILE REPORT
+        /// <summary>
+        /// Triggers method DeleteFileReport in ReportManager
+        /// Only TheOne's are allowed to perform this action.
+        /// </summary>
+        public void DeleteFileReport()
+        {
+            reportManager.DeleteFileReport();
+        }
+        #endregion DELETE FILE REPORT
 
         #region TOGGLE MODES
         /// <summary>
@@ -474,7 +485,6 @@ namespace CRUD_System
         {
             // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
             bool initialIsAdminStatus = storeIsAdminNeoStatus[0];
-            Debug.WriteLine($"initialIsAdminStatus = {initialIsAdminStatus}");
 
             // Get the new isAdmin status from the CheckBox
             bool isAdminNewStatus = chkIsAdmin.Checked;
@@ -497,7 +507,7 @@ namespace CRUD_System
 
                 // Update isAdmin and synchronize with the AdminInterface
                 isAdmin = chkIsAdmin.Checked;
-                AdminInterface.SelectedUserIsAdmin = isAdmin;
+                AdminInterface.IsSelectedUserIsAdmin = isAdmin;
             }
 
             // Note: The clearing of storeIsAdminStatus is handled in AdminInterface.ListBoxAdmin_SelectedIndexChangedHandler.
@@ -537,7 +547,7 @@ namespace CRUD_System
 
                 // Update isTheOne and synchronize with the AdminInterface
                 IsTheOne = chkIsTheOne.Checked;
-                AdminInterface.SelectedUserIsTheOne = IsTheOne;
+                AdminInterface.IsSelectedUserIsTheOne = IsTheOne;
             }
 
             // Note: The clearing of storeIsAdminNeoStatus is handled in AdminInterface.ListBoxAdmin_SelectedIndexChangedHandler.
@@ -566,7 +576,7 @@ namespace CRUD_System
 
             ChkIsTheOneChanged = true;
 
-            if (AdminInterface.SelectedUserIsAdmin && chkIsTheOne.Checked)
+            if (AdminInterface.IsSelectedUserIsAdmin && chkIsTheOne.Checked)
             {
                 IsTheOne = chkIsTheOne.Checked;
             }
@@ -720,86 +730,5 @@ namespace CRUD_System
             adminInterface.UpdatePageLabel();
         }
         #endregion TEXTBOX SEARCH
-
-        #region DELETE FILE REPORT
-        /// <summary>
-        /// Deletes a report file associated with the specified alias.
-        /// </summary>
-        /// <param name="aliasToDelete">The alias of the user whose report file is to be deleted.</param>
-        /// <remarks>
-        /// This method checks if a file is selected in the ListView before attempting to delete it.
-        /// Only The One admins have access to this functionality. A confirmation prompt is displayed 
-        /// before the file is deleted. If the deletion succeeds, the file is removed from both the file system 
-        /// and the ListView control.
-        /// </remarks>
-        /// <exception cref="IOException">Thrown if there is an issue accessing or deleting the file.</exception>
-        /// <exception cref="UnauthorizedAccessException">Thrown if access to the file is denied.</exception>
-        public void DeleteFileReport()
-        {
-            // Check if a file is selected in the ListView
-            if (btnDeleteReport.Visible && listViewReports.SelectedItems.Count > 0)
-            {
-                // Get the name of the selected file
-                string selectedFile = listViewReports.SelectedItems[0].Text;
-
-                // Construct the full name of the report file
-                string fileName = selectedFile + "_report.csv";
-                Debug.WriteLine($"fileName: {fileName}");
-
-                // Locate the directory where the report file resides
-                List<string> reportDirectories = FindCSVFiles.FindFilesInFolders(txtAlias.Text, "report");
-
-                if (reportDirectories.Any()) // Ensure there's at least one directory
-                {
-                    bool fileDeleted = false;
-                    foreach (var reportDirectory in reportDirectories)
-                    {
-                        string fileToDelete = Path.Combine(reportDirectory, fileName);
-
-                        if (File.Exists(fileToDelete)) // Check if the file exists
-                        {
-                            // Show a confirmation dialog before deleting the file
-                            DialogResult dr = message.MessageConfirmDeleteFile(fileName);
-                            if (dr == DialogResult.Yes)
-                            {
-                                try
-                                {
-                                    // Attempt to delete the file from the file system
-                                    File.Delete(fileToDelete);
-
-                                    // Remove the deleted file from the ListView
-                                    listViewReports.Items.Remove(listViewReports.SelectedItems[0]);
-
-                                    fileDeleted = true;
-                                    // Notify the user about the successful deletion
-                                    MessageBox.Show("File successfully deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    break;
-                                }
-                                catch (Exception ex)
-                                {
-                                    // Display an error message if the deletion fails
-                                    MessageBox.Show($"An error occurred while deleting the file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }
-                            }
-                        }
-                    }
-
-                    if (!fileDeleted)
-                    {
-                        MessageBox.Show("File not found in the directories.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Report directory not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                // Notify the user to select a file before attempting to delete
-                MessageBox.Show("Please select a file to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-        #endregion DELETE FILE REPORT
     }
 }

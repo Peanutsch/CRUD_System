@@ -21,8 +21,8 @@ namespace CRUD_System.Interfaces
         #region PROPERTIES
         public bool EditMode { get; set; }
         public static bool IsReport { get; set; }
-        public static bool SelectedUserIsTheOne { get; set; }
-        public static bool SelectedUserIsAdmin { get; set; }
+        public static bool IsSelectedUserIsTheOne { get; set; }
+        public static bool IsSelectedUserIsAdmin { get; set; }
 
         public List<string[]> CachedUserData => cache.CachedUserData;
         public List<string[]> CachedLoginData => cache.CachedLoginData;
@@ -30,7 +30,7 @@ namespace CRUD_System.Interfaces
         private int currentPage = 1; // Track pagenumbers
         private const int itemsPerPage = 16; // Maximum items per page in listBoxAdmin
 
-        readonly DataCache cache = new DataCache();
+        public readonly DataCache cache = new DataCache();
         private readonly AdminMainControl adminControl;
         #endregion PROPERTIES
 
@@ -232,10 +232,10 @@ namespace CRUD_System.Interfaces
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
-                // Store isAdmin status in list storeIsAdminStatus
-                adminControl.storeIsAdminNeoStatus.Add(SelectedUserIsAdmin); // index 0
-                adminControl.storeIsAdminNeoStatus.Add(SelectedUserIsTheOne); // index 1
-                Debug.WriteLine($"***\nAdding status isAdmin {SelectedUserIsAdmin} and isTheOne {SelectedUserIsTheOne} of  to list storeIsAdminStatus: {SelectedUserIsAdmin}, Items in List = {adminControl.storeIsAdminNeoStatus.Count} (must be 2)");
+                // Store booleans isAdmin and isTheOne in list storeIsAdminStatus
+                adminControl.storeIsAdminNeoStatus.Add(IsSelectedUserIsAdmin); // index 0
+                adminControl.storeIsAdminNeoStatus.Add(IsSelectedUserIsTheOne); // index 1
+                Debug.WriteLine($"***\nAdding status isAdmin {IsSelectedUserIsAdmin} and isTheOne {IsSelectedUserIsTheOne} of  to list storeIsAdminStatus\nItems in List = {adminControl.storeIsAdminNeoStatus.Count} (must be 2)");
 
                 // Close the ShowLogEventsForm if it's already open
                 CloseLogEventsFormIfOpen();
@@ -262,7 +262,7 @@ namespace CRUD_System.Interfaces
                 // If selected user is TheOne, set the flag
                 if (loginDetailsArray != null && loginDetailsArray[4] == "True")
                 {
-                    SelectedUserIsTheOne = true;
+                    IsSelectedUserIsTheOne = true;
                 }
 
                 FindReportFile(selectedAlias);
@@ -350,7 +350,7 @@ namespace CRUD_System.Interfaces
 
             if (loginDetails![2] == "True")
             {
-                SelectedUserIsAdmin = true;
+                IsSelectedUserIsAdmin = true;
             }
 
             // Interface when user is superuser TheOne
@@ -361,7 +361,7 @@ namespace CRUD_System.Interfaces
                 adminControl.btnDeleteReport.Visible = EditMode;
 
                 adminControl.chkIsTheOne.Visible = EditMode;
-                adminControl.chkIsTheOne.Checked = SelectedUserIsTheOne;
+                adminControl.chkIsTheOne.Checked = IsSelectedUserIsTheOne;
                 adminControl.chkIsAdmin.Visible = EditMode;
 
                 // Update checkbox fields based on login- and userdetails

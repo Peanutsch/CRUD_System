@@ -94,8 +94,7 @@ namespace CRUD_System.Repositories
             {
                 Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[UNKNOWN USER],Generated password for [{alias.ToUpper()}]");
                 string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[UNKNOW USER],Generated password for [{alias.ToUpper()}]";
-                path.AppendToLog("Unknown", newLog);
-                path.AppendToLog("Unknown", newLog);
+                path.AppendToLog(alias, newLog);
             }
         }
 
@@ -151,6 +150,7 @@ namespace CRUD_System.Repositories
         #region CREATE NEW PASSWORD
         /// <summary>
         /// Logs the event when a new password is created for a user.
+        /// Temp. new psw in log.
         /// </summary>
         /// <param name="currentAlias">The alias of the user whose password was changed.</param>
         public void LogEventNewPasswordCreated(string currentAlias, string newPassword)
@@ -161,7 +161,26 @@ namespace CRUD_System.Repositories
         }
         #endregion CREATE NEW PASSWORD
 
-            #region SAVE NOTE
+        #region REPORT MANAGER
+        public void LogEventReportDeleted(string currentUser, string selectedAlias, string fileNameReport)
+        {
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Deleted report [{fileNameReport}] of [{selectedAlias.ToUpper()}]");
+                string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Deleted report [{fileNameReport}] of [{selectedAlias.ToUpper()}]";
+                path.AppendToLog(currentUser, newLog);
+                path.AppendToLog(selectedAlias, newLog);
+            }
+            else
+            {
+                Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[UNKNOWN USER],Deleted report [{fileNameReport}] for [{selectedAlias.ToUpper()}]");
+                string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[UNKNOW USER],Deleted report [{fileNameReport}] for [{selectedAlias.ToUpper()}]";
+                path.AppendToLog(selectedAlias, newLog);
+            }
+        }
+        #endregion REPORT MANAGER
+
+        #region SAVE NOTE
         public void LogEventSaveNote(string currentUser, string alias)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created note for user [{alias.ToUpper()}]");

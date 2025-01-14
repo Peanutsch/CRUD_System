@@ -17,6 +17,7 @@ namespace CRUD_System.Handlers
     internal class ReportManager
     {
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
         private readonly AdminMainControl? adminControl;
 
         readonly string rootPath = RootPath.GetRootPath();
@@ -33,7 +34,7 @@ namespace CRUD_System.Handlers
         /// Handles the logic for saving a report. Validates input, confirms the action with the user, 
         /// creates a new report CSV file, and refreshes the ListView to display the new report.
         /// </summary>
-        public void btnSaveReportHandler()
+        public void BtnSaveReportHandler()
         {
             var currentUser = AuthenticationService.CurrentUser;
             string selectedAlias = adminControl!.txtAlias.Text;
@@ -176,6 +177,179 @@ namespace CRUD_System.Handlers
                 Debug.WriteLine($"Error creating report for deleted user account {isAlias}:\n{e}");
             }
         }
+
+        /// <summary>
+        /// Deletes a selected report file.
+        /// Validates the selection, confirms the action, and processes the file deletion.
+        /// </summary>
+        public void DeleteFileReport()
+        {
+            // Validate and retrieve the file path to delete
+            string? fileToDelete = ValidateAndGetFileToDelete();
+
+            if (fileToDelete != null)
+            {
+                // Delete the file if validation is successful
+                ProcessDeleteFile(fileToDelete);
+            }
+        }
+
+        /// <summary>
+        /// Validates the selected report file and retrieves its path if it exists.
+        /// Checks if a file is selected, locates the file in the directories, and confirms deletion with the user.
+        /// </summary>
+        /// <returns>The path of the file to delete or null if validation fails.</returns>
+        private string? ValidateAndGetFileToDelete()
+        {
+            // Check if a file is selected in the ListView
+            if (!adminControl!.btnDeleteReport.Visible || adminControl.listViewReports.SelectedItems.Count == 0)
+            {
+                // Notify the user that no file is selected
+                MessageBox.Show("Please select a file to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return null;
+            }
+
+            // Get the name of the selected file
+            string selectedFile = adminControl.listViewReports.SelectedItems[0].Text;
+            string fileName = selectedFile + "_report.csv"; // Append the "_report.csv" suffix
+
+            // Locate directories containing report files
+            List<string> reportDirectories = FindCSVFiles.FindFilesInFolders(adminControl.txtAlias.Text, "report");
+
+            if (!reportDirectories.Any())
+            {
+                // Notify the user that no report directory is found
+                MessageBox.Show("Report directory not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+
+            // Check if the file exists in any of the report directories
+            foreach (var reportDirectory in reportDirectories)
+            {
+                string fileToDelete = Path.Combine(reportDirectory, fileName);
+
+                if (File.Exists(fileToDelete)) // File exists in the directory
+                {
+                    // Ask for user confirmation before deletion
+                    DialogResult dr = message.MessageConfirmDeleteFile(fileName);
+                    if (dr == DialogResult.Yes)
+                    {
+                        return fileToDelete; // Return the path of the file to delete
+                    }
+                }
+            }
+
+            // Return null if the file is not found or deletion is not confirmed
+            return null;
+        }
+
+        /// <summary>
+        /// Deletes the specified file and updates the UI.
+        /// Removes the file from the filesystem and the ListView, and notifies the user of the result.
+        /// </summary>
+        /// <param name="fileToDelete">The path of the file to delete.</param>
+        private void ProcessDeleteFile(string fileToDelete)
+        {
+            try
+            {
+                // Delete the file from the filesystem
+                File.Delete(fileToDelete);
+
+                // Remove the deleted file from the ListView
+                adminControl!.listViewReports.Items.Remove(adminControl.listViewReports.SelectedItems[0]);
+
+                // Notify the user of successful deletion
+                Debug.WriteLine($"File [{fileToDelete}] successfully deleted...");
+                message.MessageReportDeletedSucces(fileToDelete);
+
+                var currentUser = AuthenticationService.CurrentUser;
+                if (string.IsNullOrEmpty(currentUser))
+                {
+                    logEvents.LogEventReportDeleted(currentUser!, adminControl.reportTxtAlias.Text, fileToDelete);
+                }
+                else
+                {
+                    logEvents.LogEventReportDeleted("UNKNOWN", adminControl.reportTxtAlias.Text, fileToDelete);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Notify the user of an error during deletion
+                message.MessageReportDeletedError(fileToDelete, ex.Message);
+            }
+        }
+
+
+
+        /*
+        public void DeleteFileReport()
+        {
+            // Check if a file is selected in the ListView
+            if (adminControl!.btnDeleteReport.Visible && adminControl.listViewReports.SelectedItems.Count > 0)
+            {
+                // Get the name of the selected file
+                string selectedFile = adminControl.listViewReports.SelectedItems[0].Text;
+
+                // Construct the full name of the report file
+                string fileName = selectedFile + "_report.csv";
+                Debug.WriteLine($"fileName: {fileName}");
+
+                // Locate the directory where the report file resides
+                List<string> reportDirectories = FindCSVFiles.FindFilesInFolders(adminControl.txtAlias.Text, "report");
+
+                if (reportDirectories.Any()) // Ensure there's at least one directory
+                {
+                    bool fileDeleted = false;
+                    foreach (var reportDirectory in reportDirectories)
+                    {
+                        string fileToDelete = Path.Combine(reportDirectory, fileName);
+
+                        if (File.Exists(fileToDelete)) // Check if the file exists
+                        {
+                            // Show a confirmation dialog before deleting the file
+                            DialogResult dr = message.MessageConfirmDeleteFile(fileName);
+                            if (dr == DialogResult.Yes)
+                            {
+                                try
+                                {
+                                    // Attempt to delete the file from the file system
+                                    File.Delete(fileToDelete);
+
+                                    // Remove the deleted file from the ListView
+                                    adminControl.listViewReports.Items.Remove(adminControl.listViewReports.SelectedItems[0]);
+
+                                    fileDeleted = true;
+                                    // Notify the user about the successful deletion
+                                    MessageBox.Show("File successfully deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Display an error message if the deletion fails
+                                    MessageBox.Show($"An error occurred while deleting the file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
+                        }
+                    }
+
+                    if (!fileDeleted)
+                    {
+                        MessageBox.Show("File not found in the directories.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Report directory not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                // Notify the user to select a file before attempting to delete
+                MessageBox.Show("Please select a file to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        */
         #endregion PROCESSING AND HANDLING
 
         #region REFRESH LISTVIEWREPORTS
