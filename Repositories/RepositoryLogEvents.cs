@@ -32,7 +32,8 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN\n==========");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
-            path.AppendToLog(currentUser, newLog);
+            path.AppendToLogEvents(currentUser, newLog); // Log login in logevent.csv
+            path.AppendToLogStatus(currentUser, newLog); // // Log login in logstatus.csv
         }
 
         /// <summary>
@@ -43,7 +44,8 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged OUT");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged OUT";
-            path.AppendToLog(currentUser, newLog);
+            path.AppendToLogEvents(currentUser, newLog); // Log login in logevent.csv
+            path.AppendToLogStatus(currentUser, newLog); // // Log login in logstatus.csv
         }
 
         /// <summary>
@@ -55,8 +57,8 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Forced [{alias.ToUpper()}] log OUT");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Forced [{alias.ToUpper()}] log OUT";
-            path.AppendToLog(currentUser, newLog);
-            path.AppendToLog(alias, newLog);
+            path.AppendToLogEvents(currentUser, newLog);
+            path.AppendToLogEvents(alias, newLog);
         }
         #endregion AUTHENTICATIONSERVICE
 
@@ -70,8 +72,8 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created user [{newAlias.ToUpper()}]. Sent email to {isEmail} with password: {isPassword}");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Created user [{newAlias.ToUpper()}]. Sent email to {isEmail} with password: {isPassword}";
-            path.AppendToLog(currentUser, newLog);
-            path.AppendToLog(newAlias, newLog);
+            path.AppendToLogEvents(currentUser, newLog);
+            path.AppendToLogEvents(newAlias, newLog);
         }
         #endregion ADMINCREATECONTROL
 
@@ -87,14 +89,14 @@ namespace CRUD_System.Repositories
             {
                 Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]");
                 string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Generated new password for [{alias.ToUpper()}]: {generatedPassword}";
-                path.AppendToLog(currentUser, newLog);
-                path.AppendToLog(alias, newLog);
+                path.AppendToLogEvents(currentUser, newLog);
+                path.AppendToLogEvents(alias, newLog);
             }
             else
             {
                 Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[UNKNOWN USER],Generated password for [{alias.ToUpper()}]");
                 string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[UNKNOW USER],Generated password for [{alias.ToUpper()}]";
-                path.AppendToLog(alias, newLog);
+                path.AppendToLogEvents(alias, newLog);
             }
         }
 
@@ -112,25 +114,25 @@ namespace CRUD_System.Repositories
 
             if (AuthenticationService.CurrentUserIsAdmin && currentUser != alias) // Log the event in admin and user files
             {
-                path.AppendToLog(currentUser, newLog);
+                path.AppendToLogEvents(currentUser, newLog);
             }
-            path.AppendToLog(alias, newLog);
+            path.AppendToLogEvents(alias, newLog);
         }
 
         public void LogEventUpdateStatusIsTheOne(string currentUser, string alias, bool isTheOne)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status IsTheOne for [{alias.ToUpper()}] to {isTheOne}");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status IsTheOne for [{alias.ToUpper()}] to {isTheOne}";
-            path.AppendToLog(currentUser, newLog);
-            path.AppendToLog(alias, newLog);
+            path.AppendToLogEvents(currentUser, newLog);
+            path.AppendToLogEvents(alias, newLog);
         }
 
         public void LogEventUpdateStatusIsAdmin(string currentUser, string alias, bool isAdmin)
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status Admin for [{alias.ToUpper()}] to {isAdmin}");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Updated status Admin for [{alias.ToUpper()}] to {isAdmin}";
-            path.AppendToLog(currentUser, newLog);
-            path.AppendToLog(alias, newLog);
+            path.AppendToLogEvents(currentUser, newLog);
+            path.AppendToLogEvents(alias, newLog);
         }
 
         /// <summary>
@@ -142,8 +144,8 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
-            path.AppendToLog(currentUser, newLog);
-            path.AppendToLog(aliasToDelete, newLog);
+            path.AppendToLogEvents(currentUser, newLog);
+            path.AppendToLogEvents(aliasToDelete, newLog);
         }
         #endregion PROFILEMANAGER
 
@@ -152,7 +154,7 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],checked {status}: {time}");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],checked {status}: {time}";
-            path.AppendToLog(currentUser, newLog);
+            path.AppendToLogStatus(currentUser, newLog);
         }
         #endregion USER MAIN CONTROL
 
@@ -166,7 +168,7 @@ namespace CRUD_System.Repositories
         {
             Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentAlias.ToUpper()}],Changed own password");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentAlias.ToUpper()}],Changed own password: {newPassword}";
-            path.AppendToLog(currentAlias, newLog);
+            path.AppendToLogEvents(currentAlias, newLog);
         }
         #endregion CREATE NEW PASSWORD
 
@@ -177,14 +179,14 @@ namespace CRUD_System.Repositories
             {
                 Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Deleted report [{fileNameReport}] of [{selectedAlias.ToUpper()}]");
                 string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],Deleted report [{fileNameReport}] of [{selectedAlias.ToUpper()}]";
-                path.AppendToLog(currentUser, newLog);
-                path.AppendToLog(selectedAlias, newLog);
+                path.AppendToLogEvents(currentUser, newLog);
+                path.AppendToLogEvents(selectedAlias, newLog);
             }
             else
             {
                 Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[UNKNOWN USER],Deleted report [{fileNameReport}] for [{selectedAlias.ToUpper()}]");
                 string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[UNKNOW USER],Deleted report [{fileNameReport}] for [{selectedAlias.ToUpper()}]";
-                path.AppendToLog(selectedAlias, newLog);
+                path.AppendToLogEvents(selectedAlias, newLog);
             }
         }
         #endregion REPORT MANAGER
@@ -197,9 +199,9 @@ namespace CRUD_System.Repositories
 
             if (AuthenticationService.CurrentUserIsAdmin && currentUser != alias) // Log the event in admin and user files
             {
-                path.AppendToLog(currentUser, newLog);
+                path.AppendToLogEvents(currentUser, newLog);
             }
-            path.AppendToLog(alias, newLog);
+            path.AppendToLogEvents(alias, newLog);
         }
         #endregion SAVE NOTE
     }

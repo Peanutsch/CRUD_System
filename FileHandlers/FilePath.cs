@@ -15,11 +15,26 @@ namespace CRUD_System.FileHandlers
     public class FilePaths
     {
         #region PROPERTIES
-        public string UserFilePath { get; private set; }
-        public string LoginFilePath { get; private set; }
-        public string LogEventFilePath { get; private set; }
-        public string? FileCisNotices { get; private set; }
-        public string? ReportFilePath { get; private set; }
+        public string UserFilePath
+        {
+            get; private set;
+        }
+        public string LoginFilePath
+        {
+            get; private set;
+        }
+        public string LogEventFilePath
+        {
+            get; private set;
+        }
+        public string? FileCisNotices
+        {
+            get; private set;
+        }
+        public string? ReportFilePath
+        {
+            get; private set;
+        }
 
         public static string rootPath = RootPath.GetRootPath() ?? string.Empty;
 
@@ -31,7 +46,7 @@ namespace CRUD_System.FileHandlers
         /// Sets file paths for user data, login data, and log events based on the root directory.
         /// </summary>
         public FilePaths()
-        { 
+        {
             UserFilePath = Path.Combine(rootPath, "CSV", "data_users.csv");
             LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
             LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
@@ -41,17 +56,17 @@ namespace CRUD_System.FileHandlers
 
         public void SetAlias(string alias)
         {
-            FileCisNotices = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString() ,alias, $"{alias}_cis_notices.csv");
+            FileCisNotices = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString(), alias, $"{alias}_cis_notices.csv");
         }
 
         #endregion CONSTRUCTOR
 
-        #region PROCESSING
+        #region PROCESSING LOG EVENTS
         /// <summary>
         /// Ensures the log events file for the selected alias exists, creating it if necessary.
         /// </summary>
         /// <param name="selectedAlias">The alias for which the log events file should be created.</param>
-        public void CreateLogEventCSV(string selectedAlias)
+        public void CreateCSVLogEvent(string selectedAlias)
         {
             try
             {
@@ -87,11 +102,40 @@ namespace CRUD_System.FileHandlers
         /// </summary>
         /// <param name="selectedAlias">The alias for which the log entry is being added.</param>
         /// <param name="newLog">The log entry to append.</param>
-        public void AppendToLog(string selectedAlias, string newLog)
+        public void AppendToLogEvents(string selectedAlias, string newLog)
         {
             try
             {
-                string logPath = Path.Combine(rootPath, "logevents", Timers.CurrentYear.ToString(), selectedAlias);
+                string fileLogs = Path.Combine(rootPath, "logevents", Timers.CurrentYear.ToString(), selectedAlias, $"{selectedAlias}_logevents.csv");
+
+                // Create the log file if it doesn't exist
+                if (!File.Exists(fileLogs))
+                {
+                    CreateCSVLogEvent(selectedAlias);
+                }
+
+                // Decrypt the file, append the new log, and re-encrypt
+                EncryptionManager.DecryptFile(fileLogs);
+                File.AppendAllText(fileLogs, newLog + Environment.NewLine);
+                EncryptionManager.EncryptFile(fileLogs);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred while appending to the log file for alias {selectedAlias}: {ex.Message}");
+            }
+        }
+        #endregion PROCESSING LOG EVENTS
+
+        #region PROCESSING LOG STATUS
+        /// <summary>
+        /// Log events file for the selected alias. Creates it if necessary.
+        /// </summary>
+        /// <param name="selectedAlias">The alias for which the log events file should be created.</param>
+        public void CreateCSVLogStatusTime(string selectedAlias)
+        {
+            try
+            {
+                string logPath = Path.Combine(rootPath, "logstatus", Timers.CurrentYear.ToString(), selectedAlias);
 
                 // Ensure the logevents directory exists
                 if (!Directory.Exists(logPath))
@@ -99,12 +143,34 @@ namespace CRUD_System.FileHandlers
                     Directory.CreateDirectory(logPath);
                 }
 
-                string fileLogs = Path.Combine(logPath, $"{selectedAlias}_logevents.csv");
+                string fileLogs = Path.Combine(logPath, $"{selectedAlias}_logstatus.csv");
+
+                // Create the log file with default headers if it doesn't exist
+                if (!File.Exists(fileLogs))
+                {
+                    File.WriteAllText(fileLogs, "Date,Time,Alias,Status,TimeStatusSwitch" + Environment.NewLine);
+                    EncryptionManager.EncryptFile(fileLogs);
+
+                    Debug.WriteLine($"Created {selectedAlias}_logstatus.csv");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions gracefully
+                Debug.WriteLine($"An error occurred while creating the log file for alias {selectedAlias}: {ex.Message}");
+            }
+        }
+
+        public void AppendToLogStatus(string selectedAlias, string newLog)
+        {
+            try
+            {
+                string fileLogs = Path.Combine(rootPath, "logstatus", Timers.CurrentYear.ToString(), selectedAlias, $"{selectedAlias}_logstatus.csv");
 
                 // Create the log file if it doesn't exist
                 if (!File.Exists(fileLogs))
                 {
-                    CreateLogEventCSV(selectedAlias);
+                    CreateCSVLogStatusTime(selectedAlias);
                 }
 
                 // Decrypt the file, append the new log, and re-encrypt
@@ -118,6 +184,7 @@ namespace CRUD_System.FileHandlers
             }
         }
 
+        #endregion PROCESSING LOG STATUS
 
         /// <summary>
         /// Returns path userLines and loginLines
@@ -129,7 +196,6 @@ namespace CRUD_System.FileHandlers
             var loginLines = File.ReadAllLines(LoginFilePath).ToList();
             return (userLines, loginLines);
         }
-        #endregion PROCESSING
 
         #region SEARCH CIS NOTICES
         /// <summary>

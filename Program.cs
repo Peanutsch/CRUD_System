@@ -16,19 +16,17 @@ namespace CRUD_System
         /// This method is responsible for encrypting the CSV file and initializing the application.
         /// </summary>
         [STAThread]
-        static void Main() 
+        static void Main()
         {
             #region Decrypt files
             // Decrypt the CSV file
             //EncryptionManager.DecryptFile(filePath.LoginFilePath); // data_login.csv
             //MessageBox.Show("File data_login DECRYPTED");
-
             //EncryptionManager.DecryptFile(filePath.UserFilePath); // data_users.csv
             //MessageBox.Show("File data_users DECRYPTED");
 
             //EncryptionManager.DecryptFile(filePath.HRFilePath);
-            //DecryptSingleCSVFile("peer001", "report"); //--------------> Do not forget to check if DirectoryName is correct in method. Current setup: peer001
-            //DecryptSingleCSVFile("paer001", "log");
+            //DecryptSingleCSVFile("mist002", "2025", "logstatus", "mist002_logstatus.csv"); //--------------> Do not forget to check if year and directoryName are correct in method. 
             #endregion Decrypt files
 
             #region Encrypt files
@@ -43,9 +41,7 @@ namespace CRUD_System
             //EncryptionManager.EncryptFile(filePath.ReportFilePath); // {alias}_report.csv
 
             //EncryptFile("mist001", "logevents", "mist001_logevents.csv");
-
-            //DecryptSingleCSVFile("mist001", "logEvents");
-            //DecryptSingleCSVFile("peer001", "logEvents");
+            //EncryptSingleCSVFile("mist002", "2025", "logstatus", "mist002_logstatus.csv");
             #endregion Encrypt files
 
             #region Create/Edit CSV Files
@@ -118,7 +114,7 @@ namespace CRUD_System
         public static void CreateCISNoticeCSV()
         {
             DataCache cache = new DataCache();
-            
+
             // Load all data to cache
             cache.LoadDecryptedData();
 
@@ -310,30 +306,33 @@ namespace CRUD_System
         #endregion CREATE CSV FILES
 
         #region DECRYPT FILE
-        public static void DecryptSingleCSVFile(string alias, string directoryName, string fileName)
+        public static void DecryptSingleCSVFile(string alias, string year, string directoryName, string fileName)
         {
             string rootPath = RootPath.GetRootPath();
             string logPath = Path.Combine(rootPath, directoryName);
-            
+
             //string file_logs = Path.Combine(logPath, $"{alias}_logs.csv");
-            EncryptionManager.DecryptFile(Path.Combine(logPath, "2024", alias, fileName));
+            EncryptionManager.DecryptFile(Path.Combine(logPath, year, alias, fileName));
+            Debug.WriteLine($"alias: {alias}");
+            Debug.WriteLine($"directoryName: {directoryName}");
+            Debug.WriteLine($"fileName: {fileName}");
+            Debug.WriteLine($"Decrypted: {Path.Combine(logPath, year, alias, fileName)}");
         }
         #endregion DECRYPT FILE
 
         #region ENCRYPT FILE
-        public static void EncryptFile(string alias, string directoryName, string fileName)
+        public static void EncryptSingleCSVFile(string alias, string year, string directoryName, string fileName)
         {
             // Set rootpath
             string rootPath = RootPath.GetRootPath();
             // Set map
             string logPath = Path.Combine(rootPath, directoryName);
 
+            EncryptionManager.EncryptFile(Path.Combine(logPath, year, alias, fileName));
             Debug.WriteLine($"alias: {alias}");
             Debug.WriteLine($"directoryName: {directoryName}");
             Debug.WriteLine($"fileName: {fileName}");
-
-            EncryptionManager.EncryptFile(Path.Combine(logPath, "2024", alias, fileName));
-            Debug.WriteLine($"Encrypted: {Path.Combine(logPath, "2024", alias, fileName)}");
+            Debug.WriteLine($"Encrypted: {Path.Combine(logPath, year, alias, fileName)}");
         }
         #endregion ENCRYPT FILE
     }

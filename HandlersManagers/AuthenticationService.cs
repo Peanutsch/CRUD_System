@@ -26,9 +26,18 @@ namespace CRUD_System.Handlers
     public class AuthenticationService
     {
         #region PROPERTIES
-        public static string? CurrentUser { get; set; }
-        public static bool CurrentUserIsAdmin { get; set; }
-        public static bool CurrentUserIsTheOne { get; set; }
+        public static string? CurrentUser
+        {
+            get; set;
+        }
+        public static bool CurrentUserIsAdmin
+        {
+            get; set;
+        }
+        public static bool CurrentUserIsTheOne
+        {
+            get; set;
+        }
 
         private readonly FilePaths path = new FilePaths();
         private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
@@ -215,7 +224,7 @@ namespace CRUD_System.Handlers
 
             // Online Status = true
             UpdateUserOnlineStatus(CurrentUser, true);
-           
+
             logEvents.UserLoggedIn(CurrentUser);
 
             bool isAdmin = CheckAdminRole(inputUserName, inputUserPassword);
@@ -270,6 +279,7 @@ namespace CRUD_System.Handlers
         #endregion LOGIN
 
         #region LOGOUT
+        UserInterface userInterface = new UserInterface();
         /// <summary>
         /// Logs out the current user by updating their online status to offline,
         /// logging the logout event, and clearing the current user.
@@ -280,8 +290,18 @@ namespace CRUD_System.Handlers
 
             if (!string.IsNullOrEmpty(currentUser))
             {
+                // When no status Offline, time of logout == time offline
+                if (!userInterface.isOffline)
+                {
+                    string currentTime = DateTime.Now.ToString("HH:mm");
+
+                    userInterface.StatusIndicator("Offline", currentUser);
+                    Debug.WriteLine($"User status is not 'Offline'. Set offline status at {currentTime}...");
+                }
+
                 UpdateUserOnlineStatus(currentUser, false);
                 logEvents.UserLoggedOut(currentUser);
+
                 CurrentUser = null;
             }
         }
@@ -298,6 +318,15 @@ namespace CRUD_System.Handlers
             if (dr == DialogResult.No)
             {
                 return;
+            }
+
+            // When no status Offline, time of logout == time offline
+            if (!userInterface.isOffline)
+            {
+                string currentTime = DateTime.Now.ToString("HH:mm");
+
+                userInterface.StatusIndicator("Offline", aliasToLogOut);
+                Debug.WriteLine($"User status is not 'Offline'. Set offline status at {currentTime}...");
             }
 
             AdminInterface adminInterface = new AdminInterface();

@@ -21,12 +21,12 @@ namespace CRUD_System.Interfaces
         {
             get; set;
         }
+        public bool isOffline = false;
 
         private readonly FilePaths path = new FilePaths();
         private readonly AccountManager repository = new AccountManager();
         private readonly DataCache cache = new DataCache();
         private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
-        
 
         private readonly UserMainControl userControl;
         #endregion PROPERTIES
@@ -190,7 +190,7 @@ namespace CRUD_System.Interfaces
         private string? PrepareLogFile(string alias)
         {
             // Find the file path for the user's logs
-            string logFile = FindCSVFiles.FindCSVFileLogEvent(alias, "logevents");
+            string logFile = FindCSVFiles.FindCSVFileLogEvent(alias, "logstatus");
 
             // Check if the file exists
             if (File.Exists(logFile))
@@ -298,7 +298,7 @@ namespace CRUD_System.Interfaces
             // Manage visibility and enablement of buttons and controls
             userControl.btnSaveEditUserDetails.Visible = EditMode;
             userControl.btnSaveEditUserDetails.BackColor = Color.LightGreen;
-            
+
             userControl.btnChangePassword.Visible = EditMode;
 
             // Array of text fields to enable or disable in EditMode
@@ -331,33 +331,34 @@ namespace CRUD_System.Interfaces
             switch (status)
             {
                 case "Online":
+                    isOffline = false;
                     userControl.txtStatusIndicator.BackColor = Color.Blue;
                     string TimeOnline = currentTime;
-
-                    Debug.WriteLine($"{isAlias.ToUpper()} checked Online: {TimeOnline}");
                     logEvents.CheckStatus(isAlias, status, TimeOnline);
+
                     break;
 
                 case "Away":
+                    isOffline = false;
                     userControl.txtStatusIndicator.BackColor = Color.Orange;
                     string TimeAway = currentTime;
-
-                    Debug.WriteLine($"{isAlias.ToUpper()} checked Away: {TimeAway}");
                     logEvents.CheckStatus(isAlias, status, TimeAway);
+
                     break;
                 case "Break":
+                    isOffline = false;
                     userControl.txtStatusIndicator.BackColor = Color.Yellow;
                     string TimeBreak = currentTime;
-
-                    Debug.WriteLine($"{isAlias.ToUpper()} checked Break: {TimeBreak}");
                     logEvents.CheckStatus(isAlias, status, TimeBreak);
+
                     break;
                 case "Offline":
+                    isOffline = true;
+
                     userControl.txtStatusIndicator.BackColor = Color.Gray;
                     string TimeOffline = currentTime;
-
-                    Debug.WriteLine($"{isAlias.ToUpper()} checked Offline: {TimeOffline}");
                     logEvents.CheckStatus(isAlias, status, TimeOffline);
+
                     break;
             }
             // Clear and reload listbox
