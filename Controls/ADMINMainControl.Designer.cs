@@ -75,10 +75,11 @@
             this.reportLBLSelectedAlias = new Label();
             this.reportLBLCreatedBy = new Label();
             this.reportLBLCurrentDate = new Label();
-            this.btnShowListBoxLogs = new Button();
+            this.btnShowListBoxLogEvents = new Button();
             this.btnDeleteReport = new Button();
             this.chkIsTheOne = new CheckBox();
             this.btnUploadFile = new Button();
+            this.btnShowLogsStatus = new Button();
             this.SuspendLayout();
             // 
             // txtName
@@ -156,7 +157,7 @@
             // 
             this.btnSaveEditUserDetails.BackColor = Color.LightGreen;
             this.btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnSaveEditUserDetails.Location = new Point(168, 419);
+            this.btnSaveEditUserDetails.Location = new Point(186, 419);
             this.btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
             this.btnSaveEditUserDetails.Size = new Size(106, 30);
             this.btnSaveEditUserDetails.TabIndex = 9;
@@ -169,9 +170,9 @@
             // 
             this.btnDeleteUser.BackColor = Color.Red;
             this.btnDeleteUser.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.btnDeleteUser.Location = new Point(432, 419);
+            this.btnDeleteUser.Location = new Point(450, 419);
             this.btnDeleteUser.Name = "btnDeleteUser";
-            this.btnDeleteUser.Size = new Size(150, 30);
+            this.btnDeleteUser.Size = new Size(126, 30);
             this.btnDeleteUser.TabIndex = 9;
             this.btnDeleteUser.Text = "Delete User";
             this.btnDeleteUser.UseVisualStyleBackColor = false;
@@ -229,7 +230,7 @@
             // 
             this.btnGeneratePSW.BackColor = SystemColors.ActiveCaption;
             this.btnGeneratePSW.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.btnGeneratePSW.Location = new Point(280, 419);
+            this.btnGeneratePSW.Location = new Point(298, 419);
             this.btnGeneratePSW.Name = "btnGeneratePSW";
             this.btnGeneratePSW.Size = new Size(146, 30);
             this.btnGeneratePSW.TabIndex = 22;
@@ -244,9 +245,9 @@
             this.btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.btnEditUserDetails.Location = new Point(24, 419);
             this.btnEditUserDetails.Name = "btnEditUserDetails";
-            this.btnEditUserDetails.Size = new Size(138, 30);
+            this.btnEditUserDetails.Size = new Size(156, 30);
             this.btnEditUserDetails.TabIndex = 25;
-            this.btnEditUserDetails.Text = "Edit Details";
+            this.btnEditUserDetails.Text = "Unlock Details";
             this.btnEditUserDetails.UseVisualStyleBackColor = false;
             this.btnEditUserDetails.Click += this.btnEditUserDetails_Click;
             // 
@@ -558,28 +559,28 @@
             this.reportLBLCurrentDate.Text = "Current Date";
             this.reportLBLCurrentDate.Visible = false;
             // 
-            // btnShowListBoxLogs
+            // btnShowListBoxLogEvents
             // 
-            this.btnShowListBoxLogs.BackColor = SystemColors.ActiveCaption;
-            this.btnShowListBoxLogs.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnShowListBoxLogs.Location = new Point(800, 419);
-            this.btnShowListBoxLogs.Name = "btnShowListBoxLogs";
-            this.btnShowListBoxLogs.Size = new Size(127, 30);
-            this.btnShowListBoxLogs.TabIndex = 58;
-            this.btnShowListBoxLogs.Text = "ListBoxLogs";
-            this.btnShowListBoxLogs.UseVisualStyleBackColor = false;
-            this.btnShowListBoxLogs.Visible = false;
-            this.btnShowListBoxLogs.Click += this.btnShowListBoxLogs_Click;
+            this.btnShowListBoxLogEvents.BackColor = SystemColors.ActiveCaption;
+            this.btnShowListBoxLogEvents.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnShowListBoxLogEvents.Location = new Point(186, 455);
+            this.btnShowListBoxLogEvents.Name = "btnShowListBoxLogEvents";
+            this.btnShowListBoxLogEvents.Size = new Size(192, 30);
+            this.btnShowListBoxLogEvents.TabIndex = 58;
+            this.btnShowListBoxLogEvents.Text = "Overview Events";
+            this.btnShowListBoxLogEvents.UseVisualStyleBackColor = false;
+            this.btnShowListBoxLogEvents.Visible = false;
+            this.btnShowListBoxLogEvents.Click += this.btnShowListBoxLogs_Click;
             // 
             // btnDeleteReport
             // 
             this.btnDeleteReport.BackColor = Color.Red;
             this.btnDeleteReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnDeleteReport.Location = new Point(933, 419);
+            this.btnDeleteReport.Location = new Point(800, 419);
             this.btnDeleteReport.Name = "btnDeleteReport";
-            this.btnDeleteReport.Size = new Size(126, 30);
+            this.btnDeleteReport.Size = new Size(110, 30);
             this.btnDeleteReport.TabIndex = 59;
-            this.btnDeleteReport.Text = "Delete File";
+            this.btnDeleteReport.Text = "Delete";
             this.btnDeleteReport.UseVisualStyleBackColor = false;
             this.btnDeleteReport.Visible = false;
             this.btnDeleteReport.Click += this.btnDeleteReport_Click;
@@ -605,14 +606,27 @@
             this.btnUploadFile.BackColor = SystemColors.ActiveCaption;
             this.btnUploadFile.Enabled = false;
             this.btnUploadFile.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnUploadFile.Location = new Point(1065, 419);
+            this.btnUploadFile.Location = new Point(1082, 419);
             this.btnUploadFile.Name = "btnUploadFile";
-            this.btnUploadFile.Size = new Size(127, 30);
+            this.btnUploadFile.Size = new Size(110, 30);
             this.btnUploadFile.TabIndex = 61;
-            this.btnUploadFile.Text = "Upload File";
+            this.btnUploadFile.Text = "Upload";
             this.btnUploadFile.UseVisualStyleBackColor = false;
             this.btnUploadFile.Visible = false;
             this.btnUploadFile.Click += this.btnUploadFile_Click;
+            // 
+            // btnShowLogsStatus
+            // 
+            this.btnShowLogsStatus.BackColor = SystemColors.ActiveCaption;
+            this.btnShowLogsStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnShowLogsStatus.Location = new Point(384, 455);
+            this.btnShowLogsStatus.Name = "btnShowLogsStatus";
+            this.btnShowLogsStatus.Size = new Size(192, 30);
+            this.btnShowLogsStatus.TabIndex = 62;
+            this.btnShowLogsStatus.Text = "Overview Status";
+            this.btnShowLogsStatus.UseVisualStyleBackColor = false;
+            this.btnShowLogsStatus.Visible = false;
+            this.btnShowLogsStatus.Click += this.btnShowLogsStatus_Click;
             // 
             // AdminMainControl
             // 
@@ -620,10 +634,11 @@
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
             this.BorderStyle = BorderStyle.FixedSingle;
+            this.Controls.Add(this.btnShowLogsStatus);
             this.Controls.Add(this.btnUploadFile);
             this.Controls.Add(this.chkIsTheOne);
             this.Controls.Add(this.btnDeleteReport);
-            this.Controls.Add(this.btnShowListBoxLogs);
+            this.Controls.Add(this.btnShowListBoxLogEvents);
             this.Controls.Add(this.reportLBLCurrentDate);
             this.Controls.Add(this.reportLBLCreatedBy);
             this.Controls.Add(this.reportLBLSelectedAlias);
@@ -700,10 +715,11 @@
         public Label reportLBLSelectedAlias;
         public Label reportLBLCreatedBy;
         public Label reportLBLCurrentDate;
-        public Button btnShowListBoxLogs;
+        public Button btnShowListBoxLogEvents;
         public Button btnDeleteReport;
         public CheckBox chkIsTheOne;
         public Button btnUploadFile;
         private ColumnHeader createdColumn;
+        public Button btnShowLogsStatus;
     }
 }

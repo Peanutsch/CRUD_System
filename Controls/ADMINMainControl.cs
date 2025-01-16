@@ -32,12 +32,21 @@ namespace CRUD_System
         #region PROPERTIES
         public List<bool> storeIsAdminNeoStatus = new List<bool>(); // index 0 = bool admin, index 1 = bool Neo
 
-        public static bool IsTheOne { get; set;}
-        public static bool ChkIsTheOneChanged { get; set;}
+        public static bool IsTheOne
+        {
+            get; set;
+        }
+        public static bool ChkIsTheOneChanged
+        {
+            get; set;
+        }
 
-        public static bool ChkIsAdminChanged { get; set; }
+        public static bool ChkIsAdminChanged
+        {
+            get; set;
+        }
 
-        
+
 
         readonly FilePaths path = new FilePaths();
 
@@ -108,7 +117,7 @@ namespace CRUD_System
 
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, 
+                profileManager.UpdateUserDetails(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text,
                                                  txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
             }
             editMode = false; // Close editMode
@@ -335,7 +344,12 @@ namespace CRUD_System
         /// <param name="e">Event arguments associated with the click event.</param>
         private void btnShowListBoxLogs_Click(object sender, EventArgs e)
         {
-            interactionHandler.Open_ShowLogForm(this, txtAlias.Text);
+            interactionHandler.Open_ShowLogEventsForm(this, txtAlias.Text);
+        }
+
+        private void btnShowLogsStatus_Click(object sender, EventArgs e)
+        {
+            interactionHandler.Open_ShowLogStatusForm(this, txtAlias.Text);
         }
 
         private void btnCreateReport_Click(object sender, EventArgs e)

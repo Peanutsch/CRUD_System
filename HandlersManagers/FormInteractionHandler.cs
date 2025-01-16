@@ -9,7 +9,8 @@ namespace CRUD_System.Handlers
         #region PROPERTIES
         public bool UserSelected { get; set; } // Property to store selection state
         
-        private ShowLogEventsForm? showReportForm;
+        private ShowLogEventsForm? showEventsForm;
+        private ShowLogStatusForm? showStatusForm;
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
@@ -101,7 +102,7 @@ namespace CRUD_System.Handlers
         /// The parent control (e.g., a UserControl or Form) to pass along to the ShowReportForm. 
         /// If null, an error message will be shown indicating that the parent control is invalid.
         /// </param>
-        public void Open_ShowLogForm(UserControl? parentControl = null, string selectedAlias = "")
+        public void Open_ShowLogEventsForm(UserControl? parentControl = null, string selectedAlias = "")
         {
             if (parentControl == null)
             {
@@ -109,14 +110,32 @@ namespace CRUD_System.Handlers
                 return;
             }
 
-            if (showReportForm == null || showReportForm.IsDisposed)
+            if (showEventsForm == null || showEventsForm.IsDisposed)
             {
-                showReportForm = new ShowLogEventsForm();
+                showEventsForm = new ShowLogEventsForm();
             }
 
             // Load the report content into the ShowReportForm
-            showReportForm.LoadListBoxLogs(selectedAlias);
-            showReportForm.Show();
+            showEventsForm.LoadListBoxLogs(selectedAlias);
+            showEventsForm.Show();
+        }
+
+        public void Open_ShowLogStatusForm(UserControl? parentControl = null, string selectedAlias = "")
+        {
+            if (parentControl == null)
+            {
+                MessageBox.Show("Parent control is not valid or is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (showStatusForm == null || showStatusForm.IsDisposed)
+            {
+                showStatusForm = new ShowLogStatusForm();
+            }
+
+            // Load the report content into the ShowReportForm
+            showStatusForm.LoadListBoxLogs(selectedAlias);
+            showStatusForm.Show();
         }
         #endregion SHOW REPORT FORM
 

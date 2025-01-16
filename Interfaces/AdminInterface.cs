@@ -236,7 +236,7 @@ namespace CRUD_System.Interfaces
                 VerifyRolesAdminTheOne(selectedAlias);
 
                 // Close the ShowLogEventsForm if it's already open
-                CloseLogEventsFormIfOpen();
+                CloseOverviewFormIfOpen();
 
                 // Set UserSelected on true
                 adminControl.InteractionHandler.UserSelected = true; // Pass bool true to InterActionHandler
@@ -314,10 +314,12 @@ namespace CRUD_System.Interfaces
         /// <summary>
         /// Closes the ShowLogEventsForm if it is already open.
         /// </summary>
-        private void CloseLogEventsFormIfOpen()
+        private void CloseOverviewFormIfOpen()
         {
-            var openForm = Application.OpenForms.OfType<ShowLogEventsForm>().FirstOrDefault();
-            openForm?.Close();
+            var openEventsForm = Application.OpenForms.OfType<ShowLogEventsForm>().FirstOrDefault();
+            var openStatusForm = Application.OpenForms.OfType<ShowLogStatusForm>().FirstOrDefault();
+            openEventsForm?.Close();
+            openStatusForm?.Close();
         }
         #endregion LISTBOX SELECTED INDEX CHANGED
 
@@ -378,7 +380,7 @@ namespace CRUD_System.Interfaces
             if (loginDetails != null && userDetails != null && AuthenticationService.CurrentUserIsTheOne)
             {
                 adminControl.btnDeleteUser.Visible = EditMode;
-                adminControl.btnShowListBoxLogs.Visible = EditMode;
+                adminControl.btnShowListBoxLogEvents.Visible = EditMode;
                 adminControl.btnDeleteReport.Visible = EditMode;
 
                 adminControl.chkIsTheOne.Visible = EditMode;
@@ -485,7 +487,8 @@ namespace CRUD_System.Interfaces
                 ToggleControlVisibility(adminControl.chkIsTheOne, EditMode);
                 ToggleControlVisibility(adminControl.btnDeleteReport, EditMode);
                 ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
-                ToggleControlVisibility(adminControl.btnShowListBoxLogs, EditMode);
+                ToggleControlVisibility(adminControl.btnShowListBoxLogEvents, EditMode);
+                ToggleControlVisibility(adminControl.btnShowLogsStatus, EditMode);
             }
         }
 
