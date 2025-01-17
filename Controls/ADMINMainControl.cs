@@ -386,26 +386,13 @@ namespace CRUD_System
             adminInterface.TextBoxesReportEmpty();
             AdminInterface.IsReport = ToggleIsReportMode();
             adminInterface.ReportConfig();
-
-            /*
-            interactionHandler.PerformActionIfUserSelected(() =>
-            {
-                comboBoxSubjectReport.Text = "Subject:";
-                btnEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnEditUserDetails
-                btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
-                adminInterface.TextBoxesReportEmpty();
-                AdminInterface.IsReport = ToggleIsReportMode();
-                adminInterface.ReportConfig();
-            },
-            () => message.MessageInvalidNoUserSelected());
-        */
         }
             #endregion BUTTONS SoC (Seperate of Concerns)
 
-            #region TOGGLE MODES
-            /// <summary>
-            /// Toggle between editMode and !editMode
-            /// </summary>
+        #region TOGGLE MODES
+        /// <summary>
+        /// Toggle between editMode and !editMode
+        /// </summary>
         private bool ToggleEditMode()
         {
             bool modus = editMode = !editMode;

@@ -81,10 +81,10 @@ namespace CRUD_System
         {
             // First letter of Name and City ToUpper
             string name = txtName.Text.Trim();
-            string isName = char.ToUpper(name[0]) + name.Substring(1);
+            string isName = string.IsNullOrEmpty(name) ? "" : char.ToUpper(name[0]) + name.Substring(1);
 
             string city = txtCity.Text.Trim();
-            string isCity = char.ToUpper(city[0]) + city.Substring(1);
+            string isCity = string.IsNullOrEmpty(city) ? "" : char.ToUpper(city[0]) + city.Substring(1);
 
             if (!ValidateUserInput(isName, txtSurname.Text.Trim(), txtEmail.Text))
             {
