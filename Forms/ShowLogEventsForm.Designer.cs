@@ -28,60 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnCloseForm = new Button();
-            this.txtSelectedAlias = new TextBox();
-            this.listBoxLogs = new ListBox();
-            this.SuspendLayout();
+            btnCloseForm = new Button();
+            txtSelectedAlias = new TextBox();
+            listBoxLogs = new ListBox();
+            SuspendLayout();
             // 
             // btnCloseForm
             // 
-            this.btnCloseForm.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnCloseForm.Location = new Point(223, 503);
-            this.btnCloseForm.Margin = new Padding(4);
-            this.btnCloseForm.Name = "btnCloseForm";
-            this.btnCloseForm.Size = new Size(107, 28);
-            this.btnCloseForm.TabIndex = 4;
-            this.btnCloseForm.Text = "Close";
-            this.btnCloseForm.UseVisualStyleBackColor = true;
-            this.btnCloseForm.Click += this.btnCloseForm_Click;
+            btnCloseForm.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnCloseForm.Location = new Point(259, 501);
+            btnCloseForm.Margin = new Padding(4);
+            btnCloseForm.Name = "btnCloseForm";
+            btnCloseForm.Size = new Size(107, 28);
+            btnCloseForm.TabIndex = 4;
+            btnCloseForm.Text = "Close";
+            btnCloseForm.UseVisualStyleBackColor = true;
+            btnCloseForm.Click += btnCloseForm_Click;
             // 
             // txtSelectedAlias
             // 
-            this.txtSelectedAlias.Enabled = false;
-            this.txtSelectedAlias.Location = new Point(26, 12);
-            this.txtSelectedAlias.Name = "txtSelectedAlias";
-            this.txtSelectedAlias.PlaceholderText = "SelectedAlias";
-            this.txtSelectedAlias.Size = new Size(163, 26);
-            this.txtSelectedAlias.TabIndex = 5;
-            this.txtSelectedAlias.TextAlign = HorizontalAlignment.Center;
+            txtSelectedAlias.Enabled = false;
+            txtSelectedAlias.Location = new Point(26, 12);
+            txtSelectedAlias.Name = "txtSelectedAlias";
+            txtSelectedAlias.PlaceholderText = "SelectedAlias";
+            txtSelectedAlias.Size = new Size(163, 26);
+            txtSelectedAlias.TabIndex = 5;
+            txtSelectedAlias.TextAlign = HorizontalAlignment.Center;
             // 
             // listBoxLogs
             // 
-            this.listBoxLogs.Font = new Font("Courier New", 9F, FontStyle.Bold);
-            this.listBoxLogs.FormattingEnabled = true;
-            this.listBoxLogs.HorizontalScrollbar = true;
-            this.listBoxLogs.Location = new Point(26, 42);
-            this.listBoxLogs.Name = "listBoxLogs";
-            this.listBoxLogs.Size = new Size(507, 452);
-            this.listBoxLogs.TabIndex = 6;
+            listBoxLogs.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            listBoxLogs.FormattingEnabled = true;
+            listBoxLogs.HorizontalScrollbar = true;
+            listBoxLogs.Location = new Point(26, 42);
+            listBoxLogs.Name = "listBoxLogs";
+            listBoxLogs.Size = new Size(573, 452);
+            listBoxLogs.TabIndex = 6;
             // 
             // ShowLogEventsForm
             // 
-            this.AutoScaleDimensions = new SizeF(10F, 18F);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.BackColor = SystemColors.ActiveCaption;
-            this.ClientSize = new Size(556, 539);
-            this.Controls.Add(this.listBoxLogs);
-            this.Controls.Add(this.txtSelectedAlias);
-            this.Controls.Add(this.btnCloseForm);
-            this.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.Margin = new Padding(4);
-            this.Name = "ShowLogEventsForm";
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.Text = "Overview Log Events";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(10F, 18F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveCaption;
+            ClientSize = new Size(629, 539);
+            Controls.Add(listBoxLogs);
+            Controls.Add(txtSelectedAlias);
+            Controls.Add(btnCloseForm);
+            Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(4);
+            Name = "ShowLogEventsForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Overview Log Events";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

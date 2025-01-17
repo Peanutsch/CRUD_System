@@ -464,7 +464,7 @@ namespace CRUD_System.Interfaces
         {
             var currentUser = AuthenticationService.CurrentUser;
 
-            adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Edit User"; // Toggle Edit and Cancel button text based on EditMode status
+            adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Unlock Details"; // Toggle Edit and Cancel button text based on EditMode status
             adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption; // Set the background color based on EditMode for visual feedback
 
             adminControl.btnCreateUser.Enabled = !EditMode;
@@ -473,6 +473,7 @@ namespace CRUD_System.Interfaces
             adminControl.btnPreviousPage.Enabled = !EditMode;
             adminControl.btnGeneratePSW.Enabled = !EditMode;
             adminControl.btnUploadFile.Visible = EditMode;
+            adminControl.btnShowLogsStatus.Enabled = EditMode;
 
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
@@ -488,7 +489,7 @@ namespace CRUD_System.Interfaces
                 ToggleControlVisibility(adminControl.btnDeleteReport, EditMode);
                 ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
                 ToggleControlVisibility(adminControl.btnShowListBoxLogEvents, EditMode);
-                ToggleControlVisibility(adminControl.btnShowLogsStatus, EditMode);
+                //ToggleControlVisibility(adminControl.btnShowLogsStatus, EditMode);
             }
         }
 

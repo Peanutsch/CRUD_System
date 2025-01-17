@@ -33,7 +33,6 @@ namespace CRUD_System
             // Encrypt the CSV file
             //EncryptionManager.EncryptFile(filePath.LoginFilePath); // data_login.csv
             //MessageBox.Show("File data_login ENCRYPTED");
-
             //EncryptionManager.EncryptFile(filePath.UserFilePath); // data_users.csv
             //MessageBox.Show("File data_users ENCRYPTED");
 

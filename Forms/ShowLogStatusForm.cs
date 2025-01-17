@@ -29,6 +29,8 @@ namespace CRUD_System
         /// <param name="alias">The alias of the user whose logs need to be loaded.</param>
         public void LoadListBoxLogs(string alias)
         {
+            txtSelectedAlias.Text = alias;
+
             // Prepare the log file
             string? logFile = PrepareLogFile(alias);
 
@@ -37,7 +39,7 @@ namespace CRUD_System
                 // Parse log entries from the file into structured data
                 var logEntries = ParseLogFile(logFile);
 
-                // Step 3: Sort log entries by date/time in descending order
+                // Sort log entries by date/time in descending order
                 var sortedEntries = SortLogEntriesDescending(logEntries);
 
                 // Populate the ListBox with the sorted log entries
@@ -50,6 +52,7 @@ namespace CRUD_System
             {
                 // Show a message if no log file is found
                 MessageBox.Show("Log file not found.");
+                return;
             }
         }
 
