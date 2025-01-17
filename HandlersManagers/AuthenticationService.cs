@@ -291,7 +291,7 @@ namespace CRUD_System.Handlers
             if (!string.IsNullOrEmpty(currentUser))
             {
                 // When no status Offline, time of logout == time offline
-                if (!userInterface.isOffline)
+                if (!userInterface.isOffline && !CurrentUserIsAdmin)
                 {
                     string currentTime = DateTime.Now.ToString("HH:mm");
 

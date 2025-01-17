@@ -484,12 +484,13 @@ namespace CRUD_System.Interfaces
             {
                 ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
                 ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
-                ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
-                ToggleControlVisibility(adminControl.chkIsTheOne, EditMode);
                 ToggleControlVisibility(adminControl.btnDeleteReport, EditMode);
                 ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
                 ToggleControlVisibility(adminControl.btnShowListBoxLogEvents, EditMode);
                 //ToggleControlVisibility(adminControl.btnShowLogsStatus, EditMode);
+
+                ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
+                ToggleControlVisibility(adminControl.chkIsTheOne, EditMode);
             }
         }
 
