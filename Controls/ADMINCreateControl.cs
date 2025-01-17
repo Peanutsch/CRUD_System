@@ -114,8 +114,6 @@ namespace CRUD_System
             }
             return true;
         }
-
-
         #endregion BUTTONS
 
         #region ALIAS TEXTBOX HANDLER

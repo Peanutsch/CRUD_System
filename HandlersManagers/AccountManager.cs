@@ -109,7 +109,6 @@ namespace CRUD_System.Handlers
             return finalAlias;
         }
 
-
         /// <summary>
         /// Removes diacritics, punctuation, and unwanted characters from the input string.
         /// </summary>
@@ -156,7 +155,6 @@ namespace CRUD_System.Handlers
 
             foreach (var line in cache.CachedLoginData!)
             {
-                //var loginDetails = line.Split(','); // Ensure splitting is done if data contains multiple fields
                 if (line[0].Trim() == alias)
                 {
                     Debug.WriteLine($"Alias {alias} already exists.");
