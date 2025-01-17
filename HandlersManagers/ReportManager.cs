@@ -208,7 +208,7 @@ namespace CRUD_System.Handlers
         private (string? fileToDelete, string? currentUser) ValidateAndGetFileToDelete(string fileName)
         {
             // Check if a file is selected in the ListView
-            if (!adminControl!.btnDeleteReport.Visible || adminControl.listViewReports.SelectedItems.Count == 0)
+            if (!adminControl!.btnDeleteFileReport.Visible || adminControl.listViewReports.SelectedItems.Count == 0)
             {
                 // Notify the user that no file is selected
                 MessageBox.Show("Please select a file to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);

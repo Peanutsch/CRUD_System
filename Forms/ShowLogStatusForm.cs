@@ -34,26 +34,17 @@ namespace CRUD_System
             // Prepare the log file
             string? logFile = PrepareLogFile(alias);
 
-            if (!string.IsNullOrEmpty(logFile))
-            {
-                // Parse log entries from the file into structured data
-                var logEntries = ParseLogFile(logFile);
+            // Parse log entries from the file into structured data
+            var logEntries = ParseLogFile(logFile!);
 
-                // Sort log entries by date/time in descending order
-                var sortedEntries = SortLogEntriesDescending(logEntries);
+            // Sort log entries by date/time in descending order
+            var sortedEntries = SortLogEntriesDescending(logEntries);
 
-                // Populate the ListBox with the sorted log entries
-                PopulateListBox(sortedEntries);
+            // Populate the ListBox with the sorted log entries
+            PopulateListBox(sortedEntries);
 
-                // Re-encrypt the log file after processing
-                EncryptionManager.EncryptFile(logFile);
-            }
-            else
-            {
-                // Show a message if no log file is found
-                MessageBox.Show("Log file not found.");
-                return;
-            }
+            // Re-encrypt the log file after processing
+            EncryptionManager.EncryptFile(logFile);
         }
 
         /// <summary>

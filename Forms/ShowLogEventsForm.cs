@@ -29,40 +29,28 @@ namespace CRUD_System
         /// <param name="alias">The alias of the user whose logs need to be loaded.</param>
         public void LoadListBoxLogs(string alias)
         {
-            txtSelectedAlias.Text = alias;
-
             // Prepare the log files from all year directories
             List<string> logFiles = PrepareLogFiles(alias);
 
-            if (logFiles.Any())
+            var allLogEntries = new List<Tuple<DateTime, string>>();
+
+            foreach (string logFile in logFiles)
             {
-                var allLogEntries = new List<Tuple<DateTime, string>>();
+                // Parse log entries from each file into structured data
+                var logEntries = ParseLogFile(logFile);
 
-                foreach (string logFile in logFiles)
-                {
-                    // Parse log entries from each file into structured data
-                    var logEntries = ParseLogFile(logFile);
+                // Combine entries from all files
+                allLogEntries.AddRange(logEntries);
 
-                    // Combine entries from all files
-                    allLogEntries.AddRange(logEntries);
-
-                    // Re-encrypt the log file after processing
-                    EncryptionManager.EncryptFile(logFile);
-                }
-
-                // Sort log entries by date/time in descending order
-                var sortedEntries = SortLogEntriesDescending(allLogEntries);
-
-                // Populate the ListBox with the sorted log entries
-                PopulateListBox(sortedEntries);
-            }
-            else
-            {
-                Debug.WriteLine("No log files found in any directories.");
-                return;
+                // Re-encrypt the log file after processing
+                EncryptionManager.EncryptFile(logFile);
             }
 
+            // Sort log entries by date/time in descending order
+            var sortedEntries = SortLogEntriesDescending(allLogEntries);
 
+            // Populate the ListBox with the sorted log entries
+            PopulateListBox(sortedEntries);
         }
 
         /// <summary>

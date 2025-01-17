@@ -76,7 +76,7 @@
             reportLBLCreatedBy = new Label();
             reportLBLCurrentDate = new Label();
             btnShowListBoxLogEvents = new Button();
-            btnDeleteReport = new Button();
+            btnDeleteFileReport = new Button();
             chkIsTheOne = new CheckBox();
             btnUploadFile = new Button();
             btnShowLogsStatus = new Button();
@@ -575,18 +575,18 @@
             btnShowListBoxLogEvents.Visible = false;
             btnShowListBoxLogEvents.Click += btnShowListBoxLogs_Click;
             // 
-            // btnDeleteReport
+            // btnDeleteFileReport
             // 
-            btnDeleteReport.BackColor = Color.Red;
-            btnDeleteReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteReport.Location = new Point(941, 416);
-            btnDeleteReport.Name = "btnDeleteReport";
-            btnDeleteReport.Size = new Size(146, 30);
-            btnDeleteReport.TabIndex = 59;
-            btnDeleteReport.Text = "Delete Report";
-            btnDeleteReport.UseVisualStyleBackColor = false;
-            btnDeleteReport.Visible = false;
-            btnDeleteReport.Click += btnDeleteReport_Click;
+            btnDeleteFileReport.BackColor = Color.Red;
+            btnDeleteFileReport.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDeleteFileReport.Location = new Point(941, 416);
+            btnDeleteFileReport.Name = "btnDeleteFileReport";
+            btnDeleteFileReport.Size = new Size(146, 30);
+            btnDeleteFileReport.TabIndex = 59;
+            btnDeleteFileReport.Text = "Delete Report";
+            btnDeleteFileReport.UseVisualStyleBackColor = false;
+            btnDeleteFileReport.Visible = false;
+            btnDeleteFileReport.Click += btnDeleteFileReport_Click;
             // 
             // chkIsTheOne
             // 
@@ -620,7 +620,6 @@
             // btnShowLogsStatus
             // 
             btnShowLogsStatus.BackColor = SystemColors.ActiveCaption;
-            btnShowLogsStatus.Enabled = false;
             btnShowLogsStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnShowLogsStatus.Location = new Point(800, 35);
             btnShowLogsStatus.Name = "btnShowLogsStatus";
@@ -661,7 +660,7 @@
             Controls.Add(btnShowLogsStatus);
             Controls.Add(btnUploadFile);
             Controls.Add(chkIsTheOne);
-            Controls.Add(btnDeleteReport);
+            Controls.Add(btnDeleteFileReport);
             Controls.Add(btnShowListBoxLogEvents);
             Controls.Add(reportLBLCurrentDate);
             Controls.Add(reportLBLCreatedBy);
@@ -740,7 +739,7 @@
         public Label reportLBLCreatedBy;
         public Label reportLBLCurrentDate;
         public Button btnShowListBoxLogEvents;
-        public Button btnDeleteReport;
+        public Button btnDeleteFileReport;
         public CheckBox chkIsTheOne;
         public Button btnUploadFile;
         private ColumnHeader createdColumn;
