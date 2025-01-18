@@ -473,6 +473,7 @@ namespace CRUD_System.Interfaces
             adminControl.btnPreviousPage.Enabled = !EditMode;
             adminControl.btnGeneratePSW.Enabled = !EditMode;
             adminControl.btnUploadFile.Visible = EditMode;
+            adminControl.btnCallInSick.Visible = EditMode;
             //adminControl.btnShowLogsStatus.Enabled = EditMode;
 
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
