@@ -48,12 +48,6 @@ namespace CRUD_System
                 // Re-encrypt the log file after processing
                 EncryptionManager.EncryptFile(logFile);
             }
-            else
-            {
-                // Show a message if no log file is found
-                MessageBox.Show("Log file not found.");
-                return;
-            }
         }
 
         /// <summary>
@@ -101,13 +95,13 @@ namespace CRUD_System
                     string date = parts[0];         // Date dd-MM-yyyy
                     string time = parts[1];         // Time HH:mm:ss
                     string aliasInLog = parts[2];   // Alias
-                    string logEvent = parts[3];     // Log event
+                    string logStatus = parts[3];     // Log Status
 
                     // Combine date and time into a single DateTime object
                     if (DateTime.TryParse($"{date} {time}", out DateTime logDateTime))
                     {
                         // Add the parsed log entry as a tuple (timestamp, full entry string)
-                        logEntries.Add(new Tuple<DateTime, string>(logDateTime, $"{date} {time} {aliasInLog} {logEvent}"));
+                        logEntries.Add(new Tuple<DateTime, string>(logDateTime, $"{date} {time} {aliasInLog} {logStatus}"));
                     }
                 }
             }

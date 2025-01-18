@@ -40,10 +40,11 @@ namespace CRUD_System.Handlers
         }
 
         private readonly FilePaths path = new FilePaths();
+        private readonly DataCache cache = new DataCache();
+        private readonly UserInterface userInterface = new UserInterface();
         private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        private readonly DataCache cache = new DataCache();
-
+        
         public bool onlineStatus = false;
         #endregion PROPERTIES
 
@@ -279,7 +280,6 @@ namespace CRUD_System.Handlers
         #endregion LOGIN
 
         #region LOGOUT
-        UserInterface userInterface = new UserInterface();
         /// <summary>
         /// Logs out the current user by updating their online status to offline,
         /// logging the logout event, and clearing the current user.
@@ -291,7 +291,7 @@ namespace CRUD_System.Handlers
             if (!string.IsNullOrEmpty(currentUser))
             {
                 // When no status Offline, time of logout == time offline
-                if (!userInterface.isOffline && !CurrentUserIsAdmin)
+                if (!userInterface.IsOffline && !CurrentUserIsAdmin)
                 {
                     string currentTime = DateTime.Now.ToString("HH:mm");
 
@@ -321,7 +321,7 @@ namespace CRUD_System.Handlers
             }
 
             // When no status Offline, time of logout == time offline
-            if (!userInterface.isOffline)
+            if (!userInterface.IsOffline)
             {
                 string currentTime = DateTime.Now.ToString("HH:mm");
 

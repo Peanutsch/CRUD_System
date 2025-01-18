@@ -239,6 +239,7 @@
             btnGeneratePSW.TabIndex = 22;
             btnGeneratePSW.Text = "Gen. Password";
             btnGeneratePSW.UseVisualStyleBackColor = false;
+            btnGeneratePSW.Visible = false;
             btnGeneratePSW.Click += btnGeneratePassword_Click;
             // 
             // btnEditUserDetails
@@ -389,6 +390,7 @@
             btnCallInSick.TabIndex = 40;
             btnCallInSick.Text = "Call in Sick";
             btnCallInSick.UseVisualStyleBackColor = false;
+            btnCallInSick.Visible = false;
             btnCallInSick.Click += btnCallInSick_Click;
             // 
             // listViewReports
@@ -615,6 +617,7 @@
             btnUploadFile.TabIndex = 61;
             btnUploadFile.Text = "Upload File";
             btnUploadFile.UseVisualStyleBackColor = false;
+            btnUploadFile.Visible = false;
             btnUploadFile.Click += btnUploadFile_Click;
             // 
             // btnShowLogsStatus

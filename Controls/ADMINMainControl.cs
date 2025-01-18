@@ -344,12 +344,38 @@ namespace CRUD_System
         /// <param name="e">Event arguments associated with the click event.</param>
         private void btnShowListBoxLogs_Click(object sender, EventArgs e)
         {
-            interactionHandler.Open_ShowLogEventsForm(this, txtAlias.Text);
+            // Null check
+            string logFile = FindCSVFiles.FindCSVFileLogEvent(txtAlias.Text, "logevents");
+            if (string.IsNullOrEmpty(logFile))
+            {
+                // Show a message if no log file is found
+                MessageBox.Show("Log file not found.");
+                return;
+            }
+            else
+            {
+                interactionHandler.Open_ShowLogEventsForm(this, txtAlias.Text);
+            }
         }
 
         private void btnShowLogsStatus_Click(object sender, EventArgs e)
         {
-            interactionHandler.Open_ShowLogStatusForm(this, txtAlias.Text);
+            interactionHandler.PerformActionIfUserSelected(() =>
+            {
+                // Null check
+                string logFile = FindCSVFiles.FindCSVFileLogEvent(txtAlias.Text, "logstatus");
+                if (string.IsNullOrEmpty(logFile))
+                {
+                    // Show a message if no log file is found
+                    MessageBox.Show("Log file not found.");
+                    return;
+                }
+                else
+                {
+                    interactionHandler.Open_ShowLogStatusForm(this, txtAlias.Text);
+                }
+            },
+            () => message.MessageInvalidNoUserSelected());
         }
 
         private void btnCreateReport_Click(object sender, EventArgs e)

@@ -56,13 +56,6 @@ namespace CRUD_System
                 // Populate the ListBox with the sorted log entries
                 PopulateListBox(sortedEntries);
             }
-            else
-            {
-                Debug.WriteLine("No log files found in any directories.");
-                return;
-            }
-
-
         }
 
         /// <summary>
