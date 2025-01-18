@@ -54,7 +54,7 @@ namespace CRUD_System.Interfaces
             DataCache.LoadCache();
 
             // Check if the cached user data is empty or not loaded
-            if (!cache.CachedUserData.Any()|| !cache.CachedLoginData.Any())
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
@@ -100,7 +100,7 @@ namespace CRUD_System.Interfaces
             if (e.Index < 0) return;
 
             // Safely cast sender to ListBox and check if it’s null
-            if (sender is not ListBox listBox ) return;
+            if (sender is not ListBox listBox) return;
 
             // Get the item from the list and handle possible null
             string? listItem = listBox.Items[e.Index]?.ToString();
@@ -381,7 +381,7 @@ namespace CRUD_System.Interfaces
             {
                 adminControl.btnDeleteUser.Visible = EditMode;
                 adminControl.btnShowListBoxLogEvents.Visible = EditMode;
-                adminControl.btnDeleteReport.Visible = EditMode;
+                adminControl.btnDeleteFileReport.Visible = EditMode;
 
                 adminControl.chkIsTheOne.Visible = EditMode;
                 adminControl.chkIsTheOne.Checked = IsSelectedUserAdmin;
@@ -392,7 +392,7 @@ namespace CRUD_System.Interfaces
                 adminControl.chkIsAdmin.Checked = loginDetails[2] == "True";
                 adminControl.chkIsTheOne.Checked = loginDetails[4] == "True";
             }
-            
+
             // Enable Force log Out button if the selected user is not the current user
             if (AuthenticationService.CurrentUser != selectedAlias)
             {
@@ -473,8 +473,7 @@ namespace CRUD_System.Interfaces
             adminControl.btnPreviousPage.Enabled = !EditMode;
             adminControl.btnGeneratePSW.Enabled = !EditMode;
             adminControl.btnUploadFile.Visible = EditMode;
-            adminControl.btnShowLogsStatus.Enabled = EditMode;
-            adminControl.btnCallInSick.Visible = EditMode;
+            //adminControl.btnShowLogsStatus.Enabled = EditMode;
 
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
@@ -485,7 +484,7 @@ namespace CRUD_System.Interfaces
             {
                 ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
                 ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
-                ToggleControlVisibility(adminControl.btnDeleteReport, EditMode);
+                ToggleControlVisibility(adminControl.btnDeleteFileReport, EditMode);
                 ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
                 ToggleControlVisibility(adminControl.btnShowListBoxLogEvents, EditMode);
                 //ToggleControlVisibility(adminControl.btnShowLogsStatus, EditMode);
@@ -592,7 +591,7 @@ namespace CRUD_System.Interfaces
             adminControl.txtZIPCode,
             adminControl.txtCity,
             adminControl.txtEmail,
-            adminControl.txtPhonenumber 
+            adminControl.txtPhonenumber
             };
 
             foreach (var field in textFields)
@@ -606,7 +605,7 @@ namespace CRUD_System.Interfaces
             // Update button states to false
             adminControl.InteractionHandler.UserSelected = false;
         }
-            
+
 
         /// <summary>
         /// Populates the textboxes with the details of a selected user.
@@ -665,7 +664,7 @@ namespace CRUD_System.Interfaces
             adminControl.listViewReports.Enabled = !IsReport; // Disables the list view to prevent altering older reports
             adminControl.btnDeleteUser.Enabled = !IsReport; // Disables the "Delete User" button
             adminControl.btnGeneratePSW.Enabled = !IsReport; // Disables the "Generate Password" button
-            adminControl.btnDeleteReport.Enabled = !IsReport; // Disables the "Delete Report" button
+            adminControl.btnDeleteFileReport.Enabled = !IsReport; // Disables the "Delete Report" button
             adminControl.btnSaveEditUserDetails.Enabled = !IsReport; // Disables the "Save Edit" button
 
             adminControl.reportRichTxReport.ReadOnly = !IsReport; // Sets the report text box to read-only when not in report mode

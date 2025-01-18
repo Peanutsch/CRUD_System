@@ -331,9 +331,9 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event, typically the delete button.</param>
         /// <param name="e">Contains event data.</param>
-        private void btnDeleteReport_Click(object sender, EventArgs e)
+        private void btnDeleteFileReport_Click(object sender, EventArgs e)
         {
-            DeleteFileReport();
+            reportManager.DeleteFileReport();
         }
 
         /// <summary>
@@ -380,6 +380,14 @@ namespace CRUD_System
 
         private void btnCreateReport_Click(object sender, EventArgs e)
         {
+            comboBoxSubjectReport.Text = "Subject:";
+            btnEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnEditUserDetails
+            btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
+            adminInterface.TextBoxesReportEmpty();
+            AdminInterface.IsReport = ToggleIsReportMode();
+            adminInterface.ReportConfig();
+
+            /*
             interactionHandler.PerformActionIfUserSelected(() =>
             {
                 comboBoxSubjectReport.Text = "Subject:";
@@ -390,19 +398,9 @@ namespace CRUD_System
                 adminInterface.ReportConfig();
             },
             () => message.MessageInvalidNoUserSelected());
+        */
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
-
-        #region DELETE FILE REPORT
-        /// <summary>
-        /// Triggers method DeleteFileReport in ReportManager
-        /// Only TheOne's are allowed to perform this action.
-        /// </summary>
-        public void DeleteFileReport()
-        {
-            reportManager.DeleteFileReport();
-        }
-        #endregion DELETE FILE REPORT
 
         #region TOGGLE MODES
         /// <summary>

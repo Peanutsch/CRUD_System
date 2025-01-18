@@ -34,20 +34,17 @@ namespace CRUD_System
             // Prepare the log file
             string? logFile = PrepareLogFile(alias);
 
-            if (!string.IsNullOrEmpty(logFile))
-            {
-                // Parse log entries from the file into structured data
-                var logEntries = ParseLogFile(logFile);
+            // Parse log entries from the file into structured data
+            var logEntries = ParseLogFile(logFile!);
 
-                // Sort log entries by date/time in descending order
-                var sortedEntries = SortLogEntriesDescending(logEntries);
+            // Sort log entries by date/time in descending order
+            var sortedEntries = SortLogEntriesDescending(logEntries);
 
-                // Populate the ListBox with the sorted log entries
-                PopulateListBox(sortedEntries);
+            // Populate the ListBox with the sorted log entries
+            PopulateListBox(sortedEntries);
 
-                // Re-encrypt the log file after processing
-                EncryptionManager.EncryptFile(logFile);
-            }
+            // Re-encrypt the log file after processing
+            EncryptionManager.EncryptFile(logFile!);
         }
 
         /// <summary>
@@ -95,13 +92,13 @@ namespace CRUD_System
                     string date = parts[0];         // Date dd-MM-yyyy
                     string time = parts[1];         // Time HH:mm:ss
                     string aliasInLog = parts[2];   // Alias
-                    string logStatus = parts[3];     // Log Status
+                    string logEvent = parts[3];     // Log event
 
                     // Combine date and time into a single DateTime object
                     if (DateTime.TryParse($"{date} {time}", out DateTime logDateTime))
                     {
                         // Add the parsed log entry as a tuple (timestamp, full entry string)
-                        logEntries.Add(new Tuple<DateTime, string>(logDateTime, $"{date} {time} {aliasInLog} {logStatus}"));
+                        logEntries.Add(new Tuple<DateTime, string>(logDateTime, $"{date} {time} {aliasInLog} {logEvent}"));
                     }
                 }
             }
