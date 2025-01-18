@@ -128,7 +128,9 @@ namespace CRUD_System.Interfaces
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (userControl.listBoxUser.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
-                userControl.InteractionHandler.UserSelected = true; // Sync selection state with ControlsHandler
+                // Sync selection state with ControlsHandler
+                userControl.InteractionHandler.UserSelected = true;
+
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
@@ -171,11 +173,6 @@ namespace CRUD_System.Interfaces
 
                 // Re-encrypt the log file after processing
                 EncryptionManager.EncryptFile(logFile);
-            }
-            else
-            {
-                // Show a message if no log file is found
-                MessageBox.Show("Log file not found.");
             }
         }
 
@@ -224,13 +221,13 @@ namespace CRUD_System.Interfaces
                     string date = parts[0];         // Date dd-MM-yyyy
                     string time = parts[1];         // Time HH:mm:ss
                     string aliasInLog = parts[2];   // Alias
-                    string logEvent = parts[3];     // Log event
+                    string logStatus = parts[3];     // Log event
 
                     // Combine date and time into a single DateTime object
                     if (DateTime.TryParse($"{date} {time}", out DateTime logDateTime))
                     {
                         // Add the parsed log entry as a tuple (timestamp, full entry string)
-                        logEntries.Add(new Tuple<DateTime, string>(logDateTime, $"{date} {time} {aliasInLog} {logEvent}"));
+                        logEntries.Add(new Tuple<DateTime, string>(logDateTime, $"{date} {time} {aliasInLog} {logStatus}"));
                     }
                 }
             }
@@ -329,7 +326,7 @@ namespace CRUD_System.Interfaces
             {
                 case "Online":
                     IsOffline = false;
-                    userControl.txtStatusIndicator.BackColor = Color.Blue;
+                    userControl.txtStatusIndicator.BackColor = Color.Green;
                     string TimeOnline = currentTime;
                     logEvents.CheckStatus(isAlias, status, TimeOnline);
 
