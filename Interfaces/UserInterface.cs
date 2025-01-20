@@ -327,32 +327,24 @@ namespace CRUD_System.Interfaces
                 case "Online":
                     IsOffline = false;
                     userControl.txtStatusIndicator.BackColor = Color.Green;
-                    string TimeOnline = currentTime;
-                    logEvents.CheckStatus(isAlias, status, TimeOnline);
-
+                    logEvents.CheckStatus(isAlias, status, currentTime);
                     break;
 
                 case "Away":
                     IsOffline = false;
                     userControl.txtStatusIndicator.BackColor = Color.Orange;
-                    string TimeAway = currentTime;
-                    logEvents.CheckStatus(isAlias, status, TimeAway);
-
+                    logEvents.CheckStatus(isAlias, status, currentTime);
                     break;
                 case "Break":
                     IsOffline = false;
                     userControl.txtStatusIndicator.BackColor = Color.Yellow;
-                    string TimeBreak = currentTime;
-                    logEvents.CheckStatus(isAlias, status, TimeBreak);
-
+                    logEvents.CheckStatus(isAlias, status, currentTime);
                     break;
                 case "Offline":
                     IsOffline = true;
 
                     userControl.txtStatusIndicator.BackColor = Color.Gray;
-                    string TimeOffline = currentTime;
-                    logEvents.CheckStatus(isAlias, status, TimeOffline);
-
+                    logEvents.CheckStatus(isAlias, status, currentTime);
                     break;
             }
             // Clear and reload listbox
