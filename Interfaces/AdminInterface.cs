@@ -212,14 +212,14 @@ namespace CRUD_System.Interfaces
         public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
             // Empty list storeIsAdminStatus
-            adminControl.storeIsAdminNeoStatus.Clear();
-            Debug.WriteLine($"Empty List storeIsAdminStatus, Items in List: {adminControl.storeIsAdminNeoStatus.Count}\n***\n");
+            adminControl.storeInitialAdminNeoStatus.Clear();
+            Debug.WriteLine($"Empty List storeIsAdminStatus, Items in List: {adminControl.storeInitialAdminNeoStatus.Count}\n***\n");
 
             // Empty textboxes report field
             TextBoxesReportEmpty();
 
             // Check if the cached user data is empty or not loaded
-            if (cache.CachedLoginData == null || cache.CachedLoginData.Count == 0)
+            if (!cache.CachedLoginData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
@@ -229,6 +229,10 @@ namespace CRUD_System.Interfaces
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
+                // Store booleans isAdmin and isTheOne in list storeIsAdminStatus
+                adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserAdmin); // bool IsSelectedUserAdmin at index 0
+                adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserTheOne); // Bool IsSelectedUserTheOne at index 1
+
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
@@ -270,23 +274,14 @@ namespace CRUD_System.Interfaces
 
         public void VerifyRolesAdminTheOne(string selectedAlias)
         {
-            /*
-            // Empty list storeIsAdminStatus
-            adminControl.storeIsAdminNeoStatus.Clear();
-            Debug.WriteLine($"Empty List storeIsAdminStatus, Items in List: {adminControl.storeIsAdminNeoStatus.Count}\n***\n");
-            */
-
-            // Store booleans isAdmin and isTheOne in list storeIsAdminStatus
-            adminControl.storeIsAdminNeoStatus.Add(IsSelectedUserAdmin); // index 0
-            adminControl.storeIsAdminNeoStatus.Add(IsSelectedUserTheOne); // index 1
             Debug.WriteLine($"***\nFor [{selectedAlias}]\n" +
-                            $"Added status isAdmin ({adminControl.storeIsAdminNeoStatus[0]}) and isTheOne ({adminControl.storeIsAdminNeoStatus[1]}) to list storeIsAdminStatus\n" +
-                            $"Items in List = {adminControl.storeIsAdminNeoStatus.Count} (must be 2)\n");
+                            $"Added status isAdmin ({adminControl.storeInitialAdminNeoStatus[0]}) and isTheOne ({adminControl.storeInitialAdminNeoStatus[1]}) to list storeIsAdminStatus\n" +
+                            $"Items in List = {adminControl.storeInitialAdminNeoStatus.Count} (must be 2)\n");
 
             int indexCounter = 0;
-            foreach (bool index in adminControl.storeIsAdminNeoStatus)
+            foreach (bool booleans in adminControl.storeInitialAdminNeoStatus)
             {
-                Debug.WriteLine($"Index {indexCounter}: {index}");
+                Debug.WriteLine($"Index {indexCounter}: {booleans}");
                 indexCounter++;
             }
         }

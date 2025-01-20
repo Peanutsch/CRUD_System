@@ -30,7 +30,7 @@ namespace CRUD_System
     public partial class AdminMainControl : UserControl
     {
         #region PROPERTIES
-        public List<bool> storeIsAdminNeoStatus = new List<bool>(); // index 0 = bool admin, index 1 = bool Neo
+        public List<bool> storeInitialAdminNeoStatus = new List<bool>(); // index 0 = bool admin, index 1 = bool Neo
 
         public static bool IsTheOne
         {
@@ -522,24 +522,24 @@ namespace CRUD_System
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
-            bool initialIsAdminStatus = storeIsAdminNeoStatus[0];
+            bool initialIsAdminStatus = storeInitialAdminNeoStatus[0];
+
+            Debug.WriteLine($"initialIsAdminStatus = {storeInitialAdminNeoStatus[0]}");
 
             // Get the new isAdmin status from the CheckBox
             bool isAdminNewStatus = chkIsAdmin.Checked;
 
             // Compare the new status with the initial status
-            if (isAdminNewStatus == initialIsAdminStatus)
+            if (storeInitialAdminNeoStatus.Count != 0 &&
+                chkIsAdmin.Checked &&
+                isAdminNewStatus == initialIsAdminStatus)
             {
                 // No change in the isAdmin status
                 ChkIsAdminChanged = false;
-                Debug.WriteLine($"\nisAdminNewStatus = {isAdminNewStatus} initialIsAdminStatus = {storeIsAdminNeoStatus[0]}");
                 Debug.WriteLine($"No changes: ChkIsAdminChanged = {ChkIsAdminChanged}");
             }
             else
             {
-                // Status has changed; update the flag and isAdmin property
-                Debug.WriteLine($"\nisAdminNewStatus = {isAdminNewStatus}, initialIsAdminStatus = {storeIsAdminNeoStatus[0]}");
-
                 ChkIsAdminChanged = true;
                 Debug.WriteLine($"ChkIsAdminChanged: {ChkIsAdminChanged}");
 
@@ -560,25 +560,26 @@ namespace CRUD_System
         /// <param name="e">Event data associated with the CheckedChanged event.</param>
         private void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
+
             // Retrieve the initial isTheOne status from the second item (index 1) in storeIsAdminNeoStatus
-            bool initialIsTheOneStatus = storeIsAdminNeoStatus[1];
+            bool initialIsTheOneStatus = storeInitialAdminNeoStatus[1];
+
+            Debug.WriteLine($"initialIsTheOneStatus = {storeInitialAdminNeoStatus[1]}");
 
             // Get the new isTheOne status from the CheckBox
             bool isTheOneNewStatus = chkIsTheOne.Checked;
 
             // Compare the new status with the initial status
-            if (isTheOneNewStatus == initialIsTheOneStatus)
+            if (storeInitialAdminNeoStatus.Count != 0 &&
+                chkIsTheOne.Checked &&
+                isTheOneNewStatus == initialIsTheOneStatus)
             {
                 // No change in the isTheOne status
                 ChkIsTheOneChanged = false;
-                Debug.WriteLine($"isTheOneNewStatus = {isTheOneNewStatus}, initialIsTheOneStatus = {storeIsAdminNeoStatus[1]}");
                 Debug.WriteLine($"No changes: ChkIsTheOneChanged = {ChkIsTheOneChanged}");
             }
             else
             {
-                // Status has changed; update the flag and isTheOne property
-                Debug.WriteLine($"isTheOneNewStatus = {isTheOneNewStatus}, initialIsTheOneStatus = {storeIsAdminNeoStatus[1]}");
-
                 ChkIsTheOneChanged = true;
                 Debug.WriteLine($"ChkIsTheOneChanged: {ChkIsTheOneChanged}");
 
