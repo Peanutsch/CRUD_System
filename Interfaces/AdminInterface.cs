@@ -42,6 +42,20 @@ namespace CRUD_System.Interfaces
         #endregion CONSTRUCTOR
 
         #region LISTBOX ADMIN
+        public void SetCheckBoxes()
+        {
+            // Synchronize checkboxes for Admin and TheOne
+            adminControl.chkIsTheOne.CheckedChanged -= adminControl.chkIsTheOne_CheckedChanged!;
+            adminControl.chkIsAdmin.CheckedChanged -= adminControl.chkIsAdmin_CheckedChanged!;
+
+            adminControl.chkIsAdmin.Checked = IsSelectedUserAdmin;
+            adminControl.chkIsTheOne.Checked = IsSelectedUserTheOne;
+
+            adminControl.chkIsTheOne.CheckedChanged += adminControl.chkIsTheOne_CheckedChanged!;
+            adminControl.chkIsAdmin.CheckedChanged += adminControl.chkIsAdmin_CheckedChanged!;
+        }
+
+
         /// <summary>
         /// Generates the ListBox items for a specific page of user details.
         /// </summary>
@@ -253,7 +267,7 @@ namespace CRUD_System.Interfaces
                     FillTextboxesAdmin(userDetailsArray);
                 }
 
-                ProcessUserRoleData(selectedAlias, loginDetailsArray!);  // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
+                ProcessUserRoleData(selectedAlias, loginDetailsArray!);     // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
                 FindReportFile(selectedAlias);                              // Find report files from corresponding user alias
                 HandleSelectedUserStatus(selectedAlias);                    // Update UI
             }

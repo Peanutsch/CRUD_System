@@ -506,7 +506,7 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event (chkIsAdmin).</param>
         /// <param name="e">Event data associated with the CheckedChanged event.</param>
-        private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
+        public void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             ChkIsAdminChanged = true;
             
@@ -514,7 +514,7 @@ namespace CRUD_System
             bool initialIsAdminStatus = storeInitialUserStatus[0];
             if (chkIsAdmin.Checked != initialIsAdminStatus)
             {
-                Debug.WriteLine($"---\nInitial Admin Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is changed]");
+                Debug.WriteLine($"---\nADMIN initial Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is changed]");
 
                 // Update isAdmin and synchronize with the AdminInterface
                 isAdmin = chkIsAdmin.Checked;
@@ -523,7 +523,7 @@ namespace CRUD_System
             else
             {
                 ChkIsAdminChanged = false;
-                Debug.WriteLine($"---\nInitial Admin Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is NOT changed]");
+                Debug.WriteLine($"---\nADMIN initial Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is NOT changed]");
 
                 // Synchronize with the AdminInterface
                 isAdmin = chkIsAdmin.Checked;
@@ -540,7 +540,7 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event (chkIsTheOne).</param>
         /// <param name="e">Event data associated with the CheckedChanged event.</param>
-        private void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
+        public void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
         {
             ChkIsTheOneChanged = true;
 
@@ -550,7 +550,7 @@ namespace CRUD_System
             // Compare the new status with the initial status
             if (chkIsTheOne.Checked != initialIsTheOneStatus)
             {
-                Debug.WriteLine($"---\nInitial TheOne Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is changed]");
+                Debug.WriteLine($"---\nTHEONE Initial Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is changed]");
 
                 // Update IsTheOne and synchronize with the AdminInterface
                 IsTheOne = chkIsTheOne.Checked;
@@ -559,7 +559,7 @@ namespace CRUD_System
             else
             {
                 ChkIsTheOneChanged = false;
-                Debug.WriteLine($"---\nInitial TheOne Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is NOT changed]");
+                Debug.WriteLine($"---\nTHEONE Initial Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is NOT changed]");
 
                 // Synchronize with the AdminInterface
                 IsTheOne = chkIsTheOne.Checked;
