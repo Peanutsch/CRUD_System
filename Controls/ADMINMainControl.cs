@@ -386,19 +386,6 @@ namespace CRUD_System
             adminInterface.TextBoxesReportEmpty();
             AdminInterface.IsReport = ToggleIsReportMode();
             adminInterface.ReportConfig();
-
-            /*
-            interactionHandler.PerformActionIfUserSelected(() =>
-            {
-                comboBoxSubjectReport.Text = "Subject:";
-                btnEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnEditUserDetails
-                btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
-                adminInterface.TextBoxesReportEmpty();
-                AdminInterface.IsReport = ToggleIsReportMode();
-                adminInterface.ReportConfig();
-            },
-            () => message.MessageInvalidNoUserSelected());
-        */
         }
         #endregion BUTTONS SoC (Seperate of Concerns)
 
@@ -524,8 +511,6 @@ namespace CRUD_System
             // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
             bool initialIsAdminStatus = storeInitialAdminNeoStatus[0];
 
-            Debug.WriteLine($"initialIsAdminStatus = {storeInitialAdminNeoStatus[0]}");
-
             // Get the new isAdmin status from the CheckBox
             bool isAdminNewStatus = chkIsAdmin.Checked;
 
@@ -536,7 +521,7 @@ namespace CRUD_System
             {
                 // No change in the isAdmin status
                 ChkIsAdminChanged = false;
-                Debug.WriteLine($"No changes: ChkIsAdminChanged = {ChkIsAdminChanged}");
+                Debug.WriteLine($"No changes ChkIsAdminChanged = {ChkIsAdminChanged}");
             }
             else
             {
@@ -548,7 +533,7 @@ namespace CRUD_System
                 AdminInterface.IsSelectedUserAdmin = isAdmin;
             }
 
-            // Note: The clearing of storeIsAdminStatus is handled in AdminInterface.ListBoxAdmin_SelectedIndexChangedHandler.
+            // Note: The clearing of storeIsAdminStatus is handled in ListBoxAdmin_SelectedIndexChanged.
         }
 
         /// <summary>
@@ -564,8 +549,6 @@ namespace CRUD_System
             // Retrieve the initial isTheOne status from the second item (index 1) in storeIsAdminNeoStatus
             bool initialIsTheOneStatus = storeInitialAdminNeoStatus[1];
 
-            Debug.WriteLine($"initialIsTheOneStatus = {storeInitialAdminNeoStatus[1]}");
-
             // Get the new isTheOne status from the CheckBox
             bool isTheOneNewStatus = chkIsTheOne.Checked;
 
@@ -576,7 +559,7 @@ namespace CRUD_System
             {
                 // No change in the isTheOne status
                 ChkIsTheOneChanged = false;
-                Debug.WriteLine($"No changes: ChkIsTheOneChanged = {ChkIsTheOneChanged}");
+                Debug.WriteLine($"No changes ChkIsTheOneChanged = {ChkIsTheOneChanged}");
             }
             else
             {
@@ -588,43 +571,8 @@ namespace CRUD_System
                 AdminInterface.IsSelectedUserTheOne = IsTheOne;
             }
 
-            // Note: The clearing of storeIsAdminNeoStatus is handled in AdminInterface.ListBoxAdmin_SelectedIndexChangedHandler.
+            // Note: The clearing of storeIsAdminNeoStatus is handled in ListBoxAdmin_SelectedIndexChanged.
         }
-
-
-        /*
-        /// <summary>
-        /// Handles the event triggered when the 'Is The One' checkbox state changes.
-        /// Toggles the 'IsTheOne' property based on the checkbox state.
-        /// If the checkbox is checked and the selected user is an admin, marks the current user as 'The One'.
-        /// If the checkbox is unchecked or the selected user is not an admin, the 'IsTheOne' property is set to false.
-        /// Sets flag 'ChkIsTheOneChanged' to true to indicate a change in the checkbox state.
-        /// </summary>
-        /// <param name="sender">The source of the event, typically the 'chkIsTheOne' checkbox.</param>
-        /// <param name="e">The event data containing information about the state change of the checkbox.</param>
-        public void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
-        {
-            // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
-            bool initialIsNeoStatus = storeIsAdminNeoStatus[1];
-            Debug.WriteLine($"initialIsAdminStatus = {initialIsNeoStatus}");
-
-            // Get the new isAdmin status from the CheckBox
-            bool isAdminNewStatus = chkIsAdmin.Checked;
-
-
-            ChkIsTheOneChanged = true;
-
-            if (AdminInterface.IsSelectedUserIsAdmin && chkIsTheOne.Checked)
-            {
-                IsTheOne = chkIsTheOne.Checked;
-            }
-            else
-            {
-                IsTheOne = false;
-                ChkIsTheOneChanged = true;
-            }
-        }
-        */
         #endregion CHECKBOXES
 
         #region SELECTED INDEX CHANGED
@@ -636,6 +584,10 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Empty list storeIsAdminStatus
+            storeInitialAdminNeoStatus.Clear();
+            Debug.WriteLine($"\n***\nEmpty List storeIsAdminStatus, Items in List: {storeInitialAdminNeoStatus.Count}\n***\n");
+
             listViewReports.Items.Clear();
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }

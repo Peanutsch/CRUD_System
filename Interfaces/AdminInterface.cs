@@ -211,10 +211,6 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
-            // Empty list storeIsAdminStatus
-            adminControl.storeInitialAdminNeoStatus.Clear();
-            Debug.WriteLine($"Empty List storeIsAdminStatus, Items in List: {adminControl.storeInitialAdminNeoStatus.Count}\n***\n");
-
             // Empty textboxes report field
             TextBoxesReportEmpty();
 
@@ -229,21 +225,17 @@ namespace CRUD_System.Interfaces
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
             if (adminControl.listBoxAdmin.SelectedItem is string selectedUserString && !string.IsNullOrEmpty(selectedUserString))
             {
-                // Store booleans isAdmin and isTheOne in list storeIsAdminStatus
-                adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserAdmin); // bool IsSelectedUserAdmin at index 0
-                adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserTheOne); // Bool IsSelectedUserTheOne at index 1
-
-                // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
-                string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
-
-                // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
-                VerifyRolesAdminTheOne(selectedAlias);
+                // Set UserSelected on true
+                adminControl.InteractionHandler.UserSelected = true; // Pass bool true to InterActionHandler
 
                 // Close the ShowLogEventsForm if it's already open
                 CloseOverviewFormIfOpen();
 
-                // Set UserSelected on true
-                adminControl.InteractionHandler.UserSelected = true; // Pass bool true to InterActionHandler
+                // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
+                string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
+
+                // Retrieve user details
+                var (userDetailsArray, loginDetailsArray) = RetrieveUserAndLoginDetails(selectedAlias);
 
                 // Ignore btnForceLogOutUser when selection is user's own admin account
                 if (currentUser == selectedAlias)
@@ -252,29 +244,31 @@ namespace CRUD_System.Interfaces
                     adminControl.btnForceLogOutUser.Visible = false;
                 }
 
-                // Retrieve user and login details
-                var (userDetailsArray, loginDetailsArray) = RetrieveUserAndLoginDetails(selectedAlias);
-
                 // Fill textboxes with user details
                 if (userDetailsArray != null)
                 {
                     FillTextboxesAdmin(userDetailsArray);
                 }
-
-                // If selected user is TheOne, set the flag
-                if (loginDetailsArray != null && loginDetailsArray[4] == "True")
-                {
-                    IsSelectedUserTheOne = true;
-                }
+                
+                // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
+                VerifyRolesAdminTheOne(selectedAlias, loginDetailsArray!);
 
                 FindReportFile(selectedAlias);
                 HandleSelectedUserStatus(selectedAlias);
             }
         }
 
-        public void VerifyRolesAdminTheOne(string selectedAlias)
+        public void VerifyRolesAdminTheOne(string selectedAlias, string[] loginDetailsArray)
         {
-            Debug.WriteLine($"***\nFor [{selectedAlias}]\n" +
+            // Update booleans IsSelectedUserAdmin and IsSelectedUserTheOne
+            IsSelectedUserAdmin = bool.Parse(loginDetailsArray![2]);
+            IsSelectedUserTheOne = bool.Parse(loginDetailsArray[4]);
+
+            // Store booleans isAdmin and isTheOne in list storeIsAdminStatus
+            adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserAdmin); // bool IsSelectedUserAdmin at index 0
+            adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserTheOne); // Bool IsSelectedUserTheOne at index 1
+
+            Debug.WriteLine($"For [{selectedAlias}]\n" +
                             $"Added status isAdmin ({adminControl.storeInitialAdminNeoStatus[0]}) and isTheOne ({adminControl.storeInitialAdminNeoStatus[1]}) to list storeIsAdminStatus\n" +
                             $"Items in List = {adminControl.storeInitialAdminNeoStatus.Count} (must be 2)\n");
 

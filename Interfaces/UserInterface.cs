@@ -60,7 +60,6 @@ namespace CRUD_System.Interfaces
 
             if (string.IsNullOrEmpty(currentUser))
             {
-                Debug.WriteLine("No user is currently logged in.");
                 return;
             }
 
