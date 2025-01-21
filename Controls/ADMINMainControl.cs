@@ -509,10 +509,13 @@ namespace CRUD_System
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             ChkIsAdminChanged = true;
+            
             // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
             bool initialIsAdminStatus = storeInitialUserStatus[0];
             if (chkIsAdmin.Checked != initialIsAdminStatus)
             {
+                Debug.WriteLine($"---\nInitial Admin Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is changed]");
+
                 // Update isAdmin and synchronize with the AdminInterface
                 isAdmin = chkIsAdmin.Checked;
                 AdminInterface.IsSelectedUserAdmin = isAdmin;
@@ -520,10 +523,14 @@ namespace CRUD_System
             else
             {
                 ChkIsAdminChanged = false;
+                Debug.WriteLine($"---\nInitial Admin Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is NOT changed]");
 
+                // Synchronize with the AdminInterface
                 isAdmin = chkIsAdmin.Checked;
                 AdminInterface.IsSelectedUserAdmin = isAdmin;
             }
+
+            // Note: Clearing list storeInitialUserStatus is done in ListBoxAdmin_SelectedIndexChanged()
         }
 
         /// <summary>
@@ -543,9 +550,7 @@ namespace CRUD_System
             // Compare the new status with the initial status
             if (chkIsTheOne.Checked != initialIsTheOneStatus)
             {
-
-                ChkIsTheOneChanged = true;
-                Debug.WriteLine($"isTheOne is changed: {ChkIsTheOneChanged}");
+                Debug.WriteLine($"---\nInitial TheOne Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is changed]");
 
                 // Update IsTheOne and synchronize with the AdminInterface
                 IsTheOne = chkIsTheOne.Checked;
@@ -554,10 +559,14 @@ namespace CRUD_System
             else
             {
                 ChkIsTheOneChanged = false;
+                Debug.WriteLine($"---\nInitial TheOne Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is NOT changed]");
 
+                // Synchronize with the AdminInterface
                 IsTheOne = chkIsTheOne.Checked;
                 AdminInterface.IsSelectedUserTheOne= IsTheOne;
             }
+
+            // Note: Clearing list storeInitialUserStatus is done in ListBoxAdmin_SelectedIndexChanged()
         }
         #endregion CHECKBOXES
 
@@ -570,12 +579,9 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Empty list storeIsAdminStatus
-            storeInitialUserStatus.Clear();
-            Debug.WriteLine($"\n***\nEmpty List storeIsAdminStatus, Items in List: {storeInitialUserStatus.Count}\n***\n");
-
-            listViewReports.Items.Clear();
-            adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
+            storeInitialUserStatus.Clear(); // Empty list storeIsAdminStatus
+            listViewReports.Items.Clear(); // // Empty ListView for Reports
+            adminInterface.ListBoxAdmin_SelectedIndexChangedHandler(); // Trigger handler
         }
 
         /// <summary>
@@ -596,10 +602,10 @@ namespace CRUD_System
                 if (!string.IsNullOrEmpty(selectedUserReportFileName))
                 {
                     // Retrieve the alias of the selected user from the txtAlias textbox
-                    string selectedAlias = txtAlias.Text;
+                    //string selectedAlias = txtAlias.Text;
 
                     // Use the ReportManager to display the selected report
-                    reportManager.ReportDisplay(selectedUserReportFileName, selectedAlias);
+                    reportManager.ReportDisplay(selectedUserReportFileName, txtAlias.Text);
                 }
             }
         }
@@ -653,12 +659,6 @@ namespace CRUD_System
                 adminInterface.TextBoxesReportEmpty();
                 reportTxtAlias.Text = string.Empty;
                 listViewReports.Items.Clear();
-                /*
-                txtAliasReport.Clear();
-                txtDateReport.Clear();
-                rtxReport.Clear();
-                */
-                //adminInterface.TextBoxesReportConfig();
             }
             else
             {
@@ -696,7 +696,7 @@ namespace CRUD_System
 
             // Calculate the range of results to display for the current page
             int startIndex = (searchCurrentPage - 1) * searchItemsPerPage;
-            int endIndex = Math.Min(startIndex + searchItemsPerPage, totalResults);
+            //int endIndex = Math.Min(startIndex + searchItemsPerPage, totalResults);
 
             // Populate the ListBox with results for the current page
             listBoxAdmin.Items.Clear();

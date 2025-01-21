@@ -34,56 +34,6 @@ namespace CRUD_System.Handlers
         #endregion CONSTRUCTOR
 
         #region UPDATE USER DETAILS
-        public void VerifyChkAdminIsChanged()
-        {
-            AdminMainControl adminControl = new AdminMainControl();
-
-            AdminMainControl.ChkIsAdminChanged = true;
-
-            // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
-            bool initialIsAdminStatus = adminControl.storeInitialUserStatus[0];
-            if (adminControl.chkIsAdmin.Checked != initialIsAdminStatus)
-            {
-                // Update isAdmin and synchronize with the AdminInterface
-                adminControl.isAdmin = adminControl.chkIsAdmin.Checked;
-                AdminInterface.IsSelectedUserAdmin = adminControl.isAdmin;
-            }
-            else
-            {
-                AdminMainControl.ChkIsAdminChanged = false;
-                adminControl.isAdmin = adminControl.chkIsAdmin.Checked;
-
-                AdminInterface.IsSelectedUserAdmin = adminControl.isAdmin;
-            }
-        }
-
-        public void VerifyChkIsTheOneIsChanged()
-        {
-            AdminMainControl adminControl = new AdminMainControl();
-
-            // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
-            bool initialIsTheOneStatus = adminControl.storeInitialUserStatus[1];
-
-            // Compare the new status with the initial status
-            if (adminControl.chkIsTheOne.Checked != initialIsTheOneStatus)
-            {
-
-                AdminMainControl.ChkIsTheOneChanged = true;
-                Debug.WriteLine($"isTheOne is changed: {AdminMainControl.ChkIsTheOneChanged}");
-
-                // Update IsTheOne and synchronize with the AdminInterface
-                AdminMainControl.IsTheOne = adminControl.chkIsTheOne.Checked;
-                AdminInterface.IsSelectedUserTheOne = AdminMainControl.IsTheOne;
-            }
-            else
-            {
-                AdminMainControl.ChkIsTheOneChanged = false;
-
-                AdminMainControl.IsTheOne = adminControl.chkIsTheOne.Checked;
-                AdminInterface.IsSelectedUserTheOne = AdminMainControl.IsTheOne;
-            }
-        }
-
         /// <summary>
         /// Updates user details and login data.
         /// </summary>
@@ -149,57 +99,65 @@ namespace CRUD_System.Handlers
         }
 
         /// <summary>
-        /// Updates the login details of the user, including "The One" status.
+        /// Updates the login details of the user, including "The One" and admin status.
         /// </summary>
         /// <param name="alias">The alias of the user to update.</param>
         /// <param name="isAdmin">Indicates if the user has admin status.</param>
         private void UpdateCachedLoginDetails(string alias, bool isAdmin)
         {
-            // Find and update the login details in the cached data
+            // Update cached login data
+            UpdateCachedLoginData(alias, isAdmin);
+
+            // Process changes to isAdmin and IsTheOne status
+            ProcessStatusChange(alias, AdminMainControl.ChkIsAdminChanged, AdminMainControl.ChkIsTheOneChanged);
+
+            // Reset the status flags
+            AdminMainControl.ChkIsAdminChanged = false;
+            AdminMainControl.ChkIsTheOneChanged = false;
+        }
+
+        private void UpdateCachedLoginData(string alias, bool isAdmin)
+        {
             var loginData = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
             if (loginData != null)
             {
                 loginData[2] = isAdmin.ToString();
                 loginData[4] = AdminMainControl.IsTheOne.ToString();
+            }
+        }
 
-                // When isAdmin is changed
-                if (AdminMainControl.ChkIsAdminChanged)
+        private void ProcessStatusChange(string alias, bool isAdminChanged, bool isTheOneChanged)
+        {
+            var currentUser = AuthenticationService.CurrentUser;
+
+            // Process admin status change
+            if (isAdminChanged)
+            {
+                logEvents.LogEventUpdateStatusIsAdmin(currentUser!, alias, AdminInterface.IsSelectedUserAdmin);
+
+                if (AdminInterface.IsSelectedUserAdmin)
                 {
-                    var currentUser = AuthenticationService.CurrentUser;
-                    logEvents.LogEventUpdateStatusIsAdmin(currentUser!, alias, AdminInterface.IsSelectedUserAdmin);
-
-                    if (AdminInterface.IsSelectedUserAdmin)
-                    {
-                        Debug.WriteLine($"[INFO] User {alias} is Admin.");
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"[INFO] User {alias} is no longer Admin.");
-                    }
-
-                    AdminMainControl.ChkIsAdminChanged = false;
+                    Debug.WriteLine($"[INFO] User {alias} is Admin.");
                 }
-
-                // When IsTheOne is changed
-                if (AdminMainControl.ChkIsTheOneChanged)
+                else
                 {
-                    var currentUser = AuthenticationService.CurrentUser;
-                    logEvents.LogEventUpdateStatusIsTheOne(currentUser!, alias, AdminMainControl.IsTheOne);
-
-                    if (AdminMainControl.IsTheOne)
-                    {
-                        Debug.WriteLine($"[INFO] User {alias} is Neo.");
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"[INFO] User {alias} is no longer Neo.");
-                    }
-
-                    AdminMainControl.ChkIsTheOneChanged = false;
+                    Debug.WriteLine($"[INFO] User {alias} is no longer Admin.");
                 }
+            }
 
-                AdminMainControl.ChkIsAdminChanged = false;
-                AdminMainControl.ChkIsTheOneChanged = false;
+            // Process The One status change
+            if (isTheOneChanged)
+            {
+                logEvents.LogEventUpdateStatusIsTheOne(currentUser!, alias, AdminMainControl.IsTheOne);
+
+                if (AdminMainControl.IsTheOne)
+                {
+                    Debug.WriteLine($"[INFO] User {alias} is Neo.");
+                }
+                else
+                {
+                    Debug.WriteLine($"[INFO] User {alias} is no longer Neo.");
+                }
             }
         }
 
