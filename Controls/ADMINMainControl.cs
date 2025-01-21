@@ -509,21 +509,23 @@ namespace CRUD_System
         public void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             ChkIsAdminChanged = true;
-            
-            // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
+
+            // Retrieve the initial isAdmin status index[0] in storeInitialUserStatus
             bool initialIsAdminStatus = storeInitialUserStatus[0];
+
+            // Compare the new status with the initial status
             if (chkIsAdmin.Checked != initialIsAdminStatus)
             {
-                Debug.WriteLine($"---\nADMIN initial Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is changed]");
+                Debug.WriteLine($"---\n[ADMIN] initial Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is changed]");
 
-                // Update isAdmin and synchronize with the AdminInterface
+                // Synchronize with the AdminInterface
                 isAdmin = chkIsAdmin.Checked;
                 AdminInterface.IsSelectedUserAdmin = isAdmin;
             }
             else
             {
                 ChkIsAdminChanged = false;
-                Debug.WriteLine($"---\nADMIN initial Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is NOT changed]");
+                Debug.WriteLine($"---\n[ADMIN] initial Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is NOT changed]");
 
                 // Synchronize with the AdminInterface
                 isAdmin = chkIsAdmin.Checked;
@@ -544,22 +546,22 @@ namespace CRUD_System
         {
             ChkIsTheOneChanged = true;
 
-            // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
+            // Retrieve the initial IsTheOne status from index[1] in storeInitialUserStatus
             bool initialIsTheOneStatus = storeInitialUserStatus[1];
 
             // Compare the new status with the initial status
             if (chkIsTheOne.Checked != initialIsTheOneStatus)
             {
-                Debug.WriteLine($"---\nTHEONE Initial Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is changed]");
+                Debug.WriteLine($"---\n[THE ONE] Initial Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is changed]");
 
-                // Update IsTheOne and synchronize with the AdminInterface
+                // Synchronize with the AdminInterface
                 IsTheOne = chkIsTheOne.Checked;
                 AdminInterface.IsSelectedUserTheOne = IsTheOne;
             }
             else
             {
                 ChkIsTheOneChanged = false;
-                Debug.WriteLine($"---\nTHEONE Initial Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is NOT changed]");
+                Debug.WriteLine($"---\n[THE ONE] Initial Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is NOT changed]");
 
                 // Synchronize with the AdminInterface
                 IsTheOne = chkIsTheOne.Checked;

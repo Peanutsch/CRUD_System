@@ -290,6 +290,8 @@ namespace CRUD_System.Interfaces
             adminControl.storeInitialUserStatus.Add(IsSelectedUserAdmin);   // bool IsSelectedUserAdmin at index 0
             adminControl.storeInitialUserStatus.Add(IsSelectedUserTheOne);  // Bool IsSelectedUserTheOne at index 1
 
+            SetCheckBoxes();
+
             Debug.WriteLine($"\nFor [{selectedAlias}]\n" +
                             $"Added status isAdmin ({adminControl.storeInitialUserStatus[0]}) and isTheOne ({adminControl.storeInitialUserStatus[1]}) to list storeIsAdminStatus\n" +
                             $"Items in List = {adminControl.storeInitialUserStatus.Count} (must be 2)");

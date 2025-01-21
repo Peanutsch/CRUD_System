@@ -604,6 +604,7 @@
             chkIsTheOne.TextAlign = ContentAlignment.MiddleRight;
             chkIsTheOne.UseVisualStyleBackColor = true;
             chkIsTheOne.Visible = false;
+            chkIsTheOne.CheckState = CheckState.Checked;
             chkIsTheOne.CheckedChanged += chkIsTheOne_CheckedChanged;
             // 
             // btnUploadFile
