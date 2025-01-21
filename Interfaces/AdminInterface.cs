@@ -272,16 +272,16 @@ namespace CRUD_System.Interfaces
             IsSelectedUserAdmin = bool.Parse(loginDetailsArray![2]);
             IsSelectedUserTheOne = bool.Parse(loginDetailsArray[4]);
 
-            // Store booleans isAdmin and isTheOne in list storeIsAdminStatus
-            adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserAdmin);   // bool IsSelectedUserAdmin at index 0
-            adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserTheOne);  // Bool IsSelectedUserTheOne at index 1
+            // Store booleans isAdmin and isTheOne in list storeInitialUserStatus
+            adminControl.storeInitialUserStatus.Add(IsSelectedUserAdmin);   // bool IsSelectedUserAdmin at index 0
+            adminControl.storeInitialUserStatus.Add(IsSelectedUserTheOne);  // Bool IsSelectedUserTheOne at index 1
 
             Debug.WriteLine($"For [{selectedAlias}]\n" +
-                            $"Added status isAdmin ({adminControl.storeInitialAdminNeoStatus[0]}) and isTheOne ({adminControl.storeInitialAdminNeoStatus[1]}) to list storeIsAdminStatus\n" +
-                            $"Items in List = {adminControl.storeInitialAdminNeoStatus.Count} (must be 2)");
+                            $"Added status isAdmin ({adminControl.storeInitialUserStatus[0]}) and isTheOne ({adminControl.storeInitialUserStatus[1]}) to list storeIsAdminStatus\n" +
+                            $"Items in List = {adminControl.storeInitialUserStatus.Count} (must be 2)");
 
             int indexCounter = 0;
-            foreach (bool booleans in adminControl.storeInitialAdminNeoStatus)
+            foreach (bool booleans in adminControl.storeInitialUserStatus)
             {
                 Debug.WriteLine($"Index {indexCounter}: {booleans}");
                 indexCounter++;

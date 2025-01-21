@@ -34,6 +34,55 @@ namespace CRUD_System.Handlers
         #endregion CONSTRUCTOR
 
         #region UPDATE USER DETAILS
+        public void VerifyChkAdminIsChanged()
+        {
+            AdminMainControl adminControl = new AdminMainControl();
+
+            AdminMainControl.ChkIsAdminChanged = true;
+
+            // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
+            bool initialIsAdminStatus = adminControl.storeInitialUserStatus[0];
+            if (adminControl.chkIsAdmin.Checked != initialIsAdminStatus)
+            {
+                // Update isAdmin and synchronize with the AdminInterface
+                adminControl.isAdmin = adminControl.chkIsAdmin.Checked;
+                AdminInterface.IsSelectedUserAdmin = adminControl.isAdmin;
+            }
+            else
+            {
+                AdminMainControl.ChkIsAdminChanged = false;
+                adminControl.isAdmin = adminControl.chkIsAdmin.Checked;
+
+                AdminInterface.IsSelectedUserAdmin = adminControl.isAdmin;
+            }
+        }
+
+        public void VerifyChkIsTheOneIsChanged()
+        {
+            AdminMainControl adminControl = new AdminMainControl();
+
+            // Retrieve the initial isAdmin status from the first item in storeIsAdminStatus
+            bool initialIsTheOneStatus = adminControl.storeInitialUserStatus[1];
+
+            // Compare the new status with the initial status
+            if (adminControl.chkIsTheOne.Checked != initialIsTheOneStatus)
+            {
+
+                AdminMainControl.ChkIsTheOneChanged = true;
+                Debug.WriteLine($"isTheOne is changed: {AdminMainControl.ChkIsTheOneChanged}");
+
+                // Update IsTheOne and synchronize with the AdminInterface
+                AdminMainControl.IsTheOne = adminControl.chkIsTheOne.Checked;
+                AdminInterface.IsSelectedUserTheOne = AdminMainControl.IsTheOne;
+            }
+            else
+            {
+                AdminMainControl.ChkIsTheOneChanged = false;
+
+                AdminMainControl.IsTheOne = adminControl.chkIsTheOne.Checked;
+                AdminInterface.IsSelectedUserTheOne = AdminMainControl.IsTheOne;
+            }
+        }
 
         /// <summary>
         /// Updates user details and login data.
@@ -148,6 +197,9 @@ namespace CRUD_System.Handlers
 
                     AdminMainControl.ChkIsTheOneChanged = false;
                 }
+
+                AdminMainControl.ChkIsAdminChanged = false;
+                AdminMainControl.ChkIsTheOneChanged = false;
             }
         }
 
