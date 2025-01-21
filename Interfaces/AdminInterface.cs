@@ -43,6 +43,32 @@ namespace CRUD_System.Interfaces
 
         #region LISTBOX ADMIN
         /// <summary>
+        /// Generates the ListBox items for a specific page of user details.
+        /// </summary>
+        /// <param name="startIndex">The starting index for the page.</param>
+        /// <param name="itemsPerPage">The maximum number of items per page.</param>
+        /// <returns>A collection of formatted ListBox items.</returns>
+        private IEnumerable<string> GenerateListBoxItems(int startIndex, int itemsPerPage)
+        {
+            // Skip header rows and load items for the specified page
+            var userDetailsForPage = cache.CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
+
+            foreach (var userDetailsArray in userDetailsForPage)
+            {
+                // Selection of items to display in ListBoxAdmin
+                string name = userDetailsArray[0];
+                string surname = userDetailsArray[1];
+                string alias = userDetailsArray[2];
+                string email = userDetailsArray[6];
+                string phonenumber = userDetailsArray[7];
+                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
+                string isSick = userDetailsArray.Length > 9 && userDetailsArray[9] == "True" ? "| [ABSENCE due ILLNESS]" : string.Empty;
+
+                yield return $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline} {isSick}";
+            }
+        }
+
+        /// <summary>
         /// Loads user details from data_users.csv and populates the ListBox with formatted information.
         /// The method reads data from the user file, skips the header and admin details, and processes each user's details.
         /// It formats the list item to display the user's name, surname, alias, email, phone number, and indicates whether the user is online based on the data in the file.
@@ -62,31 +88,72 @@ namespace CRUD_System.Interfaces
             // Clear the ListBox
             adminControl.listBoxAdmin.Items.Clear();
 
-            // Calculate start and end indices for the current page
+            // Calculate start index for the current page
             int startIndex = (currentPage - 1) * itemsPerPage;
-            //int endIndex = Math.Min(startIndex + itemsPerPage, CachedUserData.Count);
 
-            // Skip header rows and load items for the current page
-            var userDetailsForPage = CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
-
-            foreach (var userDetailsArray in userDetailsForPage)
+            // Populate the ListBox with generated items
+            foreach (var item in GenerateListBoxItems(startIndex, itemsPerPage))
             {
-                // Selection of items to display in ListBoxAdmin
-                string name = userDetailsArray[0];
-                string surname = userDetailsArray[1];
-                string alias = userDetailsArray[2];
-                string email = userDetailsArray[6];
-                string phonenumber = userDetailsArray[7];
-                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
-                string isSick = userDetailsArray.Length > 9 && userDetailsArray[9] == "True" ? "| [ABSENCE due ILLNESS]" : string.Empty;
-
-                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline} {isSick}";
-
-                adminControl.listBoxAdmin.Items.Add(listItem);
-
-                UpdatePageLabel();
+                adminControl.listBoxAdmin.Items.Add(item);
             }
+
+            // Update the page label
+            UpdatePageLabel();
         }
+
+
+        /// <summary>
+        /// Reloads the ListBox and reselects the specified item.
+        /// </summary>
+        /// <param name="aliasToSelect">The alias of the user to reselect after reloading.</param>
+        /// <summary>
+        /// Reloads the ListBox and reselects the specified item.
+        /// </summary>
+        /// <param name="aliasToSelect">The alias of the user to reselect after reloading.</param>
+        public void ReloadListBoxWithSelection(string aliasToSelect)
+        {
+            // Ensure ListBoxAdmin is initialized
+            if (adminControl?.listBoxAdmin == null)
+            {
+                throw new InvalidOperationException("ListBoxAdmin is not initialized.");
+            }
+
+            // Refresh the cache
+            cache.LoadDecryptedData();
+
+            // Clear the ListBox
+            adminControl.listBoxAdmin.Items.Clear();
+
+            // Calculate start index for the current page
+            int startIndex = (currentPage - 1) * itemsPerPage;
+
+            // Populate the ListBox with generated items
+            foreach (var item in GenerateListBoxItems(startIndex, itemsPerPage))
+            {
+                adminControl.listBoxAdmin.Items.Add(item);
+            }
+
+            // Update the page label
+            UpdatePageLabel();
+
+            // Try to reselect the previously edited item
+            if (!string.IsNullOrEmpty(aliasToSelect))
+            {
+                for (int i = 0; i < adminControl.listBoxAdmin.Items.Count; i++)
+                {
+                    var currentItem = adminControl.listBoxAdmin.Items[i];
+                    if (currentItem?.ToString()!.Contains($"({aliasToSelect})") == true)
+                    {
+                        adminControl.listBoxAdmin.SelectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            // Refresh the ListBox to trigger the DrawItem event
+            adminControl.listBoxAdmin.Refresh();
+        }
+
 
         /// <summary>
         /// Handles the custom drawing of items in the ListBox, allowing for conditional formatting based on the item content.
@@ -138,70 +205,6 @@ namespace CRUD_System.Interfaces
             }
             e.DrawFocusRectangle();
         }
-
-        /// <summary>
-        /// Reloads the ListBox and reselects the specified item.
-        /// </summary>
-        /// <param name="aliasToSelect">The alias of the user to reselect after reloading.</param>
-        public void ReloadListBoxWithSelection(string aliasToSelect)
-        {
-            // Controleer of ListBoxAdmin is geïnitialiseerd
-            if (adminControl?.listBoxAdmin == null)
-            {
-                throw new InvalidOperationException("ListBoxAdmin is not initialized.");
-            }
-
-            // Refresh the cache
-            cache.LoadDecryptedData();
-
-            // Clear the ListBox
-            adminControl.listBoxAdmin.Items.Clear();
-
-            // Calculate start and end indices for the current page
-            int startIndex = (currentPage - 1) * itemsPerPage;
-            int endIndex = Math.Min(startIndex + itemsPerPage, cache.CachedUserData.Count);
-
-            // Skip header rows and load items for the current page
-            var userDetailsForPage = cache.CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
-
-            foreach (var userDetailsArray in userDetailsForPage)
-            {
-                // Selection of items to display in ListBoxAdmin
-                string name = userDetailsArray[0];
-                string surname = userDetailsArray[1];
-                string alias = userDetailsArray[2];
-                string email = userDetailsArray[6];
-                string phonenumber = userDetailsArray[7];
-                string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
-                string isSick = userDetailsArray.Length > 9 && userDetailsArray[9] == "True" ? "| [ABSENCE due ILLNESS]" : string.Empty;
-
-                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline} {isSick}";
-                if (!string.IsNullOrEmpty(listItem))
-                {
-                    adminControl.listBoxAdmin.Items.Add(listItem);
-                }
-            }
-
-            // Update the page label
-            UpdatePageLabel();
-
-            // Try to reselect the previously edited item
-            if (!string.IsNullOrEmpty(aliasToSelect))
-            {
-                for (int i = 0; i < adminControl.listBoxAdmin.Items.Count; i++)
-                {
-                    var currentItem = adminControl.listBoxAdmin.Items[i];
-                    if (currentItem?.ToString()!.Contains($"({aliasToSelect})") == true)
-                    {
-                        adminControl.listBoxAdmin.SelectedIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            // Refresh the ListBox to trigger the DrawItem event
-            adminControl.listBoxAdmin.Refresh();
-        }
         #endregion LISTBOX ADMIN
 
         #region LISTBOX SELECTED INDEX CHANGED
@@ -249,28 +252,33 @@ namespace CRUD_System.Interfaces
                 {
                     FillTextboxesAdmin(userDetailsArray);
                 }
-                
-                // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
-                VerifyRolesAdminTheOne(selectedAlias, loginDetailsArray!);
 
-                FindReportFile(selectedAlias);
-                HandleSelectedUserStatus(selectedAlias);
+                ProcessUserRoleData(selectedAlias, loginDetailsArray!);  // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
+                FindReportFile(selectedAlias);                              // Find report files from corresponding user alias
+                HandleSelectedUserStatus(selectedAlias);                    // Update UI
             }
         }
 
-        public void VerifyRolesAdminTheOne(string selectedAlias, string[] loginDetailsArray)
+        /// <summary>
+        /// Verifies the roles of the selected user based on their login details, 
+        /// updating the <c>IsSelectedUserAdmin</c> and <c>IsSelectedUserTheOne</c> properties.
+        /// Stores these boolean values in the <c>storeInitialAdminNeoStatus</c> list for further use.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the selected user in the ListBox.</param>
+        /// <param name="loginDetailsArray">An array containing the login details of the selected user. 
+        public void ProcessUserRoleData(string selectedAlias, string[] loginDetailsArray)
         {
             // Update booleans IsSelectedUserAdmin and IsSelectedUserTheOne
             IsSelectedUserAdmin = bool.Parse(loginDetailsArray![2]);
             IsSelectedUserTheOne = bool.Parse(loginDetailsArray[4]);
 
             // Store booleans isAdmin and isTheOne in list storeIsAdminStatus
-            adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserAdmin); // bool IsSelectedUserAdmin at index 0
-            adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserTheOne); // Bool IsSelectedUserTheOne at index 1
+            adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserAdmin);   // bool IsSelectedUserAdmin at index 0
+            adminControl.storeInitialAdminNeoStatus.Add(IsSelectedUserTheOne);  // Bool IsSelectedUserTheOne at index 1
 
             Debug.WriteLine($"For [{selectedAlias}]\n" +
                             $"Added status isAdmin ({adminControl.storeInitialAdminNeoStatus[0]}) and isTheOne ({adminControl.storeInitialAdminNeoStatus[1]}) to list storeIsAdminStatus\n" +
-                            $"Items in List = {adminControl.storeInitialAdminNeoStatus.Count} (must be 2)\n");
+                            $"Items in List = {adminControl.storeInitialAdminNeoStatus.Count} (must be 2)");
 
             int indexCounter = 0;
             foreach (bool booleans in adminControl.storeInitialAdminNeoStatus)

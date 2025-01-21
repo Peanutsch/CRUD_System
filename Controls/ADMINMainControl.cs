@@ -516,21 +516,20 @@ namespace CRUD_System
 
             // Compare the new status with the initial status
             if (storeInitialAdminNeoStatus.Count != 0 &&
-                chkIsAdmin.Checked &&
-                isAdminNewStatus == initialIsAdminStatus)
-            {
-                // No change in the isAdmin status
-                ChkIsAdminChanged = false;
-                Debug.WriteLine($"No changes ChkIsAdminChanged = {ChkIsAdminChanged}");
-            }
-            else
+                isAdminNewStatus != initialIsAdminStatus)
             {
                 ChkIsAdminChanged = true;
-                Debug.WriteLine($"ChkIsAdminChanged: {ChkIsAdminChanged}");
+                Debug.WriteLine($"isAdmin is changed: {ChkIsAdminChanged}");
 
                 // Update isAdmin and synchronize with the AdminInterface
                 isAdmin = chkIsAdmin.Checked;
                 AdminInterface.IsSelectedUserAdmin = isAdmin;
+            }
+            else
+            {
+                // No change in the isAdmin status
+                ChkIsAdminChanged = false;
+                Debug.WriteLine($"No changes isAdmin");
             }
 
             // Note: The clearing of storeIsAdminStatus is handled in ListBoxAdmin_SelectedIndexChanged.
@@ -554,21 +553,20 @@ namespace CRUD_System
 
             // Compare the new status with the initial status
             if (storeInitialAdminNeoStatus.Count != 0 &&
-                chkIsTheOne.Checked &&
-                isTheOneNewStatus == initialIsTheOneStatus)
-            {
-                // No change in the isTheOne status
-                ChkIsTheOneChanged = false;
-                Debug.WriteLine($"No changes ChkIsTheOneChanged = {ChkIsTheOneChanged}");
-            }
-            else
+                isTheOneNewStatus != initialIsTheOneStatus)
             {
                 ChkIsTheOneChanged = true;
-                Debug.WriteLine($"ChkIsTheOneChanged: {ChkIsTheOneChanged}");
+                Debug.WriteLine($"isTheOne is changed: {ChkIsTheOneChanged}");
 
                 // Update isTheOne and synchronize with the AdminInterface
                 IsTheOne = chkIsTheOne.Checked;
                 AdminInterface.IsSelectedUserTheOne = IsTheOne;
+            }
+            else
+            {
+                // No change in the isTheOne status
+                ChkIsTheOneChanged = false;
+                Debug.WriteLine($"no changes isTheOne");
             }
 
             // Note: The clearing of storeIsAdminNeoStatus is handled in ListBoxAdmin_SelectedIndexChanged.
