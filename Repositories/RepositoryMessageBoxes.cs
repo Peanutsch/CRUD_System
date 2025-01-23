@@ -68,9 +68,14 @@ namespace CRUD_System.Repositories
         #endregion CONFIRM
 
         #region SUCCES
-        public DialogResult MessageUpdateSucces()
+        public DialogResult MessageUpdateUserDetailsSucces()
         {
             return MessageBox.Show("User Details updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public DialogResult MessageUpdateLoginDetailsSucces()
+        {
+            return MessageBox.Show("Login Details updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public DialogResult MessageDeleteSucces(string aliasToDelete)
@@ -157,6 +162,11 @@ namespace CRUD_System.Repositories
         public DialogResult MessageReportDeletedError(string fileToDelete, string exMessage)
         {
             return MessageBox.Show($"An error occurred while deleting the file {fileToDelete}: {exMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public DialogResult MessageNoDetailsModified()
+        {
+            return MessageBox.Show("No modifications in user details!", "No modifications", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion INVALID
     }

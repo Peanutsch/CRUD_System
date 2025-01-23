@@ -300,19 +300,6 @@ namespace CRUD_System.Interfaces
             // Store the initial admin and "TheOne" statuses in a list for future reference
             adminControl.storeInitialUserStatus.Add(IsSelectedUserAdmin);   // Admin status at index 0
             adminControl.storeInitialUserStatus.Add(IsSelectedUserTheOne);  // "TheOne" status at index 1
-
-            // Log the statuses for debugging purposes
-            Debug.WriteLine($"\nFor [{selectedAlias}]\n" +
-                            $"Added status isAdmin ({adminControl.storeInitialUserStatus[0]}) and isTheOne ({adminControl.storeInitialUserStatus[1]}) to list storeInitialUserStatus\n" +
-                            $"Items in List = {adminControl.storeInitialUserStatus.Count} (must be 2)");
-
-            // Iterate through the list and log each index and value for verification
-            int indexCounter = 0;
-            foreach (bool status in adminControl.storeInitialUserStatus)
-            {
-                Debug.WriteLine($"Index {indexCounter}: {status}");
-                indexCounter++;
-            }
         }
 
 
@@ -499,7 +486,6 @@ namespace CRUD_System.Interfaces
             adminControl.btnGeneratePSW.Enabled = !EditMode;
             adminControl.btnUploadFile.Visible = EditMode;
             adminControl.btnCallInSick.Visible = EditMode;
-            //adminControl.btnShowLogsStatus.Enabled = EditMode;
 
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
@@ -513,8 +499,6 @@ namespace CRUD_System.Interfaces
                 ToggleControlVisibility(adminControl.btnDeleteFileReport, EditMode);
                 ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
                 ToggleControlVisibility(adminControl.btnShowListBoxLogEvents, EditMode);
-                //ToggleControlVisibility(adminControl.btnShowLogsStatus, EditMode);
-
                 ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
                 
                 // If selected user is Admin, show checkbox IsTheOne

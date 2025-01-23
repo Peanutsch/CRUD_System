@@ -10,6 +10,8 @@ using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using CRUD_System.Encryption;
+using System.Net;
+using System.Reflection.Emit;
 
 namespace CRUD_System.Handlers
 {
@@ -35,36 +37,85 @@ namespace CRUD_System.Handlers
 
         #region UPDATE USER DETAILS
         /// <summary>
-        /// Updates user details and login data.
+        /// Controleert of de details van de gebruiker zijn gewijzigd.
+        /// </summary>
+        public bool AreUserDetailsModified(string name, string surname, string alias, string address, string zipCode, string city,
+                                           string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+        {
+            // Haal de oorspronkelijke gegevens van de gebruiker op uit de cache
+            var originalUserDetails = cache.CachedUserData.FirstOrDefault(user => user[2] == alias);
+            if (originalUserDetails == null)
+            {
+                return false; // Gebruiker niet gevonden
+            }
+
+            return originalUserDetails[0] != name ||
+                   originalUserDetails[1] != surname ||
+                   originalUserDetails[2] != alias ||
+                   originalUserDetails[3] != address ||
+                   originalUserDetails[4] != zipCode ||
+                   originalUserDetails[5] != city ||
+                   originalUserDetails[6] != email ||
+                   originalUserDetails[7] != phoneNumber ||
+                   originalUserDetails[8] != onlineStatus.ToString() ||
+                   originalUserDetails[9] != isSick.ToString();
+        }
+
+        /// <summary>
+        /// Updates user details and login data for a specified user.
+        /// Confirms changes with the user, checks for modifications in user and login details, 
+        /// updates the cached data, saves and encrypts the changes, and reloads the UI.
         /// </summary>
         public void UpdateUserDetails(string name, string surname, string alias, string address, string zipCode, string city,
-                               string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+                              string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
-            // Confirm with the user before saving changes
+            // Confirm changes with the user
             DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
             if (dr == DialogResult.No)
             {
+                // Exit the method if the user chooses not to save changes
                 return;
             }
 
-            // Ensure the cache is loaded with decrypted data before proceeding
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            // Ensure that the cache is loaded with decrypted data
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
 
+            // Check if user details or login details are modified
+            bool userDetailsModified = AreUserDetailsModified(name, surname, alias, address, zipCode, city, email, phoneNumber, isAdmin, onlineStatus, isSick);
+            bool loginDetailsModified = AdminMainControl.ChkIsAdminChanged || AdminMainControl.ChkIsTheOneChanged;
+
             try
             {
-                // Update user details in the cached data
-                UpdateCachedUserDetails(alias, name, surname, address, zipCode, city, email, phoneNumber, onlineStatus, isSick);
+                // Update user details if modifications are detected
+                if (userDetailsModified)
+                {
+                    UpdateCachedUserDetails(alias, name, surname, address, zipCode, city, email, phoneNumber, onlineStatus, isSick);
+                    cache.SaveAndEncryptData(); // Save updated data and encrypt it
+                    message.MessageUpdateUserDetailsSucces(); // Notify the user of a successful update
 
-                 // Update login details in cached data
-                UpdateCachedLoginDetails(alias, isAdmin);
+                    // Log the update for user details
+                    var currentUser = AuthenticationService.CurrentUser;
+                    logEvents.LogEventUpdateUserDetails(currentUser!, alias);
+                }
 
-                // Save updated data and log the changes
-                SaveDataAndLogUpdates(alias);
+                // Update login details if modifications are detected
+                if (loginDetailsModified)
+                {
+                    UpdateCachedLoginDetails(alias, isAdmin);
+                    cache.SaveAndEncryptData(); // Save updated login data and encrypt it
+                    message.MessageUpdateLoginDetailsSucces(); // Notify the user of a successful update
+                }
 
-                // Reload the UI and maintain selection
+                // Handle the case where no modifications were made
+                if (!userDetailsModified && !loginDetailsModified)
+                {
+                    message.MessageNoDetailsModified();
+                }
+
+                // Reload the UI to reflect the updated details
                 ReloadUIWithSelection(alias);
             }
             catch (Exception ex)
@@ -79,7 +130,7 @@ namespace CRUD_System.Handlers
         /// Updates the user's details in the cached user data.
         /// </summary>
         private void UpdateCachedUserDetails(string alias, string name, string surname, string address, string zipCode,
-                                      string city, string email, string phoneNumber, bool onlineStatus, bool isSick)
+                                             string city, string email, string phoneNumber, bool onlineStatus, bool isSick)
         {
             // Find and update the user in the cached data
             var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias);
@@ -159,23 +210,6 @@ namespace CRUD_System.Handlers
                     Debug.WriteLine($"[INFO] User {alias} is no longer Neo.");
                 }
             }
-        }
-
-        /// <summary>
-        /// Saves the updated user and login data, and logs the changes.
-        /// </summary>
-        /// <param name="alias">The alias of the updated user.</param>
-        private void SaveDataAndLogUpdates(string alias)
-        {
-            // Save and encrypt the updated data
-            cache.SaveAndEncryptData();
-
-            // Log the changes
-            var currentUser = AuthenticationService.CurrentUser;
-            logEvents.LogEventUpdateUserDetails(currentUser!, alias);
-
-            // Notify the user of a successful update
-            message.MessageUpdateSucces();
         }
 
         /// <summary>
@@ -607,7 +641,7 @@ namespace CRUD_System.Handlers
             cache.SaveAndEncryptData();
 
             // Notify the user that the update was successful.
-            message.MessageUpdateSucces();
+            message.MessageUpdateUserDetailsSucces();
         }
 
         #endregion IS THE ONE

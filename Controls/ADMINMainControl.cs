@@ -46,8 +46,6 @@ namespace CRUD_System
             get; set;
         }
 
-
-
         readonly FilePaths path = new FilePaths();
 
         readonly AdminInterface adminInterface;
@@ -512,17 +510,10 @@ namespace CRUD_System
 
             // Retrieve the initial isAdmin status index[0] in storeInitialUserStatus
             bool initialIsAdminStatus = storeInitialUserStatus[0];
-
-            // Compare the new status with the initial status
-            if (chkIsAdmin.Checked != initialIsAdminStatus)
-            {
-                Debug.WriteLine($"---\n[Status Admin] will be changed to {chkIsAdmin.Checked}");
-            }
             
             if (chkIsAdmin.Checked == initialIsAdminStatus)
             {
                 ChkIsAdminChanged = false;
-                Debug.WriteLine($"---\n[Status Admin] shall NOT change and stays {chkIsAdmin.Checked}");
             }
             
             // Synchronize with the AdminInterface
@@ -546,16 +537,9 @@ namespace CRUD_System
             // Retrieve the initial IsTheOne status from index[1] in storeInitialUserStatus
             bool initialIsTheOneStatus = storeInitialUserStatus[1];
 
-            // Compare the new status with the initial status
-            if (chkIsTheOne.Checked != initialIsTheOneStatus)
-            {
-                Debug.WriteLine($"---\n[Status TheOne] will be changed to {chkIsTheOne.Checked}");
-            }
-
             if (chkIsTheOne.Checked == initialIsTheOneStatus)
             {
                 ChkIsTheOneChanged = false;
-                Debug.WriteLine($"---\n[Status TheOne] shall NOT change and stays {chkIsTheOne.Checked}");
             }
 
             // Synchronize with the AdminInterface
@@ -577,7 +561,6 @@ namespace CRUD_System
         {
             storeInitialUserStatus.Clear(); // Empty list storeIsAdminStatus
             listViewReports.Items.Clear(); // // Empty ListView for Reports
-
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler(); // Trigger handler
         }
 
@@ -598,9 +581,6 @@ namespace CRUD_System
                 // Ensure the selected file name is not null or empty
                 if (!string.IsNullOrEmpty(selectedUserReportFileName))
                 {
-                    // Retrieve the alias of the selected user from the txtAlias textbox
-                    //string selectedAlias = txtAlias.Text;
-
                     // Use the ReportManager to display the selected report
                     reportManager.ReportDisplay(selectedUserReportFileName, txtAlias.Text);
                 }
@@ -680,7 +660,7 @@ namespace CRUD_System
                 // If no results are found:
                 // Clear the ListBox, add a placeholder message, and update the page label
                 listBoxAdmin.Items.Clear();
-                listBoxAdmin.Items.Add("No results found.");
+                listBoxAdmin.Items.Add("No results found...");
                 adminInterface.UpdatePageLabel();
                 return;
             }
