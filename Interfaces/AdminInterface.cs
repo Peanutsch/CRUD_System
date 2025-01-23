@@ -516,7 +516,12 @@ namespace CRUD_System.Interfaces
                 //ToggleControlVisibility(adminControl.btnShowLogsStatus, EditMode);
 
                 ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
-                ToggleControlVisibility(adminControl.chkIsTheOne, EditMode);
+                
+                // If selected user is Admin, show checkbox IsTheOne
+                if (IsSelectedUserAdmin)
+                {
+                    ToggleControlVisibility(adminControl.chkIsTheOne, EditMode);
+                }
             }
         }
 
