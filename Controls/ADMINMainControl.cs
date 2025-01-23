@@ -516,21 +516,18 @@ namespace CRUD_System
             // Compare the new status with the initial status
             if (chkIsAdmin.Checked != initialIsAdminStatus)
             {
-                Debug.WriteLine($"---\n[ADMIN] initial Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is changed]");
-
-                // Synchronize with the AdminInterface
-                isAdmin = chkIsAdmin.Checked;
-                AdminInterface.IsSelectedUserAdmin = isAdmin;
+                Debug.WriteLine($"---\n[Status Admin] will be changed to {chkIsAdmin.Checked}");
             }
-            else
+            
+            if (chkIsAdmin.Checked == initialIsAdminStatus)
             {
                 ChkIsAdminChanged = false;
-                Debug.WriteLine($"---\n[ADMIN] initial Status: {initialIsAdminStatus}, CheckBox: {chkIsAdmin.Checked} [Status Admin is NOT changed]");
-
-                // Synchronize with the AdminInterface
-                isAdmin = chkIsAdmin.Checked;
-                AdminInterface.IsSelectedUserAdmin = isAdmin;
+                Debug.WriteLine($"---\n[Status Admin] shall NOT change and stays {chkIsAdmin.Checked}");
             }
+            
+            // Synchronize with the AdminInterface
+            isAdmin = chkIsAdmin.Checked;
+            AdminInterface.IsSelectedUserAdmin = isAdmin;
 
             // Note: Clearing list storeInitialUserStatus is done in ListBoxAdmin_SelectedIndexChanged()
         }
@@ -552,21 +549,18 @@ namespace CRUD_System
             // Compare the new status with the initial status
             if (chkIsTheOne.Checked != initialIsTheOneStatus)
             {
-                Debug.WriteLine($"---\n[THE ONE] Initial Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is changed]");
-
-                // Synchronize with the AdminInterface
-                IsTheOne = chkIsTheOne.Checked;
-                AdminInterface.IsSelectedUserTheOne = IsTheOne;
+                Debug.WriteLine($"---\n[Status TheOne] will be changed to {chkIsTheOne.Checked}");
             }
-            else
+
+            if (chkIsTheOne.Checked == initialIsTheOneStatus)
             {
                 ChkIsTheOneChanged = false;
-                Debug.WriteLine($"---\n[THE ONE] Initial Status: {initialIsTheOneStatus}, CheckBox: {chkIsTheOne.Checked} [Status TheOne is NOT changed]");
-
-                // Synchronize with the AdminInterface
-                IsTheOne = chkIsTheOne.Checked;
-                AdminInterface.IsSelectedUserTheOne= IsTheOne;
+                Debug.WriteLine($"---\n[Status TheOne] shall NOT change and stays {chkIsTheOne.Checked}");
             }
+
+            // Synchronize with the AdminInterface
+            IsTheOne = chkIsTheOne.Checked;
+            AdminInterface.IsSelectedUserTheOne = IsTheOne;
 
             // Note: Clearing list storeInitialUserStatus is done in ListBoxAdmin_SelectedIndexChanged()
         }
@@ -583,6 +577,7 @@ namespace CRUD_System
         {
             storeInitialUserStatus.Clear(); // Empty list storeIsAdminStatus
             listViewReports.Items.Clear(); // // Empty ListView for Reports
+
             adminInterface.ListBoxAdmin_SelectedIndexChangedHandler(); // Trigger handler
         }
 

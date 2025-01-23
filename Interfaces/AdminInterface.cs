@@ -42,20 +42,6 @@ namespace CRUD_System.Interfaces
         #endregion CONSTRUCTOR
 
         #region LISTBOX ADMIN
-        public void SetCheckBoxes()
-        {
-            // Synchronize checkboxes for Admin and TheOne
-            adminControl.chkIsTheOne.CheckedChanged -= adminControl.chkIsTheOne_CheckedChanged!;
-            adminControl.chkIsAdmin.CheckedChanged -= adminControl.chkIsAdmin_CheckedChanged!;
-
-            adminControl.chkIsAdmin.Checked = IsSelectedUserAdmin;
-            adminControl.chkIsTheOne.Checked = IsSelectedUserTheOne;
-
-            adminControl.chkIsTheOne.CheckedChanged += adminControl.chkIsTheOne_CheckedChanged!;
-            adminControl.chkIsAdmin.CheckedChanged += adminControl.chkIsAdmin_CheckedChanged!;
-        }
-
-
         /// <summary>
         /// Generates the ListBox items for a specific page of user details.
         /// </summary>
@@ -274,35 +260,61 @@ namespace CRUD_System.Interfaces
         }
 
         /// <summary>
-        /// Verifies the roles of the selected user based on their login details, 
-        /// updating the <c>IsSelectedUserAdmin</c> and <c>IsSelectedUserTheOne</c> properties.
-        /// Stores these boolean values in the <c>storeInitialAdminNeoStatus</c> list for further use.
+        /// Synchronizes the state of Admin and TheOne checkboxes with the selected user's roles.
+        /// Temporarily detaches the event handlers for the checkboxes to prevent triggering events during the update.
+        /// </summary>
+        public void SetCheckBoxHandlers()
+        {
+            // Temporarily remove event handlers to prevent undesired triggering
+            adminControl.chkIsAdmin.CheckedChanged -= adminControl.chkIsAdmin_CheckedChanged!;
+            adminControl.chkIsTheOne.CheckedChanged -= adminControl.chkIsTheOne_CheckedChanged!;
+
+            // Update the checkbox states based on the user's roles
+            adminControl.chkIsAdmin.Checked = IsSelectedUserAdmin;
+            adminControl.chkIsTheOne.Checked = IsSelectedUserTheOne;
+
+            // Reattach the event handlers after updating
+            adminControl.chkIsAdmin.CheckedChanged += adminControl.chkIsAdmin_CheckedChanged!;
+            adminControl.chkIsTheOne.CheckedChanged += adminControl.chkIsTheOne_CheckedChanged!;
+        }
+
+        /// <summary>
+        /// Processes the role data of the selected user, updating the <c>IsSelectedUserAdmin</c> and 
+        /// <c>IsSelectedUserTheOne</c> properties based on login details, synchronizing the UI checkboxes, 
+        /// and storing the initial statuses for further reference.
         /// </summary>
         /// <param name="selectedAlias">The alias of the selected user in the ListBox.</param>
         /// <param name="loginDetailsArray">An array containing the login details of the selected user. 
+        /// The array should contain role information at specific indices:
+        /// - Index 2: Indicates if the user is an admin.
+        /// - Index 4: Indicates if the user is "TheOne".</param>
         public void ProcessUserRoleData(string selectedAlias, string[] loginDetailsArray)
         {
-            // Update booleans IsSelectedUserAdmin and IsSelectedUserTheOne
-            IsSelectedUserAdmin = bool.Parse(loginDetailsArray![2]);
-            IsSelectedUserTheOne = bool.Parse(loginDetailsArray[4]);
+            // Parse the role data from the login details array
+            IsSelectedUserAdmin = bool.Parse(loginDetailsArray![2]); // Extract admin status (Index 2)
+            IsSelectedUserTheOne = bool.Parse(loginDetailsArray[4]); // Extract "TheOne" status (Index 4)
 
-            // Store booleans isAdmin and isTheOne in list storeInitialUserStatus
-            adminControl.storeInitialUserStatus.Add(IsSelectedUserAdmin);   // bool IsSelectedUserAdmin at index 0
-            adminControl.storeInitialUserStatus.Add(IsSelectedUserTheOne);  // Bool IsSelectedUserTheOne at index 1
+            // Synchronize the checkbox states with the parsed role data
+            SetCheckBoxHandlers();
 
-            SetCheckBoxes();
+            // Store the initial admin and "TheOne" statuses in a list for future reference
+            adminControl.storeInitialUserStatus.Add(IsSelectedUserAdmin);   // Admin status at index 0
+            adminControl.storeInitialUserStatus.Add(IsSelectedUserTheOne);  // "TheOne" status at index 1
 
+            // Log the statuses for debugging purposes
             Debug.WriteLine($"\nFor [{selectedAlias}]\n" +
-                            $"Added status isAdmin ({adminControl.storeInitialUserStatus[0]}) and isTheOne ({adminControl.storeInitialUserStatus[1]}) to list storeIsAdminStatus\n" +
+                            $"Added status isAdmin ({adminControl.storeInitialUserStatus[0]}) and isTheOne ({adminControl.storeInitialUserStatus[1]}) to list storeInitialUserStatus\n" +
                             $"Items in List = {adminControl.storeInitialUserStatus.Count} (must be 2)");
 
+            // Iterate through the list and log each index and value for verification
             int indexCounter = 0;
-            foreach (bool booleans in adminControl.storeInitialUserStatus)
+            foreach (bool status in adminControl.storeInitialUserStatus)
             {
-                Debug.WriteLine($"Index {indexCounter}: {booleans}");
+                Debug.WriteLine($"Index {indexCounter}: {status}");
                 indexCounter++;
             }
         }
+
 
         /// <summary>
         /// Retrieves user and login details from the cache for the selected alias.
@@ -397,7 +409,7 @@ namespace CRUD_System.Interfaces
                 adminControl.btnDeleteFileReport.Visible = EditMode;
 
                 adminControl.chkIsTheOne.Visible = EditMode;
-                adminControl.chkIsTheOne.Checked = IsSelectedUserAdmin;
+                //adminControl.chkIsTheOne.Checked = IsSelectedUserAdmin;
                 adminControl.chkIsAdmin.Visible = EditMode;
 
                 // Update checkbox fields based on login- and userdetails

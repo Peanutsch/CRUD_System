@@ -280,6 +280,7 @@
             chkIsAdmin.TextAlign = ContentAlignment.MiddleRight;
             chkIsAdmin.UseVisualStyleBackColor = true;
             chkIsAdmin.Visible = false;
+            chkIsAdmin.CheckState = CheckState.Unchecked;
             chkIsAdmin.CheckedChanged += chkIsAdmin_CheckedChanged;
             // 
             // btnChangePassword
@@ -604,7 +605,7 @@
             chkIsTheOne.TextAlign = ContentAlignment.MiddleRight;
             chkIsTheOne.UseVisualStyleBackColor = true;
             chkIsTheOne.Visible = false;
-            chkIsTheOne.CheckState = CheckState.Checked;
+            chkIsTheOne.CheckState = CheckState.Unchecked;
             chkIsTheOne.CheckedChanged += chkIsTheOne_CheckedChanged;
             // 
             // btnUploadFile
