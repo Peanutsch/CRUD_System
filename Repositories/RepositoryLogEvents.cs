@@ -30,7 +30,7 @@ namespace CRUD_System.Repositories
         /// <param name="currentUser">The username of the user who logged in.</param>
         public void UserLoggedIn(string currentUser)
         {
-            Debug.WriteLine($"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN\n==========");
+            Debug.WriteLine($"{DateTime.Today.ToString("==========\ndd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN\n----------\n");
             string newLog = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")},[{currentUser.ToUpper()}],logged IN";
             path.AppendToLogEvents(currentUser, newLog); // Log login in logevent.csv
             path.AppendToLogStatus(currentUser, newLog); // // Log login in logstatus.csv
