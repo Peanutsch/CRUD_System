@@ -15,7 +15,7 @@ namespace CRUD_System
     {
         //private readonly AdminMainControl adminControl = new AdminMainControl();
         private readonly DataCache cache = new DataCache();
-        //private readonly ProfileManager profileManager = new ProfileManager();
+        private readonly ProfileManager profileManager = new ProfileManager();
 
         public AbsenceDueIllnessForm()
         {
@@ -36,7 +36,7 @@ namespace CRUD_System
         private void btnApply_Click(object sender, EventArgs e)
         {
             // passing bool false for testing
-            //profileManager.AbsenceDueIllness(false, txtAlias.Text);
+            profileManager.AbsenceDueIllness(false, txtAlias.Text);
             this.Close();
         }
     }

@@ -219,7 +219,7 @@ namespace CRUD_System
             // 
             this.comboBoxStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.comboBoxStatus.FormattingEnabled = true;
-            this.comboBoxStatus.Items.AddRange(new object[] { "Online", "Away", "Break", "Offline" });
+            this.comboBoxStatus.Items.AddRange(new object[] { "Online", "Away", "Break" });
             this.comboBoxStatus.Location = new Point(1079, 16);
             this.comboBoxStatus.MaxDropDownItems = 9;
             this.comboBoxStatus.Name = "comboBoxStatus";

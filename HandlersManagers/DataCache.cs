@@ -97,7 +97,7 @@ public class DataCache
         path.SetAlias(alias);
         path.SearchCIS_Notice(alias);
 
-        //EncryptionManager.DecryptFile();
+        EncryptionManager.DecryptFile(fileCisNotices!);
 
         // Read the decrypted login data file and split each line into fields (CSV format)
         // Skip the header and split by comma, caching all records into CachedLoginData

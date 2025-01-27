@@ -18,7 +18,6 @@ namespace CRUD_System.Interfaces
     {
         #region PROPERTIES
         public bool EditMode { get; set; }
-        public bool IsOffline { get; set; }
 
         private readonly FilePaths path = new FilePaths();
         private readonly AccountManager repository = new AccountManager();
@@ -324,25 +323,16 @@ namespace CRUD_System.Interfaces
             switch (status)
             {
                 case "Online":
-                    IsOffline = false;
                     userControl.txtStatusIndicator.BackColor = Color.Green;
                     logEvents.CheckStatus(isAlias, status, currentTime);
                     break;
 
                 case "Away":
-                    IsOffline = false;
                     userControl.txtStatusIndicator.BackColor = Color.Orange;
                     logEvents.CheckStatus(isAlias, status, currentTime);
                     break;
                 case "Break":
-                    IsOffline = false;
                     userControl.txtStatusIndicator.BackColor = Color.Yellow;
-                    logEvents.CheckStatus(isAlias, status, currentTime);
-                    break;
-                case "Offline":
-                    IsOffline = true;
-
-                    userControl.txtStatusIndicator.BackColor = Color.Gray;
                     logEvents.CheckStatus(isAlias, status, currentTime);
                     break;
             }
