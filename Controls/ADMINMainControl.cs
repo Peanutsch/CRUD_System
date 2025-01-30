@@ -111,8 +111,6 @@ namespace CRUD_System
                                                  txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
             }
 
-            interactionHandler.UserSelected = true;
-
             adminInterface.EditMode = false;
             adminInterface.ReloadListBoxWithSelection(txtAlias.Text); // Reload listbox
             adminInterface.InterfaceEditModeAdmin();
