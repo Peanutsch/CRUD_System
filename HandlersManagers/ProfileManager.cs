@@ -30,7 +30,7 @@ namespace CRUD_System.Handlers
         /// <summary>
         /// Checks if the user details have been modified compared to the cached data.
         /// </summary>
-        public bool AreUserDetailsModified(string name, string surname, string alias, string address, string zipCode, string city,
+        public bool VerifyDetailModifications(string name, string surname, string alias, string address, string zipCode, string city,
                                            string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
             // Retrieve the original user details from the cache using the alias as the identifier
@@ -73,7 +73,7 @@ namespace CRUD_System.Handlers
             }
 
             // Check if the user details have been modified
-            bool userDetailsModified = AreUserDetailsModified(name, surname, alias, address, zipCode, city, email, phoneNumber, isAdmin, onlineStatus, isSick);
+            bool userDetailsModified = VerifyDetailModifications(name, surname, alias, address, zipCode, city, email, phoneNumber, isAdmin, onlineStatus, isSick);
 
             // Check if any login details (such as admin status) have been changed
             bool loginDetailsModified = AdminMainControl.ChkIsAdminChanged || AdminMainControl.ChkIsTheOneChanged;
