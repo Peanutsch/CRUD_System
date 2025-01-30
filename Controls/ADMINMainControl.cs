@@ -32,19 +32,10 @@ namespace CRUD_System
         #region PROPERTIES
         public List<bool> storeInitialUserStatus = new List<bool>(); // index 0 = bool admin, index 1 = bool Neo
 
-        public static bool IsTheOne
-        {
-            get; set;
-        }
-        public static bool ChkIsTheOneChanged
-        {
-            get; set;
-        }
+        public static bool IsTheOne { get; set; }
+        public static bool ChkIsTheOneChanged { get; set; }
 
-        public static bool ChkIsAdminChanged
-        {
-            get; set;
-        }
+        public static bool ChkIsAdminChanged { get; set; }
 
         readonly FilePaths path = new FilePaths();
 
@@ -115,12 +106,14 @@ namespace CRUD_System
 
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text,
+                profileManager.CheckModifications(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text,
                                                  txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
             }
+            /*
             editMode = false; // Close editMode
             adminInterface.EditMode = false;
             adminInterface.InterfaceEditModeAdmin();
+            */
             adminInterface.ReloadListBoxWithSelection(txtAlias.Text); // Reload listbox
         }
 

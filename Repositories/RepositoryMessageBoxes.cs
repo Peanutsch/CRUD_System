@@ -166,7 +166,7 @@ namespace CRUD_System.Repositories
 
         public DialogResult MessageNoDetailsModified()
         {
-            return MessageBox.Show("No modifications in user details!", "No modifications", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return MessageBox.Show("No modifications were made...", "No modifications", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion INVALID
     }

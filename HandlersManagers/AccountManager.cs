@@ -24,8 +24,6 @@ namespace CRUD_System.Handlers
         /// <summary>
         /// Finds the index of a user by their alias in both user and login data.
         /// </summary>
-        /// <param name="userLines">A list of strings representing user details, where each entry is a CSV-formatted line.</param>
-        /// <param name="loginLines">A list of strings representing login details, where each entry is a CSV-formatted line.</param>
         /// <param name="alias">The alias of the user to search for.</param>
         /// <returns>
         /// The index of the user if found; otherwise, -1. 
@@ -37,7 +35,7 @@ namespace CRUD_System.Handlers
             DataCache.LoadCache();
 
             // Check if cache is loaded correctly
-            if (DataCache.CachedLoginLines == null || DataCache.CachedLoginLines.Count == 0)
+            if (!DataCache.CachedLoginLines.Any()|| !DataCache.CachedLoginLines.Any())
             {
                 DataCache dataCache = new DataCache();
                 dataCache.LoadDecryptedData();
@@ -48,7 +46,7 @@ namespace CRUD_System.Handlers
             {
                 var loginDetails = DataCache.CachedLoginLines[index].Split(",");
 
-                // Assuming the first element of loginDetails is the encrypted alias
+                // The first element of loginDetails is the encrypted alias
                 string encryptedAlias = loginDetails[0].Trim();
 
                 // Decrypt the alias using your decryption method

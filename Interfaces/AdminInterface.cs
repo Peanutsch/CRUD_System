@@ -472,7 +472,7 @@ namespace CRUD_System.Interfaces
         /// <summary>
         /// Updates the interface display and control states based on EditMode.
         /// </summary>
-        private void UpdateInterfaceControls()
+        public void UpdateInterfaceControls()
         {
             var currentUser = AuthenticationService.CurrentUser;
 

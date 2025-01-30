@@ -1,17 +1,8 @@
-﻿using CRUD_System.FileHandlers;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Xml.Linq;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
+﻿using CRUD_System.Encryption;
+using CRUD_System.FileHandlers;
 using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
-using CRUD_System.Encryption;
-using System.Net;
-using System.Reflection.Emit;
+using System.Diagnostics;
 
 namespace CRUD_System.Handlers
 {
@@ -37,21 +28,24 @@ namespace CRUD_System.Handlers
 
         #region UPDATE USER DETAILS
         /// <summary>
-        /// Controleert of de details van de gebruiker zijn gewijzigd.
+        /// Checks if the user details have been modified compared to the cached data.
         /// </summary>
         public bool AreUserDetailsModified(string name, string surname, string alias, string address, string zipCode, string city,
                                            string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
-            // Haal de oorspronkelijke gegevens van de gebruiker op uit de cache
+            // Retrieve the original user details from the cache using the alias as the identifier
             var originalUserDetails = cache.CachedUserData.FirstOrDefault(user => user[2] == alias);
+
+            // If the user is not found in the cache, return false (no modifications possible)
             if (originalUserDetails == null)
             {
-                return false; // Gebruiker niet gevonden
+                return false;
             }
 
+            // Compare each field to check if any detail has been modified
             return originalUserDetails[0] != name ||
                    originalUserDetails[1] != surname ||
-                   originalUserDetails[2] != alias ||
+                   originalUserDetails[2] != alias || // This should always be the same since it's the unique identifier
                    originalUserDetails[3] != address ||
                    originalUserDetails[4] != zipCode ||
                    originalUserDetails[5] != city ||
@@ -62,31 +56,63 @@ namespace CRUD_System.Handlers
         }
 
         /// <summary>
-        /// Updates user details and login data for a specified user.
-        /// Confirms changes with the user, checks for modifications in user and login details, 
-        /// updates the cached data, saves and encrypts the changes, and reloads the UI.
+        /// Checks if the user details or login details have been modified compared to the cached data.
+        /// If no modifications are detected, the edit mode remains active.
+        /// If modifications are detected, the user is prompted to confirm the changes before saving.
         /// </summary>
-        public void UpdateUserDetails(string name, string surname, string alias, string address, string zipCode, string city,
-                              string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+        public void CheckModifications(string name, string surname, string alias, string address, string zipCode, string city,
+                                        string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
-            // Confirm changes with the user
-            DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
-            if (dr == DialogResult.No)
-            {
-                // Exit the method if the user chooses not to save changes
-                return;
-            }
+            // Create a new instance of AdminInterface to manage UI interactions
+            AdminInterface adminInterface = new AdminInterface();
 
-            // Ensure that the cache is loaded with decrypted data
+            // Ensure that the cache is loaded with decrypted user and login data
             if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
 
-            // Check if user details or login details are modified
+            // Check if the user details have been modified
             bool userDetailsModified = AreUserDetailsModified(name, surname, alias, address, zipCode, city, email, phoneNumber, isAdmin, onlineStatus, isSick);
+
+            // Check if any login details (such as admin status) have been changed
             bool loginDetailsModified = AdminMainControl.ChkIsAdminChanged || AdminMainControl.ChkIsTheOneChanged;
 
+            // If no modifications are detected, notify the user and keep edit mode active
+            if (!userDetailsModified && !loginDetailsModified)
+            {
+                Debug.WriteLine("No modifications");
+                message.MessageNoDetailsModified();
+            }
+            else
+            {
+                // Prompt the user to confirm saving changes
+                DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
+
+                if (dr == DialogResult.Yes)
+                {
+                    // Save the modifications if the user confirms
+                    ProcessModifications(name, surname, alias, address, zipCode, city, email, phoneNumber, isAdmin, onlineStatus, isSick, userDetailsModified, loginDetailsModified);
+                }
+                else
+                {
+                    // If the user cancels, keep edit mode active
+                    Debug.WriteLine("Modifications cancelled");
+                    adminInterface.EditMode = true;
+                    adminInterface.InterfaceEditModeAdmin();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates user details and login data for a specified user.
+        /// Confirms changes with the user, checks for modifications in user and login details, 
+        /// updates the cached data, saves and encrypts the changes, and reloads the UI.
+        /// </summary>
+        public void ProcessModifications(string name, string surname, string alias, string address, string zipCode, string city,
+                                         string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick, 
+                                         bool userDetailsModified, bool loginDetailsModified)
+        {
             try
             {
                 // Update user details if modifications are detected
@@ -107,12 +133,6 @@ namespace CRUD_System.Handlers
                     UpdateCachedLoginDetails(alias, isAdmin);
                     cache.SaveAndEncryptData(); // Save updated login data and encrypt it
                     message.MessageUpdateLoginDetailsSucces(); // Notify the user of a successful update
-                }
-
-                // Handle the case where no modifications were made
-                if (!userDetailsModified && !loginDetailsModified)
-                {
-                    message.MessageNoDetailsModified();
                 }
 
                 // Reload the UI to reflect the updated details
