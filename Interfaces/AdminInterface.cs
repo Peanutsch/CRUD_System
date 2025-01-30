@@ -395,13 +395,18 @@ namespace CRUD_System.Interfaces
                 adminControl.btnShowListBoxLogEvents.Visible = EditMode;
                 adminControl.btnDeleteFileReport.Visible = EditMode;
 
-                adminControl.chkIsTheOne.Visible = EditMode;
                 adminControl.chkIsAdmin.Visible = EditMode;
 
                 // Update checkbox fields based on login- and userdetails
                 adminControl.txtAdmin.Visible = loginDetails[2] == "True"; // IsAdmin
                 adminControl.chkIsAdmin.Checked = loginDetails[2] == "True";
-                adminControl.chkIsTheOne.Checked = loginDetails[4] == "True";
+
+                // Setup checkbox chkIsTheOne
+                if (IsSelectedUserAdmin)
+                {
+                    adminControl.chkIsTheOne.Visible = EditMode;
+                    adminControl.chkIsTheOne.Checked = loginDetails[4] == "True";
+                }
             }
 
             // Enable Force log Out button if the selected user is not the current user
@@ -504,6 +509,11 @@ namespace CRUD_System.Interfaces
                 if (IsSelectedUserAdmin)
                 {
                     ToggleControlVisibility(adminControl.chkIsTheOne, EditMode);
+                }
+
+                if (IsSelectedUserTheOne)
+                {
+                    adminControl.chkIsAdmin.Enabled = !IsSelectedUserTheOne;
                 }
             }
         }

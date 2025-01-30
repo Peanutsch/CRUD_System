@@ -57,7 +57,6 @@ namespace CRUD_System.Handlers
 
         /// <summary>
         /// Checks if the user details or login details have been modified compared to the cached data.
-        /// If no modifications are detected, the edit mode remains active.
         /// If modifications are detected, the user is prompted to confirm the changes before saving.
         /// </summary>
         public void CheckModifications(string name, string surname, string alias, string address, string zipCode, string city,
@@ -72,10 +71,7 @@ namespace CRUD_System.Handlers
                 cache.LoadDecryptedData();
             }
 
-            // Check if the user details have been modified
             bool userDetailsModified = VerifyDetailModifications(name, surname, alias, address, zipCode, city, email, phoneNumber, isAdmin, onlineStatus, isSick);
-
-            // Check if any login details (such as admin status) have been changed
             bool loginDetailsModified = AdminMainControl.ChkIsAdminChanged || AdminMainControl.ChkIsTheOneChanged;
 
             // If no modifications are detected, notify the user and keep edit mode active
@@ -98,8 +94,6 @@ namespace CRUD_System.Handlers
                 {
                     // If the user cancels, keep edit mode active
                     Debug.WriteLine("Modifications cancelled");
-                    adminInterface.EditMode = true;
-                    adminInterface.InterfaceEditModeAdmin();
                 }
             }
         }

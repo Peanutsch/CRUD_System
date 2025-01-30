@@ -96,6 +96,7 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the click event to save the edited user details.
+        /// Set EditMode to False.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
@@ -109,12 +110,12 @@ namespace CRUD_System
                 profileManager.CheckModifications(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text,
                                                  txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
             }
-            /*
-            editMode = false; // Close editMode
+
+            interactionHandler.UserSelected = true;
+
             adminInterface.EditMode = false;
-            adminInterface.InterfaceEditModeAdmin();
-            */
             adminInterface.ReloadListBoxWithSelection(txtAlias.Text); // Reload listbox
+            adminInterface.InterfaceEditModeAdmin();
         }
 
         /// <summary>
