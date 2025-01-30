@@ -286,26 +286,19 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void PerformLogout()
         {
+            Debug.WriteLine("\n=== Perform Logout ===");
             var currentUser = CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                // When no status Offline, time of logout == time offline
-                if (!userInterface.IsOffline && !CurrentUserIsAdmin)
-                {
-                    string currentTime = DateTime.Now.ToString("HH:mm");
-
-                    userInterface.StatusIndicator("Offline", currentUser);
-                    Debug.WriteLine($"User status is not 'Offline'. Set offline status at {currentTime}...");
-                }
-
                 UpdateUserOnlineStatus(currentUser, false);
                 logEvents.UserLoggedOut(currentUser);
 
                 CurrentUser = null;
             }
+            Debug.WriteLine("=== LOGGED OUT ==="); 
         }
-
+            
         /// <summary>
         /// Forces a user to log out by an admin, updating their online status,
         /// triggering logout actions, and logging the forced logout event.
@@ -320,14 +313,10 @@ namespace CRUD_System.Handlers
                 return;
             }
 
-            // When no status Offline, time of logout == time offline
-            if (!userInterface.IsOffline)
-            {
-                string currentTime = DateTime.Now.ToString("HH:mm");
+            string currentTime = DateTime.Now.ToString("HH:mm");
 
-                userInterface.StatusIndicator("Offline", aliasToLogOut);
-                Debug.WriteLine($"User status is not 'Offline'. Set offline status at {currentTime}...");
-            }
+            userInterface.StatusIndicator("Offline", aliasToLogOut);
+            Debug.WriteLine($"User status is set 'Offline'. Set offline status at {currentTime}...");
 
             AdminInterface adminInterface = new AdminInterface();
             adminInterface.SetForceLogOutUserBtn(aliasToLogOut); // Pass the selected alias to SetForceLogOutUserBtn in AdminInterface

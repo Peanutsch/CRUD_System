@@ -371,7 +371,7 @@ namespace CRUD_System.Interfaces
         public void HandleSelectedUserStatus(string selectedAlias)
         {
             // Check if the cached user data is empty or not loaded
-            if (cache.CachedLoginData == null || !cache.CachedLoginData.Any())
+            if (cache.CachedLoginData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
@@ -396,7 +396,6 @@ namespace CRUD_System.Interfaces
                 adminControl.btnDeleteFileReport.Visible = EditMode;
 
                 adminControl.chkIsTheOne.Visible = EditMode;
-                //adminControl.chkIsTheOne.Checked = IsSelectedUserAdmin;
                 adminControl.chkIsAdmin.Visible = EditMode;
 
                 // Update checkbox fields based on login- and userdetails
