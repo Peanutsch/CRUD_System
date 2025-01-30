@@ -61,7 +61,7 @@ namespace CRUD_System.Handlers
         /// If modifications are detected, the user is prompted to confirm the changes before saving.
         /// </summary>
         public void CheckModifications(string name, string surname, string alias, string address, string zipCode, string city,
-                                        string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+                                       string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
             // Create a new instance of AdminInterface to manage UI interactions
             AdminInterface adminInterface = new AdminInterface();
