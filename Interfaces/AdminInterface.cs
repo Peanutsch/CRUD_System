@@ -115,10 +115,10 @@ namespace CRUD_System.Interfaces
                 throw new InvalidOperationException("ListBoxAdmin is not initialized.");
             }
 
-            cache.LoadDecryptedData();                          // Refresh the cache
+            cache.LoadDecryptedData();                         // Refresh the cache
 
-            adminControl.listBoxAdmin.Items.Clear();            // Clear the ListBox
-            int startIndex = (currentPage - 1) * itemsPerPage;  // Calculate start index for the current page
+            adminControl.listBoxAdmin.Items.Clear();           // Clear the ListBox
+            int startIndex = (currentPage - 1) * itemsPerPage; // Calculate start index for the current page
 
             // Populate the ListBox with generated items
             foreach (var item in GenerateListBoxItems(startIndex, itemsPerPage))
@@ -245,9 +245,9 @@ namespace CRUD_System.Interfaces
                     FillTextboxesAdmin(userDetailsArray);
                 }
 
-                ProcessUserRoleData(selectedAlias, loginDetailsArray!);     // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
-                FindReportFile(selectedAlias);                              // Find report files from corresponding user alias
-                HandleSelectedUserStatus(selectedAlias);                    // Update UI
+                ProcessUserRoleData(selectedAlias, loginDetailsArray!); // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
+                FindReportFile(selectedAlias);                          // Find report files from corresponding user alias
+                HandleSelectedUserStatus(selectedAlias);                // Update UI
             }
         }
 
@@ -316,7 +316,7 @@ namespace CRUD_System.Interfaces
         }
 
         /// <summary>
-        /// Closes the ShowLogEventsForm if it is already open.
+        /// Closes the ShowLogEventsForm and ShowLogStatusForm if they are already open.
         /// </summary>
         private void CloseOverviewFormIfOpen()
         {
@@ -391,13 +391,13 @@ namespace CRUD_System.Interfaces
 
                 // Update checkbox fields based on login- and userdetails
                 adminControl.txtAdmin.Visible = loginDetails[2] == "True"; // IsAdmin
-                adminControl.chkIsAdmin.Checked = loginDetails[2] == "True";
+                adminControl.chkIsAdmin.Checked = loginDetails[2] == "True"; // box is checked if selected user is Admin
 
                 // Setup checkbox chkIsTheOne
                 if (IsSelectedUserAdmin)
                 {
                     adminControl.chkIsTheOne.Visible = EditMode;
-                    adminControl.chkIsTheOne.Checked = loginDetails[4] == "True";
+                    adminControl.chkIsTheOne.Checked = loginDetails[4] == "True"; // Box is checked if selected user is Neo
                 }
             }
 
@@ -459,7 +459,7 @@ namespace CRUD_System.Interfaces
         /// <summary>
         /// Manages the interface display and controls based on the edit mode status.
         /// </summary>
-        public void InterfaceEditModeAdmin()
+        public void UpdateInterfaceAdmin()
         {
             UpdateInterfaceControls();
             UpdateTextFieldsAndListBox();
@@ -502,7 +502,7 @@ namespace CRUD_System.Interfaces
 
             if (IsSelectedUserTheOne)
             {
-                adminControl.chkIsAdmin.Enabled = false;
+                adminControl.chkIsAdmin.Enabled = false; // Checkbox chkIsAdmin is disabled if selected user is Neo
             }
         }
 
@@ -686,8 +686,8 @@ namespace CRUD_System.Interfaces
             adminControl.comboBoxSubjectReport.Visible = IsReport; // Shows the subject selection combo box in report mode
 
             // Updates the "Create Report" button's text and appearance based on the report mode
-            adminControl.btnCreateReport.Text = adminControl.ToggleIsReportMode() ? "Report" : "Exit";
-            adminControl.reportRichTxReport.BackColor = adminControl.ToggleIsReportMode() ? Color.White : Color.LightGray;
+            adminControl.btnCreateReport.Text = AdminMainControl.ToggleIsReportMode() ? "Report" : "Exit";
+            adminControl.reportRichTxReport.BackColor = AdminMainControl.ToggleIsReportMode() ? Color.White : Color.LightGray;
 
             // Shows or hides the "Save Report" button based on report mode
             adminControl.btnSaveReport.Visible = IsReport;
@@ -695,7 +695,6 @@ namespace CRUD_System.Interfaces
             // Clears any selected items in the list view to reset the state
             adminControl.listViewReports.SelectedItems.Clear();
         }
-
         #endregion TEXTBOXES AND CONFIG REPORT
     }
 }

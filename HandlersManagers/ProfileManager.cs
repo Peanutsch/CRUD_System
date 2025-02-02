@@ -453,7 +453,7 @@ namespace CRUD_System.Handlers
                 adminControl.listBoxAdmin.Items.Clear();
                 adminInterface.ReloadListBoxWithSelection(isAlias);
                 adminInterface.EditMode = false;
-                adminInterface.InterfaceEditModeAdmin();
+                adminInterface.UpdateInterfaceAdmin();
             }
             else
             {

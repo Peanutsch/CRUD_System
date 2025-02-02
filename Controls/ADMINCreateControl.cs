@@ -44,7 +44,6 @@ namespace CRUD_System
                 chkIsAdmin.Visible = true;
                 chkIsAdmin.Enabled = true;
             }
-
         }
 
         #region BUTTONS
@@ -86,10 +85,21 @@ namespace CRUD_System
             string city = txtCity.Text.Trim();
             string isCity = char.ToUpper(city[0]) + city.Substring(1);
 
-            if (!ValidateUserInput(isName, txtSurname.Text.Trim(), txtEmail.Text))
+            if (ValidateUserInput(isName, txtSurname.Text.Trim(), txtEmail.Text))
+            {
+                btnSaveEdit.Enabled = true;
+            }
+            else
             {
                 return;
             }
+
+            /*
+            if (!string.IsNullOrEmpty(isName) || !string.IsNullOrEmpty(txtSurname.Text) || !string.IsNullOrEmpty(txtEmail.Text))
+            {
+                btnSaveEdit.Enabled = true;
+            }
+            */
 
             // Pass to SaveUser for processing 
             profileManager.SaveNewUser(isName, txtSurname.Text.Trim(), 

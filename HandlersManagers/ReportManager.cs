@@ -63,7 +63,7 @@ namespace CRUD_System.Handlers
 
                 // Set EditMode back to true
                 adminInterface.EditMode = true;
-                adminInterface.InterfaceEditModeAdmin();
+                adminInterface.UpdateInterfaceAdmin();
             }
             else
             {

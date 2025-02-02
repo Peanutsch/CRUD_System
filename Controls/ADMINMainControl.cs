@@ -88,7 +88,7 @@ namespace CRUD_System
             {
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
-                adminInterface.InterfaceEditModeAdmin();
+                adminInterface.UpdateInterfaceAdmin();
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -112,7 +112,7 @@ namespace CRUD_System
 
             adminInterface.EditMode = false;
             adminInterface.ReloadListBoxWithSelection(txtAlias.Text); // Reload listbox
-            adminInterface.InterfaceEditModeAdmin();
+            adminInterface.UpdateInterfaceAdmin();
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace CRUD_System
 
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
-                adminInterface.InterfaceEditModeAdmin();
+                adminInterface.UpdateInterfaceAdmin();
             },
             () => message.MessageInvalidNoUserSelected()); // Handle no user selected case
         }
@@ -392,7 +392,7 @@ namespace CRUD_System
         /// <summary>
         /// Toggle between IsReport and !IsReport
         /// </summary>
-        public bool ToggleIsReportMode()
+        public static bool ToggleIsReportMode()
         {
             bool modus = AdminInterface.IsReport = !AdminInterface.IsReport;
             return modus;

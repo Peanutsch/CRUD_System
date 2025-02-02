@@ -150,6 +150,7 @@
             // btnSaveEdit
             // 
             btnSaveEdit.BackColor = Color.LightGreen;
+            btnSaveEdit.Enabled = false;
             btnSaveEdit.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSaveEdit.Location = new Point(595, 132);
             btnSaveEdit.Name = "btnSaveEdit";
