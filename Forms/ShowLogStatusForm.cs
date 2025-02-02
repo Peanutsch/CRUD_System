@@ -89,10 +89,10 @@ namespace CRUD_System
                 // Ensure the line has the expected number of parts
                 if (parts.Length >= 4)
                 {
-                    string date = parts[0];         // Date dd-MM-yyyy
-                    string time = parts[1];         // Time HH:mm:ss
-                    string aliasInLog = parts[2];   // Alias
-                    string logEvent = parts[3];     // Log event
+                    string date = parts[0];       // Date dd-MM-yyyy
+                    string time = parts[1];       // Time HH:mm:ss
+                    string aliasInLog = parts[2]; // Alias
+                    string logEvent = parts[3];   // Log event
 
                     // Combine date and time into a single DateTime object
                     if (DateTime.TryParse($"{date} {time}", out DateTime logDateTime))

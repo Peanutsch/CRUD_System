@@ -79,7 +79,6 @@ namespace CRUD_System.Interfaces
             // Check if the cached user data is empty or not loaded
             if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
-                Debug.WriteLine("Loading Decrypted Data");
                 cache.LoadDecryptedData();
             }
 
@@ -213,7 +212,6 @@ namespace CRUD_System.Interfaces
             // Check if the cached user data is empty or not loaded
             if (!cache.CachedLoginData.Any() || !cache.CachedLoginData.Any())
             {
-                Debug.WriteLine("Loading Decrypted Data");
                 cache.LoadDecryptedData();
             }
 

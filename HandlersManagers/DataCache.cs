@@ -93,7 +93,6 @@ public class DataCache
 
     public void LoadDecryptedCISData(string alias)
     {
-        
         path.SetAlias(alias);
         path.SearchCIS_Notice(alias);
 
