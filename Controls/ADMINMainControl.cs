@@ -48,7 +48,6 @@ namespace CRUD_System
 
         public bool isAdmin;
         public bool editMode = false;
-        //readonly bool isTheOne = false;
         readonly bool onlineStatus = false;
         readonly bool isSick = false;
 

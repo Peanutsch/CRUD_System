@@ -76,12 +76,10 @@ namespace CRUD_System.Interfaces
         /// </summary>>
         public void LoadDetailsListBox()
         {
-            // Ensure DataCache is loaded
-            DataCache.LoadCache();
-
             // Check if the cached user data is empty or not loaded
             if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
+                Debug.WriteLine("Loading Decrypted Data");
                 cache.LoadDecryptedData();
             }
 
@@ -118,14 +116,10 @@ namespace CRUD_System.Interfaces
                 throw new InvalidOperationException("ListBoxAdmin is not initialized.");
             }
 
-            // Refresh the cache
-            cache.LoadDecryptedData();
+            cache.LoadDecryptedData();                          // Refresh the cache
 
-            // Clear the ListBox
-            adminControl.listBoxAdmin.Items.Clear();
-
-            // Calculate start index for the current page
-            int startIndex = (currentPage - 1) * itemsPerPage;
+            adminControl.listBoxAdmin.Items.Clear();            // Clear the ListBox
+            int startIndex = (currentPage - 1) * itemsPerPage;  // Calculate start index for the current page
 
             // Populate the ListBox with generated items
             foreach (var item in GenerateListBoxItems(startIndex, itemsPerPage))
@@ -133,8 +127,7 @@ namespace CRUD_System.Interfaces
                 adminControl.listBoxAdmin.Items.Add(item);
             }
 
-            // Update the page label
-            UpdatePageLabel();
+            UpdatePageLabel(); // Update the page label
 
             // Try to reselect the previously edited item
             if (!string.IsNullOrEmpty(aliasToSelect))
@@ -220,6 +213,7 @@ namespace CRUD_System.Interfaces
             // Check if the cached user data is empty or not loaded
             if (!cache.CachedLoginData.Any() || !cache.CachedLoginData.Any())
             {
+                Debug.WriteLine("Loading Decrypted Data");
                 cache.LoadDecryptedData();
             }
 
@@ -371,7 +365,7 @@ namespace CRUD_System.Interfaces
         public void HandleSelectedUserStatus(string selectedAlias)
         {
             // Check if the cached user data is empty or not loaded
-            if (cache.CachedLoginData.Any() || !cache.CachedLoginData.Any())
+            if (!cache.CachedLoginData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
@@ -500,21 +494,17 @@ namespace CRUD_System.Interfaces
             {
                 ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
                 ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
-                ToggleControlVisibility(adminControl.btnDeleteFileReport, EditMode);
-                ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
+                ToggleControlVisibility(adminControl.btnDeleteFileReport, EditMode, Color.Red);
+                ToggleControlVisibility(adminControl.btnDeleteUser, EditMode, Color.Red);
                 ToggleControlVisibility(adminControl.btnShowListBoxLogEvents, EditMode);
                 ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
-                
-                // If selected user is Admin, show checkbox IsTheOne
-                if (IsSelectedUserAdmin)
-                {
-                    ToggleControlVisibility(adminControl.chkIsTheOne, EditMode);
-                }
 
-                if (IsSelectedUserTheOne)
-                {
-                    adminControl.chkIsAdmin.Enabled = !IsSelectedUserTheOne;
-                }
+                ToggleControlVisibility(adminControl.chkIsTheOne, IsSelectedUserAdmin && EditMode);
+            }
+
+            if (IsSelectedUserTheOne)
+            {
+                adminControl.chkIsAdmin.Enabled = false;
             }
         }
 
@@ -581,7 +571,7 @@ namespace CRUD_System.Interfaces
             if (AuthenticationService.CurrentUserIsTheOne)
             {
                 // Check if the cache is empty, and reload data if necessary.
-                if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+                if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
                 {
                     cache.LoadDecryptedData();
                 }
@@ -590,7 +580,7 @@ namespace CRUD_System.Interfaces
                 bool isOnline = cache.CachedUserData
                     .Skip(1) // Skip the header row
                     .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == aliasToLogOut) // Match alias
-                    .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online based on the 9th column
+                    .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online
 
                 // Display the "Force log Out User" button if the user is online
                 adminControl.btnForceLogOutUser.Enabled = isOnline;
@@ -646,10 +636,6 @@ namespace CRUD_System.Interfaces
             adminControl.txtCity.Text = userDetailsArray[5];
             adminControl.txtEmail.Text = userDetailsArray[6];
             adminControl.txtPhonenumber.Text = userDetailsArray[7];
-
-            // Populate text fields in Notes
-            string currentDate = Timers.CurrentDate.ToShortDateString();
-            string currentTime = Timers.CurrentTime.ToString(@"hh\:mm\:ss");
 
             adminControl.reportTxtAlias.Text = adminControl.txtAlias.Text;
         }

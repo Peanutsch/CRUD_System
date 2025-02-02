@@ -68,7 +68,7 @@ namespace CRUD_System.Handlers
         public bool ValidateLogin(string inputUserName, string inputUserPassword)
         {
             // Check if the cache is empty, and reload data if necessary.
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
@@ -334,7 +334,7 @@ namespace CRUD_System.Handlers
             UserMainForm userForm = new UserMainForm();
 
             // Check if the cache is empty, and reload data if necessary.
-            if (cache.CachedUserData.Any() || cache.CachedLoginData.Any())
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }

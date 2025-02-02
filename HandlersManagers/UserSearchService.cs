@@ -22,7 +22,7 @@ namespace CRUD_System.Handlers
         {
             DataCache cache = new DataCache();
             // Check if the cache is empty, and reload data if necessary.
-            if (cache.CachedUserData.Count == 0 || cache.CachedLoginData.Count == 0)
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }

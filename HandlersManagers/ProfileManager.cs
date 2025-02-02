@@ -622,8 +622,9 @@ namespace CRUD_System.Handlers
         public void IsTheOne(string selectedAlias, bool isTheOne)
         {
             AdminInterface adminInterface = new AdminInterface();
+
             // Check if the cached login data is empty. If so, load the decrypted data.
-            if (cache.CachedLoginData.Count == 0)
+            if (!cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }

@@ -29,6 +29,8 @@ namespace CRUD_System
         /// <param name="alias">The alias of the user whose logs need to be loaded.</param>
         public void LoadListBoxLogs(string alias)
         {
+            txtSelectedAlias.Text = alias;
+
             // Prepare the log files from all year directories
             List<string> logFiles = PrepareLogFiles(alias);
 

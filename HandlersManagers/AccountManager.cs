@@ -147,7 +147,7 @@ namespace CRUD_System.Handlers
         {
             DataCache cache = new DataCache();
             // Check if the cached user data is empty or not loaded
-            if (cache.CachedLoginData == null || cache.CachedLoginData.Count == 0)
+            if (!cache.CachedLoginData.Any() || !cache.CachedLoginData.Any())
             {
                 cache.LoadDecryptedData();
             }
