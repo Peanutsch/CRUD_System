@@ -101,15 +101,15 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            // Read lines from data_users.csv and data_login.csv
-            int userIndex = accountManager.FindUserIndexByAlias(txtAlias.Text);
+            profileManager.CheckModifications(txtName.Text, txtSurname.Text, txtAlias.Text, 
+                                              txtAddress.Text, txtZIPCode.Text, txtCity.Text,
+                                              txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
 
-            if (userIndex != -1)
-            {
-                profileManager.CheckModifications(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text,
-                                                 txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
-            }
+            // Reload cache
+            DataCache cache = new DataCache();
+            cache.LoadDecryptedData(); 
 
+            // Reload list- and textboxes
             adminInterface.EditMode = false;
             adminInterface.ReloadListBoxWithSelection(txtAlias.Text); // Reload listbox
             adminInterface.UpdateInterfaceAdmin();

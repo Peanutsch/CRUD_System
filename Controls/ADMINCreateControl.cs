@@ -31,7 +31,8 @@ namespace CRUD_System
         public AdminCreateControl()
         {
             InitializeComponent();
-            
+
+            InitializeEvents();
             SetChkIsAdmin();
         }
         #endregion CONSTRUCTOR
@@ -46,9 +47,20 @@ namespace CRUD_System
             }
         }
 
+        /// <summary>
+        /// Initializes event handlers for text fields.
+        /// </summary>
+        public void InitializeEvents()
+        {
+            txtName.TextChanged += txtFields_TextChanged!;
+            txtSurname.TextChanged += txtFields_TextChanged!;
+            txtEmail.TextChanged += txtFields_TextChanged!;
+        }
+
         #region BUTTONS
         /// <summary>
-        /// Initializes the components of the AdminCreateControl class.
+        /// Cancels the user creation process and closes the form.
+        /// Also reloads the cached user data to reflect any changes.
         /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -60,72 +72,52 @@ namespace CRUD_System
         }
 
         /// <summary>
-        /// Handles the click event to cancel the user creation process and close the form.
+        /// Toggles the admin status when the checkbox is checked or unchecked.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
         private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
         {
             isAdmin = !isAdmin; // Toggle between true and false
         }
 
         /// <summary>
-        /// Handles the click event to save the new user's details to the database. 
-        /// It saves the data and then closes the user creation form.
-        /// Required fields: txtName, txtSurname and txtEmail
+        /// Handles the save action for a new user.
+        /// Ensures proper capitalization of the name and city before saving.
+        /// Closes the user creation form after successful save.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // First letter of Name and City ToUpper
-            string name = txtName.Text.Trim();
-            string isName = char.ToUpper(name[0]) + name.Substring(1);
+            string isName = char.ToUpper(txtName.Text.Trim()[0]) + txtName.Text.Trim().Substring(1);
+            string isCity = char.ToUpper(txtCity.Text.Trim()[0]) + txtCity.Text.Trim().Substring(1);
 
-            string city = txtCity.Text.Trim();
-            string isCity = char.ToUpper(city[0]) + city.Substring(1);
-
-            if (ValidateUserInput(isName, txtSurname.Text.Trim(), txtEmail.Text))
-            {
-                btnSaveEdit.Enabled = true;
-            }
-            else
-            {
-                return;
-            }
-
-            /*
-            if (!string.IsNullOrEmpty(isName) || !string.IsNullOrEmpty(txtSurname.Text) || !string.IsNullOrEmpty(txtEmail.Text))
-            {
-                btnSaveEdit.Enabled = true;
-            }
-            */
-
-            // Pass to SaveUser for processing 
-            profileManager.SaveNewUser(isName, txtSurname.Text.Trim(), 
+            profileManager.SaveNewUser(isName, txtSurname.Text.Trim(),
                                        txtAddress.Text.Trim(), txtZIPCode.Text.Trim(),
                                        isCity, txtEmail.Text.Trim(),
                                        txtPhonenumber.Text.Trim(), isAdmin);
 
-            // Close CreateFormADMIN, return to MainFormADMIN
             interactionHandler.Close_CreateForm(this.ParentForm);
         }
 
         /// <summary>
-        /// Validates the user input to ensure that required fields are not empty.
+        /// Enables or disables the save button based on user input validation.
         /// </summary>
-        private bool ValidateUserInput(string name, string surname, string email)
+        private void txtFields_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(email))
-            {
-                Debug.WriteLine("Details are not complete. Name, Surname and Email are required");
-                message.MessageDetailsNotComplete();
-                return false;
-            }
-            return true;
+            btnSaveEdit.Enabled = ValidateUserInput();
         }
 
+        /// <summary>
+        /// Validates user input fields to ensure required fields are filled.
+        /// Required fields: Name, Surname, and Email.
+        /// </summary>
+        /// <returns>True if input is valid; otherwise, false.</returns>
+        private bool ValidateUserInput()
+        {
+            bool isValid = !string.IsNullOrEmpty(txtName.Text.Trim()) &&
+                           !string.IsNullOrEmpty(txtSurname.Text.Trim()) &&
+                           !string.IsNullOrEmpty(txtEmail.Text.Trim());
 
+            return isValid;
+        }
         #endregion BUTTONS
 
         #region ALIAS TEXTBOX HANDLER
@@ -176,8 +168,6 @@ namespace CRUD_System
             // Suppress all other keys
             e.SuppressKeyPress = true;
         }
-
-
 
         /// <summary>
         /// Handles the KeyDown event for the txtName textbox.

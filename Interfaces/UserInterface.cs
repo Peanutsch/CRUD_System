@@ -62,6 +62,7 @@ namespace CRUD_System.Interfaces
                 return;
             }
 
+            
             // Find the index of the current user in the cached user data (userLines has already skipped the header)
             var userIndex = repository.FindUserIndexByAlias(currentUser!);
             if (userIndex < 0)

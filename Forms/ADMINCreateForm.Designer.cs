@@ -30,40 +30,40 @@ namespace CRUD_System
         /// </summary>
         private void InitializeComponent()
         {
-            createControlADMIN = new AdminCreateControl();
-            focusButton = new Button();
-            SuspendLayout();
+            this.createControlADMIN = new AdminCreateControl();
+            this.focusButton = new Button();
+            this.SuspendLayout();
             // 
             // createControlADMIN
             // 
-            createControlADMIN.BackColor = SystemColors.ActiveCaption;
-            createControlADMIN.Dock = DockStyle.Fill;
-            createControlADMIN.Location = new Point(0, 0);
-            createControlADMIN.Name = "createControlADMIN";
-            createControlADMIN.Size = new Size(1133, 339);
-            createControlADMIN.TabIndex = 0;
+            this.createControlADMIN.BackColor = SystemColors.ActiveCaption;
+            this.createControlADMIN.Dock = DockStyle.Fill;
+            this.createControlADMIN.Location = new Point(0, 0);
+            this.createControlADMIN.Name = "createControlADMIN";
+            this.createControlADMIN.Size = new Size(1133, 339);
+            this.createControlADMIN.TabIndex = 0;
             // 
             // focusButton
             // 
-            focusButton.Enabled = false;
-            focusButton.Location = new Point(1046, 304);
-            focusButton.Name = "focusButton";
-            focusButton.Size = new Size(75, 23);
-            focusButton.TabIndex = 0;
-            focusButton.Visible = false;
+            this.focusButton.Enabled = false;
+            this.focusButton.Location = new Point(1046, 304);
+            this.focusButton.Name = "focusButton";
+            this.focusButton.Size = new Size(75, 23);
+            this.focusButton.TabIndex = 0;
+            this.focusButton.Visible = false;
             // 
             // ADMINCreateForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1133, 339);
-            Controls.Add(focusButton);
-            Controls.Add(createControlADMIN);
-            Name = "ADMINCreateForm";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Create New User";
-            Load += Form_Load;
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new SizeF(7F, 15F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.ClientSize = new Size(1133, 339);
+            this.Controls.Add(this.focusButton);
+            this.Controls.Add(this.createControlADMIN);
+            this.Name = "ADMINCreateForm";
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Text = "Create New User";
+            this.Load += this.Form_Load;
+            this.ResumeLayout(false);
         }
 
         #endregion

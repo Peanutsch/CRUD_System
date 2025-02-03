@@ -31,7 +31,7 @@ namespace CRUD_System.Handlers
         /// Checks if the user details have been modified compared to the cached data.
         /// </summary>
         public bool VerifyDetailModifications(string name, string surname, string alias, string address, string zipCode, string city,
-                                           string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+                                              string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
             // Retrieve the original user details from the cache using the alias as the identifier
             var originalUserDetails = cache.CachedUserData.FirstOrDefault(user => user[2] == alias);
@@ -64,6 +64,8 @@ namespace CRUD_System.Handlers
         {
             // Create a new instance of AdminInterface to manage UI interactions
             AdminInterface adminInterface = new AdminInterface();
+
+            
 
             // Ensure that the cache is loaded with decrypted user and login data
             if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
@@ -409,9 +411,9 @@ namespace CRUD_System.Handlers
         /// appropriate messages based on the result.
         /// </summary>
         public void SaveNewUser(string Name, string Surname,
-                        string Address, string ZIPCode,
-                        string City, string Email,
-                        string Phonenumber, bool isAdmin)
+                                string Address, string ZIPCode,
+                                string City, string Email,
+                                string Phonenumber, bool isAdmin)
         {
 
             // Generate a unique alias and password for the user
@@ -420,7 +422,6 @@ namespace CRUD_System.Handlers
             //=== PASSWORD TEMP ISALIAS ===//
             // Generate password
             string isPassword = PasswordManager.PasswordGenerator();
-            //string isPassword = isAlias;
 
             // Default values new user
             bool onlineStatus = false;
@@ -448,9 +449,14 @@ namespace CRUD_System.Handlers
                 // Notify the admin that the account creation was successful
                 message.MessageNewAccountSucces(isAlias);
 
-                AdminInterface adminInterface = new AdminInterface();
+                // Update list- and textboxes
+                cache.LoadDecryptedData();
+                DataCache.LoadCache();
+
                 AdminMainControl adminControl = new AdminMainControl();
                 adminControl.listBoxAdmin.Items.Clear();
+
+                AdminInterface adminInterface = new AdminInterface();
                 adminInterface.ReloadListBoxWithSelection(isAlias);
                 adminInterface.EditMode = false;
                 adminInterface.UpdateInterfaceAdmin();
@@ -465,8 +471,8 @@ namespace CRUD_System.Handlers
         /// Saves the new user data to the CSV files and ensures that data is encrypted.
         /// </summary>
         private void SaveUserData(string alias, string password, string name, string surname,
-                                   string address, string zipCode, string city, string email,
-                                   string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+                                  string address, string zipCode, string city, string email,
+                                  string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
             // Decrypt the user and login files before updating
             EncryptionManager.DecryptFile(path.UserFilePath);
@@ -490,6 +496,7 @@ namespace CRUD_System.Handlers
 
             // Update the DataCache with the latest data
             DataCache.LoadCache();
+            cache.LoadDecryptedData();
         }
 
         /// <summary>

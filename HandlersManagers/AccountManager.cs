@@ -31,38 +31,41 @@ namespace CRUD_System.Handlers
         /// </returns>
         public int FindUserIndexByAlias(string alias)
         {
-            // Load cache
+            DataCache cache = new DataCache();
             DataCache.LoadCache();
 
-            // Check if cache is loaded correctly
-            if (!DataCache.CachedLoginLines.Any()|| !DataCache.CachedLoginLines.Any())
-            {
-                DataCache dataCache = new DataCache();
-                dataCache.LoadDecryptedData();
-            }
-
             // Search through the cached login data for the alias
-            for (int index = 0; index < DataCache.CachedLoginLines?.Count; index++)
+            for (int index = 0; index < DataCache.CachedLoginLines!.Count; index++)
             {
                 var loginDetails = DataCache.CachedLoginLines[index].Split(",");
 
                 // The first element of loginDetails is the encrypted alias
                 string encryptedAlias = loginDetails[0].Trim();
 
-                // Decrypt the alias using your decryption method
-                string decryptedAlias = AesEncryption.DecryptWithFixedKey(encryptedAlias, AesEncryption.EncryptionKey);
-
-                // Compare the decrypted alias with the provided alias
-                if (decryptedAlias == alias.Trim())
+                try
                 {
-                    return index; // Return the index if found
+                    // Decrypt the alias using your decryption method
+                    string decryptedAlias = AesEncryption.DecryptWithFixedKey(encryptedAlias, AesEncryption.EncryptionKey);
+
+                    // Compare the decrypted alias with the provided alias
+                    if (decryptedAlias == alias.Trim())
+                    {
+                        return index; // Return the index if found
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error decrypting alias: {ex.Message}");
+                    continue; // Continue to the next iteration if decryption fails
                 }
             }
 
-            // If not found, show a message
+            // Alias not found after iterating through all lines
             message.MessageUserNotFound(alias);
+            Debug.WriteLine($"Something went wrong! User {alias} not found (Index -1)");
             return -1; // Return -1 if the alias was not found
         }
+
 
         /// <summary>
         /// Generates a unique alias for the user based on the first two letters of the first name
