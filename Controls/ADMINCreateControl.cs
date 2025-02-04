@@ -64,11 +64,22 @@ namespace CRUD_System
         /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            interactionHandler.Close_CreateForm(this.ParentForm);
+            DialogResult dr = message.MessageConfirmCancel();
 
-            // Reload Cache
-            DataCache cache = new DataCache();
-            cache.LoadDecryptedData();
+            if (dr == DialogResult.Yes)
+            {
+                interactionHandler.Close_CreateForm(this.ParentForm);
+
+                // Reload Cache
+                DataCache cache = new DataCache();
+                cache.LoadDecryptedData();
+            }
+            else
+            {
+                return;
+            }
+
+
         }
 
         /// <summary>
@@ -81,16 +92,16 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the save action for a new user.
-        /// Ensures proper capitalization of the name and city before saving.
+        /// Ensures proper capitalization of the name, city and zipcode before saving.
         /// Closes the user creation form after successful save.
         /// </summary>
-        private void btnSave_Click(object sender, EventArgs e)
+        private void btnSaveNewAccount_Click(object sender, EventArgs e)
         {
             string isName = char.ToUpper(txtName.Text.Trim()[0]) + txtName.Text.Trim().Substring(1);
             string isCity = char.ToUpper(txtCity.Text.Trim()[0]) + txtCity.Text.Trim().Substring(1);
 
             profileManager.SaveNewUser(isName, txtSurname.Text.Trim(),
-                                       txtAddress.Text.Trim(), txtZIPCode.Text.Trim(),
+                                       txtAddress.Text.Trim(), txtZIPCode.Text.ToUpper().Trim(),
                                        isCity, txtEmail.Text.Trim(),
                                        txtPhonenumber.Text.Trim(), isAdmin);
 
@@ -102,7 +113,7 @@ namespace CRUD_System
         /// </summary>
         private void txtFields_TextChanged(object sender, EventArgs e)
         {
-            btnSaveEdit.Enabled = ValidateUserInput();
+            btnSaveNewAccount.Enabled = ValidateUserInput();
         }
 
         /// <summary>
@@ -155,11 +166,16 @@ namespace CRUD_System
         {
             // Allow valid keys: digits (main and numpad), Backspace, Space, '+', '-', and clipboard shortcuts
             if ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) || // Digits (main keyboard)
-                (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9) || // Digits (numpad)
-                e.KeyCode == Keys.Back || // Backspace
-                e.KeyCode == Keys.Space || // Spacebar
-                e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add || // Plus
-                e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract || // Minus
+                (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9) ||  // Digits (numpad)
+                e.KeyCode == Keys.Back             ||                        // Backspace
+                e.KeyCode == Keys.Space            ||                        // Spacebar
+                e.KeyCode == Keys.Oemplus          ||                        // Plus Numpad
+                e.KeyCode == Keys.Add              ||                        // Plus
+                e.KeyCode == Keys.OemMinus         ||                        // Minus Numpad
+                e.KeyCode == Keys.Subtract         ||                        // Minus
+                e.KeyCode == Keys.Home             ||                        // Home
+                e.KeyCode == Keys.ShiftKey         ||                        // Shift
+                e.KeyCode == Keys.ControlKey       ||                        // Control key
                 (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.V))) // Clipboard shortcuts
             {
                 return;
@@ -180,7 +196,11 @@ namespace CRUD_System
                 && e.KeyCode != Keys.Back                                       // Allow Backspace
                 && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right            // Allow arrow keys
                 && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
-                && e.KeyCode != Keys.Space                                      
+                && e.KeyCode != Keys.Space                      
+                && e.KeyCode != Keys.Control
+                && e.KeyCode != Keys.Home
+                && e.KeyCode != Keys.End
+                && e.KeyCode == Keys.Subtract
                 && !(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))   // Block NumPad numbers
             {
                 e.SuppressKeyPress = true; // Suppress invalid keypress
@@ -199,6 +219,10 @@ namespace CRUD_System
                 && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right // Allow arrow keys
                 && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
                 && e.KeyCode != Keys.Space
+                && e.KeyCode != Keys.Control
+                && e.KeyCode != Keys.Home
+                && e.KeyCode != Keys.End
+                && e.KeyCode == Keys.Subtract
                 && !(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9)) // Block NumPad numbers
             {
                 e.SuppressKeyPress = true; // Suppress invalid keypress
@@ -217,12 +241,14 @@ namespace CRUD_System
                 && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right // Allow arrow keys
                 && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
                 && e.KeyCode != Keys.Space
+                && e.KeyCode != Keys.Control
+                && e.KeyCode != Keys.Home
+                && e.KeyCode != Keys.End
                 && !(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9)) // Block NumPad numbers
             {
                 e.SuppressKeyPress = true; // Suppress invalid keypress
             }
         }
-
         #endregion ALIAS TEXTBOX HANDLER
     }
 }

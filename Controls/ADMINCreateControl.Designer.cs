@@ -38,7 +38,7 @@
             this.txtEmail = new TextBox();
             this.txtAddress = new TextBox();
             this.txtCity = new TextBox();
-            this.btnSaveEdit = new Button();
+            this.btnSaveNewAccount = new Button();
             this.SuspendLayout();
             // 
             // chkIsAdmin
@@ -147,18 +147,18 @@
             this.txtCity.TextAlign = HorizontalAlignment.Center;
             this.txtCity.KeyDown += this.TxtCity_KeyDown;
             // 
-            // btnSaveEdit
+            // btnSaveNewAccount
             // 
-            this.btnSaveEdit.BackColor = Color.LightGreen;
-            this.btnSaveEdit.Enabled = false;
-            this.btnSaveEdit.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnSaveEdit.Location = new Point(595, 132);
-            this.btnSaveEdit.Name = "btnSaveEdit";
-            this.btnSaveEdit.Size = new Size(89, 30);
-            this.btnSaveEdit.TabIndex = 8;
-            this.btnSaveEdit.Text = "Save";
-            this.btnSaveEdit.UseVisualStyleBackColor = false;
-            this.btnSaveEdit.Click += this.btnSave_Click;
+            this.btnSaveNewAccount.BackColor = Color.LightGreen;
+            this.btnSaveNewAccount.Enabled = false;
+            this.btnSaveNewAccount.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnSaveNewAccount.Location = new Point(595, 132);
+            this.btnSaveNewAccount.Name = "btnSaveNewAccount";
+            this.btnSaveNewAccount.Size = new Size(89, 30);
+            this.btnSaveNewAccount.TabIndex = 8;
+            this.btnSaveNewAccount.Text = "Save";
+            this.btnSaveNewAccount.UseVisualStyleBackColor = false;
+            this.btnSaveNewAccount.Click += this.btnSaveNewAccount_Click;
             // 
             // AdminCreateControl
             // 
@@ -175,7 +175,7 @@
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.txtAddress);
             this.Controls.Add(this.txtCity);
-            this.Controls.Add(this.btnSaveEdit);
+            this.Controls.Add(this.btnSaveNewAccount);
             this.Name = "AdminCreateControl";
             this.Size = new Size(1038, 198);
             this.ResumeLayout(false);
@@ -194,6 +194,6 @@
         public TextBox txtEmail;
         public TextBox txtAddress;
         public TextBox txtCity;
-        public Button btnSaveEdit;
+        public Button btnSaveNewAccount;
     }
 }

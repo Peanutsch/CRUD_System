@@ -133,6 +133,9 @@ namespace CRUD_System
                 adminInterface.EmptyTextBoxesAdmin();
                 adminInterface.ReloadListBoxWithSelection(txtAlias.Text);
 
+                // Empty ListViewReports
+                listViewReports.Items.Clear();
+
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
                 adminInterface.UpdateInterfaceAdmin();

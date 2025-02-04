@@ -34,7 +34,7 @@ namespace CRUD_System.Handlers
                                               string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
             // Retrieve the original user details from the cache using the alias as the identifier
-            var originalUserDetails = cache.CachedUserData.FirstOrDefault(user => user[2] == alias);
+            string[] originalUserDetails = cache.CachedUserData.FirstOrDefault(user => user[2] == alias)!;
 
             // If the user is not found in the cache, return false (no modifications possible)
             if (originalUserDetails == null)
@@ -42,15 +42,14 @@ namespace CRUD_System.Handlers
                 return false;
             }
 
-            // Compare each field to check if any detail has been modified
-            return originalUserDetails[0] != name ||
-                   originalUserDetails[1] != surname ||
-                   originalUserDetails[2] != alias || // This should always be the same since it's the unique identifier
-                   originalUserDetails[3] != address ||
-                   originalUserDetails[4] != zipCode ||
-                   originalUserDetails[5] != city ||
-                   originalUserDetails[6] != email ||
-                   originalUserDetails[7] != phoneNumber ||
+            // Compare each field to check if any detail has been modified, except for the unique identifier alias (originalUserDetails[2])
+            return originalUserDetails[0] != name                    ||
+                   originalUserDetails[1] != surname                 ||
+                   originalUserDetails[3] != address                 ||
+                   originalUserDetails[4] != zipCode                 ||
+                   originalUserDetails[5] != city                    ||
+                   originalUserDetails[6] != email                   ||
+                   originalUserDetails[7] != phoneNumber             ||
                    originalUserDetails[8] != onlineStatus.ToString() ||
                    originalUserDetails[9] != isSick.ToString();
         }
@@ -62,11 +61,6 @@ namespace CRUD_System.Handlers
         public void CheckModifications(string name, string surname, string alias, string address, string zipCode, string city,
                                        string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
         {
-            // Create a new instance of AdminInterface to manage UI interactions
-            AdminInterface adminInterface = new AdminInterface();
-
-            
-
             // Ensure that the cache is loaded with decrypted user and login data
             if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
             {
@@ -79,7 +73,7 @@ namespace CRUD_System.Handlers
             // If no modifications are detected, notify the user and keep edit mode active
             if (!userDetailsModified && !loginDetailsModified)
             {
-                Debug.WriteLine("No modifications");
+                Debug.WriteLine("No modifications were made...");
                 message.MessageNoDetailsModified();
             }
             else
@@ -451,13 +445,12 @@ namespace CRUD_System.Handlers
 
                 // Update list- and textboxes
                 cache.LoadDecryptedData();
-                DataCache.LoadCache();
 
                 AdminMainControl adminControl = new AdminMainControl();
                 adminControl.listBoxAdmin.Items.Clear();
 
                 AdminInterface adminInterface = new AdminInterface();
-                adminInterface.ReloadListBoxWithSelection(isAlias);
+                adminInterface.LoadDetailsListBox();
                 adminInterface.EditMode = false;
                 adminInterface.UpdateInterfaceAdmin();
             }

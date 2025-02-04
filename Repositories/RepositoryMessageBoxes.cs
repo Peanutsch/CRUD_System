@@ -65,6 +65,11 @@ namespace CRUD_System.Repositories
         {
             return MessageBox.Show("Are you sure you want to exit?", "Confirm Exit", MessageBoxButtons.YesNo);
         }
+
+        public DialogResult MessageConfirmCancel()
+        {
+            return MessageBox.Show("Are you sure you want to cancel?", "Confirm Cancelation", MessageBoxButtons.YesNo);
+        }
         #endregion CONFIRM
 
         #region SUCCES
