@@ -98,10 +98,12 @@ namespace CRUD_System
         private void btnSaveNewAccount_Click(object sender, EventArgs e)
         {
             string isName = char.ToUpper(txtName.Text.Trim()[0]) + txtName.Text.Trim().Substring(1);
+            string isSurname = char.ToUpper(txtSurname.Text.Trim()[0]) + txtSurname.Text.Trim().Substring(1);
+            string isAddress = char.ToUpper(txtAddress.Text.Trim()[0]) + txtAddress.Text.Trim().Substring(1);
             string isCity = char.ToUpper(txtCity.Text.Trim()[0]) + txtCity.Text.Trim().Substring(1);
-
-            profileManager.SaveNewUser(isName, txtSurname.Text.Trim(),
-                                       txtAddress.Text.Trim(), txtZIPCode.Text.ToUpper().Trim(),
+            
+            profileManager.SaveNewUser(isName, isSurname.Trim(),
+                                       isAddress, txtZIPCode.Text.ToUpper().Trim(),
                                        isCity, txtEmail.Text.Trim(),
                                        txtPhonenumber.Text.Trim(), isAdmin);
 
