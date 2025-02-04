@@ -42,8 +42,8 @@ namespace CRUD_System
         { 
             if (AuthenticationService.CurrentUserIsTheOne)
             {
-                //chkIsAdmin.Visible = true;
-                //chkIsAdmin.Enabled = true;
+                chkIsAdmin.Visible = true;
+                chkIsAdmin.Enabled = true;
             }
         }
 

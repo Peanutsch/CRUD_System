@@ -31,7 +31,7 @@ namespace CRUD_System.Handlers
         /// Checks if the user details have been modified compared to the cached data.
         /// </summary>
         public bool VerifyDetailModifications(string name, string surname, string alias, string address, string zipCode, string city,
-                                              string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+                                              string email, string phoneNumber, bool onlineStatus, bool isSick)
         {
             // Retrieve the original user details from the cache using the alias as the identifier
             string[] originalUserDetails = cache.CachedUserData.FirstOrDefault(user => user[2] == alias)!;
@@ -67,7 +67,7 @@ namespace CRUD_System.Handlers
                 cache.LoadDecryptedData();
             }
 
-            bool userDetailsModified = VerifyDetailModifications(name, surname, alias, address, zipCode, city, email, phoneNumber, isAdmin, onlineStatus, isSick);
+            bool userDetailsModified = VerifyDetailModifications(name, surname, alias, address, zipCode, city, email, phoneNumber, onlineStatus, isSick);
             bool loginDetailsModified = AdminMainControl.ChkIsAdminChanged || AdminMainControl.ChkIsTheOneChanged;
 
             // If no modifications are detected, notify the user and keep edit mode active
@@ -188,6 +188,16 @@ namespace CRUD_System.Handlers
             {
                 loginData[2] = isAdmin.ToString();
                 loginData[4] = AdminMainControl.IsTheOne.ToString();
+
+                // Only users with role Admin can be set on role IsTheOne
+                // Set IsAdmin on True when selected user is IsTheOne
+                /*
+                AdminMainControl adminControl = new AdminMainControl();
+                if (adminControl.chkIsTheOne.Checked)
+                {
+                    loginData[2] = "True";
+                }
+                */
             }
         }
 

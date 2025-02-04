@@ -426,10 +426,17 @@ namespace CRUD_System.Interfaces
         /// Event handler for when the chkIsTheOne checkbox is checked/unchecked.
         /// - Disables "Is Admin" checkbox when chkIsTheOne is checked.
         /// - Enables "Is Admin" checkbox when chkIsTheOne is unchecked.
+        /// - Check checkbox chkIsAdmin when chkIsTheOne is checked
         /// </summary>
         private void ChkIsTheOne_CheckedChanged(object? sender, EventArgs e)
         {
             adminControl.chkIsAdmin.Enabled = !adminControl.chkIsTheOne.Checked;
+            adminControl.chkIsAdmin.Checked = adminControl.chkIsTheOne.Checked;
+        }
+
+        private void ChkIsAdmin_CheckedChanged(object? sender, EventArgs e)
+        {
+            adminControl.chkIsTheOne.Enabled = !adminControl.chkIsAdmin.Checked;
         }
         #endregion HANDLE SELECTED USER STATUS
 
