@@ -453,6 +453,7 @@ namespace CRUD_System.Handlers
                 adminInterface.LoadDetailsListBox();
                 adminInterface.EditMode = false;
                 adminInterface.UpdateInterfaceAdmin();
+                adminInterface.EmptyTextBoxesAdmin();
             }
             else
             {
@@ -545,7 +546,6 @@ namespace CRUD_System.Handlers
             {
                 AdminMainControl adminControl = new AdminMainControl();
                 // Create default CSV files line = {string.Empty},{string.Empty},{string.Empty}
-                //CreateCSVFiles.CreateCISNoticeCSV(alias);
                 CreateCSVFiles.CreateLogCSV(alias); //, currentUser.ToUpper(), logEvent);
 
                 // log event in {alias}_log.csv
