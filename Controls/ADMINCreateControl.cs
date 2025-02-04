@@ -42,8 +42,8 @@ namespace CRUD_System
         { 
             if (AuthenticationService.CurrentUserIsTheOne)
             {
-                chkIsAdmin.Visible = true;
-                chkIsAdmin.Enabled = true;
+                //chkIsAdmin.Visible = true;
+                //chkIsAdmin.Enabled = true;
             }
         }
 
@@ -92,20 +92,40 @@ namespace CRUD_System
 
         /// <summary>
         /// Handles the save action for a new user.
-        /// Ensures proper capitalization of the name, city and zipcode before saving.
-        /// Closes the user creation form after successful save.
+        /// Ensures proper capitalization of the name, city, and address before saving.
+        /// Converts the ZIP code to uppercase.
+        /// Updates the data cache and closes the user creation form after a successful save.
         /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments.</param>
         private void btnSaveNewAccount_Click(object sender, EventArgs e)
         {
-            string isName = char.ToUpper(txtName.Text.Trim()[0]) + txtName.Text.Trim().Substring(1);
-            string isSurname = char.ToUpper(txtSurname.Text.Trim()[0]) + txtSurname.Text.Trim().Substring(1);
-            string isAddress = char.ToUpper(txtAddress.Text.Trim()[0]) + txtAddress.Text.Trim().Substring(1);
-            string isCity = char.ToUpper(txtCity.Text.Trim()[0]) + txtCity.Text.Trim().Substring(1);
-            
-            profileManager.SaveNewUser(isName, isSurname.Trim(),
-                                       isAddress, txtZIPCode.Text.ToUpper().Trim(),
-                                       isCity, txtEmail.Text.Trim(),
-                                       txtPhonenumber.Text.Trim(), isAdmin);
+            // Ensure the first letter is capitalized; if empty, use an empty string
+            string isName = string.IsNullOrWhiteSpace(txtName.Text) ? string.Empty
+                                : char.ToUpper(txtName.Text.Trim()[0]) + txtName.Text.Trim().Substring(1);
+
+            string isSurname = string.IsNullOrWhiteSpace(txtSurname.Text) ? string.Empty
+                              : char.ToUpper(txtSurname.Text.Trim()[0]) + txtSurname.Text.Trim().Substring(1);
+
+            string isAddress = string.IsNullOrWhiteSpace(txtAddress.Text) ? string.Empty
+                              : char.ToUpper(txtAddress.Text.Trim()[0]) + txtAddress.Text.Trim().Substring(1);
+
+            string isCity = string.IsNullOrWhiteSpace(txtCity.Text) ? string.Empty
+                          : char.ToUpper(txtCity.Text.Trim()[0]) + txtCity.Text.Trim().Substring(1);
+
+            string zipCode = string.IsNullOrWhiteSpace(txtZIPCode.Text) ? string.Empty : txtZIPCode.Text.ToUpper().Trim();
+            string email = string.IsNullOrWhiteSpace(txtEmail.Text) ? string.Empty : txtEmail.Text.Trim();
+            string phoneNumber = string.IsNullOrWhiteSpace(txtPhonenumber.Text) ? string.Empty : txtPhonenumber.Text.Trim();
+
+
+            profileManager.SaveNewUser(isName, isSurname,
+                                       isAddress, zipCode,
+                                       isCity, email,
+                                       phoneNumber, isAdmin);
+
+            // Update the DataCache with the latest data
+            DataCache cache = new DataCache();
+            cache.LoadDecryptedData();
 
             interactionHandler.Close_CreateForm(this.ParentForm);
         }

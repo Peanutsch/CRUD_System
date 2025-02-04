@@ -31,7 +31,7 @@ namespace CRUD_System.Handlers
         /// </returns>
         public int FindUserIndexByAlias(string alias)
         {
-            DataCache cache = new DataCache();
+            // Reload cache
             DataCache.LoadCache();
 
             // Search through the cached login data for the alias

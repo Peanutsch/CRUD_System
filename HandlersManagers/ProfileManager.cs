@@ -109,7 +109,6 @@ namespace CRUD_System.Handlers
                 if (userDetailsModified)
                 {
                     UpdateCachedUserDetails(alias, name, surname, address, zipCode, city, email, phoneNumber, onlineStatus, isSick);
-                    cache.SaveAndEncryptData(); // Save updated data and encrypt it
                     message.MessageUpdateUserDetailsSucces(); // Notify the user of a successful update
 
                     // Log the update for user details
@@ -121,7 +120,6 @@ namespace CRUD_System.Handlers
                 if (loginDetailsModified)
                 {
                     UpdateCachedLoginDetails(alias, isAdmin);
-                    cache.SaveAndEncryptData(); // Save updated login data and encrypt it
                     message.MessageUpdateLoginDetailsSucces(); // Notify the user of a successful update
                 }
 
@@ -133,6 +131,12 @@ namespace CRUD_System.Handlers
                 // Log the error and notify the user
                 Debug.WriteLine($"Error while updating user {alias}: {ex}");
                 message.MessageSomethingWentWrong();
+            }
+
+            // Save and encrypt updated data if changes are made
+            if (userDetailsModified || loginDetailsModified)
+            {
+                cache.SaveAndEncryptData(); 
             }
         }
 
@@ -424,18 +428,14 @@ namespace CRUD_System.Handlers
             // Confirm the creation of the new user with the alias
             if (ConfirmNewUserCreation(isAlias))
             {
+                AdminInterface adminInterface = new AdminInterface();
+
                 Debug.WriteLine($"New account for Alias: {isAlias}");
                 Debug.WriteLine($"Created Password: {isPassword}");
                 Debug.WriteLine($"Welcome Email to {Email}");
 
                 // Save the new user's data to the system (cache and file storage)
                 SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin, onlineStatus, isSick);
-
-                // Add the user to the cache and ListBoxAdmin
-                string[] userDetails = new string[]
-                {
-                    Name, Surname, isAlias, Phonenumber, onlineStatus.ToString()
-                };
 
                 // log the creation of the new user
                 LogNewAccountCreation(isAlias, isPassword, Email);
@@ -449,8 +449,9 @@ namespace CRUD_System.Handlers
                 AdminMainControl adminControl = new AdminMainControl();
                 adminControl.listBoxAdmin.Items.Clear();
 
-                AdminInterface adminInterface = new AdminInterface();
-                adminInterface.LoadDetailsListBox();
+                
+                //adminInterface.LoadDetailsListBox();
+                adminInterface.ReloadListBoxWithSelection(isAlias);
                 adminInterface.EditMode = false;
                 adminInterface.UpdateInterfaceAdmin();
                 adminInterface.EmptyTextBoxesAdmin();
@@ -487,10 +488,6 @@ namespace CRUD_System.Handlers
             // Encrypt the user and login files again to secure the data
             EncryptionManager.EncryptFile(path.UserFilePath);
             EncryptionManager.EncryptFile(path.LoginFilePath);
-
-            // Update the DataCache with the latest data
-            DataCache.LoadCache();
-            cache.LoadDecryptedData();
         }
 
         /// <summary>

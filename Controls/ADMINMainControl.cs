@@ -46,7 +46,7 @@ namespace CRUD_System
         readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         readonly ReportManager reportManager;
 
-        public bool isAdmin;
+        public bool isAdmin = false;
         public bool editMode = false;
         readonly bool onlineStatus = false;
         readonly bool isSick = false;
