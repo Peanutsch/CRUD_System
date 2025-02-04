@@ -356,62 +356,80 @@ namespace CRUD_System.Interfaces
         #region HANDLE SELECTED USER STATUS
         /// <summary>
         /// Validates the selected user alias and updates the UI accordingly. 
-        /// Checks the login details for the selected alias, determines if the user is an admin, and updates the visibility of admin-related fields. 
-        /// It also checks if the user is online and enables/disables the Force log Out button.
+        /// - Checks the login details for the selected alias.
+        /// - Determines if the user is an admin and updates related UI elements.
+        /// - Checks if the user is online and enables/disables the "Force Log Out" button.
+        /// - If the selected user is "TheOne", enables additional admin controls.
         /// </summary>
         /// <param name="selectedAlias">The alias of the selected user to be validated.</param>
         public void HandleSelectedUserStatus(string selectedAlias)
         {
-            // Check if the cached user data is empty or not loaded
-            if (!cache.CachedLoginData.Any() || !cache.CachedLoginData.Any())
+            // Check if cached login data is empty or not loaded, and load it if necessary.
+            if (!cache.CachedLoginData.Any() || !cache.CachedUserData.Any())
             {
                 cache.LoadDecryptedData();
             }
 
-            // Retrieve login details from the cache
+            // Retrieve login and user details from the cache
             var loginDetails = cache.CachedLoginData?.FirstOrDefault(details => details[0] == selectedAlias); // Match alias in login data
             var userDetails = cache.CachedUserData?.FirstOrDefault(details => details[2] == selectedAlias); // Match alias in user data
 
-            adminControl.txtAbsenceIllness.Visible = userDetails![9] == "True"; // isSick
-            adminControl.txtAdmin.Visible = loginDetails![2] == "True"; // IsAdmin
+            // Update UI visibility based on retrieved user details
+            adminControl.txtAbsenceIllness.Visible = userDetails != null && userDetails[9] == "True"; // Show if user is sick
+            adminControl.txtAdmin.Visible = loginDetails != null && loginDetails[2] == "True"; // Show if user is admin
 
-            if (loginDetails![2] == "True")
-            {
-                IsSelectedUserAdmin = true;
-            }
+            // Determine if the selected user is an admin
+            IsSelectedUserAdmin = loginDetails != null && loginDetails[2] == "True";
 
-            // Interface when user is superuser TheOne
+            // If the logged-in user is "TheOne", enable additional admin functionalities
             if (loginDetails != null && userDetails != null && AuthenticationService.CurrentUserIsTheOne)
             {
+                // Show admin-specific buttons when in edit mode
                 adminControl.btnDeleteUser.Visible = EditMode;
                 adminControl.btnShowListBoxLogEvents.Visible = EditMode;
                 adminControl.btnDeleteFileReport.Visible = EditMode;
-
                 adminControl.chkIsAdmin.Visible = EditMode;
 
-                // Update checkbox fields based on login- and userdetails
-                adminControl.txtAdmin.Visible = loginDetails[2] == "True"; // IsAdmin
-                adminControl.chkIsAdmin.Checked = loginDetails[2] == "True"; // box is checked if selected user is Admin
+                // Update checkbox fields based on login and user details
+                adminControl.chkIsAdmin.Checked = loginDetails[2] == "True"; // IsAdmin checkbox checked if user is an admin
 
-                // Setup checkbox chkIsTheOne
+                // Setup "chkIsTheOne" checkbox logic
                 if (IsSelectedUserAdmin)
                 {
+                    // Remove any existing event handler to prevent multiple subscriptions
+                    adminControl.chkIsTheOne.CheckedChanged -= ChkIsTheOne_CheckedChanged;
+
+                    // Attach event handler to manage chkIsAdmin enable/disable state
+                    adminControl.chkIsTheOne.CheckedChanged += ChkIsTheOne_CheckedChanged;
+
+                    // Update visibility and state of "TheOne" checkbox
                     adminControl.chkIsTheOne.Visible = EditMode;
-                    adminControl.chkIsTheOne.Checked = loginDetails[4] == "True"; // Box is checked if selected user is Neo
+                    adminControl.chkIsTheOne.Checked = loginDetails[4] == "True"; // Checked if the user is "Neo"
                 }
             }
 
-            // Enable Force log Out button if the selected user is not the current user
+            // Enable "Force Log Out" button if the selected user is not the current user
             if (AuthenticationService.CurrentUser != selectedAlias)
             {
-                // Update the state of the Force log Out button based on the selected user's online status
+                // Update the state of the "Force Log Out" button based on the selected user's online status
                 SetForceLogOutUserBtn(selectedAlias);
             }
             else
             {
-                adminControl.txtAdmin.Visible = false; // Hide admin-related fields if no login details are found
-                adminControl.txtAbsenceIllness.Visible = false; // Hide isSick-related fields if no user details are found
+                // Hide admin and illness fields if no user is selected
+                adminControl.txtAdmin.Visible = false;
+                adminControl.txtAbsenceIllness.Visible = false;
             }
+        }
+
+        /// <summary>
+        /// Event handler for when the chkIsTheOne checkbox is checked/unchecked.
+        /// - Disables "Is Admin" checkbox when chkIsTheOne is checked.
+        /// - Enables "Is Admin" checkbox when chkIsTheOne is unchecked.
+        /// </summary>
+        private void ChkIsTheOne_CheckedChanged(object? sender, EventArgs e)
+        {
+            adminControl.chkIsAdmin.Enabled = !adminControl.chkIsTheOne.Checked;
         }
         #endregion HANDLE SELECTED USER STATUS
 
