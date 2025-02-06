@@ -11,6 +11,7 @@ namespace CRUD_System.Encryption
     internal static class AesEncryption
     {
         // The fixed encryption key (32 bytes) for AES encryption.
+        // PLACE KEY IN SECRET FILE. SAVE SECRET FILE ON SERVER
         public static string EncryptionKey { get; } = "l8GGfRqI8hEzw00+WP0SMpptSNw/WjgSeF74sbUL1LizDXicc5wi4YsbLDdTyMqH";
 
         /// <summary>
@@ -43,7 +44,6 @@ namespace CRUD_System.Encryption
                 }
             }
         }
-
 
         /// <summary>
         /// Decrypts a Base64-encoded cipher text (containing IV and encrypted data) using a fixed password.
