@@ -123,11 +123,13 @@ namespace CRUD_System.Handlers
             }
             catch (Exception e)
             {
+                // If any exception occurs, return an empty string
                 Debug.WriteLine($"Exception error: {e}...\nReturn string.Empty");
-                return ((string.Empty, string.Empty)); // If any exception occurs, return an empty string
+                return ((string.Empty, string.Empty));
             }
 
-            return ((string.Empty, string.Empty)); // Return an empty string if no subject is found or input is invalid
+            // Return an empty string if no subject is found or input is invalid
+            return ((string.Empty, string.Empty));
         }
         #endregion PROCESS
     }

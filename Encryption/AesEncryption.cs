@@ -83,10 +83,7 @@ namespace CRUD_System.Encryption
         /// <returns>A 256-bit encryption key derived from the password.</returns>
         private static byte[] GetKeyFromPassword(string password)
         {
-            using (var sha256 = SHA256.Create())
-            {
-                return sha256.ComputeHash(Encoding.UTF8.GetBytes(password)); // Return the hashed key
-            }
+            return SHA256.HashData(Encoding.UTF8.GetBytes(password)); // Return the hashed key
         }
     }
 }

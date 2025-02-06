@@ -15,19 +15,17 @@ namespace CRUD_System
     public partial class LoginForm : Form
     {
         #region PROPERTIES
-        AuthenticationService authService = new AuthenticationService();
+        private readonly AuthenticationService authService = new AuthenticationService();
         private bool isPasswordVisible = false;
         #endregion PROPERTIES
 
         #region CONSTRUCTOR
-        /// <summary>
-        /// Constructor. Initializes the components for the LoginForm.
-        /// </summary>
         public LoginForm()
         {
             InitializeComponent();
 
-            EnterKey(); //Initialize Key.Enter
+            //Initialize Key.Enter
+            EnterKey();
         }
         #endregion CONSTRUCTOR
 
@@ -37,7 +35,6 @@ namespace CRUD_System
             // Set focus ActiveControl on loginButton
             this.ActiveControl = checkBoxTogglePSW;
         }
-
 
         /// <summary>
         /// Enables the password input box when the username input box has text.
@@ -52,6 +49,7 @@ namespace CRUD_System
             }
             else
             {
+                // Disable the password input box
                 loginUserPSWBox.Enabled = false;
             }
         }
@@ -70,6 +68,7 @@ namespace CRUD_System
             }
             else
             {
+                // Disable login button
                 loginButton.Enabled = false;
                 checkBoxTogglePSW.Enabled = false;
             }
@@ -104,8 +103,10 @@ namespace CRUD_System
         private void LoginButton_Click(object sender, EventArgs e)
         {
             this.Hide();
+
             // Validate username and password, and display appropriate message
             authService.AuthenticateUser(loginUserNameBox.Text.ToLower(), loginUserPSWBox.Text);
+            
             this.Close();
         }
 

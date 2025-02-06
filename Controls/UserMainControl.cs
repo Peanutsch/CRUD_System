@@ -19,7 +19,7 @@ namespace CRUD_System
     /// <summary>
     /// Manages user-related interactions within the main user control panel of the CRUD system.
     /// Provides functionality to edit user details, toggle edit mode, change passwords, and handle 
-    /// ListBox selection events. Integrates with other components like UserInterface, AccountManager,
+    /// ListBox selection events. Integrates with other components like UserInterface, AccountManager (not in use),
     /// ProfileManager, and FormInteractionHandler to manage user data and interface behavior.
     /// </summary>
     public partial class UserMainControl : UserControl
@@ -138,7 +138,6 @@ namespace CRUD_System
                 }
             }
         }
-
         #endregion BUTTONS
     }
 }

@@ -17,7 +17,7 @@ namespace CRUD_System.Handlers
     public class AccountManager
     {
         #region PROPERTIES
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         #endregion PROPERTIES
 
         #region PROCES
@@ -50,7 +50,8 @@ namespace CRUD_System.Handlers
                     // Compare the decrypted alias with the provided alias
                     if (decryptedAlias == alias.Trim())
                     {
-                        return index; // Return the index if found
+                        // Return the index if found
+                        return index; 
                     }
                 }
                 catch (Exception ex)
@@ -63,7 +64,9 @@ namespace CRUD_System.Handlers
             // Alias not found after iterating through all lines
             message.MessageUserNotFound(alias);
             Debug.WriteLine($"Something went wrong! User {alias} not found (Index -1)");
-            return -1; // Return -1 if the alias was not found
+            
+            // Return -1 if the alias was not found
+            return -1;
         }
 
 

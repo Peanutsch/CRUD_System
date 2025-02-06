@@ -157,14 +157,16 @@ namespace CRUD_System.Handlers
             var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias); // Alias field
             if (user != null)
             {
-                user[8] = onlineStatus.ToString(); // Update online status
+                // Update online status
+                user[8] = onlineStatus.ToString();
             }
 
             // Find the user in the cached login data by alias and update their online status.
-            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias field
+            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
             if (login != null)
             {
-                login[3] = onlineStatus.ToString(); // Update online status
+                // Update online status
+                login[3] = onlineStatus.ToString();
             }
 
             // Save changes to the data files and encrypt them
@@ -199,15 +201,22 @@ namespace CRUD_System.Handlers
             if (!ValidateLogin(inputUserName, inputUserPassword))
             {
                 message.MessageInvalidNamePassword();
-                loginForm.ShowDialog(); // Reopen LoginForm for retry
+                
+                // Reopen LoginForm for retry
+                loginForm.ShowDialog();
+
                 return false;
             }
             if (ValidateOnlineStatus(inputUserName, inputUserPassword))
             {
                 message.MessageUserAlreadyOnline(inputUserName);
-                loginForm.ShowDialog(); // Reopen LoginForm for retry
+
+                // Reopen LoginForm for retry
+                loginForm.ShowDialog();
+                
                 return false;
             }
+
             return true;
         }
 
@@ -229,7 +238,9 @@ namespace CRUD_System.Handlers
             logEvents.UserLoggedIn(CurrentUser);
 
             bool isAdmin = CheckAdminRole(inputUserName, inputUserPassword);
-            if (isAdmin) // Send to admin interface
+
+            // Send to admin interface
+            if (isAdmin)
             {
                 AdminMainForm adminForm = new AdminMainForm();
                 CurrentUserIsAdmin = isAdmin;
@@ -239,7 +250,8 @@ namespace CRUD_System.Handlers
                 adminForm.ShowDialog();
 
             }
-            else // Send to user interface
+            // Send to user interface
+            else
             {
                 UserMainForm usersForm = new UserMainForm();
                 DisplayUserAlias(usersForm, isAdmin);
@@ -266,8 +278,10 @@ namespace CRUD_System.Handlers
             {
                 form.textBoxUserName.Text = "UNKNOWN";
             }
+
             form.labelAlias.TextAlign = ContentAlignment.TopLeft;
             form.labelAlias.BackColor = isAdmin ? Color.LightGreen : Color.LightBlue;
+            
             if (!CurrentUserIsTheOne)
             {
                 form.labelAlias.Text = isAdmin ? "Admin" : "User";
@@ -316,12 +330,13 @@ namespace CRUD_System.Handlers
             string currentTime = DateTime.Now.ToString("HH:mm");
 
             userInterface.StatusIndicator("Offline", aliasToLogOut);
+            MessageBox.Show($"User {aliasToLogOut} has been forced logged out.");
             Debug.WriteLine($"User status is set 'Offline'. Set offline status at {currentTime}...");
 
             AdminInterface adminInterface = new AdminInterface();
             adminInterface.SetForceLogOutUserBtn(aliasToLogOut); // Pass the selected alias to SetForceLogOutUserBtn in AdminInterface
-            UpdateUserOnlineStatus(aliasToLogOut, false); // Update the user's online status to offline
-            PerformForcedLogOutByAdmin(aliasToLogOut); // Perform the forced logout for the user
+            UpdateUserOnlineStatus(aliasToLogOut, false);        // Update the user's online status to offline
+            PerformForcedLogOutByAdmin(aliasToLogOut);           // Perform the forced logout for the user
         }
 
         /// <summary>
@@ -345,7 +360,7 @@ namespace CRUD_System.Handlers
             {
                 cache.SaveAndEncryptData();
 
-                // log the forced logout event
+                // log the forced logout event for admin and aliasToLogOut
                 logEvents.ForceUserLogOut(admin, aliasToLogOut);
 
                 // Hide the user's form if active

@@ -34,15 +34,16 @@ namespace CRUD_System.Handlers
                 {
                     // Check if the search term matches the alias, name, surname, or email
                     return userDetails.Length > 2 &&
-                           (userDetails[0].Contains(searchTerm, StringComparison. OrdinalIgnoreCase) || // Name
-                            userDetails[1].Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || // Surname
-                            userDetails[2].Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || // Alias
-                            userDetails[5].Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || // City
-                            userDetails.Length > 6 && userDetails[6].Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || // Email
-                            userDetails[7].Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || // Phonenumber
-                            userDetails.Length > 8 && userDetails[8].Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) || // Online status searchterm = bool true or false
-                            userDetails.Length > 9 && userDetails[9].Contains(searchTerm, StringComparison.OrdinalIgnoreCase); // Absence due Illness
+                          (userDetails[0].Contains(searchTerm, StringComparison. OrdinalIgnoreCase)                           // Name
+                        || userDetails[1].Contains(searchTerm, StringComparison.OrdinalIgnoreCase)                            // Surname
+                        || userDetails[2].Contains(searchTerm, StringComparison.OrdinalIgnoreCase)                            // Alias
+                        || userDetails[5].Contains(searchTerm, StringComparison.OrdinalIgnoreCase)                            // City
+                        || userDetails.Length > 6 && userDetails[6].Contains(searchTerm, StringComparison.OrdinalIgnoreCase)  // Email
+                        || userDetails[7].Contains(searchTerm, StringComparison.OrdinalIgnoreCase)                            // Phonenumber
+                        || userDetails.Length > 8 && userDetails[8].Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) // Online status searchterm = bool true or false
+                        || userDetails.Length > 9 && userDetails[9].Contains(searchTerm, StringComparison.OrdinalIgnoreCase); // Absence due Illness
                 })
+                // Details for display when matching terms
                 .Select(userDetails =>
                 {
                     string name = userDetails[0];

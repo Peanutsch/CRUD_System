@@ -16,11 +16,13 @@ namespace CRUD_System.Handlers
 {
     internal class ReportManager
     {
+        #region PROPERTIES
         private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
         private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
         private readonly AdminMainControl? adminControl;
 
         readonly string rootPath = RootPath.GetRootPath();
+        #endregion PROPERTIES
 
         #region CONSTRUCTOR
         public ReportManager(AdminMainControl control)
@@ -118,7 +120,7 @@ namespace CRUD_System.Handlers
             string? currentUser = AuthenticationService.CurrentUser ?? throw new InvalidOperationException("Current user is not authenticated.");
 
             // Ensure the report text doesn't contain commas by replacing them with semicolons.
-            // Commas are breaking the text and only the part before the first comma will be used as report
+            // -> Commas are breaking the text and only the part before the first comma will be used as report
             string sanitizedText = isReportText.Replace(",", ";");
 
             return (timeStamp, currentUser, sanitizedText);
@@ -184,9 +186,9 @@ namespace CRUD_System.Handlers
         /// </summary>
         public void DeleteFileReport()
         {
-            // Get the name of the selected file
+            // Get the name of the selected file and append the "_report.csv" suffix
             string selectedFile = adminControl!.listViewReports.SelectedItems[0].Text;
-            string fileName = selectedFile + "_report.csv"; // Append the "_report.csv" suffix
+            string fileName = selectedFile + "_report.csv";
 
             // Validate and retrieve the file path to delete
             var (fileToDelete, currentUser) = ValidateAndGetFileToDelete(fileName);
@@ -446,8 +448,7 @@ namespace CRUD_System.Handlers
         /// <exception cref="FileNotFoundException">Thrown if the report file does not exist.</exception>
         private string PrepareAndDecryptReport(string selectedUserReportFileName, string selectedAlias)
         {
-            // Construct the report file path.
-            // Format: rootPath\"report"\yearFolder\selectedAlias\isFileName
+            // Construct the report file path. Format: rootPath\"report"\yearFolder\selectedAlias\isFileName
             string isFileName = $"{selectedUserReportFileName}_report.csv";
             string yearFolder = GetYearFolder(selectedUserReportFileName);
             string filePath = Path.Combine(rootPath, "report", yearFolder, selectedAlias, isFileName);
@@ -462,7 +463,7 @@ namespace CRUD_System.Handlers
             // Decrypt the file
             EncryptionManager.DecryptFile(filePath);
 
-            return filePath; // Return the file path
+            return filePath;
         }
 
         /// <summary>
@@ -476,8 +477,12 @@ namespace CRUD_System.Handlers
         {
             // Read the content of the report file
             string reportContent = File.ReadAllText(filePath);
-            string[] reportContentSplit = reportContent.Split(","); // Split content by comma
-            string[] isFileNameSplit = selectedUserReportFileName.Split("_"); // Split filename
+            
+            // Split content by comma
+            string[] reportContentSplit = reportContent.Split(",");
+
+            // Split filename
+            string[] isFileNameSplit = selectedUserReportFileName.Split("_");
 
             // Check if the content is correctly formatted
             if (reportContentSplit.Length < 5)
@@ -486,10 +491,10 @@ namespace CRUD_System.Handlers
             }
 
             // Parse the content of the report
-            string reportCreator = reportContentSplit[1]; // Creator Alias
-            string reportSubject = reportContentSplit[3]; // Subject
-            string reportTextReport = reportContentSplit[4]; // Full text, including commas
-            string reportDate = isFileNameSplit[1].Replace("-", " "); // Format date part
+            string reportCreator = reportContentSplit[1];               // Creator Alias
+            string reportSubject = reportContentSplit[3];               // Subject
+            string reportTextReport = reportContentSplit[4];            // Full text, including commas
+            string reportDate = isFileNameSplit[1].Replace("-", " ");   // Format date part
 
             // Ensure adminControl is not null
             if (adminControl == null)

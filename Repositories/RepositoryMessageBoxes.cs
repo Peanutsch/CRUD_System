@@ -129,7 +129,7 @@ namespace CRUD_System.Repositories
         {
             CreateNewPasswordForm psw = new CreateNewPasswordForm();
             return MessageBox.Show($"Invalid Password\n" +
-                                   $"Must contain {psw.lengthPsw} or more chars.\n" +
+                                   $"Must contain {psw.lengthPsw} or more character.\n" +
                                    $"Must contain at least {psw.charToUpper} capital letters\n" +
                                    $"Must contain at least {psw.charIsDigi} numbers");
         }

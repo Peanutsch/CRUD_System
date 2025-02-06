@@ -25,7 +25,6 @@ namespace CRUD_System.Interfaces
         public static bool IsSelectedUserAdmin { get; set; }
 
         public List<string[]> CachedUserData => cache.CachedUserData;
-        public List<string[]> CachedLoginData => cache.CachedLoginData;
 
         private int currentPage = 1; // Track pagenumbers
         private const int itemsPerPage = 16; // Maximum items per page in listBoxAdmin
@@ -98,7 +97,6 @@ namespace CRUD_System.Interfaces
             UpdatePageLabel();
         }
 
-
         /// <summary>
         /// Reloads the ListBox and reselects the specified item.
         /// </summary>
@@ -115,10 +113,14 @@ namespace CRUD_System.Interfaces
                 throw new InvalidOperationException("ListBoxAdmin is not initialized.");
             }
 
-            cache.LoadDecryptedData();                         // Refresh the cache
+            // Refresh the cache
+            cache.LoadDecryptedData();
 
-            adminControl.listBoxAdmin.Items.Clear();           // Clear the ListBox
-            int startIndex = (currentPage - 1) * itemsPerPage; // Calculate start index for the current page
+            // Clear the ListBox
+            adminControl.listBoxAdmin.Items.Clear();
+
+            // Calculate start index for the current page
+            int startIndex = (currentPage - 1) * itemsPerPage;
 
             // Populate the ListBox with generated items
             foreach (var item in GenerateListBoxItems(startIndex, itemsPerPage))
@@ -126,7 +128,8 @@ namespace CRUD_System.Interfaces
                 adminControl.listBoxAdmin.Items.Add(item);
             }
 
-            UpdatePageLabel(); // Update the page label
+            // Update the page label
+            UpdatePageLabel();
 
             // Try to reselect the previously edited item
             if (!string.IsNullOrEmpty(aliasToSelect))
@@ -291,9 +294,8 @@ namespace CRUD_System.Interfaces
 
             // Store the initial admin and "TheOne" statuses in a list for future reference
             adminControl.storeInitialUserStatus.Add(IsSelectedUserAdmin);   // Admin status at index 0
-            adminControl.storeInitialUserStatus.Add(IsSelectedUserTheOne);  // "TheOne" status at index 1
+            adminControl.storeInitialUserStatus.Add(IsSelectedUserTheOne);  // TheOne status at index 1
         }
-
 
         /// <summary>
         /// Retrieves user and login details from the cache for the selected alias.
@@ -495,10 +497,29 @@ namespace CRUD_System.Interfaces
         /// </summary>
         public void UpdateInterfaceControls()
         {
-            var currentUser = AuthenticationService.CurrentUser;
+            // Handle buttons AdminMainControl
+            ToggleAdminMainControl();
 
-            adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Unlock Details"; // Toggle Edit and Cancel button text based on EditMode status
-            adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption; // Set the background color based on EditMode for visual feedback
+            // Interface if user is superuser
+            if (AuthenticationService.CurrentUserIsTheOne)
+            {
+                ToggleAdminMainControlForTheOne();
+            }
+            // Toggle checkbox chkIsAdmin when Selected User is The One
+            if (IsSelectedUserTheOne)
+            {
+                // Checkbox chkIsAdmin is disabled if selected user is Neo
+                adminControl.chkIsAdmin.Enabled = false; 
+            }
+        }
+
+        /// <summary>
+        /// Toggle AdminMainControl buttons EditMode
+        /// </summary>
+        private void ToggleAdminMainControl()
+        {
+            adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Unlock Details";
+            adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;
 
             adminControl.btnCreateUser.Enabled = !EditMode;
             adminControl.btnChangePassword.Enabled = !EditMode;
@@ -511,24 +532,21 @@ namespace CRUD_System.Interfaces
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
             ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
             ToggleControlVisibility(adminControl.btnCreateReport, EditMode);
+        }
 
-            // Interface if user is superuser
-            if (AuthenticationService.CurrentUserIsTheOne)
-            {
-                ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
-                ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
-                ToggleControlVisibility(adminControl.btnDeleteFileReport, EditMode, Color.Red);
-                ToggleControlVisibility(adminControl.btnDeleteUser, EditMode, Color.Red);
-                ToggleControlVisibility(adminControl.btnShowListBoxLogEvents, EditMode);
-                ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
+        /// <summary>
+        /// Toggle AdminMainControl buttons when Selected User is The One
+        /// </summary>
+        private void ToggleAdminMainControlForTheOne()
+        {
+            ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
+            ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
+            ToggleControlVisibility(adminControl.btnDeleteFileReport, EditMode, Color.Red);
+            ToggleControlVisibility(adminControl.btnDeleteUser, EditMode, Color.Red);
+            ToggleControlVisibility(adminControl.btnShowListBoxLogEvents, EditMode);
+            ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
 
-                ToggleControlVisibility(adminControl.chkIsTheOne, IsSelectedUserAdmin && EditMode);
-            }
-
-            if (IsSelectedUserTheOne)
-            {
-                adminControl.chkIsAdmin.Enabled = false; // Checkbox chkIsAdmin is disabled if selected user is Neo
-            }
+            ToggleControlVisibility(adminControl.chkIsTheOne, IsSelectedUserAdmin && EditMode);
         }
 
         /// <summary>
@@ -612,7 +630,7 @@ namespace CRUD_System.Interfaces
         }
         #endregion EDITMODE DISPLAY ADMIN
 
-        #region TEXTBOXES ADMIN
+        #region ADMIN TEXTBOXES
         /// <summary>
         /// Clears all textboxes in the interface, resetting their content.
         /// </summary>
@@ -643,7 +661,6 @@ namespace CRUD_System.Interfaces
             adminControl.InteractionHandler.UserSelected = false;
         }
 
-
         /// <summary>
         /// Populates the textboxes with the details of a selected user.
         /// </summary>
@@ -662,9 +679,9 @@ namespace CRUD_System.Interfaces
 
             adminControl.reportTxtAlias.Text = adminControl.txtAlias.Text;
         }
-        #endregion TEXTBOXES ADMIN
+        #endregion ADMIN TEXTBOXES
 
-        #region TEXTBOXES AND CONFIG REPORT
+        #region REPORT TEXTBOXES AND CONFIG
         /// <summary>
         /// Clears the content of all report-related text boxes.
         /// </summary>
@@ -720,6 +737,6 @@ namespace CRUD_System.Interfaces
             // Clears any selected items in the list view to reset the state
             adminControl.listViewReports.SelectedItems.Clear();
         }
-        #endregion TEXTBOXES AND CONFIG REPORT
+        #endregion REPORT TEXTBOXES AND CONFIG
     }
 }

@@ -36,7 +36,7 @@ namespace CRUD_System.Interfaces
 
         #region LISTBOX USER
         /// <summary>
-        /// Loads the current user's details into the list box using DataCache.
+        /// Loads the current user's details into the list box using DataCache (not in use).
         /// </summary>
         public void LoadDetailsListBoxThisUser()
         {
@@ -73,11 +73,11 @@ namespace CRUD_System.Interfaces
 
             // Retrieve the user's details from the cache, without skipping any rows in CachedUserData
             var userDetailsArray = cache.CachedUserData[userIndex];  // No Skip(1) here since we're using the correct index
-            string name = userDetailsArray[0];          // First name
-            string surname = userDetailsArray[1];      // Last name
-            string alias = userDetailsArray[2];        // Alias (username)
-            string email = userDetailsArray[6];        // Email address
-            string phonenumber = userDetailsArray[7];  // Phone number
+            string name = userDetailsArray[0];                       // First name
+            string surname = userDetailsArray[1];                    // Last name
+            string alias = userDetailsArray[2];                      // Alias (username)
+            string email = userDetailsArray[6];                      // Email address
+            string phonenumber = userDetailsArray[7];                // Phone number
             string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty; // Online status
 
             // Construct the item string to display in the list box

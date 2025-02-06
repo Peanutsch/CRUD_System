@@ -22,7 +22,6 @@ public class DataCache
     public static List<string> CachedLoginLines { get; private set; } = new List<string>();
     public static List<string> CachedUserLines { get; private set; } = new List<string>();
 
-
     /// <summary>
     /// Cached user data, where each array represents a record (line) split into fields.
     /// </summary>
@@ -37,7 +36,6 @@ public class DataCache
     /// Cached Call in Sick datawhere each array represents a record (line) split into fields.
     /// </summary>
     public List<string[]> CachedCisData { get; private set; } = new List<string[]>();
-
     #endregion PROPERTIES
 
     #region CONSTRUCTOR

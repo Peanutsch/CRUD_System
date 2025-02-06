@@ -50,7 +50,6 @@ namespace CRUD_System.FileHandlers
             UserFilePath = Path.Combine(rootPath, "CSV", "data_users.csv");
             LoginFilePath = Path.Combine(rootPath, "CSV", "data_login.csv");
             LogEventFilePath = Path.Combine(rootPath, "CSV", "logEvents.csv");
-            //FileCisNotices = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString() ,alias, $"{alias}_cis_notices.csv");
             ReportFilePath = Path.Combine(rootPath, "report", "2024", "peer001", "peer001_report.csv");
         }
 
@@ -58,7 +57,6 @@ namespace CRUD_System.FileHandlers
         {
             FileCisNotices = Path.Combine(rootPath, "cis_notices", Timers.CurrentYear.ToString(), alias, $"{alias}_cis_notices.csv");
         }
-
         #endregion CONSTRUCTOR
 
         #region PROCESSING LOG EVENTS
@@ -183,7 +181,6 @@ namespace CRUD_System.FileHandlers
                 Debug.WriteLine($"An error occurred while appending to the log file for alias {selectedAlias}: {ex.Message}");
             }
         }
-
         #endregion PROCESSING LOG STATUS
 
         /// <summary>

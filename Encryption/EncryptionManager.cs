@@ -8,6 +8,7 @@ namespace CRUD_System.Encryption
 {
     internal static class EncryptionManager
     {
+        #region ENCRYPTION
         /// <summary>
         /// Encrypts the content of a CSV file and writes the encrypted content back to the same file.
         /// Each field in the CSV is encrypted individually using AES encryption.
@@ -38,7 +39,9 @@ namespace CRUD_System.Encryption
             // Write the encrypted lines back to the same file
             File.WriteAllLines(filePath, encryptedLines);
         }
+        #endregion ENCRYPTION
 
+        #region DECRYPTION
         /// <summary>
         /// Decrypts the content of an encrypted CSV file and writes the decrypted content back to the same file.
         /// Each field in the CSV is decrypted individually using AES decryption.
@@ -69,5 +72,6 @@ namespace CRUD_System.Encryption
             // Write the decrypted lines back to the same file
             File.WriteAllLines(filePath, decryptedLines);
         }
+        #endregion DECRYPTION
     }
 }

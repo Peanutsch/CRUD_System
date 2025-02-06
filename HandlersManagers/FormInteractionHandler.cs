@@ -94,7 +94,7 @@ namespace CRUD_System.Handlers
         }
         #endregion CREATE NEW PASSWORD
 
-        #region SHOW REPORT FORM
+        #region SHOW FORM LOGGED EVENTS AND STATUS
         /// <summary> 
         /// Opens the ShowReportForm as a dialog without hiding the parent control.
         /// </summary>
@@ -137,7 +137,7 @@ namespace CRUD_System.Handlers
             showStatusForm.LoadListBoxLogs(selectedAlias);
             showStatusForm.Show();
         }
-        #endregion SHOW REPORT FORM
+        #endregion SHOW FORM LOGGED EVENTS AND STATUS
 
         #region CALL IN SICK
         public void Open_AbsenceDueIllnessForm(Form? parentControl = null)

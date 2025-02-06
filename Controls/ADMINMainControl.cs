@@ -34,10 +34,7 @@ namespace CRUD_System
 
         public static bool IsTheOne { get; set; }
         public static bool ChkIsTheOneChanged { get; set; }
-
         public static bool ChkIsAdminChanged { get; set; }
-
-        readonly FilePaths path = new FilePaths();
 
         readonly AdminInterface adminInterface;
         readonly AccountManager accountManager = new AccountManager();
@@ -170,7 +167,7 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                profileManager.GeneratePasswordNewUser(txtAlias.Text);
+                profileManager.InitiatePasswordGenerationForUser(txtAlias.Text);
             },
              () => message.MessageInvalidNoUserSelected());
         }
@@ -202,7 +199,6 @@ namespace CRUD_System
             {
                 // If a valid user is found, force logout
                 authenticationService.ForceLogOut(txtAlias.Text);
-                MessageBox.Show($"User {txtAlias.Text} has been forced logged out.");
 
                 // Reload the listbox to reflect changes
                 listBoxAdmin.Items.Clear();
@@ -403,30 +399,32 @@ namespace CRUD_System
         #endregion TOGGLE MODES
 
         #region KEY HANDLERS
-        /// <summary>
-        /// Handles the KeyPress event for the txtPhonenumber textbox.
-        /// Allows only numeric digits, '+', '-', Backspace, Spacebar, and clipboard shortcuts (Ctrl+C and Ctrl+V).
-        /// Suppresses any other key inputs to ensure only valid phone number characters are entered.
-        /// </summary>
-        /// <param name="sender">The source of the event, typically the TxtPhonenumber textbox.</param>
-        /// <param name="e">The KeyEventArgs containing the event data.</param>
+        // List of allowed keys for each textbox
+        private HashSet<Keys> allowedPhonenumberKeys = new HashSet<Keys>
+        {
+            Keys.Back, Keys.Space, Keys.Oemplus, Keys.Add, Keys.OemMinus, Keys.Subtract, Keys.Left, Keys.Right,
+            Keys.Home, Keys.Home, Keys.ShiftKey, Keys.ControlKey,
+            Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9,
+            Keys.NumPad0, Keys.NumPad1, Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad5, Keys.NumPad6, Keys.NumPad7, Keys.NumPad8, Keys.NumPad9,
+            Keys.C, Keys.V // Clipboard shortcuts
+        };
+
+        private HashSet<Keys> allowedTextKeys = new HashSet<Keys>
+        {
+            Keys.Back, Keys.Left, Keys.Right, Keys.Space, Keys.Control, Keys.Home, Keys.End,
+            Keys.OemMinus, Keys.Subtract,
+            Keys.C, Keys.V
+        };
+
         /// <summary>
         /// Handles the KeyDown event for the txtPhonenumber textbox.
-        /// Allows numeric digits, '+', '-', Backspace, Spacebar, and clipboard shortcuts (Ctrl+C, Ctrl+V).
+        /// Allows numeric digits, '+', '-', Backspace, Spacebar, arrow keys and clipboard shortcuts (Ctrl+C, Ctrl+V).
         /// Suppresses any other invalid key inputs.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The KeyEventArgs containing the event data.</param>
         public void TxtPhonenumber_KeyDown(object sender, KeyEventArgs e)
         {
             // Allow valid keys: digits (main and numpad), Backspace, Space, '+', '-', and clipboard shortcuts
-            if ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) || // Digits (main keyboard)
-                (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9) || // Digits (numpad)
-                e.KeyCode == Keys.Back || // Backspace
-                e.KeyCode == Keys.Space || // Spacebar
-                e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.Add || // Plus
-                e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Subtract || // Minus
-                (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.V))) // Clipboard shortcuts
+            if (allowedPhonenumberKeys.Contains(e.KeyCode) || (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.V)))
             {
                 return;
             }
@@ -442,12 +440,8 @@ namespace CRUD_System
         /// </summary>
         public void TxtName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!char.IsLetter((char)e.KeyCode)
-                && e.KeyCode != Keys.Back
-                && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right
-                && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
-                && e.KeyCode != Keys.Space
-                && !e.Control && !e.Shift)
+            // Check if the key is allowed (only letters, Backspace, arrow keys, and Ctrl/Shift combinations)
+            if (!char.IsLetter((char)e.KeyCode) && !allowedTextKeys.Contains(e.KeyCode) && !e.Control && !e.Shift)
             {
                 e.SuppressKeyPress = true;
             }
@@ -460,12 +454,8 @@ namespace CRUD_System
         /// </summary>
         public void TxtSurname_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!char.IsLetter((char)e.KeyCode)
-                && e.KeyCode != Keys.Back
-                && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right
-                && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
-                && e.KeyCode != Keys.Space
-                && !e.Control && !e.Shift)
+            // Check if the key is allowed (only letters, Backspace, arrow keys, and Ctrl/Shift combinations)
+            if (!char.IsLetter((char)e.KeyCode) && !allowedTextKeys.Contains(e.KeyCode) && !e.Control && !e.Shift)
             {
                 e.SuppressKeyPress = true;
             }
@@ -478,12 +468,8 @@ namespace CRUD_System
         /// </summary>
         public void TxtCity_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!char.IsLetter((char)e.KeyCode)
-                && e.KeyCode != Keys.Back
-                && e.KeyCode != Keys.Left && e.KeyCode != Keys.Right
-                && e.KeyCode != Keys.Up && e.KeyCode != Keys.Down
-                && e.KeyCode != Keys.Space
-                && !e.Control && !e.Shift)
+            // Check if the key is allowed (only letters, Backspace, arrow keys, and Ctrl/Shift combinations)
+            if (!char.IsLetter((char)e.KeyCode) && !allowedTextKeys.Contains(e.KeyCode) && !e.Control && !e.Shift)
             {
                 e.SuppressKeyPress = true;
             }
@@ -553,9 +539,12 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
-            storeInitialUserStatus.Clear(); // Empty list storeIsAdminStatus
-            listViewReports.Items.Clear(); // // Empty ListView for Reports
-            adminInterface.ListBoxAdmin_SelectedIndexChangedHandler(); // Trigger handler
+            // Empty list storeIsAdminStatus
+            storeInitialUserStatus.Clear();
+            // Empty ListView for Reports
+            listViewReports.Items.Clear();
+            // Trigger handler
+            adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
         }
 
         /// <summary>

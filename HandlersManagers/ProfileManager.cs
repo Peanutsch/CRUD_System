@@ -43,15 +43,15 @@ namespace CRUD_System.Handlers
             }
 
             // Compare each field to check if any detail has been modified, except for the unique identifier alias (originalUserDetails[2])
-            return originalUserDetails[0] != name                    ||
-                   originalUserDetails[1] != surname                 ||
-                   originalUserDetails[3] != address                 ||
-                   originalUserDetails[4] != zipCode                 ||
-                   originalUserDetails[5] != city                    ||
-                   originalUserDetails[6] != email                   ||
-                   originalUserDetails[7] != phoneNumber             ||
-                   originalUserDetails[8] != onlineStatus.ToString() ||
-                   originalUserDetails[9] != isSick.ToString();
+            return    originalUserDetails[0] != name
+                   || originalUserDetails[1] != surname
+                   || originalUserDetails[3] != address
+                   || originalUserDetails[4] != zipCode
+                   || originalUserDetails[5] != city
+                   || originalUserDetails[6] != email
+                   || originalUserDetails[7] != phoneNumber
+                   || originalUserDetails[8] != onlineStatus.ToString()
+                   || originalUserDetails[9] != isSick.ToString();
         }
 
         /// <summary>
@@ -80,7 +80,6 @@ namespace CRUD_System.Handlers
             {
                 // Prompt the user to confirm saving changes
                 DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
-
                 if (dr == DialogResult.Yes)
                 {
                     // Save the modifications if the user confirms
@@ -128,7 +127,7 @@ namespace CRUD_System.Handlers
             }
             catch (Exception ex)
             {
-                // Log the error and notify the user
+                // Debug output error and notify the user
                 Debug.WriteLine($"Error while updating user {alias}: {ex}");
                 message.MessageSomethingWentWrong();
             }
@@ -174,38 +173,45 @@ namespace CRUD_System.Handlers
             UpdateCachedLoginData(alias, isAdmin);
 
             // Process changes to isAdmin and IsTheOne status
-            ProcessStatusChange(alias, AdminMainControl.ChkIsAdminChanged, AdminMainControl.ChkIsTheOneChanged);
+            LogStatusChange(alias, AdminMainControl.ChkIsAdminChanged, AdminMainControl.ChkIsTheOneChanged);
 
-            // Reset the status flags
+            // Reset the status flags to false
             AdminMainControl.ChkIsAdminChanged = false;
             AdminMainControl.ChkIsTheOneChanged = false;
         }
 
+        /// <summary>
+        /// Updates the cached login data for a given user.
+        /// </summary>
+        /// <param name="alias">The alias of the user.</param>
+        /// <param name="isAdmin">The updated admin status of the user.</param>
         private void UpdateCachedLoginData(string alias, bool isAdmin)
         {
+            // Find the login data entry for the specified user
             var loginData = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
+
             if (loginData != null)
             {
+                // Update admin status in cache
                 loginData[2] = isAdmin.ToString();
-                loginData[4] = AdminMainControl.IsTheOne.ToString();
 
-                // Only users with role Admin can be set on role IsTheOne
-                // Set IsAdmin on True when selected user is IsTheOne
-                /*
-                AdminMainControl adminControl = new AdminMainControl();
-                if (adminControl.chkIsTheOne.Checked)
-                {
-                    loginData[2] = "True";
-                }
-                */
+                // Update "The One" status in cache
+                loginData[4] = AdminMainControl.IsTheOne.ToString();
             }
         }
 
-        private void ProcessStatusChange(string alias, bool isAdminChanged, bool isTheOneChanged)
+        /// <summary>
+        /// Processes changes to a user's status, including admin status and "The One" status.
+        /// Logs changes and outputs debug information.
+        /// </summary>
+        /// <param name="alias">The alias of the user whose status is being changed.</param>
+        /// <param name="isAdminChanged">Indicates if the admin status was changed.</param>
+        /// <param name="isTheOneChanged">Indicates if the "The One" status was changed.</param>
+        private void LogStatusChange(string alias, bool isAdminChanged, bool isTheOneChanged)
         {
             var currentUser = AuthenticationService.CurrentUser;
 
-            // Process admin status change
+            // Log admin status change
             if (isAdminChanged)
             {
                 logEvents.LogEventUpdateStatusIsAdmin(currentUser!, alias, AdminInterface.IsSelectedUserAdmin);
@@ -220,7 +226,7 @@ namespace CRUD_System.Handlers
                 }
             }
 
-            // Process The One status change
+            // Log "The One" status change
             if (isTheOneChanged)
             {
                 logEvents.LogEventUpdateStatusIsTheOne(currentUser!, alias, AdminMainControl.IsTheOne);
@@ -237,15 +243,15 @@ namespace CRUD_System.Handlers
         }
 
         /// <summary>
-        /// Reloads the UI and ensures the updated user remains selected in the list.
+        /// Reloads the admin UI and ensures that the updated user remains selected in the list.
         /// </summary>
-        /// <param name="alias">The alias of the updated user.</param>
+        /// <param name="alias">The alias of the user to keep selected.</param>
         private void ReloadUIWithSelection(string alias)
         {
+            // Create a new instance of AdminInterface and reload the user list with selection
             AdminInterface adminInterface = new AdminInterface();
             adminInterface.ReloadListBoxWithSelection(alias);
         }
-
         #endregion UPDATE USER DETAILS
 
         #region DELETE USER
@@ -351,7 +357,6 @@ namespace CRUD_System.Handlers
 
             // Create a deletion report
             string reportText = $"{DateTime.Today:dd-MM-yyyy},{DateTime.Now:HH:mm:ss}\n[{currentUser!.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
-            var adminControl = new AdminMainControl();
             ReportManager.ReportDeleteUser(aliasToDelete, "Account Deleted", reportText);
 
             // Show a success message to the user
@@ -364,11 +369,12 @@ namespace CRUD_System.Handlers
 
         #region GENERATE PASSWORD NEW USER
         /// <summary>
-        /// Generates a new password for a user and logs the event.
+        /// Prompts the user to confirm the password generation process for a given user and initiates the password generation if confirmed.
+        /// Ensures that the required data is loaded and encrypted after the process.
         /// </summary>
         /// <param name="alias">Alias of the user for whom to generate a password.</param>
-        /// <param name="isAdmin">Indicates if the user has admin privileges.</param>
-        public void GeneratePasswordNewUser(string alias)
+
+        public void InitiatePasswordGenerationForUser(string alias)
         {
             DialogResult dr = message.MessageConfirmToGeneratePassword(alias);
             if (dr != DialogResult.Yes)
@@ -386,29 +392,39 @@ namespace CRUD_System.Handlers
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                // Update password
-                string generatedPassword = PasswordManager.PasswordGenerator();
-
-                // Find the user in the cached login data by alias and update their online status.
-                var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias field
-                if (login != null)
-                {
-                    login[1] = generatedPassword; // Update password
-                    Debug.WriteLine($"Generated new password for {alias}");
-                }
+                UpdatePasswordAndLogEvent(alias, currentUser);
 
                 // Save changes to the data files and encrypt them
                 cache.SaveAndEncryptData();
-
-                // log event
-                logEvents.LogEventPasswordGenerated(currentUser, alias, generatedPassword);
-                message.MessageChangePasswordSucces(alias);
             }
             else
             {
                 message.MessageSomethingWentWrong();
                 return;
             }
+        }
+
+        /// <summary>
+        /// Generates a new password for a given user, updates the cached login data, and logs the event.
+        /// </summary>
+        /// <param name="alias">The alias of the user for whom the password is generated.</param>
+        /// <param name="currentUser">The current authenticated user performing the password change.</param>
+        private void UpdatePasswordAndLogEvent(string alias, string currentUser)
+        {
+            // Update password
+            string generatedPassword = PasswordManager.PasswordGenerator();
+
+            // Find the user in the cached login data by alias and update their online status.
+            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias field
+            if (login != null)
+            {
+                login[1] = generatedPassword; // Update password
+                Debug.WriteLine($"Generated new password for {alias}");
+            }
+
+            // log event
+            logEvents.LogEventPasswordGenerated(currentUser, alias, generatedPassword);
+            message.MessageChangePasswordSucces(alias);
         }
         #endregion GENERATE PASSWORD NEW USER
 
@@ -423,11 +439,9 @@ namespace CRUD_System.Handlers
                                 string City, string Email,
                                 string Phonenumber, bool isAdmin)
         {
-
             // Generate a unique alias and password for the user
             string isAlias = GenerateAlias(Name, Surname);
 
-            //=== PASSWORD TEMP ISALIAS ===//
             // Generate password
             string isPassword = PasswordManager.PasswordGenerator();
 
@@ -436,40 +450,29 @@ namespace CRUD_System.Handlers
             bool isSick = false;
 
             // Confirm the creation of the new user with the alias
-            if (ConfirmNewUserCreation(isAlias))
-            {
-                AdminInterface adminInterface = new AdminInterface();
-
-                Debug.WriteLine($"New account for Alias: {isAlias}");
-                Debug.WriteLine($"Created Password: {isPassword}");
-                Debug.WriteLine($"Welcome Email to {Email}");
-
-                // Save the new user's data to the system (cache and file storage)
-                SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin, onlineStatus, isSick);
-
-                // log the creation of the new user
-                LogNewAccountCreation(isAlias, isPassword, Email);
-
-                // Notify the admin that the account creation was successful
-                message.MessageNewAccountSucces(isAlias);
-
-                // Update list- and textboxes
-                cache.LoadDecryptedData();
-
-                AdminMainControl adminControl = new AdminMainControl();
-                adminControl.listBoxAdmin.Items.Clear();
-
-                
-                //adminInterface.LoadDetailsListBox();
-                adminInterface.ReloadListBoxWithSelection(isAlias);
-                adminInterface.EditMode = false;
-                adminInterface.UpdateInterfaceAdmin();
-                adminInterface.EmptyTextBoxesAdmin();
-            }
-            else
-            {
+            if (!ConfirmNewUserCreation(isAlias))
                 return;
-            }
+
+            // Save the new user's data to the system (cache and file storage)
+            SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin, onlineStatus, isSick);
+
+            // log the creation of the new user
+            LogNewAccountCreation(isAlias, isPassword, Email);
+
+            // Notify the admin that the account creation was successful
+            message.MessageNewAccountSucces(isAlias);
+
+            // Update list- and textboxes
+            cache.LoadDecryptedData();
+
+            AdminMainControl adminControl = new AdminMainControl();
+            adminControl.listBoxAdmin.Items.Clear();
+
+            AdminInterface adminInterface = new AdminInterface();
+            adminInterface.ReloadListBoxWithSelection(isAlias);
+            adminInterface.EditMode = false;
+            adminInterface.UpdateInterfaceAdmin();
+            adminInterface.EmptyTextBoxesAdmin();
         }
 
         /// <summary>
@@ -560,7 +563,7 @@ namespace CRUD_System.Handlers
 
                 // Temporary copy of logEvent in rtxReport
                 string reportText = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")}\n[{currentUser!.ToUpper()}]," +
-                                    $"Created user [{alias.ToUpper()}].\nSent email to {email} with password: {password}";
+                                    $"<Email Simulation> Created user [{alias.ToUpper()}].\nSent email to {email} with password: {password}.";
                 ReportManager.ReportSaveNewUser(alias, "New User", reportText);
             }
         }
@@ -647,16 +650,7 @@ namespace CRUD_System.Handlers
 
             if (login != null && AdminInterface.IsSelectedUserAdmin)
             {
-                Debug.WriteLine($"***\nloginLine before: {login}");
-                // Update 'IsTheOne' status
                 login[4] = isTheOne.ToString();
-                Debug.WriteLine($"login[4]: {login[4]}");
-                Debug.WriteLine($"loginLine after: {login}\n***");
-            }
-            else
-            {
-                Debug.WriteLine($"login != null and selected user must be Admin");
-                Debug.WriteLine($"login: {login} Selected User: {AdminInterface.IsSelectedUserAdmin}");
             }
 
             // Save the updated login data and encrypt it for security.
@@ -665,7 +659,6 @@ namespace CRUD_System.Handlers
             // Notify the user that the update was successful.
             message.MessageUpdateUserDetailsSucces();
         }
-
         #endregion IS THE ONE
     }
 }

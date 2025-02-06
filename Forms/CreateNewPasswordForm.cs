@@ -22,12 +22,12 @@ namespace CRUD_System
     {
         #region PROPERTIES
         // Password conditions
-        public int lengthPsw = 12;
-        public int charToUpper = 3;
-        public int charIsDigi = 3;
+        public int lengthPsw = 12; // minimal length
+        public int charToUpper = 3; // minimal chars to upper, 
+        public int charIsDigi = 3; // minimal chars are numbers
 
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        RepositoryLogEvents logEvents = new RepositoryLogEvents();
+        readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
 
         private bool isPasswordVisible = false;
         #endregion PROPERTIES
@@ -49,7 +49,7 @@ namespace CRUD_System
         /// </summary>
         private void TxtLabelPassword()
         {
-            lblPassword.Text = $"Must contain {lengthPsw} or more chars.\n" +
+            lblPassword.Text = $"Must contain {lengthPsw} or more characters.\n" +
                                $"Must contain at least {charToUpper} capital letters\n" +
                                $"Must contain at least {charIsDigi} numbers";
         }
@@ -133,7 +133,6 @@ namespace CRUD_System
             this.Close();
         }
 
-
         /// <summary>
         /// Sets up the Enter key to act as a confirmation trigger for the password inputs,
         /// calling the apply button's click event if passwords match.
@@ -190,7 +189,8 @@ namespace CRUD_System
                     var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == currentUser); // Alias field
                     if (login != null)
                     {
-                        login[1] = newPassword; // Update password
+                        // Update password
+                        login[1] = newPassword;
 
                         Debug.WriteLine($"Storing new password for {currentUser}");
 
@@ -203,6 +203,7 @@ namespace CRUD_System
                     }
                     else
                     {
+                        // Display messagebox with the password requirements
                         RepositoryMessageBoxes message = new RepositoryMessageBoxes();
                         message.MessageInvalidPassword();
                     }
