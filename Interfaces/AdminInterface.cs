@@ -434,11 +434,7 @@ namespace CRUD_System.Interfaces
         {
             adminControl.chkIsAdmin.Enabled = !adminControl.chkIsTheOne.Checked;
             adminControl.chkIsAdmin.Checked = adminControl.chkIsTheOne.Checked;
-        }
 
-        private void ChkIsAdmin_CheckedChanged(object? sender, EventArgs e)
-        {
-            adminControl.chkIsTheOne.Enabled = !adminControl.chkIsAdmin.Checked;
         }
         #endregion HANDLE SELECTED USER STATUS
 
