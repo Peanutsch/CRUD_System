@@ -62,7 +62,7 @@ namespace CRUD_System.Encryption
                 // Decrypt each field using a fixed encryption key
                 for (int i = 0; i < fields.Length; i++)
                 {
-                    fields[i] = AesEncryption.DecryptWithFixedKey(fields[i], AesEncryption.EncryptionKey);
+                    fields[i] = AesEncryption.DecryptWithFixedKey(fields[i], AesEncryption.GetKey());
                 }
 
                 // Combine the decrypted fields into a single line and add it to the decryptedLines list

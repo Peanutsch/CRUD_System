@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CRUD_System.FileHandlers;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -10,9 +12,25 @@ namespace CRUD_System.Encryption
 {
     internal static class AesEncryption
     {
-        // The fixed encryption key (32 bytes) for AES encryption.
-        // PLACE KEY IN SECRET FILE. SAVE SECRET FILE ON SERVER
-        public static string EncryptionKey { get; } = "l8GGfRqI8hEzw00+WP0SMpptSNw/WjgSeF74sbUL1LizDXicc5wi4YsbLDdTyMqH";
+        /// <summary>
+        /// Retrieves encryption key (32 bytes) for AES encryption.
+        /// </summary>
+        /// <returns>Returns encryption key</returns>
+        public static string GetKey()
+        {
+            string keyPath = Path.Combine(RootPath.GetRootPath(), "Repositories", "key.txt");
+            try
+            {
+                string getKey = File.ReadAllText(keyPath);
+                return getKey;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error retrieving key: {ex}");
+            }
+            Debug.WriteLine("No key found...");
+            return null!;
+        }
 
         /// <summary>
         /// Encrypts the given plain text using a fixed encryption key and a random IV.
@@ -24,7 +42,7 @@ namespace CRUD_System.Encryption
         {
             using (Aes aes = Aes.Create())
             {
-                aes.Key = GetKeyFromPassword(EncryptionKey);
+                aes.Key = GetKeyFromPassword(GetKey());
                 aes.GenerateIV(); // Generate a random IV
 
                 using (var encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
