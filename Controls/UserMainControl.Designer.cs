@@ -56,13 +56,16 @@ namespace CRUD_System
             this.listBoxUser = new ListBox();
             this.comboBoxStatus = new ComboBox();
             this.btnChangePassword = new Button();
+            this.txtStatusIndicator = new TextBox();
+            this.listBoxLogs = new ListBox();
+            this.lblLoggings = new Label();
             this.SuspendLayout();
             // 
             // txtName
             // 
             this.txtName.Enabled = false;
             this.txtName.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtName.Location = new Point(100, 104);
+            this.txtName.Location = new Point(28, 98);
             this.txtName.Name = "txtName";
             this.txtName.PlaceholderText = "Name";
             this.txtName.Size = new Size(325, 26);
@@ -80,7 +83,7 @@ namespace CRUD_System
             // 
             this.txtEmail.Enabled = false;
             this.txtEmail.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtEmail.Location = new Point(100, 168);
+            this.txtEmail.Location = new Point(28, 162);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.PlaceholderText = "E-mail";
             this.txtEmail.Size = new Size(325, 26);
@@ -91,7 +94,7 @@ namespace CRUD_System
             // 
             this.txtAddress.Enabled = false;
             this.txtAddress.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtAddress.Location = new Point(100, 136);
+            this.txtAddress.Location = new Point(28, 130);
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.PlaceholderText = "Adress";
             this.txtAddress.Size = new Size(325, 26);
@@ -102,10 +105,10 @@ namespace CRUD_System
             // 
             this.txtCity.Enabled = false;
             this.txtCity.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtCity.Location = new Point(762, 136);
+            this.txtCity.Location = new Point(471, 130);
             this.txtCity.Name = "txtCity";
             this.txtCity.PlaceholderText = "City";
-            this.txtCity.Size = new Size(325, 26);
+            this.txtCity.Size = new Size(237, 26);
             this.txtCity.TabIndex = 5;
             this.txtCity.TextAlign = HorizontalAlignment.Center;
             // 
@@ -120,9 +123,9 @@ namespace CRUD_System
             // 
             this.btnSaveEditUserDetails.BackColor = Color.LightGreen;
             this.btnSaveEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnSaveEditUserDetails.Location = new Point(430, 200);
+            this.btnSaveEditUserDetails.Location = new Point(359, 194);
             this.btnSaveEditUserDetails.Name = "btnSaveEditUserDetails";
-            this.btnSaveEditUserDetails.Size = new Size(160, 30);
+            this.btnSaveEditUserDetails.Size = new Size(160, 32);
             this.btnSaveEditUserDetails.TabIndex = 9;
             this.btnSaveEditUserDetails.Text = "Save Edit";
             this.btnSaveEditUserDetails.UseVisualStyleBackColor = false;
@@ -140,10 +143,10 @@ namespace CRUD_System
             // 
             this.txtSurname.Enabled = false;
             this.txtSurname.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtSurname.Location = new Point(431, 104);
+            this.txtSurname.Location = new Point(359, 98);
             this.txtSurname.Name = "txtSurname";
             this.txtSurname.PlaceholderText = "Surname";
-            this.txtSurname.Size = new Size(325, 26);
+            this.txtSurname.Size = new Size(349, 26);
             this.txtSurname.TabIndex = 2;
             this.txtSurname.TextAlign = HorizontalAlignment.Center;
             // 
@@ -151,7 +154,7 @@ namespace CRUD_System
             // 
             this.txtAlias.Enabled = false;
             this.txtAlias.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtAlias.Location = new Point(100, 72);
+            this.txtAlias.Location = new Point(28, 66);
             this.txtAlias.Name = "txtAlias";
             this.txtAlias.PlaceholderText = "Alias";
             this.txtAlias.ReadOnly = true;
@@ -163,10 +166,10 @@ namespace CRUD_System
             // 
             this.txtZIPCode.Enabled = false;
             this.txtZIPCode.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtZIPCode.Location = new Point(431, 136);
+            this.txtZIPCode.Location = new Point(359, 130);
             this.txtZIPCode.Name = "txtZIPCode";
             this.txtZIPCode.PlaceholderText = "ZIP Code";
-            this.txtZIPCode.Size = new Size(325, 26);
+            this.txtZIPCode.Size = new Size(106, 26);
             this.txtZIPCode.TabIndex = 4;
             this.txtZIPCode.TextAlign = HorizontalAlignment.Center;
             // 
@@ -174,10 +177,10 @@ namespace CRUD_System
             // 
             this.txtPhonenumber.Enabled = false;
             this.txtPhonenumber.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.txtPhonenumber.Location = new Point(431, 168);
+            this.txtPhonenumber.Location = new Point(359, 162);
             this.txtPhonenumber.Name = "txtPhonenumber";
             this.txtPhonenumber.PlaceholderText = "Phonenumber";
-            this.txtPhonenumber.Size = new Size(325, 26);
+            this.txtPhonenumber.Size = new Size(349, 26);
             this.txtPhonenumber.TabIndex = 7;
             this.txtPhonenumber.TextAlign = HorizontalAlignment.Center;
             // 
@@ -192,9 +195,9 @@ namespace CRUD_System
             // 
             this.btnEditUserDetails.BackColor = SystemColors.ActiveCaption;
             this.btnEditUserDetails.Font = new Font("Courier New", 12F, FontStyle.Bold);
-            this.btnEditUserDetails.Location = new Point(275, 200);
+            this.btnEditUserDetails.Location = new Point(203, 194);
             this.btnEditUserDetails.Name = "btnEditUserDetails";
-            this.btnEditUserDetails.Size = new Size(150, 30);
+            this.btnEditUserDetails.Size = new Size(150, 32);
             this.btnEditUserDetails.TabIndex = 8;
             this.btnEditUserDetails.Text = "Edit Details";
             this.btnEditUserDetails.UseVisualStyleBackColor = false;
@@ -205,43 +208,75 @@ namespace CRUD_System
             this.listBoxUser.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.listBoxUser.FormattingEnabled = true;
             this.listBoxUser.ItemHeight = 18;
-            this.listBoxUser.Location = new Point(100, 30);
+            this.listBoxUser.Location = new Point(28, 20);
             this.listBoxUser.Name = "listBoxUser";
             this.listBoxUser.Size = new Size(680, 22);
             this.listBoxUser.TabIndex = 27;
+            this.listBoxUser.Visible = false;
             this.listBoxUser.SelectedIndexChanged += this.ListBoxUser_SelectedIndexChanged;
             // 
             // comboBoxStatus
             // 
             this.comboBoxStatus.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.comboBoxStatus.FormattingEnabled = true;
-            this.comboBoxStatus.Location = new Point(786, 26);
+            this.comboBoxStatus.Items.AddRange(new object[] { "Online", "Away", "Break" });
+            this.comboBoxStatus.Location = new Point(1079, 16);
             this.comboBoxStatus.MaxDropDownItems = 9;
             this.comboBoxStatus.Name = "comboBoxStatus";
-            this.comboBoxStatus.Size = new Size(150, 26);
+            this.comboBoxStatus.Size = new Size(105, 26);
             this.comboBoxStatus.TabIndex = 28;
-            this.comboBoxStatus.Text = "User Status";
+            this.comboBoxStatus.Text = "Status";
             this.comboBoxStatus.SelectedIndexChanged += this.comboBoxStatus_SelectedIndexChanged;
             // 
             // btnChangePassword
             // 
             this.btnChangePassword.BackColor = SystemColors.ActiveCaption;
             this.btnChangePassword.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnChangePassword.Location = new Point(596, 200);
+            this.btnChangePassword.Location = new Point(525, 194);
             this.btnChangePassword.Name = "btnChangePassword";
-            this.btnChangePassword.Size = new Size(160, 30);
+            this.btnChangePassword.Size = new Size(160, 32);
             this.btnChangePassword.TabIndex = 10;
             this.btnChangePassword.Text = "Change PSW";
             this.btnChangePassword.UseVisualStyleBackColor = false;
             this.btnChangePassword.Visible = false;
             this.btnChangePassword.Click += this.ChangePassword_Click;
             // 
+            // txtStatusIndicator
+            // 
+            this.txtStatusIndicator.BackColor = Color.FromArgb(224, 224, 224);
+            this.txtStatusIndicator.Location = new Point(1190, 16);
+            this.txtStatusIndicator.Multiline = true;
+            this.txtStatusIndicator.Name = "txtStatusIndicator";
+            this.txtStatusIndicator.Size = new Size(49, 26);
+            this.txtStatusIndicator.TabIndex = 30;
+            // 
+            // listBoxLogs
+            // 
+            this.listBoxLogs.FormattingEnabled = true;
+            this.listBoxLogs.Location = new Point(714, 72);
+            this.listBoxLogs.Name = "listBoxLogs";
+            this.listBoxLogs.Size = new Size(525, 116);
+            this.listBoxLogs.TabIndex = 31;
+            // 
+            // lblLoggings
+            // 
+            this.lblLoggings.AutoSize = true;
+            this.lblLoggings.Font = new Font("Courier New", 9F, FontStyle.Bold);
+            this.lblLoggings.Location = new Point(714, 53);
+            this.lblLoggings.Name = "lblLoggings";
+            this.lblLoggings.Size = new Size(63, 16);
+            this.lblLoggings.TabIndex = 43;
+            this.lblLoggings.Text = "Loggings";
+            // 
             // UserMainControl
             // 
-            this.AutoScaleDimensions = new SizeF(7F, 15F);
+            this.AutoScaleDimensions = new SizeF(7F, 16F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
             this.BorderStyle = BorderStyle.FixedSingle;
+            this.Controls.Add(this.lblLoggings);
+            this.Controls.Add(this.listBoxLogs);
+            this.Controls.Add(this.txtStatusIndicator);
             this.Controls.Add(this.btnChangePassword);
             this.Controls.Add(this.comboBoxStatus);
             this.Controls.Add(this.btnEditUserDetails);
@@ -255,8 +290,9 @@ namespace CRUD_System
             this.Controls.Add(this.txtAddress);
             this.Controls.Add(this.txtCity);
             this.Controls.Add(this.btnSaveEditUserDetails);
+            this.Font = new Font("Courier New", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.Name = "UserMainControl";
-            this.Size = new Size(1192, 402);
+            this.Size = new Size(1278, 429);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
@@ -271,5 +307,8 @@ namespace CRUD_System
         public ListBox listBoxUser;
         public ComboBox comboBoxStatus;
         public Button btnChangePassword;
+        public TextBox txtStatusIndicator;
+        public ListBox listBoxLogs;
+        private Label lblLoggings;
     }
 }

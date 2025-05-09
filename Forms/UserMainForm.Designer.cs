@@ -47,12 +47,12 @@
             // buttonLOGOUT
             // 
             this.buttonLOGOUT.BackColor = SystemColors.ActiveCaption;
-            this.buttonLOGOUT.FlatStyle = FlatStyle.Popup;
+            this.buttonLOGOUT.FlatStyle = FlatStyle.Standard;
             this.buttonLOGOUT.Location = new Point(198, 11);
             this.buttonLOGOUT.Name = "buttonLOGOUT";
             this.buttonLOGOUT.Size = new Size(100, 26);
             this.buttonLOGOUT.TabIndex = 1;
-            this.buttonLOGOUT.Text = "Log Out";
+            this.buttonLOGOUT.Text = "log Out";
             this.buttonLOGOUT.UseVisualStyleBackColor = false;
             this.buttonLOGOUT.Click += this.buttonLOGOUT_Click;
             // 
@@ -72,7 +72,7 @@
             UserControl.BorderStyle = BorderStyle.FixedSingle;
             UserControl.Location = new Point(18, 86);
             UserControl.Name = "adminManagementControl";
-            UserControl.Size = new Size(1208, 400);
+            UserControl.Size = new Size(1250, 400);
             UserControl.TabIndex = 4;
             // 
             // MainFormUSERS
@@ -80,7 +80,7 @@
             this.AutoScaleDimensions = new SizeF(10F, 18F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = SystemColors.ActiveCaption;
-            this.ClientSize = new Size(1260, 512);
+            this.ClientSize = new Size(1300, 512);
             this.Controls.Add(this.labelAlias);
             this.Controls.Add(this.buttonLOGOUT);
             this.Controls.Add(this.textBoxUserName);

@@ -12,51 +12,100 @@ namespace CRUD_System.Repositories
     internal class RepositoryMessageBoxes
     {
         #region CONFIRM
-        public DialogResult MessageBoxConfirmNewUser(string alias)
+        public DialogResult MessageConfirmNewUser(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE new account {alias.ToUpper()}", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE new account {alias.ToUpper()}", "Confirm Save New Account", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToSAVEChanges(string alias)
+        public DialogResult MessageConfirmToSAVEChanges(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the changes for {alias.ToUpper()}", "Confirm Save Changes", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToSAVEPassword(string alias)
+        public DialogResult MessageConfirmToSAVEPassword(string alias)
         {
-            return MessageBox.Show($"Please confirm to SAVE the new password for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to SAVE the new password for {alias.ToUpper()}", "Confirm Save Password", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToGeneratePassword(string alias)
+        public DialogResult MessageConfirmToGeneratePassword(string alias)
         {
-            return MessageBox.Show($"Please confirm to GENERATE a NEW password for {alias.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to GENERATE a NEW password for {alias.ToUpper()}", "Confirm Generate New Password", MessageBoxButtons.YesNo);
         }
 
-        public DialogResult MessageBoxConfirmToDELETE(string aliasToDelete)
+        public DialogResult MessageConfirmToDELETE(string aliasToDelete)
         {
-            return MessageBox.Show($"Please confirm to DELETE account {aliasToDelete.ToUpper()}?", "Confirm", MessageBoxButtons.YesNo);
+            return MessageBox.Show($"Please confirm to DELETE account {aliasToDelete.ToUpper()}", "Confirm Delete Account", MessageBoxButtons.YesNo);
+        }
+
+        public DialogResult MessageConfirmCallInSickNotification(string alias)
+        {
+            return MessageBox.Show($"Please confirm to set user {alias.ToUpper()} on Absence due Illness", "Confirm CiS", MessageBoxButtons.YesNo);
+        }
+
+        public DialogResult MessageConfirmForceLogOutUser(string alias)
+        {
+            return MessageBox.Show($"Please confirm to logout user {alias.ToUpper()}", "Confirm Forced Logout", MessageBoxButtons.YesNo);
+        }
+        public DialogResult MessageConfirmSaveReport(string alias, string subject)
+        {
+            return MessageBox.Show($"Please confirm to save this report with subject [{subject.ToUpper()}] for user {alias.ToUpper()}", "Confirm Save Report", MessageBoxButtons.YesNo);
+        }
+
+        public DialogResult MessageConfirmDeleteFile(string fileName)
+        {
+        return MessageBox.Show($"Are you sure you want to delete the file '{fileName}'?", "Confirm Delete File", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        }
+
+        public DialogResult MessageConfirmIsTheOne(string alias)
+        {
+            return MessageBox.Show($"Are you sure to change SuperUser role for {alias}?", "Confirm Change Role", MessageBoxButtons.YesNo);
+        }
+
+        public DialogResult MessageConfirmLogOut()
+        {
+            return MessageBox.Show("Are you sure you want to exit?", "Confirm Exit", MessageBoxButtons.YesNo);
+        }
+
+        public DialogResult MessageConfirmCancel()
+        {
+            return MessageBox.Show("Are you sure you want to cancel?", "Confirm Cancelation", MessageBoxButtons.YesNo);
         }
         #endregion CONFIRM
 
         #region SUCCES
-        public DialogResult MessageUpdateSucces()
+        public DialogResult MessageUpdateUserDetailsSucces()
         {
-            return MessageBox.Show("User Details updated successfully!", "Succes", MessageBoxButtons.OK);
+            return MessageBox.Show("User Details updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public DialogResult MessageUpdateLoginDetailsSucces()
+        {
+            return MessageBox.Show("Login Details updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public DialogResult MessageDeleteSucces(string aliasToDelete)
         {
-            return MessageBox.Show($"Account deleted [{aliasToDelete.ToUpper()}] successfully!", "Succes", MessageBoxButtons.OK);
+            return MessageBox.Show($"Account deleted [{aliasToDelete.ToUpper()}] successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public DialogResult MessageChangePasswordSucces(string alias)
         {
-            return MessageBox.Show($"Password for [{alias.ToUpper()}] updated succesfully!");
+            return MessageBox.Show($"Password for [{alias.ToUpper()}] updated succesfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public DialogResult MessageNewAccountSucces(string alias)
         {
-            return MessageBox.Show($"New account {alias} created succesfully!");
+            return MessageBox.Show($"New account {alias} created succesfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public DialogResult MessageReportSaved(string date, string selectedAlias)
+        {
+            return MessageBox.Show($"Report saved as {selectedAlias}_{date}_report.csv", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public DialogResult MessageReportDeletedSucces(string fileToDelete)
+        {
+            return MessageBox.Show($"File {fileToDelete} successfully deleted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion SUCCES
 
@@ -80,7 +129,7 @@ namespace CRUD_System.Repositories
         {
             CreateNewPasswordForm psw = new CreateNewPasswordForm();
             return MessageBox.Show($"Invalid Password\n" +
-                                   $"Must contain {psw.lengthPsw} or more chars.\n" +
+                                   $"Must contain {psw.lengthPsw} or more character.\n" +
                                    $"Must contain at least {psw.charToUpper} capital letters\n" +
                                    $"Must contain at least {psw.charIsDigi} numbers");
         }
@@ -103,6 +152,26 @@ namespace CRUD_System.Repositories
         public DialogResult MessageUserAlreadyOnline(string alias)
         {
             return MessageBox.Show($"User with alias [{alias.ToUpper()}] is already online");
+        }
+
+        public DialogResult MessageDetailsNotComplete()
+        {
+            return MessageBox.Show("Details are not complete. Name, Surname and Email are required...");
+        }
+
+        public DialogResult MessageReportIsInvalid()
+        {
+            return MessageBox.Show("Report details is not complete! Subject and text are required..."); ;
+        }
+
+        public DialogResult MessageReportDeletedError(string fileToDelete, string exMessage)
+        {
+            return MessageBox.Show($"An error occurred while deleting the file {fileToDelete}: {exMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public DialogResult MessageNoDetailsModified()
+        {
+            return MessageBox.Show("No modifications were made...", "No modifications", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion INVALID
     }

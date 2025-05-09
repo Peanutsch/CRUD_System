@@ -72,7 +72,7 @@
             loginButton.Name = "loginButton";
             loginButton.Size = new Size(150, 56);
             loginButton.TabIndex = 3;
-            loginButton.Text = "Log In";
+            loginButton.Text = "log In";
             loginButton.UseVisualStyleBackColor = false;
             loginButton.Click += LoginButton_Click;
             // 
@@ -102,7 +102,7 @@
             Margin = new Padding(4);
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "CRUD Log In";
+            Text = "CRUD log In";
             Load += LoginForm_Load;
             this.FormClosing += this.LoginForm_FormClosing;
             ResumeLayout(false);

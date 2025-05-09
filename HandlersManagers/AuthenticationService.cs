@@ -1,0 +1,372 @@
+﻿using CRUD_System.FileHandlers;
+using CRUD_System.Interfaces;
+using CRUD_System.Repositories;
+using Microsoft.VisualBasic.Logging;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+
+namespace CRUD_System.Handlers
+{
+    /// <summary>
+    /// Responsible for managing user authentication, login validation, and session handling.
+    /// It validates user credentials, checks login status, updates the online status of users, and handles user login and logout processes.
+    /// This class also determines user roles (admin or regular user) and manages session transitions, including updating the user interface of the form with the appropriate user information.
+    /// </summary>
+    public class AuthenticationService
+    {
+        #region PROPERTIES
+        public static string? CurrentUser
+        {
+            get; set;
+        }
+        public static bool CurrentUserIsAdmin
+        {
+            get; set;
+        }
+        public static bool CurrentUserIsTheOne
+        {
+            get; set;
+        }
+
+        private readonly FilePaths path = new FilePaths();
+        private readonly DataCache cache = new DataCache();
+        private readonly UserInterface userInterface = new UserInterface();
+        private readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
+        private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        
+        public bool onlineStatus = false;
+        #endregion PROPERTIES
+
+        #region CONSTRUCTOR
+        public AuthenticationService()
+        {
+
+        }
+        #endregion CONSTRUCTOR
+
+        #region LOGIN VALIDATION
+        /// <summary>
+        /// Validates the provided username and password by checking them against the stored login data.
+        /// This method ensures the user exists in the decrypted login data and that their credentials match.
+        /// </summary>
+        /// <param name="inputUserName">The username entered by the user.</param>
+        /// <param name="inputUserPassword">The password entered by the user.</param>
+        /// <returns>
+        /// True if the provided username and password match a record in the login data; otherwise, false.
+        /// </returns>
+        public bool ValidateLogin(string inputUserName, string inputUserPassword)
+        {
+            // Check if the cache is empty, and reload data if necessary.
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
+            {
+                cache.LoadDecryptedData();
+            }
+
+            // Attempt to find a user in the cached login data that matches the provided username and password
+            var user = cache.CachedLoginData.FirstOrDefault(u =>
+                u[0].Equals(inputUserName, StringComparison.OrdinalIgnoreCase) && // Compare usernames (case-insensitive)
+                u[1] == inputUserPassword); // Compare passwords (case-sensitive)
+
+            // Return true if a matching user is found, otherwise false
+            return user != default;
+        }
+
+        /// <summary>
+        /// Determines if the logged-in user is an admin.
+        /// </summary>
+        /// <param name="inputUserName">The username of the user.</param>
+        /// <param name="inputUserPassword">The password of the user.</param>
+        /// <returns>True if the user is an admin; otherwise, false.</returns>
+        public bool CheckAdminRole(string inputUserName, string inputUserPassword)
+        {
+            // Find the user in the list where both username and password match
+            var user = cache.CachedLoginData.FirstOrDefault(u =>
+                u[0].Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
+                u[1] == inputUserPassword);
+
+            // Return the admin status if the user is found
+            return user != default && bool.Parse(user[2]);
+        }
+
+        /// <summary>
+        /// Checks if the given user has the role of "The One".
+        /// Validates the username and password against cached login data and verifies the role.
+        /// </summary>
+        /// <param name="inputUserName">The username input provided by the user.</param>
+        /// <param name="inputPassword">The password input provided by the user.</param>
+        /// <returns>
+        /// True if the user exists in the cached data, their credentials match, 
+        /// and their role ('The One') is set to True. Otherwise, returns False.
+        /// </returns>
+        public bool CheckNeoRole(string inputUserName, string inputPassword)
+        {
+            // Search for the user in the cached login data, matching both username and password
+            var user = cache.CachedLoginData.FirstOrDefault(u =>
+                u[0].Trim().Equals(inputUserName.Trim(), StringComparison.OrdinalIgnoreCase) && // Match username (case-insensitive)
+                u[1].Trim().Equals(inputPassword.Trim())); // Match password (case-sensitive)
+
+            // Check if the user exists and parse the role ('The One') from the 5th column of the data
+            return user != null &&                                   // Ensure the user exists
+                   bool.TryParse(user[4], out bool IsTheOne) &&      // Parse the 'The One' role to a boolean
+                   IsTheOne;                                        // Check if the role is True
+        }
+
+        /// <summary>
+        /// Checks if the user is offline.
+        /// </summary>
+        /// <param name="inputUserName">The username to check.</param>
+        /// <returns>True if the user is offline; otherwise, false.</returns>
+        public bool ValidateOnlineStatus(string inputUserName, string inputUserPassword)
+        {
+            // Find the user in the list where both username and password match
+            var user = cache.CachedLoginData.FirstOrDefault(u =>
+                u[0].Equals(inputUserName, StringComparison.OrdinalIgnoreCase) &&
+                u[1] == inputUserPassword);
+
+            return user != default && bool.Parse(user[3]);
+        }
+        #endregion LOGIN VALIDATION
+
+        #region LOGIN
+        /// <summary>
+        /// Updates the online status of a user by alias in both login and user data files.
+        /// If the user is not found, an error message is displayed.
+        /// </summary>
+        /// <param name="alias">The alias of the user whose online status needs to be updated.</param>
+        /// <param name="onlineStatus">The new online status to set for the user (true for online, false for offline).</param>
+        public void UpdateUserOnlineStatus(string alias, bool onlineStatus)
+        {
+            // Check if the cache is empty, and reload data if necessary.
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
+            {
+                cache.LoadDecryptedData();
+            }
+
+            // Find the user in the cached user data by alias and update their online status.
+            var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias); // Alias field
+            if (user != null)
+            {
+                // Update online status
+                user[8] = onlineStatus.ToString();
+            }
+
+            // Find the user in the cached login data by alias and update their online status.
+            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
+            if (login != null)
+            {
+                // Update online status
+                login[3] = onlineStatus.ToString();
+            }
+
+            // Save changes to the data files and encrypt them
+            cache.SaveAndEncryptData();
+        }
+
+        /// <summary>
+        /// Authenticates the user's login credentials and handles login processing.
+        /// </summary>
+        /// <param name="inputUserName">The username input provided by the user.</param>
+        /// <param name="inputUserPassword">The password input provided by the user.</param>
+        public void AuthenticateUser(string inputUserName, string inputUserPassword)
+        {
+            if (!ValidateUserLogin(inputUserName, inputUserPassword))
+            {
+                return;
+            }
+
+            ProcessSuccessfulLogin(inputUserName, inputUserPassword);
+        }
+
+        /// <summary>
+        /// Validates the user's login credentials and online status.
+        /// </summary>
+        /// <param name="inputUserName">The username input provided by the user.</param>
+        /// <param name="inputUserPassword">The password input provided by the user.</param>
+        /// <returns>True if the user credentials and status are valid; otherwise, false.</returns>
+        private bool ValidateUserLogin(string inputUserName, string inputUserPassword)
+        {
+            LoginForm loginForm = new LoginForm();
+
+            if (!ValidateLogin(inputUserName, inputUserPassword))
+            {
+                message.MessageInvalidNamePassword();
+                
+                // Reopen LoginForm for retry
+                loginForm.ShowDialog();
+
+                return false;
+            }
+            if (ValidateOnlineStatus(inputUserName, inputUserPassword))
+            {
+                message.MessageUserAlreadyOnline(inputUserName);
+
+                // Reopen LoginForm for retry
+                loginForm.ShowDialog();
+                
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Processes actions upon a successful login.
+        /// Updates the user's online status, logs the login event, 
+        /// and directs the user to the admin or user interface based on their role.
+        /// </summary>
+        /// <param name="inputUserName">The validated username.</param>
+        /// <param name="inputUserPassword">The validated password.</param>
+        private void ProcessSuccessfulLogin(string inputUserName, string inputUserPassword)
+        {
+            CurrentUser = inputUserName.ToLower();
+            CurrentUserIsTheOne = CheckNeoRole(inputUserName, inputUserPassword);
+
+            // Online Status = true
+            UpdateUserOnlineStatus(CurrentUser, true);
+
+            logEvents.UserLoggedIn(CurrentUser);
+
+            bool isAdmin = CheckAdminRole(inputUserName, inputUserPassword);
+
+            // Send to admin interface
+            if (isAdmin)
+            {
+                AdminMainForm adminForm = new AdminMainForm();
+                CurrentUserIsAdmin = isAdmin;
+
+                adminForm.FormConfig();
+                DisplayUserAlias(adminForm, isAdmin);
+                adminForm.ShowDialog();
+
+            }
+            // Send to user interface
+            else
+            {
+                UserMainForm usersForm = new UserMainForm();
+                DisplayUserAlias(usersForm, isAdmin);
+                usersForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Displays the current user's alias and role in the specified form.
+        /// Updates the form's text fields with the username and sets the role label
+        /// to indicate if the user is an Admin or a regular User.
+        /// </summary>
+        /// <param name="form">The form where the user information will be displayed.</param>
+        /// <param name="isAdmin">Indicates if the current user has admin privileges.</param>
+        public void DisplayUserAlias(dynamic form, bool isAdmin)
+        {
+            var currentUser = CurrentUser;
+
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                form.textBoxUserName.Text = $"{currentUser.ToUpper()}";
+            }
+            else
+            {
+                form.textBoxUserName.Text = "UNKNOWN";
+            }
+
+            form.labelAlias.TextAlign = ContentAlignment.TopLeft;
+            form.labelAlias.BackColor = isAdmin ? Color.LightGreen : Color.LightBlue;
+            
+            if (!CurrentUserIsTheOne)
+            {
+                form.labelAlias.Text = isAdmin ? "Admin" : "User";
+            }
+            else
+            {
+                form.labelAlias.Text = " NEO ";
+            }
+        }
+        #endregion LOGIN
+
+        #region LOGOUT
+        /// <summary>
+        /// Logs out the current user by updating their online status to offline,
+        /// logging the logout event, and clearing the current user.
+        /// </summary>
+        public void PerformLogout()
+        {
+            Debug.WriteLine("\n=== Perform Logout ===");
+            var currentUser = CurrentUser;
+
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                UpdateUserOnlineStatus(currentUser, false);
+                logEvents.UserLoggedOut(currentUser);
+
+                CurrentUser = null;
+            }
+            Debug.WriteLine("=== LOGGED OUT ==="); 
+        }
+            
+        /// <summary>
+        /// Forces a user to log out by an admin, updating their online status,
+        /// triggering logout actions, and logging the forced logout event.
+        /// </summary>
+        /// <param name="aliasToLogOut">The alias of the user to be logged out.</param>
+        public void ForceLogOut(string aliasToLogOut)
+        {
+            // Show a confirmation dialog for deletion
+            DialogResult dr = message.MessageConfirmForceLogOutUser(aliasToLogOut);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+
+            string currentTime = DateTime.Now.ToString("HH:mm");
+
+            userInterface.StatusIndicator("Offline", aliasToLogOut);
+            MessageBox.Show($"User {aliasToLogOut} has been forced logged out.");
+            Debug.WriteLine($"User status is set 'Offline'. Set offline status at {currentTime}...");
+
+            AdminInterface adminInterface = new AdminInterface();
+            adminInterface.SetForceLogOutUserBtn(aliasToLogOut); // Pass the selected alias to SetForceLogOutUserBtn in AdminInterface
+            UpdateUserOnlineStatus(aliasToLogOut, false);        // Update the user's online status to offline
+            PerformForcedLogOutByAdmin(aliasToLogOut);           // Perform the forced logout for the user
+        }
+
+        /// <summary>
+        /// Performs the forced logout action for a user by an admin.
+        /// Logs the forced logout event and hides the user's main form if active.
+        /// </summary>
+        /// <param name="aliasToLogOut">The alias of the user being logged out by the admin.</param>
+        public void PerformForcedLogOutByAdmin(string aliasToLogOut)
+        {
+            UserMainForm userForm = new UserMainForm();
+
+            // Check if the cache is empty, and reload data if necessary.
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
+            {
+                cache.LoadDecryptedData();
+            }
+
+            var admin = CurrentUser;
+
+            if (!string.IsNullOrEmpty(admin))
+            {
+                cache.SaveAndEncryptData();
+
+                // log the forced logout event for admin and aliasToLogOut
+                logEvents.ForceUserLogOut(admin, aliasToLogOut);
+
+                // Hide the user's form if active
+                userForm.Hide();
+            }
+        }
+        #endregion LOGOUT
+    }
+}

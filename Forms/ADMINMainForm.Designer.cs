@@ -47,12 +47,12 @@
             // buttonLOGOUT
             // 
             buttonLOGOUT.BackColor = SystemColors.ActiveCaption;
-            buttonLOGOUT.FlatStyle = FlatStyle.Popup;
+            buttonLOGOUT.FlatStyle = FlatStyle.Standard;
             buttonLOGOUT.Location = new Point(188, 11);
             buttonLOGOUT.Name = "buttonLOGOUT";
             buttonLOGOUT.Size = new Size(100, 26);
             buttonLOGOUT.TabIndex = 1;
-            buttonLOGOUT.Text = "Log Out";
+            buttonLOGOUT.Text = "log Out";
             buttonLOGOUT.UseVisualStyleBackColor = false;
             buttonLOGOUT.Click += buttonLOGOUT_Click;
             // 
@@ -70,28 +70,29 @@
             // UserControl
             // 
             UserControl.BorderStyle = BorderStyle.FixedSingle;
-            UserControl.Location = new Point(18, 86);
+            UserControl.Location = new Point(18, 55);
             UserControl.Name = "adminManagementControl";
-            UserControl.Size = new Size(1208, 400);
+            UserControl.Size = new Size(1500, 460);
             UserControl.TabIndex = 4;
+            UserControl.Load += adminControl.UserControl_Load;
             // 
             // MainFormADMIN
             //
             AutoScaleDimensions = new SizeF(10F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(1260, 512);
+            ClientSize = new Size(1550, 550);
             Controls.Add(labelAlias);
             Controls.Add(buttonLOGOUT);
             Controls.Add(textBoxUserName);
             Controls.Add(UserControl);
-            Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            Font = new Font("Courier New", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
             Name = "MainFormADMIN";
+            Text = "Display UserDetails Admin";
             StartPosition = FormStartPosition.CenterScreen;
             this.FormClosing += this.MainFormADMIN_FormClosing;
-            Text = "Display UserDetails Admin";
             Load += MainFormAdmin_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -103,5 +104,7 @@
         public Button buttonLOGOUT;
         public Label labelAlias;
         public AdminMainControl UserControl;
+
+        
     }
 }

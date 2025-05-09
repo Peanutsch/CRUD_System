@@ -1,5 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
 using Microsoft.Win32;
 using System;
@@ -19,19 +20,17 @@ namespace CRUD_System
 {
     public partial class CreateNewPasswordForm : Form
     {
+        #region PROPERTIES
         // Password conditions
-        public int lengthPsw = 12;
-        public int charToUpper = 3;
-        public int charIsDigi = 3;
+        public int lengthPsw = 12; // minimal length
+        public int charToUpper = 3; // minimal chars to upper, 
+        public int charIsDigi = 3; // minimal chars are numbers
 
-        AccountManager accountManager = new AccountManager();
-        AdminMainControl adminControl = new AdminMainControl();
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-        RepositoryLogEvents logEvents = new RepositoryLogEvents();
-
-        readonly FilePaths path = new FilePaths();
+        readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
 
         private bool isPasswordVisible = false;
+        #endregion PROPERTIES
 
         #region CONSTRUCTOR
         public CreateNewPasswordForm()
@@ -42,6 +41,19 @@ namespace CRUD_System
             EnterKey();
         }
         #endregion CONSTRUCTOR
+
+        #region Form UI
+        /// <summary>
+        /// Displays the text of the lblPassword label to inform users about the password requirements. 
+        /// It dynamically displays the following criteria based on the specified variables lengthPsw, charToUpper and charIsDigi.
+        /// </summary>
+        private void TxtLabelPassword()
+        {
+            lblPassword.Text = $"Must contain {lengthPsw} or more characters.\n" +
+                               $"Must contain at least {charToUpper} capital letters\n" +
+                               $"Must contain at least {charIsDigi} numbers";
+        }
+
         /// <summary>
         /// Event handler for the form load event. Sets focus to the confirm password input field.
         /// </summary>
@@ -106,7 +118,8 @@ namespace CRUD_System
             }
             else
             {
-                ProcessNewPassword();
+                ProcessAndSaveNewPassword();
+                this.Close();
             }
         }
 
@@ -119,7 +132,6 @@ namespace CRUD_System
         {
             this.Close();
         }
-
 
         /// <summary>
         /// Sets up the Enter key to act as a confirmation trigger for the password inputs,
@@ -150,79 +162,60 @@ namespace CRUD_System
                 }
             };
         }
+        #endregion Form UI
 
+        #region PROCESS AND SAVE PASSWORD
         /// <summary>
         /// Validates the new password based on length, uppercase letter, and digit requirements.
         /// If valid, prompts the user to save the password and updates the password in data files.
         /// </summary>
-        private void ProcessNewPassword()
+        private void ProcessAndSaveNewPassword()
         {
             var currentUser = AuthenticationService.CurrentUser;
 
             if (!string.IsNullOrEmpty(currentUser))
             {
-                // Read lines from data_users.csv and data_login.csv
-                (var userLines, var loginLines) = path.ReadUserAndLoginData();
-
-                // Find userIndex in data_login.csv and data_users.csv
-                int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, currentUser);
-                int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, currentUser);
-
                 string newPassword = inputChangePSW.Text;
                 int uppercaseCount = newPassword.Count(char.IsUpper);
                 int digitCount = newPassword.Count(char.IsDigit);
 
                 if (newPassword.Length >= lengthPsw && uppercaseCount >= charToUpper && digitCount >= charIsDigi)
                 {
-                    RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-                    DialogResult dr = message.MessageBoxConfirmToSAVEPassword(currentUser);
+                    // Ensure the cache is loaded and decrypted before performing the validation
+                    DataCache cache = new DataCache();
+                    cache.LoadDecryptedData();
 
-                    if (dr != DialogResult.Yes)
+                    // Find the user in the cached login data by alias and update their online status.
+                    var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == currentUser); // Alias field
+                    if (login != null)
                     {
-                        return;
+                        // Update password
+                        login[1] = newPassword;
+
+                        Debug.WriteLine($"Storing new password for {currentUser}");
+
+                        // Save changes to the data files and encrypt them
+                        cache.SaveAndEncryptData();
+
+                        // log event
+                        logEvents.LogEventNewPasswordCreated(currentUser, newPassword);
+                        message.MessageChangePasswordSucces(currentUser);
                     }
-                    UpdateNewPassword(loginLines, userIndex, newPassword);
-                    this.Close();
+                    else
+                    {
+                        // Display messagebox with the password requirements
+                        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+                        message.MessageInvalidPassword();
+                    }
                 }
                 else
                 {
-                    RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-                    message.MessageInvalidPassword();
+                    Debug.WriteLine($"IsNullOrEmpty currentUser: {currentUser}");
+                    message.MessageSomethingWentWrong();
+                    return;
                 }
             }
         }
-
-        /// <summary>
-        /// Updates the specified user's password in the login data, saves it to the CSV file, 
-        /// logs the event, and displays a success message.
-        /// </summary>
-        /// <param name="loginLines">The list of lines from data_login.csv.</param>
-        /// <param name="userIndex">The index of the user to update.</param>
-        /// <param name="newPassword">The new password to set for the user.</param>
-        public void UpdateNewPassword(List<string> loginLines, int userIndex, string newPassword)
-        {
-            var loginDetails = loginLines[userIndex].Split(',');
-
-            // When need to keep current data on indexes
-            string currentAlias = loginDetails[0];
-            string currentAdminBool = loginDetails[2];
-            string currentOnlineStatus = loginDetails[3];
-
-            loginLines[userIndex] = $"{currentAlias},{newPassword},{currentAdminBool},{currentOnlineStatus}";
-
-            // Write updated data back to data_login.csv
-            File.WriteAllLines(path.LoginFilePath, loginLines);
-            // log event to logEvents.csv
-            logEvents.LogEventNewPasswordCreated(currentAlias);
-            
-            message.MessageChangePasswordSucces(currentAlias);
-        }
-
-        private void TxtLabelPassword()
-        {
-            lblPassword.Text = $"Must contain {lengthPsw} or more chars.\n" +
-                               $"Must contain at least {charToUpper} capital letters\n" +
-                               $"Must contain at least {charIsDigi} numbers";
-        }
+        #endregion PROCESS AND SAVE PASSWORD
     }
 }

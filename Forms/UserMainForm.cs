@@ -1,5 +1,6 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
+using CRUD_System.Repositories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,15 +16,18 @@ namespace CRUD_System
 {
     public partial class UserMainForm : Form
     {
-        readonly string logAction = Path.Combine(RootPath.GetRootPath(), @"CSV\log.csv");
+        #region PROPERTIES
+        AuthenticationService authService = new AuthenticationService();
+        #endregion PROPERTIES
 
-        AuthenticationService loginHandler = new AuthenticationService();
-
+        #region CONSTRUCTOR
         public UserMainForm()
         {
             InitializeComponent();
         }
+        #endregion CONSTRUCTOR
 
+        #region BUTTONS
         private void MainFormUsers_Load(object sender, EventArgs e)
         {
             // Set focus to the logout button when the form is loaded
@@ -39,14 +43,24 @@ namespace CRUD_System
         /// <param name="e">The event arguments.</param>
         private void buttonLOGOUT_Click(object sender, EventArgs e)
         {
-            loginHandler.PerformLogout();
-            this.Hide(); // Hide the MainForm
+            this.Close();
         }
 
         private void USERSMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            loginHandler.PerformLogout();
+            RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+            DialogResult dr = message.MessageConfirmLogOut();
+
+            if (dr == DialogResult.No)
+            {
+                // Cancel the form closing if the user chooses "No"
+                e.Cancel = true;
+                return;
+            }
+
+            authService.PerformLogout();
         }
+        #endregion BUTTONS
     }
 }
 

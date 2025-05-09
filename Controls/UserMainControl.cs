@@ -19,20 +19,19 @@ namespace CRUD_System
     /// <summary>
     /// Manages user-related interactions within the main user control panel of the CRUD system.
     /// Provides functionality to edit user details, toggle edit mode, change passwords, and handle 
-    /// ListBox selection events. Integrates with other components like UserInterface, AccountManager,
+    /// ListBox selection events. Integrates with other components like UserInterface, AccountManager (not in use),
     /// ProfileManager, and FormInteractionHandler to manage user data and interface behavior.
     /// </summary>
     public partial class UserMainControl : UserControl
     {
         #region PROPERTIES
-        FilePaths path = new FilePaths();
+        private readonly FilePaths path = new FilePaths();
 
-        UserInterface userInterface;
-        AccountManager accountManager = new AccountManager();
-        ProfileManager profileManager = new ProfileManager();
-        FormInteractionHandler interactionHandler = new FormInteractionHandler();
-
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        private readonly UserInterface userInterface;
+        private readonly AccountManager accountManager = new AccountManager();
+        private readonly ProfileManager profileManager = new ProfileManager();
+        private readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        private readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
@@ -45,7 +44,6 @@ namespace CRUD_System
         {
             InitializeComponent();
             this.userInterface = userInterface ?? new UserInterface(this);
-
             this.userInterface.LoadDetailsListBoxThisUser();
         }
         #endregion CONSTRUCTOR
@@ -61,20 +59,26 @@ namespace CRUD_System
             // Read lines from data_users.csv and data_login.csv
             (var userLines, var loginLines) = path.ReadUserAndLoginData();
 
-            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            int userIndex = accountManager.FindUserIndexByAlias(txtAlias.Text);
+            int loginIndex = accountManager.FindUserIndexByAlias(txtAlias.Text);
 
             var loginDetails = loginLines[loginIndex].Split(",");
+            var userDetails = userLines[userIndex].Split(",");
 
-            // Parse the admin status and online status as bools
+            // Parse the admin status, online status and isSick status as bools
             bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
             bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
+            bool isSick = bool.TryParse(userDetails[9], out bool parsedIsSick) && parsedIsSick;
 
             if (userIndex != -1)
             {
-                profileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
+                profileManager.CheckModifications(txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text,
+                                                 txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
             }
-            editMode = false; // Close editMode
+
+            AdminInterface adminInterface = new AdminInterface();
+            adminInterface.EditMode = false;
+            userInterface.InterfaceEditModeUser();
             userInterface.ReloadListBoxUser(userIndex); // Reload interface
         }
 
@@ -99,6 +103,10 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
+                // Close EditMode
+                userInterface.EditMode = false;
+                userInterface.InterfaceEditModeUser();
+                // Open New Password Form
                 interactionHandler.Open_CreateNewPasswordForm();
             });
 
@@ -110,7 +118,6 @@ namespace CRUD_System
 
             return modus;
         }
-        #endregion BUTTONS
 
         public void ListBoxUser_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -119,7 +126,18 @@ namespace CRUD_System
 
         private void comboBoxStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Check if SelectedItem is not null before calling ToString
+            if (comboBoxStatus.SelectedItem != null)
+            {
+                string? status = comboBoxStatus.SelectedItem.ToString();
 
+                if (!string.IsNullOrEmpty(status))
+                {
+                    // Pass the selected status to the StatusIndicator method
+                    userInterface.StatusIndicator(status, txtAlias.Text);
+                }
+            }
         }
+        #endregion BUTTONS
     }
 }

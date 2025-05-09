@@ -1,6 +1,5 @@
 ﻿using CRUD_System.FileHandlers;
 using CRUD_System.Handlers;
-using CRUD_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace CRUD_System.Interfaces
@@ -18,10 +19,17 @@ namespace CRUD_System.Interfaces
     public class AdminInterface
     {
         #region PROPERTIES
-
         public bool EditMode { get; set; }
+        public static bool IsReport { get; set; }
+        public static bool IsSelectedUserTheOne { get; set; }
+        public static bool IsSelectedUserAdmin { get; set; }
 
-        readonly FilePaths path = new FilePaths();
+        public List<string[]> CachedUserData => cache.CachedUserData;
+
+        private int currentPage = 1; // Track pagenumbers
+        private const int itemsPerPage = 16; // Maximum items per page in listBoxAdmin
+
+        public readonly DataCache cache = new DataCache();
         private readonly AdminMainControl adminControl;
         #endregion PROPERTIES
 
@@ -34,34 +42,113 @@ namespace CRUD_System.Interfaces
 
         #region LISTBOX ADMIN
         /// <summary>
-        /// Loads user details from data_users.csv and populates the ListBox with formatted information.
-        /// The method reads data from the user file, skips the header and admin details, and processes each user's details.
-        /// It formats the list item to display the user's name, surname, alias, email, phone number, 
-        /// and indicates whether the user is online based on the data in the file.
-        /// </summary>>
-        public void LoadDetailsListBox()
+        /// Generates the ListBox items for a specific page of user details.
+        /// </summary>
+        /// <param name="startIndex">The starting index for the page.</param>
+        /// <param name="itemsPerPage">The maximum number of items per page.</param>
+        /// <returns>A collection of formatted ListBox items.</returns>
+        private IEnumerable<string> GenerateListBoxItems(int startIndex, int itemsPerPage)
         {
-            var lines = File.ReadAllLines(path.UserFilePath);
-            adminControl.listBoxAdmin.Items.Clear();
+            // Skip header rows and load items for the specified page
+            var userDetailsForPage = cache.CachedUserData.Skip(2).Skip(startIndex).Take(itemsPerPage);
 
-            foreach (var line in lines.Skip(2)) // Skip first 2 lines
+            foreach (var userDetailsArray in userDetailsForPage)
             {
-                var userDetailsArray = line.Split(',');
+                // Selection of items to display in ListBoxAdmin
                 string name = userDetailsArray[0];
                 string surname = userDetailsArray[1];
                 string alias = userDetailsArray[2];
-                string address = userDetailsArray[3];
-                string zipcode = userDetailsArray[4];
-                string city = userDetailsArray[5];
                 string email = userDetailsArray[6];
                 string phonenumber = userDetailsArray[7];
                 string isOnline = userDetailsArray.Length > 8 && userDetailsArray[8] == "True" ? "| [ONLINE]" : string.Empty;
+                string isSick = userDetailsArray.Length > 9 && userDetailsArray[9] == "True" ? "| [ABSENCE due ILLNESS]" : string.Empty;
 
-                // Directly format list item
-                string listItem = $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline}";
-                adminControl.listBoxAdmin.Items.Add(listItem);
+                yield return $"{name} {surname} ({alias}) | {email} | {phonenumber} {isOnline} {isSick}";
             }
         }
+
+        /// <summary>
+        /// Loads user details from data_users.csv and populates the ListBox with formatted information.
+        /// The method reads data from the user file, skips the header and admin details, and processes each user's details.
+        /// It formats the list item to display the user's name, surname, alias, email, phone number, and indicates whether the user is online based on the data in the file.
+        /// Loads a specific page of user details into the ListBox, with a maximum of 15 items per page.
+        /// </summary>>
+        public void LoadDetailsListBox()
+        {
+            // Check if the cached user data is empty or not loaded
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
+            {
+                cache.LoadDecryptedData();
+            }
+
+            // Clear the ListBox
+            adminControl.listBoxAdmin.Items.Clear();
+
+            // Calculate start index for the current page
+            int startIndex = (currentPage - 1) * itemsPerPage;
+
+            // Populate the ListBox with generated items
+            foreach (var item in GenerateListBoxItems(startIndex, itemsPerPage))
+            {
+                adminControl.listBoxAdmin.Items.Add(item);
+            }
+
+            // Update the page label
+            UpdatePageLabel();
+        }
+
+        /// <summary>
+        /// Reloads the ListBox and reselects the specified item.
+        /// </summary>
+        /// <param name="aliasToSelect">The alias of the user to reselect after reloading.</param>
+        /// <summary>
+        /// Reloads the ListBox and reselects the specified item.
+        /// </summary>
+        /// <param name="aliasToSelect">The alias of the user to reselect after reloading.</param>
+        public void ReloadListBoxWithSelection(string aliasToSelect)
+        {
+            // Ensure ListBoxAdmin is initialized
+            if (adminControl?.listBoxAdmin == null)
+            {
+                throw new InvalidOperationException("ListBoxAdmin is not initialized.");
+            }
+
+            // Refresh the cache
+            cache.LoadDecryptedData();
+
+            // Clear the ListBox
+            adminControl.listBoxAdmin.Items.Clear();
+
+            // Calculate start index for the current page
+            int startIndex = (currentPage - 1) * itemsPerPage;
+
+            // Populate the ListBox with generated items
+            foreach (var item in GenerateListBoxItems(startIndex, itemsPerPage))
+            {
+                adminControl.listBoxAdmin.Items.Add(item);
+            }
+
+            // Update the page label
+            UpdatePageLabel();
+
+            // Try to reselect the previously edited item
+            if (!string.IsNullOrEmpty(aliasToSelect))
+            {
+                for (int i = 0; i < adminControl.listBoxAdmin.Items.Count; i++)
+                {
+                    var currentItem = adminControl.listBoxAdmin.Items[i];
+                    if (currentItem?.ToString()!.Contains($"({aliasToSelect})") == true)
+                    {
+                        adminControl.listBoxAdmin.SelectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            // Refresh the ListBox to trigger the DrawItem event
+            adminControl.listBoxAdmin.Refresh();
+        }
+
 
         /// <summary>
         /// Handles the custom drawing of items in the ListBox, allowing for conditional formatting based on the item content.
@@ -70,13 +157,12 @@ namespace CRUD_System.Interfaces
         /// </summary>
         /// <param name="sender">The source of the event, expected to be the ListBox control.</param>
         /// <param name="e">The event data that contains drawing parameters, such as the item to be drawn and the graphics context.</param>
-
         public void ListBoxAdmin_DrawItemHandler(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
 
             // Safely cast sender to ListBox and check if it’s null
-            if (sender is not ListBox listBox ) return;
+            if (sender is not ListBox listBox) return;
 
             // Get the item from the list and handle possible null
             string? listItem = listBox.Items[e.Index]?.ToString();
@@ -84,8 +170,26 @@ namespace CRUD_System.Interfaces
 
             e.DrawBackground();
 
-            // Determine the color based on item content
-            Color textColor = listItem.Contains("ONLINE") ? Color.DarkOliveGreen : Color.Black;
+            // Declare the default text color
+            Color textColor = Color.Black;
+
+            // Determine the color based on item content. 
+            if (listItem.Contains("ONLINE") && listItem.Contains("ABSENCE due ILLNESS"))
+            {
+                textColor = Color.Orange;
+            }
+            else if (listItem.Contains("ONLINE"))
+            {
+                textColor = Color.DarkOliveGreen;
+            }
+            else if (listItem.Contains("ABSENCE due ILLNESS"))
+            {
+                textColor = Color.Violet;
+            }
+            else
+            {
+                textColor = Color.Black;
+            }
 
             // Use a fallback font if e.Font is null
             Font font = e.Font ?? SystemFonts.DefaultFont;
@@ -96,32 +200,24 @@ namespace CRUD_System.Interfaces
             }
             e.DrawFocusRectangle();
         }
+        #endregion LISTBOX ADMIN
 
-        /// <summary>
-        /// Reloads the user list box after making changes, refreshing the interface display.
-        /// </summary>
-        /// <param name="userIndex">The index of the updated user.</param>
-        public void ReloadListBoxAdmin(int userIndex)
-        {
-            if (userIndex >= 0 && userIndex < adminControl.listBoxAdmin.Items.Count)
-            {
-                adminControl.Refresh();
-            }
-
-            // Clear and reload listbox
-            adminControl.listBoxAdmin.Items.Clear();
-            LoadDetailsListBox();
-
-            // Reset editMode to false after saving and reload interface
-            InterfaceEditModeAdmin();
-        }
-
+        #region LISTBOX SELECTED INDEX CHANGED
         /// <summary>
         /// Handles the event when a user is selected in the ListBox. It fills the details for the selected user in the textboxes,
-        /// and disables the Force Log Out button if the selected user is the current admin user.
+        /// and disables the Force log Out button if the selected user is the current admin user.
         /// </summary>
         public void ListBoxAdmin_SelectedIndexChangedHandler()
         {
+            // Empty textboxes report field
+            TextBoxesReportEmpty();
+
+            // Check if the cached user data is empty or not loaded
+            if (!cache.CachedLoginData.Any() || !cache.CachedLoginData.Any())
+            {
+                cache.LoadDecryptedData();
+            }
+
             var currentUser = AuthenticationService.CurrentUser;
 
             // Get the selected user from the ListBox; ignore clicks on empty line in listBox
@@ -130,103 +226,341 @@ namespace CRUD_System.Interfaces
                 // Set UserSelected on true
                 adminControl.InteractionHandler.UserSelected = true; // Pass bool true to InterActionHandler
 
+                // Close the ShowLogEventsForm if it's already open
+                CloseOverviewFormIfOpen();
+
                 // Extract the alias from the selected text (in the format: "Name Surname (Alias)")
                 string selectedAlias = selectedUserString.Split('(', ')')[1]; // Extract the alias between parentheses
 
-                // Ignore btnForceLogOutUser when selection is users own admin account 
+                // Retrieve user details
+                var (userDetailsArray, loginDetailsArray) = RetrieveUserAndLoginDetails(selectedAlias);
+
+                // Ignore btnForceLogOutUser when selection is user's own admin account
                 if (currentUser == selectedAlias)
                 {
                     adminControl.btnForceLogOutUser.Enabled = false;
                     adminControl.btnForceLogOutUser.Visible = false;
                 }
 
-                // Read user details
-                var userDetailsArray = File.ReadAllLines(path.UserFilePath)
-                                           .Skip(2)
-                                           .Select(line => line.Split(','))
-                                           .FirstOrDefault(details => details[2] == selectedAlias);
-
+                // Fill textboxes with user details
                 if (userDetailsArray != null)
                 {
                     FillTextboxesAdmin(userDetailsArray);
                 }
-                HandleSelectedUserStatus(selectedAlias);
+
+                ProcessUserRoleData(selectedAlias, loginDetailsArray!); // Verify bools SelectedUserIsAdmin and SelectedUserIsTheOne
+                FindReportFile(selectedAlias);                          // Find report files from corresponding user alias
+                HandleSelectedUserStatus(selectedAlias);                // Update UI
             }
         }
 
         /// <summary>
-        /// Validates the selected user alias and updates the UI accordingly. It checks the login details for the selected alias, 
-        /// determines if the user is an admin, and updates the visibility of admin-related fields. 
-        /// It also checks if the user is online and enables/disables the Force Log Out button.
+        /// Synchronizes the state of Admin and TheOne checkboxes with the selected user's roles.
+        /// Temporarily detaches the event handlers for the checkboxes to prevent triggering events during the update.
+        /// </summary>
+        public void SetCheckBoxHandlers()
+        {
+            // Temporarily remove event handlers to prevent undesired triggering
+            adminControl.chkIsAdmin.CheckedChanged -= adminControl.chkIsAdmin_CheckedChanged!;
+            adminControl.chkIsTheOne.CheckedChanged -= adminControl.chkIsTheOne_CheckedChanged!;
+
+            // Update the checkbox states based on the user's roles
+            adminControl.chkIsAdmin.Checked = IsSelectedUserAdmin;
+            adminControl.chkIsTheOne.Checked = IsSelectedUserTheOne;
+
+            // Reattach the event handlers after updating
+            adminControl.chkIsAdmin.CheckedChanged += adminControl.chkIsAdmin_CheckedChanged!;
+            adminControl.chkIsTheOne.CheckedChanged += adminControl.chkIsTheOne_CheckedChanged!;
+        }
+
+        /// <summary>
+        /// Processes the role data of the selected user, updating the <c>IsSelectedUserAdmin</c> and 
+        /// <c>IsSelectedUserTheOne</c> properties based on login details, synchronizing the UI checkboxes, 
+        /// and storing the initial statuses for further reference.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the selected user in the ListBox.</param>
+        /// <param name="loginDetailsArray">An array containing the login details of the selected user. 
+        /// The array should contain role information at specific indices:
+        /// - Index 2: Indicates if the user is an admin.
+        /// - Index 4: Indicates if the user is "TheOne".</param>
+        public void ProcessUserRoleData(string selectedAlias, string[] loginDetailsArray)
+        {
+            // Parse the role data from the login details array
+            IsSelectedUserAdmin = bool.Parse(loginDetailsArray![2]); // Extract admin status (Index 2)
+            IsSelectedUserTheOne = bool.Parse(loginDetailsArray[4]); // Extract "TheOne" status (Index 4)
+
+            // Synchronize the checkbox states with the parsed role data
+            SetCheckBoxHandlers();
+
+            // Store the initial admin and "TheOne" statuses in a list for future reference
+            adminControl.storeInitialUserStatus.Add(IsSelectedUserAdmin);   // Admin status at index 0
+            adminControl.storeInitialUserStatus.Add(IsSelectedUserTheOne);  // TheOne status at index 1
+        }
+
+        /// <summary>
+        /// Retrieves user and login details from the cache for the selected alias.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the selected user.</param>
+        /// <returns>A tuple containing the user details array and login details array.</returns>
+        private (string[]? userDetailsArray, string[]? loginDetailsArray) RetrieveUserAndLoginDetails(string selectedAlias)
+        {
+            // Retrieve user details from the cache
+            var userDetailsArray = cache.CachedUserData
+                .Skip(1) // Skip header row
+                .FirstOrDefault(details => details[2] == selectedAlias);
+
+            // Retrieve login details from the cache
+            var loginDetailsArray = cache.CachedLoginData!
+                .Skip(1) // Skip header row
+                .FirstOrDefault(details => details[0] == selectedAlias);
+
+            return (userDetailsArray, loginDetailsArray);
+        }
+
+        /// <summary>
+        /// Closes the ShowLogEventsForm and ShowLogStatusForm if they are already open.
+        /// </summary>
+        private void CloseOverviewFormIfOpen()
+        {
+            var openEventsForm = Application.OpenForms.OfType<ShowLogEventsForm>().FirstOrDefault();
+            var openStatusForm = Application.OpenForms.OfType<ShowLogStatusForm>().FirstOrDefault();
+            openEventsForm?.Close();
+            openStatusForm?.Close();
+        }
+        #endregion LISTBOX SELECTED INDEX CHANGED
+
+        #region FIND REPORT FILE
+        /// <summary>
+        /// Finds and loads report files from corresponding user alias from ListBox into ListViewReports.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the user for whom to find report files.</param>
+        public void FindReportFile(string selectedAlias)
+        {
+            // Initialize the ListViewFiles helper class, passing the admin control reference
+            ListViewReports listView = new ListViewReports(adminControl);
+
+            // Find all report directories for the given alias
+            List<string> reportDirectories = FindCSVFiles.FindFilesInFolders(selectedAlias, "report");
+
+            // Check if any directories were found
+            if (reportDirectories.Any())
+            {
+                // Iterate through the found directories
+                foreach (var directory in reportDirectories)
+                {
+                    // Load files from the directory into the ListView
+                    listView.LoadReportsIntoListView(directory);
+                }
+            }
+        }
+        #endregion FIND REPORT FILE
+
+        #region HANDLE SELECTED USER STATUS
+        /// <summary>
+        /// Validates the selected user alias and updates the UI accordingly. 
+        /// - Checks the login details for the selected alias.
+        /// - Determines if the user is an admin and updates related UI elements.
+        /// - Checks if the user is online and enables/disables the "Force Log Out" button.
+        /// - If the selected user is "TheOne", enables additional admin controls.
         /// </summary>
         /// <param name="selectedAlias">The alias of the selected user to be validated.</param>
         public void HandleSelectedUserStatus(string selectedAlias)
         {
-            var currentUser = AuthenticationService.CurrentUser;
-            // Read the lines from data_login.csv
-            var loginLines = File.ReadAllLines(path.LoginFilePath).Skip(2); // Skip the headers
-            var loginDetailsList = loginLines.Select(line => line.Split(',')); // Split each line into details
-            var loginDetails = loginDetailsList.FirstOrDefault(details => details[0] == selectedAlias); // Find the login details for the selected alias
-
-            // Check if loginDetails is not null
-            if (loginDetails != null)
+            // Check if cached login data is empty or not loaded, and load it if necessary.
+            if (!cache.CachedLoginData.Any() || !cache.CachedUserData.Any())
             {
-                // Check if the admin status is true
-                if (loginDetails[2] == "True") // Use '==' for comparison
-                {
-                    // Show the admin label
-                    adminControl.txtAdmin.Visible = true;
-                    adminControl.chkIsAdmin.Checked = true; // checkbox chkAdmin checked
-                }
-                else
-                {
-                    // Hide the admin label if not an admin
-                    adminControl.txtAdmin.Visible = false;
-                    adminControl.chkIsAdmin.Checked = false; // checkbox chkAdmin unchecked
-                }
+                cache.LoadDecryptedData();
+            }
 
-                // Check if the user is online and enable the logout button
-                if (currentUser != selectedAlias)
-                    SetForceLogOutUserBtn(selectedAlias); // Pass selectedAlias to check if the user is online
+            // Retrieve login and user details from the cache
+            var loginDetails = cache.CachedLoginData?.FirstOrDefault(details => details[0] == selectedAlias); // Match alias in login data
+            var userDetails = cache.CachedUserData?.FirstOrDefault(details => details[2] == selectedAlias); // Match alias in user data
+
+            // Update UI visibility based on retrieved user details
+            adminControl.txtAbsenceIllness.Visible = userDetails != null && userDetails[9] == "True"; // Show if user is sick
+            adminControl.txtAdmin.Visible = loginDetails != null && loginDetails[2] == "True"; // Show if user is admin
+
+            // Determine if the selected user is an admin
+            IsSelectedUserAdmin = loginDetails != null && loginDetails[2] == "True";
+
+            // If the logged-in user is "TheOne", enable additional admin functionalities
+            if (loginDetails != null && userDetails != null && AuthenticationService.CurrentUserIsTheOne)
+            {
+                // Show admin-specific buttons when in edit mode
+                adminControl.btnDeleteUser.Visible = EditMode;
+                adminControl.btnShowListBoxLogEvents.Visible = EditMode;
+                adminControl.btnDeleteFileReport.Visible = EditMode;
+                adminControl.chkIsAdmin.Visible = EditMode;
+
+                // Update checkbox fields based on login and user details
+                adminControl.chkIsAdmin.Checked = loginDetails[2] == "True"; // IsAdmin checkbox checked if user is an admin
+
+                // Setup "chkIsTheOne" checkbox logic
+                if (IsSelectedUserAdmin)
+                {
+                    // Remove any existing event handler to prevent multiple subscriptions
+                    adminControl.chkIsTheOne.CheckedChanged -= ChkIsTheOne_CheckedChanged;
+
+                    // Attach event handler to manage chkIsAdmin enable/disable state
+                    adminControl.chkIsTheOne.CheckedChanged += ChkIsTheOne_CheckedChanged;
+
+                    // Update visibility and state of "TheOne" checkbox
+                    adminControl.chkIsTheOne.Visible = EditMode;
+                    adminControl.chkIsTheOne.Checked = loginDetails[4] == "True"; // Checked if the user is "Neo"
+                }
+            }
+
+            // Enable "Force Log Out" button if the selected user is not the current user
+            if (AuthenticationService.CurrentUser != selectedAlias)
+            {
+                // Update the state of the "Force Log Out" button based on the selected user's online status
+                SetForceLogOutUserBtn(selectedAlias);
             }
             else
             {
-                // Handle the case where loginDetails is null (optional)
-                adminControl.txtAdmin.Visible = false; // Hide the textbox if no details found
+                // Hide admin and illness fields if no user is selected
+                adminControl.txtAdmin.Visible = false;
+                adminControl.txtAbsenceIllness.Visible = false;
             }
         }
-        #endregion LISTBOX ADMIN
+
+        /// <summary>
+        /// Event handler for when the chkIsTheOne checkbox is checked/unchecked.
+        /// - Disables "Is Admin" checkbox when chkIsTheOne is checked.
+        /// - Enables "Is Admin" checkbox when chkIsTheOne is unchecked.
+        /// - Check checkbox chkIsAdmin when chkIsTheOne is checked
+        /// </summary>
+        private void ChkIsTheOne_CheckedChanged(object? sender, EventArgs e)
+        {
+            adminControl.chkIsAdmin.Enabled = !adminControl.chkIsTheOne.Checked;
+            adminControl.chkIsAdmin.Checked = adminControl.chkIsTheOne.Checked;
+
+        }
+        #endregion HANDLE SELECTED USER STATUS
+
+        #region LISTBOX PAGES
+        /// <summary>
+        /// Navigates to the next page listBoxAdmin if it exists.
+        /// </summary>
+        public void NextPage()
+        {
+            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage); // Total pages (subtract header rows)
+            if (currentPage < totalPages)
+            {
+                adminControl.btnNextPage.Enabled = true;
+                currentPage++;
+                LoadDetailsListBox();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to the previous page listBoxAdmin if it exists.
+        /// </summary>
+        public void PreviousPage()
+        {
+            if (currentPage > 1)
+            {
+                adminControl.btnPreviousPage.Enabled = true;
+                currentPage--;
+                LoadDetailsListBox();
+                EmptyTextBoxesAdmin();
+            }
+        }
+
+        /// <summary>
+        /// Updates the page navigation label to display the current page and total pages.
+        /// If no pages are available, it shows a placeholder message.
+        /// </summary>
+        public void UpdatePageLabel()
+        {
+            int totalPages = (int)Math.Ceiling((CachedUserData.Count - 2) / (double)itemsPerPage);
+            adminControl.lblPageNumber.Text = totalPages > 0 ? $"Page {currentPage} of {totalPages}" : "No pages available";
+        }
+        #endregion LISTBOX PAGES
 
         #region EDIT MODE DISPLAY ADMIN
         /// <summary>
         /// Manages the interface display and controls based on the edit mode status.
         /// </summary>
-        public void InterfaceEditModeAdmin()
+        public void UpdateInterfaceAdmin()
         {
-            Debug.WriteLine($"EditMode AdminInterface: {EditMode}");
+            UpdateInterfaceControls();
+            UpdateTextFieldsAndListBox();
+        }
 
-            // Toggle Edit and Cancel button text based on EditMode status
-            adminControl.btnEditUserDetails.Text = EditMode ? "Cancel" : "Edit User";
+        /// <summary>
+        /// Updates the interface display and control states based on EditMode.
+        /// </summary>
+        public void UpdateInterfaceControls()
+        {
+            // Handle buttons AdminMainControl
+            ToggleAdminMainControl();
 
-            // Set the background color based on EditMode for visual feedback
+            // Interface if user is superuser
+            if (AuthenticationService.CurrentUserIsTheOne)
+            {
+                ToggleAdminMainControlForTheOne();
+            }
+            // Toggle checkbox chkIsAdmin when Selected User is The One
+            if (IsSelectedUserTheOne)
+            {
+                // Checkbox chkIsAdmin is disabled if selected user is Neo
+                adminControl.chkIsAdmin.Enabled = false; 
+            }
+        }
+
+        /// <summary>
+        /// Toggle AdminMainControl buttons EditMode
+        /// </summary>
+        private void ToggleAdminMainControl()
+        {
+            adminControl.btnEditUserDetails.Text = EditMode ? "Exit" : "Unlock Details";
             adminControl.BackColor = EditMode ? Color.Orange : SystemColors.ActiveCaption;
 
-            // Adjust visibility and enablement of buttons based on EditMode
+            adminControl.btnCreateUser.Enabled = !EditMode;
+            adminControl.btnChangePassword.Enabled = !EditMode;
+            adminControl.btnNextPage.Enabled = !EditMode;
+            adminControl.btnPreviousPage.Enabled = !EditMode;
+            adminControl.btnGeneratePSW.Enabled = !EditMode;
+            adminControl.btnUploadFile.Visible = EditMode;
+            adminControl.btnCallInSick.Visible = EditMode;
+
             ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
+            ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
+            ToggleControlVisibility(adminControl.btnCreateReport, EditMode);
+        }
+
+        /// <summary>
+        /// Toggle AdminMainControl buttons when Selected User is The One
+        /// </summary>
+        private void ToggleAdminMainControlForTheOne()
+        {
+            ToggleControlVisibility(adminControl.btnSaveEditUserDetails, EditMode, Color.LightGreen);
+            ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
+            ToggleControlVisibility(adminControl.btnDeleteFileReport, EditMode, Color.Red);
+            ToggleControlVisibility(adminControl.btnDeleteUser, EditMode, Color.Red);
+            ToggleControlVisibility(adminControl.btnShowListBoxLogEvents, EditMode);
             ToggleControlVisibility(adminControl.chkIsAdmin, EditMode);
 
+            ToggleControlVisibility(adminControl.chkIsTheOne, IsSelectedUserAdmin && EditMode);
+        }
+
+        /// <summary>
+        /// Toggles the enabled state of text fields and listbox based on EditMode.
+        /// </summary>
+        private void UpdateTextFieldsAndListBox()
+        {
             // Array of text fields to enable or disable in EditMode for user editing
             var textFields = new[]
             {
-                adminControl.txtName,
-                adminControl.txtSurname,
-                adminControl.txtAdmin,
-                adminControl.txtAddress,
-                adminControl.txtZIPCode,
-                adminControl.txtCity,
-                adminControl.txtEmail,
-                adminControl.txtPhonenumber
-             };
+            adminControl.txtName,
+            adminControl.txtSurname,
+            adminControl.txtAddress,
+            adminControl.txtZIPCode,
+            adminControl.txtCity,
+            adminControl.txtEmail,
+            adminControl.txtPhonenumber,
+            };
 
             foreach (var field in textFields)
             {
@@ -236,15 +570,11 @@ namespace CRUD_System.Interfaces
                 }
             }
 
-            // Adjust other action buttons based on EditMode status
-            ToggleControlVisibility(adminControl.btnCreateUser, !EditMode);
-            ToggleControlVisibility(adminControl.btnDeleteUser, EditMode);
-            ToggleControlVisibility(adminControl.btnGeneratePSW, EditMode);
-
             // Disable ListBox when in edit mode to prevent user changes in selection
             if (adminControl.listBoxAdmin != null)
             {
                 adminControl.listBoxAdmin.Enabled = !EditMode;
+                adminControl.txtSearch.Enabled = !EditMode;
             }
         }
 
@@ -269,38 +599,59 @@ namespace CRUD_System.Interfaces
         }
 
         /// <summary>
-        /// Sets the enabled state of the Force Log Out User button based on the user's online status.
+        /// Sets the enabled state of the Force log Out User button based on the user's online status.
         /// </summary>
-        /// <param name="selectedAlias">The alias of the selected user to check online status.</param>
-        public void SetForceLogOutUserBtn(string selectedAlias)
+        /// <param name="aliasToLogOut">The alias of the selected user to check online status.</param>
+        public void SetForceLogOutUserBtn(string aliasToLogOut)
         {
-            bool isOnline = File.ReadLines(path.UserFilePath)
-                                .Skip(2) // Skip header
-                                .Select(line => line.Split(','))
-                                .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == selectedAlias) // Match alias
-                                .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check online status
+            var currentUser = AuthenticationService.CurrentUser;
+            if (AuthenticationService.CurrentUserIsTheOne)
+            {
+                // Check if the cache is empty, and reload data if necessary.
+                if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
+                {
+                    cache.LoadDecryptedData();
+                }
 
-            // Enable and show the button if the user is online and in edit mode
-            adminControl.btnForceLogOutUser.Enabled = isOnline;
-            adminControl.btnForceLogOutUser.Visible = isOnline;
+                // Determine if the selected user is online
+                bool isOnline = cache.CachedUserData
+                    .Skip(1) // Skip the header row
+                    .Where(userDetailsArray => userDetailsArray.Length > 8 && userDetailsArray[2] == aliasToLogOut) // Match alias
+                    .Any(userDetailsArray => userDetailsArray[8] == "True"); // Check if the user is online
+
+                // Display the "Force log Out User" button if the user is online
+                adminControl.btnForceLogOutUser.Enabled = isOnline;
+                adminControl.btnForceLogOutUser.Visible = isOnline;
+            }
         }
-        #endregion EDITMODE DISPLAY
+        #endregion EDITMODE DISPLAY ADMIN
 
-        #region TEXTBOXES ADMIN
+        #region ADMIN TEXTBOXES
         /// <summary>
         /// Clears all textboxes in the interface, resetting their content.
         /// </summary>
         public void EmptyTextBoxesAdmin()
         {
-            // Refill textboxes with empty values
-            adminControl.txtName.Text = string.Empty;
-            adminControl.txtSurname.Text = string.Empty;
-            adminControl.txtAlias.Text = string.Empty;
-            adminControl.txtAddress.Text = string.Empty;
-            adminControl.txtZIPCode.Text = string.Empty;
-            adminControl.txtCity.Text = string.Empty;
-            adminControl.txtEmail.Text = string.Empty;
-            adminControl.txtPhonenumber.Text = string.Empty;
+            // Array textboxes for refill with string.Empty
+            var textFields = new[]
+            {
+            adminControl.txtName,
+            adminControl.txtSurname,
+            adminControl.txtAlias,
+            adminControl.txtAddress,
+            adminControl.txtZIPCode,
+            adminControl.txtCity,
+            adminControl.txtEmail,
+            adminControl.txtPhonenumber
+            };
+
+            foreach (var field in textFields)
+            {
+                field.Text = string.Empty;
+            }
+
+            adminControl.txtAdmin.Visible = false;
+            adminControl.txtAbsenceIllness.Visible = false;
 
             // Update button states to false
             adminControl.InteractionHandler.UserSelected = false;
@@ -321,7 +672,67 @@ namespace CRUD_System.Interfaces
             adminControl.txtCity.Text = userDetailsArray[5];
             adminControl.txtEmail.Text = userDetailsArray[6];
             adminControl.txtPhonenumber.Text = userDetailsArray[7];
+
+            adminControl.reportTxtAlias.Text = adminControl.txtAlias.Text;
         }
-        #endregion TEXTBOXES ADMIN
+        #endregion ADMIN TEXTBOXES
+
+        #region REPORT TEXTBOXES AND CONFIG
+        /// <summary>
+        /// Clears the content of all report-related text boxes.
+        /// </summary>
+        public void TextBoxesReportEmpty()
+        {
+            // Clear specific text boxes in the adminControl
+            adminControl.reportTxtCreator.Text = string.Empty; // Clears the "Creator" text box
+            adminControl.reportTxtSubject.Text = string.Empty; // Clears the "Subject" text box
+            adminControl.reportTxtDate.Text = string.Empty; // Clears the "Date" text box
+            adminControl.reportRichTxReport.Text = string.Empty; // Clears the rich text box for the report content
+        }
+
+        /// <summary>
+        /// Configures the UI elements for report mode or standard mode.
+        /// </summary>
+        /// <remarks>
+        /// This method clears report-related text boxes, sets the current date, 
+        /// and updates the visibility, enabled state, and appearance of various controls 
+        /// based on whether the application is in report mode (`IsReport`).
+        /// </remarks>
+        public void ReportConfig()
+        {
+            // Clears the content of the report text boxes
+            TextBoxesReportEmpty();
+
+            // Sets the current date in the "Date" text box, formatted as "dd-MM-yyyy"
+            adminControl.reportTxtDate.Text = DateTime.Now.ToString("dd-MM-yyyy");
+
+            // Configure controls' enabled state based on whether we are in report mode (`IsReport`)
+            adminControl.listViewReports.Enabled = !IsReport; // Disables the list view to prevent altering older reports
+            adminControl.btnDeleteUser.Enabled = !IsReport; // Disables the "Delete User" button
+            adminControl.btnGeneratePSW.Enabled = !IsReport; // Disables the "Generate Password" button
+            adminControl.btnDeleteFileReport.Enabled = !IsReport; // Disables the "Delete Report" button
+            adminControl.btnSaveEditUserDetails.Enabled = !IsReport; // Disables the "Save Edit" button
+
+            adminControl.reportRichTxReport.ReadOnly = !IsReport; // Sets the report text box to read-only when not in report mode
+
+            // Toggle visibility of controls depending on report mode
+            adminControl.reportTxtSubject.Visible = !IsReport; // Shows the "Subject" text box when not in report mode
+            adminControl.reportTxtCreator.Visible = !IsReport; // Shows the "Creator" text box when not in report mode
+            adminControl.reportLBLCreatedBy.Visible = !IsReport; // Shows the "Created By" label when not in report mode
+            adminControl.reportLBLCurrentDate.Visible = IsReport; // Shows the "Current Date" label only in report mode
+
+            adminControl.comboBoxSubjectReport.Visible = IsReport; // Shows the subject selection combo box in report mode
+
+            // Updates the "Create Report" button's text and appearance based on the report mode
+            adminControl.btnCreateReport.Text = AdminMainControl.ToggleIsReportMode() ? "Report" : "Exit";
+            adminControl.reportRichTxReport.BackColor = AdminMainControl.ToggleIsReportMode() ? Color.White : Color.LightGray;
+
+            // Shows or hides the "Save Report" button based on report mode
+            adminControl.btnSaveReport.Visible = IsReport;
+
+            // Clears any selected items in the list view to reset the state
+            adminControl.listViewReports.SelectedItems.Clear();
+        }
+        #endregion REPORT TEXTBOXES AND CONFIG
     }
 }

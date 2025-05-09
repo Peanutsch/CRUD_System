@@ -38,7 +38,7 @@
             this.txtEmail = new TextBox();
             this.txtAddress = new TextBox();
             this.txtCity = new TextBox();
-            this.btnSaveEdit = new Button();
+            this.btnSaveNewAccount = new Button();
             this.SuspendLayout();
             // 
             // chkIsAdmin
@@ -52,6 +52,7 @@
             this.chkIsAdmin.Text = "isAdmin";
             this.chkIsAdmin.TextAlign = ContentAlignment.MiddleCenter;
             this.chkIsAdmin.UseVisualStyleBackColor = true;
+            this.chkIsAdmin.Visible = false;
             this.chkIsAdmin.CheckedChanged += this.chkIsAdmin_CheckedChanged;
             // 
             // btnCancel
@@ -74,6 +75,7 @@
             this.txtPhonenumber.Size = new Size(325, 23);
             this.txtPhonenumber.TabIndex = 6;
             this.txtPhonenumber.TextAlign = HorizontalAlignment.Center;
+            this.txtPhonenumber.KeyDown += this.TxtPhonenumber_KeyDown;
             // 
             // txtZIPCode
             // 
@@ -99,27 +101,29 @@
             // 
             this.txtSurname.Location = new Point(359, 45);
             this.txtSurname.Name = "txtSurname";
-            this.txtSurname.PlaceholderText = "Surname";
+            this.txtSurname.PlaceholderText = "Surname (required)";
             this.txtSurname.Size = new Size(325, 23);
             this.txtSurname.TabIndex = 1;
             this.txtSurname.TextAlign = HorizontalAlignment.Center;
             this.txtSurname.TextChanged += this.TxtAlias_TextChanged;
+            this.txtSurname.KeyDown += this.TxtSurname_KeyDown;
             // 
             // txtName
             // 
             this.txtName.Location = new Point(28, 45);
             this.txtName.Name = "txtName";
-            this.txtName.PlaceholderText = "Name";
+            this.txtName.PlaceholderText = "Name (required)";
             this.txtName.Size = new Size(325, 23);
             this.txtName.TabIndex = 0;
             this.txtName.TextAlign = HorizontalAlignment.Center;
             this.txtName.TextChanged += this.TxtAlias_TextChanged;
+            this.txtName.KeyDown += this.TxtName_KeyDown;
             // 
             // txtEmail
             // 
             this.txtEmail.Location = new Point(28, 103);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.PlaceholderText = "E-mail";
+            this.txtEmail.PlaceholderText = "E-mail (required)";
             this.txtEmail.Size = new Size(325, 23);
             this.txtEmail.TabIndex = 5;
             this.txtEmail.TextAlign = HorizontalAlignment.Center;
@@ -141,18 +145,20 @@
             this.txtCity.Size = new Size(325, 23);
             this.txtCity.TabIndex = 4;
             this.txtCity.TextAlign = HorizontalAlignment.Center;
+            this.txtCity.KeyDown += this.TxtCity_KeyDown;
             // 
-            // btnSaveEdit
+            // btnSaveNewAccount
             // 
-            this.btnSaveEdit.BackColor = Color.LightGreen;
-            this.btnSaveEdit.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.btnSaveEdit.Location = new Point(595, 132);
-            this.btnSaveEdit.Name = "btnSaveEdit";
-            this.btnSaveEdit.Size = new Size(89, 30);
-            this.btnSaveEdit.TabIndex = 8;
-            this.btnSaveEdit.Text = "Save";
-            this.btnSaveEdit.UseVisualStyleBackColor = false;
-            this.btnSaveEdit.Click += this.btnSaveEdit_Click;
+            this.btnSaveNewAccount.BackColor = Color.LightGreen;
+            this.btnSaveNewAccount.Enabled = false;
+            this.btnSaveNewAccount.Font = new Font("Courier New", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            this.btnSaveNewAccount.Location = new Point(595, 132);
+            this.btnSaveNewAccount.Name = "btnSaveNewAccount";
+            this.btnSaveNewAccount.Size = new Size(89, 30);
+            this.btnSaveNewAccount.TabIndex = 8;
+            this.btnSaveNewAccount.Text = "Save";
+            this.btnSaveNewAccount.UseVisualStyleBackColor = false;
+            this.btnSaveNewAccount.Click += this.btnSaveNewAccount_Click;
             // 
             // AdminCreateControl
             // 
@@ -169,7 +175,7 @@
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.txtAddress);
             this.Controls.Add(this.txtCity);
-            this.Controls.Add(this.btnSaveEdit);
+            this.Controls.Add(this.btnSaveNewAccount);
             this.Name = "AdminCreateControl";
             this.Size = new Size(1038, 198);
             this.ResumeLayout(false);
@@ -188,6 +194,6 @@
         public TextBox txtEmail;
         public TextBox txtAddress;
         public TextBox txtCity;
-        public Button btnSaveEdit;
+        public Button btnSaveNewAccount;
     }
 }

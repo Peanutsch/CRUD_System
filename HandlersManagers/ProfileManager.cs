@@ -1,0 +1,664 @@
+﻿using CRUD_System.Encryption;
+using CRUD_System.FileHandlers;
+using CRUD_System.Interfaces;
+using CRUD_System.Repositories;
+using System.Diagnostics;
+
+namespace CRUD_System.Handlers
+{
+    /// <summary>
+    /// Manages user profile operations, such as updating, deleting, and generating new passwords.
+    /// </summary>
+    internal class ProfileManager
+    {
+        #region PROPERTIES
+        readonly FilePaths path = new FilePaths();
+        readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        readonly AccountManager accountManager = new AccountManager();
+        readonly RepositoryLogEvents logEvents = new RepositoryLogEvents();
+        readonly DataCache cache = new DataCache();
+        #endregion PROPERTIES
+
+        #region CONSTRUCTOR
+        public ProfileManager()
+        {
+            //
+        }
+        #endregion CONSTRUCTOR
+
+        #region UPDATE USER DETAILS
+        /// <summary>
+        /// Checks if the user details have been modified compared to the cached data.
+        /// </summary>
+        public bool VerifyDetailModifications(string name, string surname, string alias, string address, string zipCode, string city,
+                                              string email, string phoneNumber, bool onlineStatus, bool isSick)
+        {
+            // Retrieve the original user details from the cache using the alias as the identifier
+            string[] originalUserDetails = cache.CachedUserData.FirstOrDefault(user => user[2] == alias)!;
+
+            // If the user is not found in the cache, return false (no modifications possible)
+            if (originalUserDetails == null)
+            {
+                return false;
+            }
+
+            // Compare each field to check if any detail has been modified, except for the unique identifier alias (originalUserDetails[2])
+            return    originalUserDetails[0] != name
+                   || originalUserDetails[1] != surname
+                   || originalUserDetails[3] != address
+                   || originalUserDetails[4] != zipCode
+                   || originalUserDetails[5] != city
+                   || originalUserDetails[6] != email
+                   || originalUserDetails[7] != phoneNumber
+                   || originalUserDetails[8] != onlineStatus.ToString()
+                   || originalUserDetails[9] != isSick.ToString();
+        }
+
+        /// <summary>
+        /// Checks if the user details or login details have been modified compared to the cached data.
+        /// If modifications are detected, the user is prompted to confirm the changes before saving.
+        /// </summary>
+        public void CheckModifications(string name, string surname, string alias, string address, string zipCode, string city,
+                                       string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+        {
+            // Ensure that the cache is loaded with decrypted user and login data
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
+            {
+                cache.LoadDecryptedData();
+            }
+
+            bool userDetailsModified = VerifyDetailModifications(name, surname, alias, address, zipCode, city, email, phoneNumber, onlineStatus, isSick);
+            bool loginDetailsModified = AdminMainControl.ChkIsAdminChanged || AdminMainControl.ChkIsTheOneChanged;
+
+            // If no modifications are detected, notify the user and keep edit mode active
+            if (!userDetailsModified && !loginDetailsModified)
+            {
+                Debug.WriteLine("No modifications were made...");
+                message.MessageNoDetailsModified();
+            }
+            else
+            {
+                // Prompt the user to confirm saving changes
+                DialogResult dr = message.MessageConfirmToSAVEChanges(alias);
+                if (dr == DialogResult.Yes)
+                {
+                    // Save the modifications if the user confirms
+                    ProcessModifications(name, surname, alias, address, zipCode, city, email, phoneNumber, isAdmin, onlineStatus, isSick, userDetailsModified, loginDetailsModified);
+                }
+                else
+                {
+                    // If the user cancels, keep edit mode active
+                    Debug.WriteLine("Modifications cancelled");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates user details and login data for a specified user.
+        /// Confirms changes with the user, checks for modifications in user and login details, 
+        /// updates the cached data, saves and encrypts the changes, and reloads the UI.
+        /// </summary>
+        public void ProcessModifications(string name, string surname, string alias, string address, string zipCode, string city,
+                                         string email, string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick, 
+                                         bool userDetailsModified, bool loginDetailsModified)
+        {
+            try
+            {
+                // Update user details if modifications are detected
+                if (userDetailsModified)
+                {
+                    UpdateCachedUserDetails(alias, name, surname, address, zipCode, city, email, phoneNumber, onlineStatus, isSick);
+                    message.MessageUpdateUserDetailsSucces(); // Notify the user of a successful update
+
+                    // Log the update for user details
+                    var currentUser = AuthenticationService.CurrentUser;
+                    logEvents.LogEventUpdateUserDetails(currentUser!, alias);
+                }
+
+                // Update login details if modifications are detected
+                if (loginDetailsModified)
+                {
+                    UpdateCachedLoginDetails(alias, isAdmin);
+                    message.MessageUpdateLoginDetailsSucces(); // Notify the user of a successful update
+                }
+
+                // Reload the UI to reflect the updated details
+                ReloadUIWithSelection(alias);
+            }
+            catch (Exception ex)
+            {
+                // Debug output error and notify the user
+                Debug.WriteLine($"Error while updating user {alias}: {ex}");
+                message.MessageSomethingWentWrong();
+            }
+
+            // Save and encrypt updated data if changes are made
+            if (userDetailsModified || loginDetailsModified)
+            {
+                cache.SaveAndEncryptData(); 
+            }
+        }
+
+        /// <summary>
+        /// Updates the user's details in the cached user data.
+        /// </summary>
+        private void UpdateCachedUserDetails(string alias, string name, string surname, string address, string zipCode,
+                                             string city, string email, string phoneNumber, bool onlineStatus, bool isSick)
+        {
+            // Find and update the user in the cached data
+            var user = cache.CachedUserData.FirstOrDefault(u => u[2] == alias);
+            if (user != null)
+            {
+                user[0] = name;
+                user[1] = surname;
+                user[2] = alias;
+                user[3] = address;
+                user[4] = zipCode;
+                user[5] = city;
+                user[6] = email;
+                user[7] = phoneNumber;
+                user[8] = onlineStatus.ToString();
+                user[9] = isSick.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Updates the login details of the user, including "The One" and admin status.
+        /// </summary>
+        /// <param name="alias">The alias of the user to update.</param>
+        /// <param name="isAdmin">Indicates if the user has admin status.</param>
+        private void UpdateCachedLoginDetails(string alias, bool isAdmin)
+        {
+            // Update cached login data
+            UpdateCachedLoginData(alias, isAdmin);
+
+            // Process changes to isAdmin and IsTheOne status
+            LogStatusChange(alias, AdminMainControl.ChkIsAdminChanged, AdminMainControl.ChkIsTheOneChanged);
+
+            // Reset the status flags to false
+            AdminMainControl.ChkIsAdminChanged = false;
+            AdminMainControl.ChkIsTheOneChanged = false;
+        }
+
+        /// <summary>
+        /// Updates the cached login data for a given user.
+        /// </summary>
+        /// <param name="alias">The alias of the user.</param>
+        /// <param name="isAdmin">The updated admin status of the user.</param>
+        private void UpdateCachedLoginData(string alias, bool isAdmin)
+        {
+            // Find the login data entry for the specified user
+            var loginData = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias);
+
+            if (loginData != null)
+            {
+                // Update admin status in cache
+                loginData[2] = isAdmin.ToString();
+
+                // Update "The One" status in cache
+                loginData[4] = AdminMainControl.IsTheOne.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Processes changes to a user's status, including admin status and "The One" status.
+        /// Logs changes and outputs debug information.
+        /// </summary>
+        /// <param name="alias">The alias of the user whose status is being changed.</param>
+        /// <param name="isAdminChanged">Indicates if the admin status was changed.</param>
+        /// <param name="isTheOneChanged">Indicates if the "The One" status was changed.</param>
+        private void LogStatusChange(string alias, bool isAdminChanged, bool isTheOneChanged)
+        {
+            var currentUser = AuthenticationService.CurrentUser;
+
+            // Log admin status change
+            if (isAdminChanged)
+            {
+                logEvents.LogEventUpdateStatusIsAdmin(currentUser!, alias, AdminInterface.IsSelectedUserAdmin);
+
+                if (AdminInterface.IsSelectedUserAdmin)
+                {
+                    Debug.WriteLine($"[INFO] User {alias} is Admin.");
+                }
+                else
+                {
+                    Debug.WriteLine($"[INFO] User {alias} is no longer Admin.");
+                }
+            }
+
+            // Log "The One" status change
+            if (isTheOneChanged)
+            {
+                logEvents.LogEventUpdateStatusIsTheOne(currentUser!, alias, AdminMainControl.IsTheOne);
+
+                if (AdminMainControl.IsTheOne)
+                {
+                    Debug.WriteLine($"[INFO] User {alias} is Neo.");
+                }
+                else
+                {
+                    Debug.WriteLine($"[INFO] User {alias} is no longer Neo.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reloads the admin UI and ensures that the updated user remains selected in the list.
+        /// </summary>
+        /// <param name="alias">The alias of the user to keep selected.</param>
+        private void ReloadUIWithSelection(string alias)
+        {
+            // Create a new instance of AdminInterface and reload the user list with selection
+            AdminInterface adminInterface = new AdminInterface();
+            adminInterface.ReloadListBoxWithSelection(alias);
+        }
+        #endregion UPDATE USER DETAILS
+
+        #region DELETE USER
+        /// <summary>
+        /// Deletes a user from the data files (data_users.csv and data_login.csv) 
+        /// after confirming the action, decrypting the files, and updating the data.
+        /// </summary>
+        /// <param name="aliasToDelete">The alias of the user to be deleted.</param>
+        public void DeleteUser(string aliasToDelete)
+        {
+            // Confirm deletion and validate the current user
+            if (!ConfirmAndValidate(aliasToDelete))
+                return;
+
+            // Decrypt the user and login data files
+            EncryptionManager.DecryptFile(path.UserFilePath);
+            EncryptionManager.DecryptFile(path.LoginFilePath);
+
+            // Remove the user from the data
+            var (updatedUserLines, updatedLoginLines) = RemoveUserFromData(aliasToDelete);
+
+            // Save the updated data and re-encrypt the files
+            SaveAndEncryptDataFiles(updatedUserLines, updatedLoginLines);
+
+            // Generate a report and log the deletion event
+            ReportAndLogDeletion(aliasToDelete);
+
+            // Reload the cache with the updated data
+            cache.LoadDecryptedData();
+        }
+
+        /// <summary>
+        /// Confirms the deletion of a user and validates the current logged-in user.
+        /// </summary>
+        /// <param name="aliasToDelete">The alias of the user to be deleted.</param>
+        /// <returns>True if the confirmation and validation succeed; otherwise, false.</returns>
+        private bool ConfirmAndValidate(string aliasToDelete)
+        {
+            // Show a confirmation dialog for the deletion
+            if (message.MessageConfirmToDELETE(aliasToDelete) == DialogResult.No)
+                return false;
+
+            // Validate the current logged-in user
+            if (string.IsNullOrEmpty(AuthenticationService.CurrentUser))
+            {
+                message.MessageSomethingWentWrong();
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Removes the user from the user and login data lists.
+        /// </summary>
+        /// <param name="aliasToDelete">The alias of the user to be removed.</param>
+        /// <returns>
+        /// A tuple containing the updated user data lines and login data lines.
+        /// </returns>
+        private (List<string> updatedUserLines, List<string> updatedLoginLines) RemoveUserFromData(string aliasToDelete)
+        {
+            // Read the existing data from the files
+            var (userLines, loginLines) = path.ReadUserAndLoginData();
+
+            // Filter out the user to be deleted from the user data
+            var updatedUserLines = userLines.Where(line =>
+                !line.Split(',')[2].Trim().Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            // Filter out the user to be deleted from the login data
+            var updatedLoginLines = loginLines.Where(line =>
+                !line.Split(',')[0].Trim().Equals(aliasToDelete, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            return (updatedUserLines, updatedLoginLines);
+        }
+
+        /// <summary>
+        /// Saves the updated user and login data back to the files and re-encrypts them.
+        /// </summary>
+        /// <param name="userLines">The updated user data lines.</param>
+        /// <param name="loginLines">The updated login data lines.</param>
+        private void SaveAndEncryptDataFiles(List<string> userLines, List<string> loginLines)
+        {
+            // Save the updated user data to the file
+            File.WriteAllLines(path.UserFilePath, userLines);
+
+            // Save the updated login data to the file
+            File.WriteAllLines(path.LoginFilePath, loginLines);
+
+            // Re-encrypt the user data file
+            EncryptionManager.EncryptFile(path.UserFilePath);
+
+            // Re-encrypt the login data file
+            EncryptionManager.EncryptFile(path.LoginFilePath);
+        }
+
+        /// <summary>
+        /// Generates a report and logs the deletion event.
+        /// </summary>
+        /// <param name="aliasToDelete">The alias of the deleted user.</param>
+        private void ReportAndLogDeletion(string aliasToDelete)
+        {
+            string? currentUser = AuthenticationService.CurrentUser;
+
+            // Create a deletion report
+            string reportText = $"{DateTime.Today:dd-MM-yyyy},{DateTime.Now:HH:mm:ss}\n[{currentUser!.ToUpper()}],Deleted user [{aliasToDelete.ToUpper()}]";
+            ReportManager.ReportDeleteUser(aliasToDelete, "Account Deleted", reportText);
+
+            // Show a success message to the user
+            message.MessageDeleteSucces(aliasToDelete);
+            
+            // Log the deletion event
+            logEvents.LogEventDeleteUser(currentUser, aliasToDelete);
+        }
+        #endregion DELETE USER
+
+        #region GENERATE PASSWORD NEW USER
+        /// <summary>
+        /// Prompts the user to confirm the password generation process for a given user and initiates the password generation if confirmed.
+        /// Ensures that the required data is loaded and encrypted after the process.
+        /// </summary>
+        /// <param name="alias">Alias of the user for whom to generate a password.</param>
+
+        public void InitiatePasswordGenerationForUser(string alias)
+        {
+            DialogResult dr = message.MessageConfirmToGeneratePassword(alias);
+            if (dr != DialogResult.Yes)
+            {
+                return;
+            }
+
+            // Check if the cache is empty, and reload data if necessary.
+            if (!cache.CachedUserData.Any() || !cache.CachedLoginData.Any())
+            {
+                cache.LoadDecryptedData();
+            }
+
+            var currentUser = AuthenticationService.CurrentUser;
+
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                UpdatePasswordAndLogEvent(alias, currentUser);
+
+                // Save changes to the data files and encrypt them
+                cache.SaveAndEncryptData();
+            }
+            else
+            {
+                message.MessageSomethingWentWrong();
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Generates a new password for a given user, updates the cached login data, and logs the event.
+        /// </summary>
+        /// <param name="alias">The alias of the user for whom the password is generated.</param>
+        /// <param name="currentUser">The current authenticated user performing the password change.</param>
+        private void UpdatePasswordAndLogEvent(string alias, string currentUser)
+        {
+            // Update password
+            string generatedPassword = PasswordManager.PasswordGenerator();
+
+            // Find the user in the cached login data by alias and update their online status.
+            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == alias); // Alias field
+            if (login != null)
+            {
+                login[1] = generatedPassword; // Update password
+                Debug.WriteLine($"Generated new password for {alias}");
+            }
+
+            // log event
+            logEvents.LogEventPasswordGenerated(currentUser, alias, generatedPassword);
+            message.MessageChangePasswordSucces(alias);
+        }
+        #endregion GENERATE PASSWORD NEW USER
+
+        #region SAVE NEW USER
+        /// <summary>
+        /// Saves a new user by collecting input data from the form, generating an alias and password,
+        /// and appending the new user data to the relevant CSV files. It also logs the event and shows
+        /// appropriate messages based on the result.
+        /// </summary>
+        public void SaveNewUser(string Name, string Surname,
+                                string Address, string ZIPCode,
+                                string City, string Email,
+                                string Phonenumber, bool isAdmin)
+        {
+            // Generate a unique alias and password for the user
+            string isAlias = GenerateAlias(Name, Surname);
+
+            // Generate password
+            string isPassword = PasswordManager.PasswordGenerator();
+
+            // Default values new user
+            bool onlineStatus = false;
+            bool isSick = false;
+
+            // Confirm the creation of the new user with the alias
+            if (!ConfirmNewUserCreation(isAlias))
+                return;
+
+            // Save the new user's data to the system (cache and file storage)
+            SaveUserData(isAlias, isPassword, Name, Surname, Address, ZIPCode, City, Email, Phonenumber, isAdmin, onlineStatus, isSick);
+
+            // log the creation of the new user
+            LogNewAccountCreation(isAlias, isPassword, Email);
+
+            // Notify the admin that the account creation was successful
+            message.MessageNewAccountSucces(isAlias);
+
+            // Update list- and textboxes
+            cache.LoadDecryptedData();
+
+            AdminMainControl adminControl = new AdminMainControl();
+            adminControl.listBoxAdmin.Items.Clear();
+
+            AdminInterface adminInterface = new AdminInterface();
+            adminInterface.ReloadListBoxWithSelection(isAlias);
+            adminInterface.EditMode = false;
+            adminInterface.UpdateInterfaceAdmin();
+            adminInterface.EmptyTextBoxesAdmin();
+        }
+
+        /// <summary>
+        /// Saves the new user data to the CSV files and ensures that data is encrypted.
+        /// </summary>
+        private void SaveUserData(string alias, string password, string name, string surname,
+                                  string address, string zipCode, string city, string email,
+                                  string phoneNumber, bool isAdmin, bool onlineStatus, bool isSick)
+        {
+            // Decrypt the user and login files before updating
+            EncryptionManager.DecryptFile(path.UserFilePath);
+            EncryptionManager.DecryptFile(path.LoginFilePath);
+
+            bool isTheOne = false;
+
+            // Prepare the new data
+            string newDataLogin = $"{alias},{password},{isAdmin},{onlineStatus},{isTheOne}";
+            string newDataUsers = $"{name},{surname},{alias},{address},{zipCode},{city},{email},{phoneNumber},{onlineStatus},{isSick}";
+
+            // Append the new data to the files
+            File.AppendAllText(path.UserFilePath, newDataUsers + Environment.NewLine);
+            File.AppendAllText(path.LoginFilePath, newDataLogin + Environment.NewLine);
+
+            CreateEmailNewUser(alias, email, password);
+
+            // Encrypt the user and login files again to secure the data
+            EncryptionManager.EncryptFile(path.UserFilePath);
+            EncryptionManager.EncryptFile(path.LoginFilePath);
+        }
+
+        /// <summary>
+        /// Creates a new user and sends an email with login credentials.
+        /// </summary>
+        public void CreateEmailNewUser(string alias, string email, string password)
+        {
+            EmailManager emailManager = new EmailManager();
+
+            // Prepare and send the welcome email
+            string subject = "Your New Account Details";
+            string body = $@"
+            <html>
+            <body>
+                <h2>Welcome {alias}!</h2>
+                <p>Your account has been created successfully.</p>
+                <p><strong>Username:</strong> {alias}</p>
+                <p><strong>Password:</strong> {password}</p>
+                <p>Login to start using your account.</p>
+            </body>
+            </html>";
+
+            emailManager.SendEmail(email, subject, body, isHtml: true);
+        }
+
+        /// <summary>
+        /// Generates a unique alias by calling the accountManager's CreateTXTAlias method.
+        /// </summary>
+        /// <param name="name">The user's first name.</param>
+        /// <param name="surname">The user's surname.</param>
+        /// <returns>A generated alias string.</returns>
+        private string GenerateAlias(string name, string surname)
+        {
+            return accountManager.CreateTXTAlias(name, surname);
+        }
+
+        /// <summary>
+        /// Confirms the creation of the new user with a dialog box.
+        /// </summary>
+        private bool ConfirmNewUserCreation(string alias)
+        {
+            DialogResult dr = message.MessageConfirmNewUser(alias);
+            return dr == DialogResult.Yes;
+        }
+
+        /// <summary>
+        /// Logs the creation of a new user account.
+        /// </summary>
+        private void LogNewAccountCreation(string alias, string password, string email)
+        {
+            var currentUser = AuthenticationService.CurrentUser;
+            if (!string.IsNullOrEmpty(currentUser))
+            {
+                AdminMainControl adminControl = new AdminMainControl();
+                // Create default CSV files line = {string.Empty},{string.Empty},{string.Empty}
+                CreateCSVFiles.CreateLogCSV(alias); //, currentUser.ToUpper(), logEvent);
+
+                // log event in {alias}_log.csv
+                logEvents.NewAccount(currentUser, alias, password, email);
+
+                // Temporary copy of logEvent in rtxReport
+                string reportText = $"{DateTime.Today.ToString("dd-MM-yyyy")},{DateTime.Now.ToString("HH:mm:ss")}\n[{currentUser!.ToUpper()}]," +
+                                    $"<Email Simulation> Created user [{alias.ToUpper()}].\nSent email to {email} with password: {password}.";
+                ReportManager.ReportSaveNewUser(alias, "New User", reportText);
+            }
+        }
+        #endregion SAVE NEW USER
+
+        #region ABSENCE DUE ILLNESS
+        public void AbsenceDueIllness(bool isSick, string alias)
+        {
+            // Confirm the action
+            DialogResult dr = message.MessageConfirmCallInSickNotification(alias);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+
+            // Check if the cache is empty and reload if necessary
+            if (cache.CachedCisData.Count == 0)
+            {
+                cache.LoadDecryptedCISData(alias);
+                MessageBox.Show($"CachedCisData: {cache.CachedCisData.Count} items");
+            }
+
+            MessageBox.Show($"ProfileManager.AbsenceDueIllness> isSick: {isSick}. User {alias} on Absence due Illness");
+
+            DateTime date_sick = DateTime.Today;
+
+            // Update the sick leave notification
+            var sickLeaveNotification = cache.CachedCisData.FirstOrDefault(n => n[0] == alias);
+            if (sickLeaveNotification != null)
+            {
+                sickLeaveNotification[1] = date_sick.ToString("yyyy-MM-dd"); // Update start date of sick leave
+                sickLeaveNotification[2] = isSick ? "Pending" : "Recovered"; // Update sick leave status
+            }
+            else
+            {
+                // Add a new sick leave entry if not found
+                cache.CachedCisData.Add(new string[] { alias, date_sick.ToString("yyyy-MM-dd"), "Pending" });
+            }
+
+            // Decrypt the file for updates
+            EncryptionManager.DecryptFile(path.FileCisNotices!);
+
+            // Append the updated data to the file
+            foreach (var notification in cache.CachedCisData)
+            {
+                string dataLine = string.Join(",", notification); // Combine array into CSV line
+                File.AppendAllText(path.FileCisNotices!, dataLine + Environment.NewLine);
+            }
+
+            // Encrypt the file after updates
+            EncryptionManager.EncryptFile(path.FileCisNotices!);
+
+            // Update the cache with the latest data
+            DataCache.LoadCache();
+        }
+        #endregion ABSENCE DUE ILLNESS
+
+        #region IS THE ONE
+        /// <summary>
+        /// Updates the 'Is The One' status for a specific user identified by their alias.
+        /// Ensures the cached login data is loaded, modifies the relevant entry, 
+        /// and saves the changes to the encrypted data files.
+        /// </summary>
+        /// <param name="selectedAlias">The alias of the user to update.</param>
+        /// <param name="isTheOne">The new status indicating whether the user is "The One".</param>
+        public void IsTheOne(string selectedAlias, bool isTheOne)
+        {
+            AdminInterface adminInterface = new AdminInterface();
+
+            // Check if the cached login data is empty. If so, load the decrypted data.
+            if (!cache.CachedLoginData.Any())
+            {
+                cache.LoadDecryptedData();
+            }
+
+            DialogResult dr = message.MessageConfirmIsTheOne(selectedAlias);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+
+            // Locate the user in the cached login data by matching their alias.
+            var login = cache.CachedLoginData.FirstOrDefault(l => l[0] == selectedAlias); // Alias is in the first field (index 0)
+
+            if (login != null && AdminInterface.IsSelectedUserAdmin)
+            {
+                login[4] = isTheOne.ToString();
+            }
+
+            // Save the updated login data and encrypt it for security.
+            cache.SaveAndEncryptData();
+
+            // Notify the user that the update was successful.
+            message.MessageUpdateUserDetailsSucces();
+        }
+        #endregion IS THE ONE
+    }
+}

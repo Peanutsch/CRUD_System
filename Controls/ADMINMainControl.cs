@@ -16,6 +16,7 @@ using CRUD_System.Handlers;
 using CRUD_System.FileHandlers;
 using CRUD_System.Interfaces;
 using CRUD_System.Repositories;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CRUD_System
 {
@@ -29,21 +30,27 @@ namespace CRUD_System
     public partial class AdminMainControl : UserControl
     {
         #region PROPERTIES
-        FilePaths path = new FilePaths();
+        public List<bool> storeInitialUserStatus = new List<bool>(); // index 0 = bool admin, index 1 = bool Neo
 
-        AdminInterface adminInterface;
-        AccountManager accountManager = new AccountManager();
-        ProfileManager userProfileManager = new ProfileManager();
-        FormInteractionHandler interactionHandler = new FormInteractionHandler();
-        UserSearchService search = new UserSearchService();
+        public static bool IsTheOne { get; set; }
+        public static bool ChkIsTheOneChanged { get; set; }
+        public static bool ChkIsAdminChanged { get; set; }
+
+        readonly AdminInterface adminInterface;
+        readonly AccountManager accountManager = new AccountManager();
+        readonly ProfileManager profileManager = new ProfileManager();
+        readonly FormInteractionHandler interactionHandler = new FormInteractionHandler();
+        readonly RepositoryMessageBoxes message = new RepositoryMessageBoxes();
+        readonly ReportManager reportManager;
+
+        public bool isAdmin = false;
+        public bool editMode = false;
+        readonly bool onlineStatus = false;
+        readonly bool isSick = false;
 
         // Property to expose the InteractionHandler instance for external access
         public FormInteractionHandler InteractionHandler => interactionHandler;
 
-        RepositoryMessageBoxes message = new RepositoryMessageBoxes();
-
-        bool editMode = false;
-        public bool isAdmin = false;
         #endregion PROPERTIES
 
         #region Constructor
@@ -54,10 +61,17 @@ namespace CRUD_System
             // Assign the UserInterface field; if no instance is provided, create a new UserInterface instance
             this.adminInterface = adminInterface ?? new AdminInterface(this);
 
+            reportManager = new ReportManager(this);
+
             // Load data_users.csv for display in listbox
             this.adminInterface.LoadDetailsListBox();
         }
         #endregion CONSTRUCTOR
+
+        public void UserControl_Load(object sender, EventArgs e)
+        {
+            string selectedAlias = txtAlias.Text;
+        }
 
         #region BUTTONS SoC (Seperate of Concerns)
         /// <summary>
@@ -71,40 +85,31 @@ namespace CRUD_System
             {
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
-                adminInterface.InterfaceEditModeAdmin();
+                adminInterface.UpdateInterfaceAdmin();
             },
              () => message.MessageInvalidNoUserSelected());
         }
 
         /// <summary>
         /// Handles the click event to save the edited user details.
+        /// Set EditMode to False.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
         private void btnSaveEditUserDetails_Click(object sender, EventArgs e)
         {
-            // Read lines from data_users.csv and data_login.csv
-            (var userLines, var loginLines) = path.ReadUserAndLoginData();
-            int userIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
-            int loginIndex = accountManager.FindUserIndexByAlias(userLines, loginLines, txtAlias.Text);
+            profileManager.CheckModifications(txtName.Text, txtSurname.Text, txtAlias.Text, 
+                                              txtAddress.Text, txtZIPCode.Text, txtCity.Text,
+                                              txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus, isSick);
 
-            var loginDetails = loginLines[loginIndex].Split(",");
+            // Reload cache
+            DataCache cache = new DataCache();
+            cache.LoadDecryptedData(); 
 
-            // Parse the admin status and online status as bools
-            //bool isAdmin = bool.TryParse(loginDetails[2], out bool parsedIsAdmin) && parsedIsAdmin;
-            bool onlineStatus = bool.TryParse(loginDetails[3], out bool parsedOnlineStatus) && parsedOnlineStatus;
-
-            Debug.WriteLine("ADMINMainControl.btnSaveEditUserDetails_Click");
-            Debug.WriteLine($"isAdmin = {isAdmin}");
-            Debug.WriteLine($"omlineStatus = {onlineStatus}");
-
-            if (userIndex != -1)
-            {
-                userProfileManager.UpdateUserDetails(userLines, loginLines, userIndex, loginIndex, txtName.Text, txtSurname.Text, txtAlias.Text, txtAddress.Text, txtZIPCode.Text, txtCity.Text, txtEmail.Text, txtPhonenumber.Text, isAdmin, onlineStatus);
-            }
+            // Reload list- and textboxes
             adminInterface.EditMode = false;
-            adminInterface.InterfaceEditModeAdmin();
-            adminInterface.ReloadListBoxAdmin(userIndex); // Reload listbox
+            adminInterface.ReloadListBoxWithSelection(txtAlias.Text); // Reload listbox
+            adminInterface.UpdateInterfaceAdmin();
         }
 
         /// <summary>
@@ -116,17 +121,23 @@ namespace CRUD_System
         {
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                userProfileManager.DeleteUser(txtAlias.Text); // Perform delete action only if a user is selected
+                AdminMainControl adminControl = new AdminMainControl();
+                DataCache cache = new DataCache();
+                // Deleting user from files
+                profileManager.DeleteUser(txtAlias.Text);
 
-                listBoxAdmin.Items.Clear();
-                adminInterface.LoadDetailsListBox();
+                // Empty TextBoxes and reload ListBox
                 adminInterface.EmptyTextBoxesAdmin();
+                adminInterface.ReloadListBoxWithSelection(txtAlias.Text);
+
+                // Empty ListViewReports
+                listViewReports.Items.Clear();
 
                 // Toggle edit mode
                 adminInterface.EditMode = ToggleEditMode();
-                adminInterface.InterfaceEditModeAdmin();
+                adminInterface.UpdateInterfaceAdmin();
             },
-             () => message.MessageInvalidNoUserSelected());
+            () => message.MessageInvalidNoUserSelected()); // Handle no user selected case
         }
 
         /// <summary>
@@ -136,13 +147,15 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnCreateUser_Click(object sender, EventArgs e)
         {
-            AccountManager accountManager = new AccountManager();
             interactionHandler.Open_CreateForm(this);
+
+            // Reload Cache
+            DataCache cache = new DataCache();
+            cache.LoadDecryptedData();
+
             // Reload listbox
             listBoxAdmin.Items.Clear();
-            adminInterface.LoadDetailsListBox();
-            // Empty Textboxes
-            adminInterface.EmptyTextBoxesAdmin();
+            adminInterface.ReloadListBoxWithSelection(txtAlias.Text);
         }
 
         /// <summary>
@@ -152,24 +165,11 @@ namespace CRUD_System
         /// <param name="e">The event data.</param>
         private void btnGeneratePassword_Click(object sender, EventArgs e)
         {
-            ProfileManager userProfileManager = new ProfileManager();
             interactionHandler.PerformActionIfUserSelected(() =>
             {
-                userProfileManager.GenerateNewPassword(txtAlias.Text, chkIsAdmin.Checked);
+                profileManager.InitiatePasswordGenerationForUser(txtAlias.Text);
             },
              () => message.MessageInvalidNoUserSelected());
-        }
-
-        /// <summary>
-        /// Handles the event when the 'Is Admin' checkbox state changes.
-        /// Marks the current user as an admin when the checkbox is checked.
-        /// </summary>
-        /// <param name="sender">The source of the event (the CheckBox).</param>
-        /// <param name="e">The event data (checkbox change).</param>
-        private void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
-        {
-            isAdmin = chkIsAdmin.Checked;
-            Debug.WriteLine($"isAdmin updated to: {isAdmin}");
         }
 
         /// <summary>
@@ -182,37 +182,37 @@ namespace CRUD_System
             interactionHandler.Open_CreateNewPasswordForm();
         }
 
-        private void btnForceLogOutUser_Click(object sender, EventArgs e)
-        {
-            AuthenticationService authenticationService = new AuthenticationService();
-            interactionHandler.PerformActionIfUserSelected(() =>
-            {
-                MessageBox.Show("Pushing force logout");
-                authenticationService.ForceLogOut(txtAlias.Text);
-            },
-            () => message.MessageInvalidNoUserSelected());
-        }
-
         /// <summary>
-        /// Toggle between editMode and !editMode
-        /// </summary>
-        /// <returns></returns>
-        private bool ToggleEditMode()
-        {
-            bool modus = editMode = !editMode;
-
-            return modus;
-        }
-
-        /// <summary>
-        /// Handles the selection change event for the ListBox in the admin interface.
-        /// Triggers the appropriate selection handler in AdminInterface.
+        /// Handles the click event to force log out the selected user.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event data.</param>
-        public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnForceLogOutUser_Click(object sender, EventArgs e)
         {
-            adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
+            AuthenticationService authenticationService = new AuthenticationService();
+
+            // Find the user index based on the alias
+            int userIndex = accountManager.FindUserIndexByAlias(txtAlias.Text);
+
+            // Perform action only if a user is selected
+            interactionHandler.PerformActionIfUserSelected(() =>
+            {
+                // If a valid user is found, force logout
+                authenticationService.ForceLogOut(txtAlias.Text);
+
+                // Reload the listbox to reflect changes
+                listBoxAdmin.Items.Clear();
+                adminInterface.ReloadListBoxWithSelection(txtAlias.Text);
+
+                // Disable and hide the logout button after action
+                btnForceLogOutUser.Enabled = false;
+                btnForceLogOutUser.Visible = false;
+            },
+            () =>
+            {
+                // Handle the case where no user is selected
+                message.MessageInvalidNoUserSelected();
+            });
         }
 
         /// <summary>
@@ -221,45 +221,450 @@ namespace CRUD_System
         /// </summary>
         /// <param name="sender">The source of the event, typically the ListBox control.</param>
         /// <param name="e">The event data that contains the drawing information for the item.</param>
-        private void ListBoxAdmin_DrawItem(object sender, DrawItemEventArgs e)
+        public void ListBoxAdmin_DrawItem(object sender, DrawItemEventArgs e)
         {
             adminInterface.ListBoxAdmin_DrawItemHandler(sender, e);
         }
-        #endregion BUTTONS SoC (Seperate of Concerns)
+
+        private void btnPreviousPage_Click(object sender, EventArgs e)
+        {
+            adminInterface.PreviousPage();
+        }
+
+        private void btnNextPage_Click(object sender, EventArgs e)
+        {
+            adminInterface.NextPage();
+        }
+
+        private void btnUploadFile_Click(object sender, EventArgs e)
+        {
+            //
+        }
 
         /// <summary>
-        /// Handles the text changed event for the alias search textbox. It dynamically updates the list of users
-        /// displayed in the listbox based on the search input. If the input is empty, it loads all users;
-        /// otherwise, it filters the users based on the provided alias prefix.
+        /// Handles the state change of the 'Absence Due to Illness' checkbox.
+        /// If the checkbox changes from checked to unchecked, it performs an action
+        /// to update the illness absence status for the selected user.
         /// </summary>
-        /// <param name="sender">The source of the event (typically the text box control that triggered the event).</param>
-        /// <param name="e">The event data, which contains information about the text change event.</param>
-        private void txtAliasToSearch_TextChanged(object sender, EventArgs e)
+        /// <param name="sender">The source of the event (the CheckBox).</param>
+        /// <param name="e">The event data (checkbox state change).</param>
+        private void chkAbsenceDueIllness_CheckedChanged(object sender, EventArgs e)
         {
-            // Get the alias input by the user in the search box
-            string alias = txtAliasToSearch.Text;
+            /*
+            // Update the isSick variable to reflect the current state of the checkbox
+            isSick = chkAbsenceDueIllness.Checked;
 
-            // If the alias is empty, load all users into the listbox
-            if (string.IsNullOrEmpty(alias))
+            // Check if the checkbox state changes from checked (true) to unchecked (false)
+            if (!isSick && previousSickStatus)
             {
-                // Load all user details into the listbox (when no search term is entered)
-                adminInterface.LoadDetailsListBox();
+                // Confirm to save changes
+                DialogResult dr = message.MessageConfirmCallInSickNotification(txtAlias.Text);
+                if (dr != DialogResult.Yes)
+                {
+                    return;
+                }
+
+                // Perform an action when the checkbox is unchecked (illness resolved)
+                profileManager.AbsenceDueIllness(isSick, txtAlias.Text);
             }
             else
             {
-                // If alias is not empty, search for users by the alias prefix
-                var searchResults = new UserSearchService().SearchByAlias(alias);
+                return;
+            }
 
-                // Clear the current items in the listbox to display the search results
-                listBoxAdmin.Items.Clear();
+            // Update the previousSickStatus to store the current state of the checkbox
+            previousSickStatus = isSick;
+            */
+        }
 
-                // Add each matched result (user details) to the listbox
-                foreach (var result in searchResults)
+        private void btnCallInSick_Click(object sender, EventArgs e)
+        {
+            interactionHandler.PerformActionIfUserSelected(() =>
+            {
+                // Create an instance of the AbsenceDueIllness form
+                AbsenceDueIllnessForm absence = new AbsenceDueIllnessForm();
+
+                // Pass the form instance to DisplayUserAlias to set the alias
+                DisplayUserAlias(absence);
+
+                // Open the absence form
+                interactionHandler.Open_AbsenceDueIllnessForm(absence); // Pass the existing instance to the method
+            },
+            () => message.MessageInvalidNoUserSelected());
+        }
+
+        public void DisplayUserAlias(AbsenceDueIllnessForm absence)
+        {
+            if (!string.IsNullOrEmpty(txtAlias.Text))
+            {
+                absence.txtAlias.Text = $"{txtAlias.Text.ToUpper()}";
+            }
+            else
+            {
+                absence.txtAlias.Text = "UNKNOWN";
+            }
+        }
+
+        private void btnSaveReport_Click(object sender, EventArgs e)
+        {
+            ReportManager reportManager = new ReportManager(this);
+            reportManager.BtnSaveReportHandler();
+            btnEditUserDetails.Enabled = true; // Enable btnEditUserDetails
+            btnSaveEditUserDetails.Enabled = true; // Enable btnSaveEditUserDetails
+        }
+
+        /// <summary>
+        /// Handles the deletion of a selected file from the listViewFiles control. 
+        /// Only TheOne's are allowed to perform this action.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the delete button.</param>
+        /// <param name="e">Contains event data.</param>
+        private void btnDeleteFileReport_Click(object sender, EventArgs e)
+        {
+            reportManager.DeleteFileReport();
+        }
+
+        /// <summary>
+        /// Handles the click event of the "Show Logs" button.
+        /// Opens the report form to display log details in a ListBox.
+        /// </summary>
+        /// <param name="sender">The source of the event (button).</param>
+        /// <param name="e">Event arguments associated with the click event.</param>
+        private void btnShowListBoxLogs_Click(object sender, EventArgs e)
+        {
+            // Null check
+            string logFile = FindCSVFiles.FindCSVFileLogEvent(txtAlias.Text, "logevents");
+            if (string.IsNullOrEmpty(logFile))
+            {
+                // Show a message if no log file is found
+                MessageBox.Show("Log file not found.");
+                return;
+            }
+            else
+            {
+                interactionHandler.Open_ShowLogEventsForm(this, txtAlias.Text);
+            }
+        }
+
+        private void btnShowLogsStatus_Click(object sender, EventArgs e)
+        {
+            interactionHandler.PerformActionIfUserSelected(() =>
+            {
+                // Null check
+                string logFile = FindCSVFiles.FindCSVFileLogEvent(txtAlias.Text, "logstatus");
+                if (string.IsNullOrEmpty(logFile))
                 {
-                    listBoxAdmin.Items.Add(result);
+                    // Show a message if no log file is found
+                    MessageBox.Show("Log file not found.");
+                    return;
+                }
+                else
+                {
+                    interactionHandler.Open_ShowLogStatusForm(this, txtAlias.Text);
+                }
+            },
+            () => message.MessageInvalidNoUserSelected());
+        }
+
+        private void btnCreateReport_Click(object sender, EventArgs e)
+        {
+            comboBoxSubjectReport.Text = "Subject:";
+            btnEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnEditUserDetails
+            btnSaveEditUserDetails.Enabled = AdminInterface.IsReport; // Toggle btnSaveEditUserDetails
+            adminInterface.TextBoxesReportEmpty();
+            AdminInterface.IsReport = ToggleIsReportMode();
+            adminInterface.ReportConfig();
+        }
+        #endregion BUTTONS SoC (Seperate of Concerns)
+
+        #region TOGGLE MODES
+        /// <summary>
+        /// Toggle between editMode and !editMode
+        /// </summary>
+        private bool ToggleEditMode()
+        {
+            bool modus = editMode = !editMode;
+
+            return modus;
+        }
+
+        /// <summary>
+        /// Toggle between IsReport and !IsReport
+        /// </summary>
+        public static bool ToggleIsReportMode()
+        {
+            bool modus = AdminInterface.IsReport = !AdminInterface.IsReport;
+            return modus;
+        }
+        #endregion TOGGLE MODES
+
+        #region KEY HANDLERS
+        // List of allowed keys for each textbox
+        private HashSet<Keys> allowedPhonenumberKeys = new HashSet<Keys>
+        {
+            Keys.Back, Keys.Space, Keys.Oemplus, Keys.Add, Keys.OemMinus, Keys.Subtract, Keys.Left, Keys.Right,
+            Keys.Home, Keys.Home, Keys.ShiftKey, Keys.ControlKey,
+            Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9,
+            Keys.NumPad0, Keys.NumPad1, Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad5, Keys.NumPad6, Keys.NumPad7, Keys.NumPad8, Keys.NumPad9,
+            Keys.C, Keys.V // Clipboard shortcuts
+        };
+
+        private HashSet<Keys> allowedTextKeys = new HashSet<Keys>
+        {
+            Keys.Back, Keys.Left, Keys.Right, Keys.Space, Keys.Control, Keys.Home, Keys.End,
+            Keys.OemMinus, Keys.Subtract,
+            Keys.C, Keys.V
+        };
+
+        /// <summary>
+        /// Handles the KeyDown event for the txtPhonenumber textbox.
+        /// Allows numeric digits, '+', '-', Backspace, Spacebar, arrow keys and clipboard shortcuts (Ctrl+C, Ctrl+V).
+        /// Suppresses any other invalid key inputs.
+        /// </summary>
+        public void TxtPhonenumber_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Allow valid keys: digits (main and numpad), Backspace, Space, '+', '-', and clipboard shortcuts
+            if (allowedPhonenumberKeys.Contains(e.KeyCode) || (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.V)))
+            {
+                return;
+            }
+
+            // Suppress all other keys
+            e.SuppressKeyPress = true;
+        }
+
+        /// <summary>
+        /// Handles the KeyDown event for the txtName textbox.
+        /// Allows only letters, Backspace, arrow keys, and Ctrl/Shift key combinations.
+        /// Suppresses any other key inputs to prevent invalid characters from being entered.
+        /// </summary>
+        public void TxtName_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Check if the key is allowed (only letters, Backspace, arrow keys, and Ctrl/Shift combinations)
+            if (!char.IsLetter((char)e.KeyCode) && !allowedTextKeys.Contains(e.KeyCode) && !e.Control && !e.Shift)
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        /// <summary>
+        /// Handles the KeyDown event for the txtSurname textbox.
+        /// Allows only letters, Backspace, arrow keys, and Ctrl/Shift key combinations.
+        /// Suppresses any other key inputs to prevent invalid characters from being entered.
+        /// </summary>
+        public void TxtSurname_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Check if the key is allowed (only letters, Backspace, arrow keys, and Ctrl/Shift combinations)
+            if (!char.IsLetter((char)e.KeyCode) && !allowedTextKeys.Contains(e.KeyCode) && !e.Control && !e.Shift)
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        /// <summary>
+        /// Handles the KeyDown event for the txtCity textbox.
+        /// Allows only letters, Backspace, arrow keys, and Ctrl/Shift key combinations.
+        /// Suppresses any other key inputs to prevent invalid characters from being entered.
+        /// </summary>
+        public void TxtCity_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Check if the key is allowed (only letters, Backspace, arrow keys, and Ctrl/Shift combinations)
+            if (!char.IsLetter((char)e.KeyCode) && !allowedTextKeys.Contains(e.KeyCode) && !e.Control && !e.Shift)
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+        #endregion KEY HANDLERS
+
+        #region CHECKBOXES
+        /// <summary>
+        /// Handles the CheckedChanged event for the chkIsAdmin CheckBox. 
+        /// Compares the new isAdmin status with the stored initial status to determine if a change has occurred.
+        /// Updates the ChkIsAdminChanged flag and synchronizes the isAdmin value with the AdminInterface if needed.
+        /// </summary>
+        /// <param name="sender">The source of the event (chkIsAdmin).</param>
+        /// <param name="e">Event data associated with the CheckedChanged event.</param>
+        public void chkIsAdmin_CheckedChanged(object sender, EventArgs e)
+        {
+            ChkIsAdminChanged = true;
+
+            // Retrieve the initial isAdmin status index[0] in storeInitialUserStatus
+            bool initialIsAdminStatus = storeInitialUserStatus[0];
+            
+            if (chkIsAdmin.Checked == initialIsAdminStatus)
+            {
+                ChkIsAdminChanged = false;
+            }
+            
+            // Synchronize with the AdminInterface
+            isAdmin = chkIsAdmin.Checked;
+            AdminInterface.IsSelectedUserAdmin = isAdmin;
+
+            // Note: Clearing list storeInitialUserStatus is done in ListBoxAdmin_SelectedIndexChanged()
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event for the chkIsTheOne CheckBox. 
+        /// Compares the new isTheOne status with the stored initial status to determine if a change has occurred.
+        /// Updates the ChkIsTheOneChanged flag and synchronizes the isTheOne value with the AdminInterface if needed.
+        /// </summary>
+        /// <param name="sender">The source of the event (chkIsTheOne).</param>
+        /// <param name="e">Event data associated with the CheckedChanged event.</param>
+        public void chkIsTheOne_CheckedChanged(object sender, EventArgs e)
+        {
+            ChkIsTheOneChanged = true;
+
+            // Retrieve the initial IsTheOne status from index[1] in storeInitialUserStatus
+            bool initialIsTheOneStatus = storeInitialUserStatus[1];
+
+            if (chkIsTheOne.Checked == initialIsTheOneStatus)
+            {
+                ChkIsTheOneChanged = false;
+            }
+
+            // Synchronize with the AdminInterface
+            IsTheOne = chkIsTheOne.Checked;
+            AdminInterface.IsSelectedUserTheOne = IsTheOne;
+
+            // Note: Clearing list storeInitialUserStatus is done in ListBoxAdmin_SelectedIndexChanged()
+        }
+        #endregion CHECKBOXES
+
+        #region SELECTED INDEX CHANGED
+        /// <summary>
+        /// Handles the selection change event for the ListBox in the admin interface.
+        /// Triggers the appropriate selection handler in AdminInterface.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        public void ListBoxAdmin_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Empty list storeIsAdminStatus
+            storeInitialUserStatus.Clear();
+            // Empty ListView for Reports
+            listViewReports.Items.Clear();
+            // Trigger handler
+            adminInterface.ListBoxAdmin_SelectedIndexChangedHandler();
+        }
+
+        /// <summary>
+        /// Event handler triggered when the selected item in the listViewReports changes.
+        /// Displays the selected user report if an item is selected and valid.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the listViewReports.</param>
+        /// <param name="e">Event data containing information about the event.</param>
+        private void listViewReports_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Check if at least one item is selected in the ListView
+            if (listViewReports.SelectedItems.Count > 0)
+            {
+                // Get the file name of the selected user report
+                string selectedUserReportFileName = listViewReports.SelectedItems[0].Text;
+
+                // Ensure the selected file name is not null or empty
+                if (!string.IsNullOrEmpty(selectedUserReportFileName))
+                {
+                    // Use the ReportManager to display the selected report
+                    reportManager.ReportDisplay(selectedUserReportFileName, txtAlias.Text);
                 }
             }
         }
+
+        /// <summary>
+        /// Event handler triggered when there is an attempt to resize a column in listViewReports.
+        /// Prevents the user from resizing columns by locking their widths.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the listViewReports.</param>
+        /// <param name="e">Event data containing information about the column width change.</param>
+        private void listViewReports_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            // Prevent column width changes by setting the new width to the current width
+            e.NewWidth = listViewReports.Columns[e.ColumnIndex].Width;
+
+            // Cancel the resize action
+            e.Cancel = true;
+        }
+        #endregion SELECTED INDEX CHANGED
+
+        #region TEXTBOX SEARCH
+        public int searchCurrentPage = 1; // Current page number for the search results, starting at 1
+        private const int searchItemsPerPage = 15; // Maximum number of items displayed per page during search
+        private List<string> currentSearchResults = new(); // Cache to store the current search results for efficient pagination
+
+
+        /// <summary>
+        /// Dynamically updates the user list displayed in the ListBox based on the search term entered.
+        /// If the search term is empty, it resets the list to show all users.
+        /// </summary>
+        /// <param name="sender">The source of the event (the TextBox).</param>
+        /// <param name="e">The event data for the text change event.</param>
+        private void txtAliasToSearch_TextChanged(object sender, EventArgs e)
+        {
+            // Get the trimmed search term from the TextBox, handling possible null values
+            string? searchTerm = txtSearch.Text?.Trim();
+
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                // If the search term is empty:
+                // Reset the page number, clear cached results, and reload the full list
+                searchCurrentPage = 1;
+                currentSearchResults.Clear();
+                DisplaySearchResults(searchCurrentPage); // Clear the display and show all users
+                adminInterface.LoadDetailsListBox(); // Load all users into the ListBox
+                adminInterface.EmptyTextBoxesAdmin(); // Clear all input TextBoxes
+
+                // Empty all report textboxes and listView
+                AdminInterface.IsReport = false;
+                adminInterface.ReportConfig();
+                adminInterface.TextBoxesReportEmpty();
+                reportTxtAlias.Text = string.Empty;
+                listViewReports.Items.Clear();
+            }
+            else
+            {
+                // If a search term is provided:
+                // Perform the search and display results starting from the first page
+                currentSearchResults = new UserSearchService().SearchUsers(searchTerm);
+                DisplaySearchResults(1); // Always start at page 1 for new search terms
+            }
+        }
+
+        /// <summary>
+        /// Displays a subset of the search results in the ListBox based on the specified page number.
+        /// If no results are found, it shows a placeholder message.
+        /// </summary>
+        /// <param name="page">The current page to display.</param>
+        private void DisplaySearchResults(int page)
+        {
+            // Check if there are any results in the search cache
+            int totalResults = currentSearchResults.Count;
+            if (totalResults == 0)
+            {
+                // If no results are found:
+                // Clear the ListBox, add a placeholder message, and update the page label
+                listBoxAdmin.Items.Clear();
+                listBoxAdmin.Items.Add("No results found...");
+                adminInterface.UpdatePageLabel();
+                return;
+            }
+
+            // Calculate the total number of pages based on results per page
+            int totalPages = (int)Math.Ceiling(totalResults / (double)searchItemsPerPage);
+
+            // Ensure the current page is within the valid range
+            searchCurrentPage = Math.Clamp(page, 1, totalPages);
+
+            // Calculate the range of results to display for the current page
+            int startIndex = (searchCurrentPage - 1) * searchItemsPerPage;
+            //int endIndex = Math.Min(startIndex + searchItemsPerPage, totalResults);
+
+            // Populate the ListBox with results for the current page
+            listBoxAdmin.Items.Clear();
+            listBoxAdmin.Items.AddRange(currentSearchResults.Skip(startIndex).Take(searchItemsPerPage).ToArray());
+
+            // Update the page navigation label to reflect the current page and total pages
+            adminInterface.UpdatePageLabel();
+        }
+        #endregion TEXTBOX SEARCH
     }
 }
-
